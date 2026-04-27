@@ -142,6 +142,45 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/bundle</ACTION>
     </COMMAND>
 
+    <!-- ACL binding (S3.1.1):
+         IOS-XR: `ipv4|ipv6 access-group <ACL-NAME> {ingress|egress}`
+         Maps to: add interface to ACL_TABLE/<NAME>/ports leaf-list.
+         The ACL_TABLE.stage (INGRESS or EGRESS) must already match the
+         direction the user asks for; the helper does NOT auto-create
+         a second ACL_TABLE for the opposite direction. -->
+    <COMMAND name="ipv4 access-group"
+             help="Apply IPv4 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 access-group" help="Remove IPv4 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 access-group"
+             help="Apply IPv6 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 access-group" help="Remove IPv6 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ethernet-services access-group"
+             help="Apply L2 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ethernet-services access-group" help="Remove L2 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
     <!-- Show within if-view (candidate-aware) -->
     <COMMAND name="show" help="Show interface configuration"/>
     <COMMAND name="show configuration" help="Show pending changes for this interface">
