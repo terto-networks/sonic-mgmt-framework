@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — exec-view (read-only base prompt: "tertoos>").
+  Equivalente IOS-XR: user EXEC. Promove para privileged-view via "enable".
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- TertoOS startup view: KLISH boota direto em exec-view (IOS-XR style). -->
+  <STARTUP view="exec-view" default="exec-view"/>
+
+  <VIEW name="exec-view" prompt="${SYSTEM_NAME}&gt; ">
+
+    <COMMAND name="enable" help="Enter privileged EXEC mode"
+             view="privileged-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <COMMAND name="exit" help="Exit the CLI" lock="false">
+      <ACTION builtin="clish_close"/>
+    </COMMAND>
+
+    <COMMAND name="logout" help="Exit the CLI" lock="false">
+      <ACTION builtin="clish_close"/>
+    </COMMAND>
+
+    <COMMAND name="show" help="Display operational state"/>
+    <COMMAND name="show version" help="Show TertoOS version">
+      <ACTION>tertoos-cli show version</ACTION>
+    </COMMAND>
+    <COMMAND name="show clock" help="Show current system time">
+      <ACTION>date</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ping" help="Ping IPv4/IPv6 host">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>ping -c 4 ${target}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="traceroute" help="Trace IPv4/IPv6 route">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>traceroute ${target}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="terminal" help="Set terminal parameters"/>
+    <COMMAND name="terminal length" help="Set terminal pager length">
+      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
+      <ACTION>tertoos-cli terminal length ${lines}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — config-if-view (IOS-XR style).
+  "interface <name>" entra na view; saída via "exit" volta para config-view.
+
+  Suporta:
+    - Ethernet portas físicas (ex.: Ethernet0, GigabitEthernet0/0/0/1 traduzido)
+    - Bundle-EtherN (LACP virtual)
+    - <if>.<vlan> sub-interfaces com encapsulation dot1q
+
+  Mapeamento candidate → CONFIG_DB:
+    interface/<name>/mtu
+    interface/<name>/description
+    interface/<name>/admin_status   (up | down)
+    interface/<name>/ipv4/address/<addr>/<plen>
+    interface/<name>/ipv6/address/<addr>/<plen>
+    interface/<name>/vrf
+    interface/<name>/encapsulation/dot1q/<vlan>
+    interface/<name>/bundle/id
+    interface/<name>/bundle/mode    (active | passive | on)
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- Entrada na view a partir de config-view -->
+  <VIEW name="config-view">
+    <COMMAND name="interface"
+             help="Configure an interface"
+             view="config-if-view"
+             viewid="ifname=${name}">
+      <PARAM name="name" help="Interface name (Ethernet0, Bundle-Ether1, ...)"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate context interface ${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="no interface"
+             help="Remove interface configuration">
+      <PARAM name="name" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete interface/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-if-view"
+        prompt="${SYSTEM_NAME}(config-if-${ifname})# ">
+
+    <!-- Navegação -->
+    <COMMAND name="exit"
+             help="Exit interface configuration"
+             view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end"
+             help="Return to privileged EXEC"
+             view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="root"
+             help="Return to top of config tree"
+             view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+
+    <!-- Atributos básicos -->
+    <COMMAND name="description"
+             help="Interface description (free text)">
+      <PARAM name="text" help="Description text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/description "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no description" help="Clear description">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/description</ACTION>
+    </COMMAND>
+
+    <COMMAND name="mtu" help="Interface MTU (576..9216)">
+      <PARAM name="bytes" help="MTU in bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="no mtu" help="Reset MTU to default">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/mtu</ACTION>
+    </COMMAND>
+
+    <COMMAND name="shutdown" help="Administratively disable">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/admin_status down</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Administratively enable">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/admin_status up</ACTION>
+    </COMMAND>
+
+    <COMMAND name="load-interval" help="Counter polling interval seconds">
+      <PARAM name="seconds" help="1..600 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/load_interval ${seconds}</ACTION>
+    </COMMAND>
+
+    <!-- IPv4 / IPv6 addressing -->
+    <COMMAND name="ipv4 address"
+             help="Assign primary IPv4 address (A.B.C.D/M)">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv4/address ${prefix}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 address" help="Remove IPv4 address">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv4/address</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 address" help="Assign IPv6 address (X:X::X/M)">
+      <PARAM name="prefix" help="X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6/address ${prefix}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 address" help="Remove IPv6 address">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv6/address</ACTION>
+    </COMMAND>
+
+    <!-- VRF binding -->
+    <COMMAND name="vrf" help="Bind interface to a VRF">
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/vrf ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vrf" help="Remove VRF binding">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/vrf</ACTION>
+    </COMMAND>
+
+    <!-- Sub-interface encapsulation -->
+    <COMMAND name="encapsulation dot1q"
+             help="802.1Q encapsulation (sub-interfaces)">
+      <PARAM name="vlan" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation dot1q" help="Remove dot1q encap">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/dot1q</ACTION>
+    </COMMAND>
+
+    <!-- LACP / Bundle membership (em interface física apontando para Bundle-EtherN) -->
+    <COMMAND name="bundle id"
+             help="Make this interface a member of a Bundle-Ether">
+      <PARAM name="id" help="Bundle id" ptype="TERTOOS_BUNDLE_ID"/>
+      <PARAM name="mode-kw" help="mode" ptype="STRING"/>
+      <PARAM name="mode" help="active | passive | on" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no bundle id" help="Remove from any bundle">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/bundle</ACTION>
+    </COMMAND>
+
+    <!-- Show within if-view (candidate-aware) -->
+    <COMMAND name="show" help="Show interface configuration"/>
+    <COMMAND name="show configuration" help="Show pending changes for this interface">
+      <ACTION>tertoos-cli candidate show --filter interface/${ifname}</ACTION>
+    </COMMAND>
+
+    <!-- do <cmd> cross-mode -->
+    <COMMAND name="do"
+             help="Run a privileged EXEC command without leaving config">
+      <PARAM name="cmd" help="Command line" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli do ${cmd}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

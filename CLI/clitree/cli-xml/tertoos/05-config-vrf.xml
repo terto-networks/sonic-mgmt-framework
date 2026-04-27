@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — config-vrf-view (IOS-XR style).
+  "vrf <name>" entra na view; sub-block address-family entra em
+  config-vrf-af-view onde se configura import/export de route-target e
+  route-policy.
+
+  Mapeamento candidate → CONFIG_DB:
+    vrf/<name>/rd
+    vrf/<name>/af/<ipv4|ipv6>/import_rt
+    vrf/<name>/af/<ipv4|ipv6>/export_rt
+    vrf/<name>/af/<ipv4|ipv6>/import_policy
+    vrf/<name>/af/<ipv4|ipv6>/export_policy
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- Entrada via config-view -->
+  <VIEW name="config-view">
+    <COMMAND name="vrf"
+             help="Configure VRF (L3 Virtual Routing and Forwarding)"
+             view="config-vrf-view"
+             viewid="vrfname=${name}">
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context vrf ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vrf" help="Remove VRF">
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete vrf/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-vrf-view"
+        prompt="${SYSTEM_NAME}(config-vrf-${vrfname})# ">
+
+    <COMMAND name="exit" help="Exit VRF configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="root" help="Return to top of config tree" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+
+    <COMMAND name="rd" help="Route Distinguisher (ASN:nn or A.B.C.D:nn)">
+      <PARAM name="rd" help="Route Distinguisher" ptype="TERTOOS_RD"/>
+      <ACTION>tertoos-cli candidate set vrf/${vrfname}/rd ${rd}</ACTION>
+    </COMMAND>
+    <COMMAND name="no rd" help="Remove Route Distinguisher">
+      <ACTION>tertoos-cli candidate delete vrf/${vrfname}/rd</ACTION>
+    </COMMAND>
+
+    <COMMAND name="address-family ipv4 unicast"
+             help="IPv4 unicast address-family"
+             view="config-vrf-af-view"
+             viewid="vrfname=${vrfname};af=ipv4">
+      <ACTION>tertoos-cli candidate context vrf-af ipv4</ACTION>
+    </COMMAND>
+    <COMMAND name="address-family ipv6 unicast"
+             help="IPv6 unicast address-family"
+             view="config-vrf-af-view"
+             viewid="vrfname=${vrfname};af=ipv6">
+      <ACTION>tertoos-cli candidate context vrf-af ipv6</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show configuration" help="Show pending VRF config">
+      <ACTION>tertoos-cli candidate show --filter vrf/${vrfname}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-vrf-af-view"
+        prompt="${SYSTEM_NAME}(config-vrf-${vrfname}-af-${af})# ">
+
+    <COMMAND name="exit" help="Exit address-family" view="config-vrf-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="import route-target"
+             help="Import Route Target into this VRF/AF">
+      <PARAM name="rt" help="Route Target (ASN:nn)" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate add vrf/${vrfname}/af/${af}/import_rt ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="no import route-target"
+             help="Remove imported Route Target">
+      <PARAM name="rt" help="Route Target" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate del-list vrf/${vrfname}/af/${af}/import_rt ${rt}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="export route-target"
+             help="Export Route Target from this VRF/AF">
+      <PARAM name="rt" help="Route Target (ASN:nn)" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate add vrf/${vrfname}/af/${af}/export_rt ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="no export route-target"
+             help="Remove exported Route Target">
+      <PARAM name="rt" help="Route Target" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate del-list vrf/${vrfname}/af/${af}/export_rt ${rt}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="import route-policy"
+             help="Apply RPL on import">
+      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set vrf/${vrfname}/af/${af}/import_policy ${rpl}</ACTION>
+    </COMMAND>
+    <COMMAND name="export route-policy"
+             help="Apply RPL on export">
+      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set vrf/${vrfname}/af/${af}/export_policy ${rpl}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

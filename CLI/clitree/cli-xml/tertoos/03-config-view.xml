@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — config-view (candidate config root, IOS-XR style).
+  Toda mutação aqui escreve em CANDIDATE, não em running. Aplicação
+  atômica via "commit" (que invoca o GCU do sonic-utilities).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view" prompt="${SYSTEM_NAME}(config)# ">
+
+    <!-- Commit machinery -->
+    <COMMAND name="commit"
+             help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="commit confirmed"
+             help="Apply with auto-rollback if not confirmed">
+      <PARAM name="minutes" help="Confirm window (1..60 minutes)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate commit --confirmed ${minutes}</ACTION>
+    </COMMAND>
+    <COMMAND name="commit replace"
+             help="Replace running configuration entirely">
+      <ACTION>tertoos-cli candidate commit --replace</ACTION>
+    </COMMAND>
+    <COMMAND name="commit label"
+             help="Apply with a textual label">
+      <PARAM name="label" help="Label (no spaces)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate commit --label ${label}</ACTION>
+    </COMMAND>
+    <COMMAND name="commit comment"
+             help="Apply with a free-text comment">
+      <PARAM name="comment" help="Comment text" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate commit --comment "${comment}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="abort"
+             help="Discard candidate and exit"
+             view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+
+    <COMMAND name="rollback configuration last"
+             help="Roll back N most recent commits">
+      <PARAM name="n" help="Number of commits to roll back" ptype="UINT"/>
+      <ACTION>tertoos-cli rollback last ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="rollback configuration to"
+             help="Roll back to a labeled commit">
+      <PARAM name="label" help="Commit label" ptype="STRING"/>
+      <ACTION>tertoos-cli rollback to ${label}</ACTION>
+    </COMMAND>
+
+    <!-- Show within config (candidate-aware) -->
+    <COMMAND name="show" help="Display configuration"/>
+    <COMMAND name="show configuration"
+             help="Show candidate (uncommitted) configuration">
+      <ACTION>tertoos-cli candidate show</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration merge"
+             help="Show candidate merged with running">
+      <ACTION>tertoos-cli candidate show --merge</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration running"
+             help="Show running configuration (committed)">
+      <ACTION>tertoos-cli show running</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration failed"
+             help="Show last commit failure detail">
+      <ACTION>tertoos-cli candidate show --failed</ACTION>
+    </COMMAND>
+
+    <!-- Cross-mode: do <any privileged command> -->
+    <COMMAND name="do"
+             help="Run a privileged EXEC command without leaving config">
+      <PARAM name="cmd" help="Command line" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli do ${cmd}</ACTION>
+    </COMMAND>
+
+    <!-- Navigation -->
+    <COMMAND name="exit"
+             help="Exit configuration mode (discard candidate if not committed)"
+             view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="end"
+             help="Return to privileged EXEC"
+             view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="root" help="Return to top of config tree" view="config-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <!-- Identity / minimal global config (S1 scope) -->
+    <COMMAND name="hostname"
+             help="Set system hostname (candidate)">
+      <PARAM name="name" help="Hostname" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set hostname ${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="banner motd" help="Set message-of-the-day banner">
+      <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set banner/motd "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="banner login" help="Set pre-login banner">
+      <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set banner/login "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="banner exec" help="Set post-login (EXEC) banner">
+      <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set banner/exec "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no banner motd" help="Clear MOTD banner">
+      <ACTION>tertoos-cli candidate delete banner/motd</ACTION>
+    </COMMAND>
+    <COMMAND name="no banner login" help="Clear login banner">
+      <ACTION>tertoos-cli candidate delete banner/login</ACTION>
+    </COMMAND>
+    <COMMAND name="no banner exec" help="Clear EXEC banner">
+      <ACTION>tertoos-cli candidate delete banner/exec</ACTION>
+    </COMMAND>
+
+    <!--
+      Sub-views futuras (escopo de sprints S2+):
+        interface, vrf, router static, router bgp, router isis, router ospf,
+        mpls ldp, segment-routing, l2vpn, evpn, route-policy, prefix-set,
+        community-set, ipv4 access-list, ipv6 access-list, class-map,
+        policy-map, snmp-server, logging, ntp, lldp, sflow, telemetry,
+        ssh server, netconf-yang, grpc, feature, horizon.
+      Cada uma vira um arquivo XML separado em desta pasta.
+    -->
+
+  </VIEW>
+</CLISH_MODULE>

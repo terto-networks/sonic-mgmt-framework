@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — privileged-view ("tertoos#").
+  Equivalente IOS-XR: privileged EXEC. Entrada em config via
+  "configure" ou "configure terminal".
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="privileged-view" prompt="${SYSTEM_NAME}# ">
+
+    <COMMAND name="disable" help="Return to user EXEC" view="exec-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <COMMAND name="exit" help="Exit privileged EXEC" view="exec-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <COMMAND name="logout" help="Exit the CLI" lock="false">
+      <ACTION builtin="clish_close"/>
+    </COMMAND>
+
+    <!-- Enter configuration (candidate) -->
+    <COMMAND name="configure"
+             help="Enter global configuration mode"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin</ACTION>
+    </COMMAND>
+    <COMMAND name="configure terminal"
+             help="Configure from the terminal"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin</ACTION>
+    </COMMAND>
+    <COMMAND name="configure exclusive"
+             help="Configure with exclusive lock"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin --exclusive</ACTION>
+    </COMMAND>
+
+    <!-- Show family -->
+    <COMMAND name="show" help="Display operational state"/>
+    <COMMAND name="show version" help="Show TertoOS version">
+      <ACTION>tertoos-cli show version</ACTION>
+    </COMMAND>
+    <COMMAND name="show running-config"
+             help="Show running configuration (committed)">
+      <ACTION>tertoos-cli show running</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration commit list"
+             help="List recent commits">
+      <ACTION>tertoos-cli commit list</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration commit changes"
+             help="Show changes of a specific commit">
+      <PARAM name="commit-id" help="Commit id (numeric or label)" ptype="STRING"/>
+      <ACTION>tertoos-cli commit show ${commit-id}</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces" help="Show interfaces">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
+      <ACTION>tertoos-cli show ipv4 brief</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv4 route" help="IPv4 routing table">
+      <ACTION>tertoos-cli show ipv4 route</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp summary" help="BGP summary">
+      <ACTION>vtysh -c "show bgp summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform" help="Platform information">
+      <ACTION>tertoos-cli show platform</ACTION>
+    </COMMAND>
+    <COMMAND name="show tech-support" help="Collect tech-support bundle">
+      <ACTION>tertoos-cli tech-support</ACTION>
+    </COMMAND>
+
+    <!-- Operational -->
+    <COMMAND name="ping" help="Ping IPv4/IPv6 host">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>ping -c 4 ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="traceroute" help="Trace route to host">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>traceroute ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="ssh" help="Open SSH session">
+      <PARAM name="target" help="user@host" ptype="STRING"/>
+      <ACTION>ssh ${target}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="reload" help="Reload the system">
+      <ACTION>tertoos-cli reload</ACTION>
+    </COMMAND>
+    <COMMAND name="clear" help="Reset operational counters/state"/>
+    <COMMAND name="clear counters" help="Clear interface counters">
+      <ACTION>tertoos-cli clear counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp" help="Reset BGP sessions">
+      <ACTION>vtysh -c "clear bgp *"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug" help="Enable debug for a feature">
+      <PARAM name="feature" help="Feature name" ptype="STRING"/>
+      <ACTION>tertoos-cli debug enable ${feature}</ACTION>
+    </COMMAND>
+    <COMMAND name="undebug" help="Disable debug for a feature">
+      <PARAM name="feature" help="Feature name" ptype="STRING"/>
+      <ACTION>tertoos-cli debug disable ${feature}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="terminal length" help="Set terminal pager length">
+      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
+      <ACTION>tertoos-cli terminal length ${lines}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

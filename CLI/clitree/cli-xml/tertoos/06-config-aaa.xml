@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — AAA, TACACS+, RADIUS, e usuários locais (IOS-XR style).
+
+  Mapeamento candidate → CONFIG_DB:
+    aaa/authentication/login              → AAA|authentication.login   "login"  (csv)
+    aaa/authentication/failthrough        → AAA|authentication         "failthrough"
+    aaa/authorization/exec                → AAA|authorization          "exec"
+    aaa/accounting/exec                   → AAA|accounting             "exec"
+    tacacs/global/timeout                 → TACPLUS|global             "timeout"
+    tacacs/global/auth-type               → TACPLUS|global             "auth_type"
+    tacacs/global/key                     → TACPLUS|global             "passkey"
+    tacacs/server/<host>/key              → TACPLUS_SERVER|<host>      "passkey"
+    tacacs/server/<host>/timeout          → TACPLUS_SERVER|<host>      "timeout"
+    tacacs/server/<host>/priority         → TACPLUS_SERVER|<host>      "priority"
+    radius/server/<host>/...              → RADIUS_SERVER|<host>       analogous
+    user/<name>/group                     → SHELLOUT host-services (não transacional)
+    user/<name>/password                  → SHELLOUT host-services
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <!-- ================================ AAA ================================ -->
+    <COMMAND name="aaa authentication login"
+             help="Set authentication method list (default)">
+      <PARAM name="methods"
+             help="Comma-separated list: local,tacacs+,radius"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set aaa/authentication/login ${methods}</ACTION>
+    </COMMAND>
+    <COMMAND name="no aaa authentication login" help="Reset authentication to default">
+      <ACTION>tertoos-cli candidate delete aaa/authentication/login</ACTION>
+    </COMMAND>
+
+    <COMMAND name="aaa authentication failthrough"
+             help="Try next method on auth failure (true/false)">
+      <PARAM name="state" help="true | false" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set aaa/authentication/failthrough ${state}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="aaa authorization exec"
+             help="Set EXEC authorization method list">
+      <PARAM name="methods" help="local | tacacs+ | radius (csv)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set aaa/authorization/exec ${methods}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="aaa accounting exec"
+             help="Set EXEC accounting method list">
+      <PARAM name="methods" help="local | tacacs+ | radius (csv)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set aaa/accounting/exec ${methods}</ACTION>
+    </COMMAND>
+
+    <!-- =============================== TACACS+ ============================== -->
+    <COMMAND name="tacacs-server timeout" help="Global TACACS+ timeout (sec)">
+      <PARAM name="seconds" help="1..60" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set tacacs/global/timeout ${seconds}</ACTION>
+    </COMMAND>
+    <COMMAND name="tacacs-server auth-type" help="Global auth type">
+      <PARAM name="type" help="pap | chap | login | mschap" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set tacacs/global/auth-type ${type}</ACTION>
+    </COMMAND>
+    <COMMAND name="tacacs-server key" help="Global shared secret">
+      <PARAM name="key" help="Shared key" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set tacacs/global/key "${key}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="tacacs-server host" help="Configure a TACACS+ server">
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="key-kw" help="key" ptype="STRING"/>
+      <PARAM name="key" help="Shared secret" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set tacacs/server/${host}/key "${key}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no tacacs-server host" help="Remove TACACS+ server">
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete tacacs/server/${host}</ACTION>
+    </COMMAND>
+
+    <!-- ================================ RADIUS ============================== -->
+    <COMMAND name="radius-server timeout" help="Global RADIUS timeout (sec)">
+      <PARAM name="seconds" help="1..60" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set radius/global/timeout ${seconds}</ACTION>
+    </COMMAND>
+    <COMMAND name="radius-server retransmit" help="Global retransmit count">
+      <PARAM name="count" help="0..10" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set radius/global/retransmit ${count}</ACTION>
+    </COMMAND>
+    <COMMAND name="radius-server key" help="Global shared secret">
+      <PARAM name="key" help="Shared key" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set radius/global/key "${key}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="radius-server host" help="Configure a RADIUS server">
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="key-kw" help="key" ptype="STRING"/>
+      <PARAM name="key" help="Shared secret" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set radius/server/${host}/key "${key}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no radius-server host" help="Remove RADIUS server">
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete radius/server/${host}</ACTION>
+    </COMMAND>
+
+    <!-- ============================ Local users ============================= -->
+    <COMMAND name="username"
+             help="Configure a local user (group/role + password)">
+      <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
+      <PARAM name="group-kw" help="group" ptype="STRING"/>
+      <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="STRING"/>
+      <PARAM name="password-kw" help="password" ptype="STRING"/>
+      <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no username" help="Remove a local user">
+      <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete user/${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>
