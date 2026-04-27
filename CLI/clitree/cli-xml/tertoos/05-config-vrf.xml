@@ -54,6 +54,15 @@
       <ACTION>tertoos-cli candidate delete vrf/${vrfname}/rd</ACTION>
     </COMMAND>
 
+    <!-- S10 — EVPN Type-5 anchor: VRF→L3 VNI binding. -->
+    <COMMAND name="vni" help="Bind L3 VNI to this VRF (EVPN Type-5)">
+      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set vrf/${vrfname}/vni ${vni}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vni" help="Remove L3 VNI binding">
+      <ACTION>tertoos-cli candidate delete vrf/${vrfname}/vni</ACTION>
+    </COMMAND>
+
     <COMMAND name="address-family ipv4 unicast"
              help="IPv4 unicast address-family"
              view="config-vrf-af-view"

@@ -144,6 +144,27 @@
     <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
       <ACTION>vtysh -c "show mpls l2transport vc"</ACTION>
     </COMMAND>
+    <COMMAND name="show evpn vni" help="EVPN VNI summary">
+      <ACTION>vtysh -c "show evpn vni"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn vni detail" help="EVPN VNI detail">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn mac vni" help="EVPN MACs for a VNI">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn mac vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn arp-cache vni" help="EVPN ARP/ND cache for a VNI">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn arp-cache vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn es" help="EVPN ethernet-segments">
+      <ACTION>vtysh -c "show evpn es"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp l2vpn evpn" help="BGP L2VPN EVPN RIB">
+      <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
+    </COMMAND>
     <COMMAND name="show platform" help="Platform information">
       <ACTION>tertoos-cli show platform</ACTION>
     </COMMAND>
@@ -197,6 +218,12 @@
     <COMMAND name="clear mpls ldp neighbor peer" help="Reset specific LDP neighbor">
       <PARAM name="addr" help="Peer LSR-id" ptype="STRING"/>
       <ACTION>vtysh -c "clear mpls ldp neighbor ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear evpn dup-addr" help="Clear EVPN duplicate-address detection state">
+      <ACTION>vtysh -c "clear evpn dup-addr"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp l2vpn evpn" help="Reset all BGP L2VPN EVPN sessions">
+      <ACTION>vtysh -c "clear bgp l2vpn evpn *"</ACTION>
     </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">

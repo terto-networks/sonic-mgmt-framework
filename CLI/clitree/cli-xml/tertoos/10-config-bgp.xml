@@ -149,8 +149,8 @@
     </COMMAND>
     <COMMAND name="address-family l2vpn evpn"
              help="Enter L2VPN EVPN address-family"
-             view="config-router-bgp-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpaf=l2vpn_evpn">
+             view="config-router-bgp-evpn-view"
+             viewid="bgpvrf=${bgpvrf}">
       <ACTION>
         tertoos-cli candidate context router-bgp-af l2vpn_evpn
         tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn
@@ -223,6 +223,56 @@
     <COMMAND name="no neighbor" help="Remove a BGP neighbor">
       <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${addr}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-router-bgp-evpn-view (S10) ================== -->
+  <VIEW name="config-router-bgp-evpn-view"
+        prompt="${SYSTEM_NAME}(config-router-bgp-af-l2vpn-evpn)# ">
+
+    <COMMAND name="exit" help="Exit EVPN address-family" view="config-router-bgp-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <!-- Reusa leaves do AF padrão (route-policy, send-community, etc.) via
+         translateBGPGlobalAF — entrada principal já criada. EVPN-specific: -->
+    <COMMAND name="advertise-all-vni" help="Advertise all locally-configured VNIs">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/advertise-all-vni true</ACTION>
+    </COMMAND>
+    <COMMAND name="no advertise-all-vni" help="Stop advertising all VNIs">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/advertise-all-vni false</ACTION>
+    </COMMAND>
+    <COMMAND name="advertise ipv4 unicast" help="Advertise IPv4 prefixes via Type-5">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/advertise-ipv4-unicast true</ACTION>
+    </COMMAND>
+    <COMMAND name="advertise ipv6 unicast" help="Advertise IPv6 prefixes via Type-5">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/advertise-ipv6-unicast true</ACTION>
+    </COMMAND>
+
+    <COMMAND name="vni route-target import"
+             help="Per-VNI import route-target">
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/import ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="vni route-target export"
+             help="Per-VNI export route-target">
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/export ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="vni route-target both"
+             help="Per-VNI import + export route-target">
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
+      <ACTION>
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/import ${rt}
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/export ${rt}
+      </ACTION>
     </COMMAND>
 
   </VIEW>
