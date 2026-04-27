@@ -96,6 +96,22 @@
       <PARAM name="prefix" help="X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
       <ACTION>vtysh -c "show bgp ipv6 unicast ${prefix}"</ACTION>
     </COMMAND>
+    <COMMAND name="show ospf" help="OSPF process info">
+      <ACTION>vtysh -c "show ip ospf"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf vrf" help="OSPF info for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show ip ospf vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf neighbor" help="OSPF neighbors">
+      <ACTION>vtysh -c "show ip ospf neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf interface" help="OSPF interfaces">
+      <ACTION>vtysh -c "show ip ospf interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database" help="OSPF LSDB">
+      <ACTION>vtysh -c "show ip ospf database"</ACTION>
+    </COMMAND>
     <COMMAND name="show platform" help="Platform information">
       <ACTION>tertoos-cli show platform</ACTION>
     </COMMAND>
@@ -139,6 +155,9 @@
     <COMMAND name="clear bgp vrf" help="Reset BGP sessions in a VRF">
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>vtysh -c "clear bgp vrf ${vrf} *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear ip ospf process" help="Reset the OSPF process">
+      <ACTION>vtysh -c "clear ip ospf process"</ACTION>
     </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">

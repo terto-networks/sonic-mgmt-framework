@@ -181,6 +181,72 @@
       <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
     </COMMAND>
 
+    <!-- ====== OSPFv2 per-interface (S6) ===================================
+         Mapeia para OSPFV2_INTERFACE|<if>|null. A chave usa 'null' como
+         endereço — frrcfgd interpreta como interface-wide (vale para todos
+         os IPs configurados). Usar a key concreta com endereço seria
+         possível mas exige saber o IP em commit-time (não temos).
+    -->
+    <COMMAND name="ip ospf area" help="Bind interface to an OSPF area">
+      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <PARAM name="area" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/area-id ${area}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf area" help="Unbind interface from OSPF">
+      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/area-id</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf cost" help="OSPF link cost">
+      <PARAM name="cost" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/metric ${cost}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf hello-interval" help="Hello interval (seconds)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf dead-interval" help="Dead interval (seconds)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/dead-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf network" help="OSPF network type">
+      <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/network-type ${kind}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf priority" help="DR election priority">
+      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication" help="Per-interface authentication">
+      <PARAM name="kind" help="text | message-digest | null" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-type ${kind}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication-key" help="Plain authentication key">
+      <PARAM name="key" help="Key string" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key "${key}"</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf message-digest-key" help="MD5 key">
+      <PARAM name="id" help="Key id 1..255" ptype="UINT"/>
+      <PARAM name="md5" help="md5" ptype="STRING"/>
+      <PARAM name="key" help="Key string" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-md5-key "${key}"
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf mtu-ignore" help="Ignore MTU mismatch">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/mtu-ignore true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf mtu-ignore" help="Re-enable MTU check">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/mtu-ignore false</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf bfd" help="Enable BFD on this OSPF interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf bfd" help="Disable BFD">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/bfd-enable false</ACTION>
+    </COMMAND>
+
     <!-- Show within if-view (candidate-aware) -->
     <COMMAND name="show" help="Show interface configuration"/>
     <COMMAND name="show configuration" help="Show pending changes for this interface">
