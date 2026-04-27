@@ -71,6 +71,31 @@
     <COMMAND name="show bgp summary" help="BGP summary">
       <ACTION>vtysh -c "show bgp summary"</ACTION>
     </COMMAND>
+    <COMMAND name="show bgp summary vrf" help="BGP summary for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vrf ${vrf} summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp neighbors" help="BGP neighbors detail">
+      <ACTION>vtysh -c "show bgp neighbors"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp neighbor" help="BGP neighbor detail (single peer)">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <ACTION>vtysh -c "show bgp neighbors ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 unicast" help="BGP IPv4 unicast RIB">
+      <ACTION>vtysh -c "show bgp ipv4 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 unicast prefix" help="BGP IPv4 unicast for a prefix">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>vtysh -c "show bgp ipv4 unicast ${prefix}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv6 unicast" help="BGP IPv6 unicast RIB">
+      <ACTION>vtysh -c "show bgp ipv6 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv6 unicast prefix" help="BGP IPv6 unicast for a prefix">
+      <PARAM name="prefix" help="X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>vtysh -c "show bgp ipv6 unicast ${prefix}"</ACTION>
+    </COMMAND>
     <COMMAND name="show platform" help="Platform information">
       <ACTION>tertoos-cli show platform</ACTION>
     </COMMAND>
@@ -99,8 +124,21 @@
     <COMMAND name="clear counters" help="Clear interface counters">
       <ACTION>tertoos-cli clear counters</ACTION>
     </COMMAND>
-    <COMMAND name="clear bgp" help="Reset BGP sessions">
+    <COMMAND name="clear bgp" help="Reset all BGP sessions">
       <ACTION>vtysh -c "clear bgp *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp neighbor" help="Reset a specific BGP neighbor">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <ACTION>vtysh -c "clear bgp ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp neighbor soft" help="Soft-clear a BGP neighbor">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="dir" help="in | out" ptype="STRING"/>
+      <ACTION>vtysh -c "clear bgp ${addr} soft ${dir}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp vrf" help="Reset BGP sessions in a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "clear bgp vrf ${vrf} *"</ACTION>
     </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">
