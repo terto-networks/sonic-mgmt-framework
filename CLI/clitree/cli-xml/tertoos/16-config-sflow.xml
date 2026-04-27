@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — sFlow (S12). sonic-sflow.yang upstream.
+    sflow enable                         → SFLOW|global admin_state=up
+    sflow agent-id <if|ip>               → SFLOW|global agent_id
+    sflow polling-interval <s>           → SFLOW|global polling_interval
+    sflow sample-direction <dir>         → SFLOW|global sample_direction
+    sflow collector <name> <ip> [port P] → SFLOW_COLLECTOR|<name>
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="sflow enable" help="Enable sFlow globally">
+      <ACTION>tertoos-cli candidate set sflow/admin_state up</ACTION>
+    </COMMAND>
+    <COMMAND name="no sflow enable" help="Disable sFlow">
+      <ACTION>tertoos-cli candidate set sflow/admin_state down</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow agent-id" help="Agent identification (interface or IP)">
+      <PARAM name="agent" help="Interface name or IP" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow polling-interval" help="Counter poll interval">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sflow/polling_interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow sample-direction" help="Sample direction">
+      <PARAM name="dir" help="rx | tx | both" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sflow/sample_direction ${dir}</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow collector" help="Add a collector">
+      <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
+      <PARAM name="ip" help="Collector IP" ptype="STRING"/>
+      <PARAM name="port" help="UDP port (optional, default 6343)"
+             ptype="UINT" optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set sflow/collector/${name}/collector_ip ${ip}
+        if [ -n "${port}" ]; then
+            tertoos-cli candidate set sflow/collector/${name}/collector_port ${port}
+        fi
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="sflow collector vrf" help="Bind a collector to a VRF">
+      <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set sflow/collector/${name}/collector_vrf ${vrf}</ACTION>
+    </COMMAND>
+    <COMMAND name="no sflow collector" help="Remove a collector">
+      <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete sflow/collector/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

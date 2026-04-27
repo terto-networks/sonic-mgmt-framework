@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — SSH server (S12). DEVICE_METADATA.localhost.ssh-* + SSH_SERVER
+  table (sonic-utilities consume).
+    ssh server v2          → DEVICE_METADATA|localhost ssh_protocol_version=2
+    ssh server port <p>    → DEVICE_METADATA|localhost ssh_port
+    ssh server vrf <name>  → DEVICE_METADATA|localhost ssh_vrf
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="ssh server v2" help="Enable SSH protocol v2">
+      <ACTION>tertoos-cli candidate set ssh/protocol_version 2</ACTION>
+    </COMMAND>
+    <COMMAND name="ssh server port" help="SSH listen port">
+      <PARAM name="port" help="TCP port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ssh/port ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="ssh server vrf" help="VRF for SSH server">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set ssh/vrf ${vrf}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ssh server vrf" help="Remove VRF binding">
+      <ACTION>tertoos-cli candidate delete ssh/vrf</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

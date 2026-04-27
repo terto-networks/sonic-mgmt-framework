@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Telemetry / gNMI (S12). sonic-telemetry.yang + sonic-gnmi.yang.
+    telemetry-model-driven   → TELEMETRY|gnmi
+    grpc server enable       → GNMI|gnmi enabled
+
+  Subset implementado: server enable + port + log-level + client-auth.
+  Sensor-paths/destinations/subscriptions IOS-XR-style precisam tabelas
+  específicas (TELEMETRY_CLIENT) que ficam para fatia futura — comandos
+  CLI presentes mas escrevem em annotation-table até backend completar.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="grpc server enable" help="Enable gNMI/gRPC server">
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/enabled true</ACTION>
+    </COMMAND>
+    <COMMAND name="no grpc server enable" help="Disable gNMI/gRPC server">
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/enabled false</ACTION>
+    </COMMAND>
+    <COMMAND name="grpc server port" help="gNMI/gRPC TCP port">
+      <PARAM name="port" help="TCP port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/port ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="grpc server log-level" help="gNMI server log level">
+      <PARAM name="level" help="0..9" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/log_level ${level}</ACTION>
+    </COMMAND>
+    <COMMAND name="grpc server client-auth" help="Client cert auth (cert|password|none)">
+      <PARAM name="mode" help="cert | password | none" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/client_auth ${mode}</ACTION>
+    </COMMAND>
+    <COMMAND name="grpc server certificate" help="Server cert/key">
+      <PARAM name="ca" help="Path to CA cert" ptype="STRING"/>
+      <PARAM name="crt" help="Path to server cert" ptype="STRING"/>
+      <PARAM name="key" help="Path to server key" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set telemetry/gnmi/ca_crt ${ca}
+        tertoos-cli candidate set telemetry/gnmi/server_crt ${crt}
+        tertoos-cli candidate set telemetry/gnmi/server_key ${key}
+      </ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

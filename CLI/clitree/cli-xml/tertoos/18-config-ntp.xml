@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — NTP (S12). sonic-ntp.yang upstream.
+    ntp authenticate                                    → NTP|global authentication=enable
+    ntp source <if>                                     → NTP|global src_intf (custom/upstream)
+    ntp vrf <name>                                      → NTP|global vrf
+    ntp server <addr> [iburst] [version V] [key K] [prefer]
+                                                        → NTP_SERVER|<addr>
+    ntp authentication-key <id> md5 <key>               → NTP_KEY|<id>
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="ntp authenticate" help="Enable NTP authentication">
+      <ACTION>tertoos-cli candidate set ntp/authentication enable</ACTION>
+    </COMMAND>
+    <COMMAND name="no ntp authenticate" help="Disable NTP authentication">
+      <ACTION>tertoos-cli candidate set ntp/authentication disable</ACTION>
+    </COMMAND>
+    <COMMAND name="ntp vrf" help="Bind NTP to a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set ntp/vrf ${vrf}</ACTION>
+    </COMMAND>
+    <COMMAND name="ntp source" help="Source interface">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set ntp/src_intf ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ntp server" help="Add an NTP server">
+      <PARAM name="addr" help="Server IP/hostname" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set ntp/server/${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="ntp server iburst" help="Add a server with iburst">
+      <PARAM name="addr" help="Server IP" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set ntp/server/${addr}
+        tertoos-cli candidate set ntp/server/${addr}/iburst true
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ntp server prefer" help="Add a preferred server">
+      <PARAM name="addr" help="Server IP" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set ntp/server/${addr}
+        tertoos-cli candidate set ntp/server/${addr}/association_type preferred
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ntp server key" help="Bind a key id to a server">
+      <PARAM name="addr" help="Server IP" ptype="STRING"/>
+      <PARAM name="kid" help="Key id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ntp/server/${addr}/key ${kid}</ACTION>
+    </COMMAND>
+    <COMMAND name="ntp server version" help="Set NTP version (3|4)">
+      <PARAM name="addr" help="Server IP" ptype="STRING"/>
+      <PARAM name="ver" help="3 | 4" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ntp/server/${addr}/version ${ver}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ntp server" help="Remove a server">
+      <PARAM name="addr" help="Server IP" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete ntp/server/${addr}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ntp authentication-key" help="Configure an auth key">
+      <PARAM name="id" help="Key id" ptype="UINT"/>
+      <PARAM name="alg" help="md5 | sha1" ptype="STRING"/>
+      <PARAM name="value" help="Key value" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set ntp/key/${id}/type ${alg}
+        tertoos-cli candidate set ntp/key/${id}/value "${value}"
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ntp trusted-key" help="Mark a key as trusted">
+      <PARAM name="id" help="Key id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ntp/key/${id}/trusted true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ntp authentication-key" help="Remove an auth key">
+      <PARAM name="id" help="Key id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete ntp/key/${id}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

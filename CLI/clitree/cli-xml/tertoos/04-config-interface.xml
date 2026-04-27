@@ -247,6 +247,30 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/bfd-enable false</ACTION>
     </COMMAND>
 
+    <!-- ===== S12 — operational per-interface ============================== -->
+    <COMMAND name="lldp transmit" help="Enable LLDP transmit on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode tx</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp receive" help="Enable LLDP receive on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode rx</ACTION>
+    </COMMAND>
+    <COMMAND name="no lldp transmit" help="Disable LLDP transmit">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode disabled-tx</ACTION>
+    </COMMAND>
+    <COMMAND name="no lldp receive" help="Disable LLDP receive">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode disabled-rx</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow enable" help="Enable sFlow sampling on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/admin_state up</ACTION>
+    </COMMAND>
+    <COMMAND name="no sflow enable" help="Disable sFlow on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/admin_state down</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow sample-rate" help="Per-port sample rate override">
+      <PARAM name="n" help="1-in-N" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
+    </COMMAND>
+
     <!-- Show within if-view (candidate-aware) -->
     <COMMAND name="show" help="Show interface configuration"/>
     <COMMAND name="show configuration" help="Show pending changes for this interface">

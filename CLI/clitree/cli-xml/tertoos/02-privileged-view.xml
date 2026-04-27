@@ -225,6 +225,42 @@
     <COMMAND name="clear bgp l2vpn evpn" help="Reset all BGP L2VPN EVPN sessions">
       <ACTION>vtysh -c "clear bgp l2vpn evpn *"</ACTION>
     </COMMAND>
+    <COMMAND name="clear bfd statistics" help="Reset BFD counters">
+      <ACTION>vtysh -c "clear bfd statistics"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bfd peers" help="BFD peers state">
+      <ACTION>vtysh -c "show bfd peers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bfd peers brief" help="BFD peers brief">
+      <ACTION>vtysh -c "show bfd peers brief"</ACTION>
+    </COMMAND>
+    <COMMAND name="show sflow" help="sFlow status">
+      <ACTION>show sflow</ACTION>
+    </COMMAND>
+    <COMMAND name="show lldp neighbors" help="LLDP neighbors">
+      <ACTION>show lldp neighbors</ACTION>
+    </COMMAND>
+    <COMMAND name="show lldp table" help="LLDP table">
+      <ACTION>show lldp table</ACTION>
+    </COMMAND>
+    <COMMAND name="show ntp associations" help="NTP associations">
+      <ACTION>chronyc sources -v 2&gt;/dev/null || ntpq -p</ACTION>
+    </COMMAND>
+    <COMMAND name="show ntp status" help="NTP status">
+      <ACTION>chronyc tracking 2&gt;/dev/null || ntpq -nc rv</ACTION>
+    </COMMAND>
+    <COMMAND name="show logging" help="Recent log messages">
+      <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
+    </COMMAND>
+    <COMMAND name="show snmp" help="SNMP runtime config">
+      <ACTION>show runningconfiguration snmp 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <COMMAND name="show telemetry" help="Telemetry/gNMI status">
+      <ACTION>systemctl status telemetry 2&gt;/dev/null | head -10</ACTION>
+    </COMMAND>
+    <COMMAND name="show ssh server" help="SSH server config">
+      <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
+    </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">
       <PARAM name="feature" help="Feature name" ptype="STRING"/>

@@ -392,6 +392,12 @@
       <PARAM name="hops" help="1..254" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ttl_security_hops ${hops}</ACTION>
     </COMMAND>
+    <COMMAND name="bfd" help="Enable BFD for this peer">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/bfd true</ACTION>
+    </COMMAND>
+    <COMMAND name="no bfd" help="Disable BFD for this peer">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/bfd false</ACTION>
+    </COMMAND>
     <COMMAND name="update-source" help="Source interface or address">
       <PARAM name="src" help="Interface name or IP" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_addr ${src}</ACTION>

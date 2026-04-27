@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Logging/syslog (S12). sonic-syslog.yang upstream.
+    logging <addr> [port P] [protocol tcp|udp] [severity S] [vrf V]
+                                          → SYSLOG_SERVER|<addr>
+    logging trap <severity>               → SYSLOG_CONFIG|GLOBAL severity
+    logging source-interface <if>         → SYSLOG_CONFIG|GLOBAL source_intf
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="logging" help="Add a remote syslog server">
+      <PARAM name="addr" help="Server IP/hostname" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set logging/server/${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="logging port" help="Server port">
+      <PARAM name="addr" help="Server" ptype="STRING"/>
+      <PARAM name="p" help="UDP/TCP port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set logging/server/${addr}/port ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="logging protocol" help="Transport protocol">
+      <PARAM name="addr" help="Server" ptype="STRING"/>
+      <PARAM name="proto" help="udp | tcp" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set logging/server/${addr}/protocol ${proto}</ACTION>
+    </COMMAND>
+    <COMMAND name="logging severity" help="Per-server severity threshold">
+      <PARAM name="addr" help="Server" ptype="STRING"/>
+      <PARAM name="sev" help="emerg|alert|crit|error|warning|notice|info|debug" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set logging/server/${addr}/severity ${sev}</ACTION>
+    </COMMAND>
+    <COMMAND name="logging vrf" help="Server VRF context">
+      <PARAM name="addr" help="Server" ptype="STRING"/>
+      <PARAM name="vrf" help="VRF" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set logging/server/${addr}/vrf ${vrf}</ACTION>
+    </COMMAND>
+    <COMMAND name="no logging" help="Remove a server">
+      <PARAM name="addr" help="Server" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete logging/server/${addr}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="logging trap" help="Global severity threshold">
+      <PARAM name="sev" help="Severity" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set logging/global/severity ${sev}</ACTION>
+    </COMMAND>
+    <COMMAND name="logging source-interface" help="Source interface">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set logging/global/source_intf ${ifname}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>
