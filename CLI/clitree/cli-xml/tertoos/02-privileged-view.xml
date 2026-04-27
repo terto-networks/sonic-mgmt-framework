@@ -261,6 +261,15 @@
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
     </COMMAND>
+    <COMMAND name="show horizon status" help="Horizon agent status">
+      <ACTION>tertoos-cli horizon status</ACTION>
+    </COMMAND>
+    <COMMAND name="show horizon telemetry" help="Last telemetry samples">
+      <ACTION>tertoos-cli horizon telemetry</ACTION>
+    </COMMAND>
+    <COMMAND name="show horizon queue" help="Pending publish queue">
+      <ACTION>tertoos-cli horizon queue</ACTION>
+    </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">
       <PARAM name="feature" help="Feature name" ptype="STRING"/>

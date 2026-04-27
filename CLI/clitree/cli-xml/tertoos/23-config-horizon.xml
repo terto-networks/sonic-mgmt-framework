@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Horizon agent (S13.A). HORIZON_AGENT|global em CONFIG_DB,
+  consumido pelo terto-horizon-agent (Go) que rodará como systemd unit.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+
+    <COMMAND name="horizon enable" help="Enable Horizon agent">
+      <ACTION>tertoos-cli candidate set horizon/enabled true</ACTION>
+    </COMMAND>
+    <COMMAND name="no horizon enable" help="Disable Horizon agent">
+      <ACTION>tertoos-cli candidate set horizon/enabled false</ACTION>
+    </COMMAND>
+    <COMMAND name="horizon disable" help="Disable Horizon agent (alias)">
+      <ACTION>tertoos-cli candidate set horizon/enabled false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon tenant-id" help="Tenant UUID (assigned by Core)">
+      <PARAM name="id" help="UUID" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set horizon/tenant_id ${id}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon site-id" help="Site slug (Edge local)">
+      <PARAM name="id" help="Slug" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set horizon/site_id ${id}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon broker" help="Broker NATS URL (Edge local)">
+      <PARAM name="url" help="nats://host:port" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set horizon/broker_url ${url}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon enrollment-token" help="Set enrollment token (write-once)">
+      <PARAM name="tok" help="Opaque token" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set horizon/enrollment_token "${tok}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no horizon enrollment-token" help="Clear enrollment token">
+      <ACTION>tertoos-cli candidate delete horizon/enrollment_token</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon interval-heartbeat" help="Heartbeat interval (s)">
+      <PARAM name="s" help="5..3600" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set horizon/interval_heartbeat ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="horizon interval-counters" help="Counters interval (s)">
+      <PARAM name="s" help="5..3600" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set horizon/interval_counters ${s}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon subject-prefix" help="NATS subject prefix">
+      <PARAM name="p" help="Prefix" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set horizon/subject_prefix ${p}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>
