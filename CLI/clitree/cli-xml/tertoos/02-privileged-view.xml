@@ -112,6 +112,38 @@
     <COMMAND name="show ospf database" help="OSPF LSDB">
       <ACTION>vtysh -c "show ip ospf database"</ACTION>
     </COMMAND>
+    <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
+      <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp binding" help="LDP label bindings">
+      <ACTION>vtysh -c "show mpls ldp binding"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp interface" help="LDP enabled interfaces">
+      <ACTION>vtysh -c "show mpls ldp interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp discovery" help="LDP discovery">
+      <ACTION>vtysh -c "show mpls ldp discovery"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv4 unicast" help="BGP VPNv4 unicast RIB">
+      <ACTION>vtysh -c "show bgp vpnv4 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv4 unicast vrf" help="BGP VPNv4 unicast for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vpnv4 unicast vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv6 unicast" help="BGP VPNv6 unicast RIB">
+      <ACTION>vtysh -c "show bgp vpnv6 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv6 unicast vrf" help="BGP VPNv6 unicast for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vpnv6 unicast vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn xconnect" help="L2VPN xconnect status">
+      <ACTION>vtysh -c "show l2vpn xconnect"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
+      <ACTION>vtysh -c "show mpls l2transport vc"</ACTION>
+    </COMMAND>
     <COMMAND name="show platform" help="Platform information">
       <ACTION>tertoos-cli show platform</ACTION>
     </COMMAND>
@@ -158,6 +190,13 @@
     </COMMAND>
     <COMMAND name="clear ip ospf process" help="Reset the OSPF process">
       <ACTION>vtysh -c "clear ip ospf process"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear mpls ldp neighbor" help="Reset all LDP neighbors">
+      <ACTION>vtysh -c "clear mpls ldp neighbor *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear mpls ldp neighbor peer" help="Reset specific LDP neighbor">
+      <PARAM name="addr" help="Peer LSR-id" ptype="STRING"/>
+      <ACTION>vtysh -c "clear mpls ldp neighbor ${addr}"</ACTION>
     </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">

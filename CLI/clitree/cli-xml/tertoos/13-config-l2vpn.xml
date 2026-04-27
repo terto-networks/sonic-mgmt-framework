@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — l2vpn views (IOS-XR style VPWS).
+
+  Estrutura IOS-XR vs CONFIG_DB:
+    pw-class <name>                              → L2VPN_PW_CLASS|<name>
+    l2vpn xconnect group <g> p2p <p>             → L2VPN_XCONNECT_GROUP|<g>|<p>
+      interface <if>                             → leaf interface
+      neighbor ipv4 <ip> pw-id <n>               → leaves peer-address + pw-id
+      pw-class <c>                               → leaf pw-class
+
+  Backend: frrcfgd renderiza via templates/ldpd/ldpd.conf.db.l2vpn.j2 →
+  FRR ldpd (mpls ldp\n l2vpn ... pwtype ethernet\n bridge ...).
+
+  Gating SAI: dataplane L2VPN não funciona no AS5912 (Trident III).
+  Funcional no Centec quando lab estiver pronto.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="pw-class"
+             help="Configure a pseudowire class"
+             view="config-pw-class-view"
+             viewid="pwcname=${name}">
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context pw-class ${name}
+        tertoos-cli candidate set l2vpn/pw-class/${name}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no pw-class" help="Remove pw-class">
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete l2vpn/pw-class/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="l2vpn xconnect group"
+             help="Configure an L2VPN xconnect group"
+             view="config-l2vpn-group-view"
+             viewid="l2vpngrp=${name}">
+      <PARAM name="name" help="Group name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context l2vpn-group ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2vpn xconnect group" help="Remove an L2VPN group">
+      <PARAM name="name" help="Group name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate delete l2vpn/xconnect/${name}/-all
+      </ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-pw-class-view =============================== -->
+  <VIEW name="config-pw-class-view"
+        prompt="${SYSTEM_NAME}(config-pw-class-${pwcname})# ">
+
+    <COMMAND name="exit" help="Exit pw-class" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="encapsulation mpls" help="MPLS encapsulation">
+      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/encapsulation mpls</ACTION>
+    </COMMAND>
+    <COMMAND name="control-word" help="Enable PW control-word">
+      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/control-word true</ACTION>
+    </COMMAND>
+    <COMMAND name="no control-word" help="Disable PW control-word">
+      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/control-word false</ACTION>
+    </COMMAND>
+    <COMMAND name="mtu" help="PW MTU">
+      <PARAM name="bytes" help="64..9216" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="transport-mode" help="Transport mode">
+      <PARAM name="mode" help="ethernet | vlan" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/transport-mode ${mode}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-l2vpn-group-view ============================ -->
+  <VIEW name="config-l2vpn-group-view"
+        prompt="${SYSTEM_NAME}(config-l2vpn-${l2vpngrp})# ">
+
+    <COMMAND name="exit" help="Exit l2vpn group" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="p2p"
+             help="Configure a point-to-point pseudowire"
+             view="config-l2vpn-p2p-view"
+             viewid="l2vpngrp=${l2vpngrp};l2vpnp2p=${name}">
+      <PARAM name="name" help="P2P name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context l2vpn-p2p ${name}
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${name}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no p2p" help="Remove a p2p">
+      <PARAM name="name" help="P2P name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-l2vpn-p2p-view ============================== -->
+  <VIEW name="config-l2vpn-p2p-view"
+        prompt="${SYSTEM_NAME}(config-l2vpn-${l2vpngrp}-p2p-${l2vpnp2p})# ">
+
+    <COMMAND name="exit" help="Exit p2p" view="config-l2vpn-group-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="interface" help="Attachment circuit interface">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="neighbor ipv4 pw-id" help="Remote PE peer + PW id">
+      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <PARAM name="pwid" help="Pw-id 1..4294967295" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/peer-address ${addr}
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id ${pwid}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="pw-class" help="Bind a pw-class">
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-class ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="mtu" help="P2P MTU override">
+      <PARAM name="bytes" help="64..9216" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="shutdown" help="Disable the p2p">
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/enabled false</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Enable the p2p">
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/enabled true</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>

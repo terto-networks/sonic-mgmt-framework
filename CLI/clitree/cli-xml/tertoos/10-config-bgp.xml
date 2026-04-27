@@ -124,6 +124,48 @@
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/ipv6_unicast</ACTION>
     </COMMAND>
 
+    <!-- L3VPN address-families (S11). Reusam config-router-bgp-af-view —
+         os mesmos comandos `route-map`, `network`, `aggregate-address`
+         valem (frrcfgd não filtra por AFI). bgpcfgd consome a row
+         BGP_GLOBALS_AF|<vrf>|vpnv4_unicast e ergue a AF correspondente
+         em FRR. -->
+    <COMMAND name="address-family vpnv4 unicast"
+             help="Enter VPNv4 unicast address-family (L3VPN)"
+             view="config-router-bgp-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpaf=vpnv4_unicast">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-af vpnv4_unicast
+        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv4_unicast
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family vpnv6 unicast"
+             help="Enter VPNv6 unicast address-family (L3VPN)"
+             view="config-router-bgp-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpaf=vpnv6_unicast">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-af vpnv6_unicast
+        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv6_unicast
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family l2vpn evpn"
+             help="Enter L2VPN EVPN address-family"
+             view="config-router-bgp-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpaf=l2vpn_evpn">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-af l2vpn_evpn
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no address-family vpnv4 unicast" help="Remove VPNv4 AF">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/vpnv4_unicast</ACTION>
+    </COMMAND>
+    <COMMAND name="no address-family vpnv6 unicast" help="Remove VPNv6 AF">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/vpnv6_unicast</ACTION>
+    </COMMAND>
+    <COMMAND name="no address-family l2vpn evpn" help="Remove EVPN AF">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/l2vpn_evpn</ACTION>
+    </COMMAND>
+
     <COMMAND name="session-group"
              help="Configure a named session-group (peer-group session leaves)"
              view="config-router-bgp-sg-view"
@@ -433,6 +475,33 @@
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af ipv6_unicast
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv6_unicast
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family vpnv4 unicast"
+             help="Per-neighbor VPNv4 unicast (L3VPN)"
+             view="config-router-bgp-nbr-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv4_unicast">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-nbr-af vpnv4_unicast
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv4_unicast
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family vpnv6 unicast"
+             help="Per-neighbor VPNv6 unicast (L3VPN)"
+             view="config-router-bgp-nbr-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv6_unicast">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-nbr-af vpnv6_unicast
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv6_unicast
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family l2vpn evpn"
+             help="Per-neighbor L2VPN EVPN"
+             view="config-router-bgp-nbr-af-view"
+             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=l2vpn_evpn">
+      <ACTION>
+        tertoos-cli candidate context router-bgp-nbr-af l2vpn_evpn
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/l2vpn_evpn
       </ACTION>
     </COMMAND>
 
