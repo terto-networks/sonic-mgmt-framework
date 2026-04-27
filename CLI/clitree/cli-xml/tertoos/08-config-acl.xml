@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — IPv4 / IPv6 / Ethernet-services access-lists (IOS-XR style).
+
+  Sintaxe IOS-XR usa sequence number; SONiC ACL_RULE usa priority (maior =
+  match-first, max 9999). A camada `tertoos-cli candidate` converte:
+      PRIORITY = 10000 - seq
+
+  Mapeamento candidate → CONFIG_DB (validado por tertoos-acl.yang):
+    acl/<n>/type                       → ACL_TABLE|<n>            type
+    acl/<n>/stage                      → ACL_TABLE|<n>            stage
+    acl/<n>/policy_desc                → ACL_TABLE|<n>            policy_desc
+    acl/<n>/ports                      → ACL_TABLE|<n>            ports (leaf-list)
+    acl/<n>/rule/<seq>/action          → ACL_RULE|<n>|RULE_<seq>  PACKET_ACTION
+    acl/<n>/rule/<seq>/protocol        → ACL_RULE|<n>|RULE_<seq>  IP_PROTOCOL
+    acl/<n>/rule/<seq>/src             → ACL_RULE|<n>|RULE_<seq>  SRC_IP|SRC_IPV6
+    acl/<n>/rule/<seq>/dst             → ACL_RULE|<n>|RULE_<seq>  DST_IP|DST_IPV6
+    acl/<n>/rule/<seq>/dst_port        → ACL_RULE|<n>|RULE_<seq>  L4_DST_PORT
+    acl/<n>/rule/<seq>/src_port        → ACL_RULE|<n>|RULE_<seq>  L4_SRC_PORT
+    acl/<n>/rule/<seq>/tcp_flags       → ACL_RULE|<n>|RULE_<seq>  TCP_FLAGS
+    acl/<n>/rule/<seq>/ether_type      → ACL_RULE|<n>|RULE_<seq>  ETHER_TYPE
+    acl/<n>/rule/<seq>/vlan_id         → ACL_RULE|<n>|RULE_<seq>  VLAN_ID
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- Entrada via config-view -->
+  <VIEW name="config-view">
+
+    <COMMAND name="ipv4 access-list"
+             help="Configure an IPv4 access-list"
+             view="config-ipv4-acl-view"
+             viewid="aclname=${name}">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context acl ${name}
+        tertoos-cli candidate set acl/${name}/type L3
+        tertoos-cli candidate set acl/${name}/stage INGRESS
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 access-list" help="Delete an IPv4 access-list">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 access-list"
+             help="Configure an IPv6 access-list"
+             view="config-ipv6-acl-view"
+             viewid="aclname=${name}">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context acl ${name}
+        tertoos-cli candidate set acl/${name}/type L3V6
+        tertoos-cli candidate set acl/${name}/stage INGRESS
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 access-list" help="Delete an IPv6 access-list">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ethernet-services access-list"
+             help="Configure an L2 (MAC/802.1Q) access-list"
+             view="config-l2-acl-view"
+             viewid="aclname=${name}">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context acl ${name}
+        tertoos-cli candidate set acl/${name}/type L2
+        tertoos-cli candidate set acl/${name}/stage INGRESS
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no ethernet-services access-list" help="Delete an L2 access-list">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================== IPv4 view ============================ -->
+  <VIEW name="config-ipv4-acl-view"
+        prompt="${SYSTEM_NAME}(config-ipv4-acl-${aclname})# ">
+
+    <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="description" help="Set policy description">
+      <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
+    </COMMAND>
+
+    <!--
+      Forma simplificada (uma única regra por linha):
+        <seq> permit|deny <protocol> <src> <dst> [eq <port>]
+      Exemplos canônicos do IOS-XR:
+        10 permit tcp 10.0.0.0/8 any eq 22
+        20 deny ip any any
+    -->
+    <COMMAND name="permit"
+             help="Add an ACL rule (sequence + protocol + src + dst)">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="protocol" help="ip | tcp | udp | icmp | <number>"
+             ptype="STRING"/>
+      <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst_port_kw"
+             help="Optional 'eq <port>'"
+             ptype="STRING"
+             optional="true"/>
+      <PARAM name="dst_port"
+             help="Destination port"
+             ptype="UINT"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
+        if [ -n "${dst_port}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="deny" help="Add a deny ACL rule">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="protocol" help="ip | tcp | udp | icmp | <number>"
+             ptype="STRING"/>
+      <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst_port_kw"
+             help="Optional 'eq <port>'"
+             ptype="STRING"
+             optional="true"/>
+      <PARAM name="dst_port"
+             help="Destination port"
+             ptype="UINT"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
+        if [ -n "${dst_port}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="remark" help="Add a comment to a rule (does not match)">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="text" help="Comment text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/remark "${text}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="no" help="Remove an ACL rule by sequence number">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show configuration"
+             help="Show pending ACL configuration">
+      <ACTION>tertoos-cli candidate show --filter acl/${aclname}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================== IPv6 view ============================ -->
+  <VIEW name="config-ipv6-acl-view"
+        prompt="${SYSTEM_NAME}(config-ipv6-acl-${aclname})# ">
+
+    <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="description" help="Set policy description">
+      <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="permit" help="Add a permit ACL rule">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | <number>"
+             ptype="STRING"/>
+      <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst_port_kw"
+             help="Optional 'eq <port>'"
+             ptype="STRING"
+             optional="true"/>
+      <PARAM name="dst_port"
+             help="Destination port"
+             ptype="UINT"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
+        if [ -n "${dst_port}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="deny" help="Add a deny ACL rule">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | <number>"
+             ptype="STRING"/>
+      <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="dst_port_kw"
+             help="Optional 'eq <port>'"
+             ptype="STRING"
+             optional="true"/>
+      <PARAM name="dst_port"
+             help="Destination port"
+             ptype="UINT"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
+        if [ -n "${dst_port}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no" help="Remove an ACL rule by sequence number">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show configuration"
+             help="Show pending ACL configuration">
+      <ACTION>tertoos-cli candidate show --filter acl/${aclname}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================ L2 (Eth-services) view ================== -->
+  <VIEW name="config-l2-acl-view"
+        prompt="${SYSTEM_NAME}(config-l2-acl-${aclname})# ">
+
+    <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="description" help="Set policy description">
+      <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="permit" help="Permit by ether-type and/or VLAN">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)"
+             ptype="STRING"/>
+      <PARAM name="vlan_kw" help="Optional 'vlan <id>'"
+             ptype="STRING" optional="true"/>
+      <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}
+        if [ -n "${vlan_id}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="deny" help="Deny by ether-type and/or VLAN">
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="ether_type" help="EtherType" ptype="STRING"/>
+      <PARAM name="vlan_kw" help="Optional 'vlan <id>'"
+             ptype="STRING" optional="true"/>
+      <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
+             optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}
+        if [ -n "${vlan_id}" ]; then
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no" help="Remove an ACL rule by sequence number">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show configuration"
+             help="Show pending ACL configuration">
+      <ACTION>tertoos-cli candidate show --filter acl/${aclname}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>
