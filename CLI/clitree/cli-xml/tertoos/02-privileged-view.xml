@@ -168,6 +168,55 @@
     <COMMAND name="show platform" help="Platform information">
       <ACTION>tertoos-cli show platform</ACTION>
     </COMMAND>
+    <COMMAND name="show platform summary" help="Platform summary (alias)">
+      <ACTION>show platform summary</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform inventory" help="EEPROM / serial / model">
+      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform environment" help="Fans, PSU, temperature">
+      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform controllers" help="PCI controllers and SAI driver">
+      <ACTION>lspci -nn 2&gt;/dev/null | head -40; echo; show platform npu summary 2&gt;/dev/null || true</ACTION>
+    </COMMAND>
+    <COMMAND name="show inventory" help="Inventory (alias for show platform inventory)">
+      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+    </COMMAND>
+    <COMMAND name="show environment" help="Environment (alias)">
+      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show processes" help="Top processes snapshot">
+      <ACTION>top -bn1 -w 200 2&gt;/dev/null | head -40</ACTION>
+    </COMMAND>
+    <COMMAND name="show processes cpu" help="Top processes by CPU">
+      <ACTION>ps -eo pid,user,pcpu,pmem,comm --sort=-pcpu | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show processes memory" help="Top processes by memory">
+      <ACTION>ps -eo pid,user,pmem,rss,comm --sort=-pmem | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show memory summary" help="Memory summary">
+      <ACTION>cat /proc/meminfo 2&gt;/dev/null | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show watchdog" help="Watchdog status">
+      <ACTION>systemctl status sonic-watchdog 2&gt;/dev/null | head -15 || echo "watchdog: service not present on this build"</ACTION>
+    </COMMAND>
+    <COMMAND name="show users" help="Logged-in users">
+      <ACTION>who 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <COMMAND name="show uptime" help="System uptime">
+      <ACTION>uptime</ACTION>
+    </COMMAND>
+    <COMMAND name="show clock" help="System clock">
+      <ACTION>date '+%Y-%m-%d %H:%M:%S %Z'</ACTION>
+    </COMMAND>
+    <COMMAND name="show file systems" help="Filesystem usage">
+      <ACTION>df -h 2&gt;/dev/null | grep -vE '^(tmpfs|udev|none)'</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces transceiver" help="SFP/QSFP transceiver presence + EEPROM">
+      <ACTION>show interfaces transceiver presence 2&gt;/dev/null; echo; show interfaces transceiver eeprom 2&gt;/dev/null | head -50</ACTION>
+    </COMMAND>
     <COMMAND name="show tech-support" help="Collect tech-support bundle">
       <ACTION>tertoos-cli tech-support</ACTION>
     </COMMAND>
