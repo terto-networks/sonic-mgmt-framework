@@ -253,6 +253,26 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/advertise-ipv6-unicast true</ACTION>
     </COMMAND>
 
+    <!-- ===== S11.x — EVPN-MPLS encap (#37) ============================== -->
+    <COMMAND name="encapsulation" help="EVPN encapsulation default">
+      <PARAM name="t" help="vxlan | mpls" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set evpn/globals/${bgpvrf}/default_encapsulation ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="advertise mpls-labels" help="Advertise MPLS labels in EVPN routes">
+      <ACTION>tertoos-cli candidate set evpn/globals/${bgpvrf}/advertise_mpls_labels true</ACTION>
+    </COMMAND>
+    <COMMAND name="no advertise mpls-labels" help="Disable MPLS label advertisement">
+      <ACTION>tertoos-cli candidate set evpn/globals/${bgpvrf}/advertise_mpls_labels false</ACTION>
+    </COMMAND>
+    <COMMAND name="mpls label-block" help="MPLS label block for EVPN">
+      <PARAM name="start" help="Start label" ptype="UINT"/>
+      <PARAM name="end" help="End label" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_start ${start}
+        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_end ${end}
+      </ACTION>
+    </COMMAND>
+
     <COMMAND name="vni route-target import"
              help="Per-VNI import route-target">
       <PARAM name="vni" help="VNI" ptype="UINT"/>

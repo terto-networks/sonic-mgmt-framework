@@ -138,6 +138,15 @@
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>vtysh -c "show bgp vpnv6 unicast vrf ${vrf}"</ACTION>
     </COMMAND>
+    <COMMAND name="show l2vpn bridge-domain" help="VPLS bridge-domains (S11.x)">
+      <ACTION>vtysh -c "show l2vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn vfi" help="VPLS VFIs (S11.x)">
+      <ACTION>vtysh -c "show l2vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn encapsulation" help="EVPN encap config">
+      <ACTION>sonic-db-cli CONFIG_DB keys 'EVPN_GLOBALS|*' &amp;&amp; vtysh -c "show bgp l2vpn evpn"</ACTION>
+    </COMMAND>
     <COMMAND name="show l2vpn xconnect" help="L2VPN xconnect status">
       <ACTION>vtysh -c "show l2vpn xconnect"</ACTION>
     </COMMAND>
