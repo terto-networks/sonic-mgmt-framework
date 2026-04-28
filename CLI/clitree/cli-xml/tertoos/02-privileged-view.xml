@@ -310,6 +310,42 @@
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
     </COMMAND>
+    <!-- ===== S5 — IS-IS show/clear ========================================= -->
+    <COMMAND name="show isis summary" help="IS-IS summary">
+      <ACTION>vtysh -c "show isis summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis topology" help="IS-IS topology">
+      <ACTION>vtysh -c "show isis topology"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis database" help="IS-IS LSP database">
+      <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
+      <ACTION>vtysh -c "show isis database ${detail}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis neighbor" help="IS-IS neighbors">
+      <ACTION>vtysh -c "show isis neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis interface" help="IS-IS per-interface state">
+      <PARAM name="ifname" help="Interface (optional)" ptype="STRING" optional="true"/>
+      <ACTION>vtysh -c "show isis interface ${ifname}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis route" help="IS-IS computed routes">
+      <ACTION>vtysh -c "show isis route"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis segment-routing prefix-sids" help="SR prefix-SID map">
+      <ACTION>vtysh -c "show isis segment-routing prefix-sids"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear isis" help="Reset IS-IS adjacencies">
+      <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${vrf}" ]; then
+            vtysh -c "clear isis vrf ${vrf}"
+        else
+            vtysh -c "clear isis *"
+        fi
+      </ACTION>
+    </COMMAND>
+
     <COMMAND name="show qos map dscp-to-tc" help="DSCP→TC maps">
       <ACTION>show qos map dscp-tc 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'DSCP_TO_TC_MAP|*'</ACTION>
     </COMMAND>

@@ -271,6 +271,55 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
 
+    <!-- ===== S5 — IS-IS per-interface (ISIS_INTERFACE) ==================== -->
+    <COMMAND name="ip router isis" help="Attach interface to an IS-IS instance">
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/instance ${tag}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip router isis" help="Detach interface from IS-IS">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/isis/instance</ACTION>
+    </COMMAND>
+    <COMMAND name="isis circuit-type" help="Per-port adjacency level">
+      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/circuit-type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis network" help="Per-port network type">
+      <PARAM name="n" help="point-to-point | broadcast" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/network-type ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis hello-interval" help="Hello interval in seconds">
+      <PARAM name="s" help="1..600" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis hello-multiplier" help="Hello multiplier">
+      <PARAM name="n" help="2..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-multiplier ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis metric" help="Per-port metric">
+      <PARAM name="n" help="1..16777215" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/metric ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis password" help="Per-port authentication">
+      <PARAM name="t" help="clear | md5" ptype="STRING"/>
+      <PARAM name="key" help="Password" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/isis/password-type ${t}
+        tertoos-cli candidate set interface/${ifname}/isis/password "${key}"
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="isis bfd" help="Enable BFD for IS-IS adjacency">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis bfd" help="Disable BFD for IS-IS">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable false</ACTION>
+    </COMMAND>
+    <COMMAND name="isis passive" help="Mark interface passive in IS-IS">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis passive" help="Re-enable IS-IS adjacency on interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive false</ACTION>
+    </COMMAND>
+
     <!-- ===== S12.B — QoS bindings (PORT_QOS_MAP) ========================== -->
     <COMMAND name="qos service-policy dscp-to-tc-map" help="Bind DSCP→TC map">
       <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
