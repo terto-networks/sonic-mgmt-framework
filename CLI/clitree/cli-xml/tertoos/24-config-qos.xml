@@ -63,6 +63,177 @@
       <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate delete qos/scheduler/${name}</ACTION>
     </COMMAND>
+
+    <!-- ===== S12.B.2 — WRED + Buffer Pool/Profile ========================= -->
+    <COMMAND name="wred-profile"
+             help="Configure WRED profile (congestion avoidance)"
+             view="config-qos-wred-view"
+             viewid="wredname=${name}">
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-wred ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no wred-profile" help="Remove WRED profile">
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/wred-profile/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="buffer-pool"
+             help="Configure buffer pool"
+             view="config-qos-buffer-pool-view"
+             viewid="poolname=${name}">
+      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-buffer-pool ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no buffer-pool" help="Remove buffer pool">
+      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/buffer-pool/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="buffer-profile"
+             help="Configure buffer profile"
+             view="config-qos-buffer-profile-view"
+             viewid="profname=${name}">
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-buffer-profile ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no buffer-profile" help="Remove buffer profile">
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/buffer-profile/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- WRED profile leaves                                            -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-wred-view"
+        prompt="${SYSTEM_NAME}(config-qos-wred-${wredname})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="ecn" help="ECN marking mode">
+      <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/ecn ${m}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="green min-threshold" help="Green min threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_min_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="green max-threshold" help="Green max threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_max_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="green drop-probability" help="Green drop probability %">
+      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_drop_probability ${p}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="yellow min-threshold" help="Yellow min threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_min_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="yellow max-threshold" help="Yellow max threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_max_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="yellow drop-probability" help="Yellow drop probability %">
+      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_drop_probability ${p}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="red min-threshold" help="Red min threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_min_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="red max-threshold" help="Red max threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_max_threshold ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="red drop-probability" help="Red drop probability %">
+      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_drop_probability ${p}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="wred enable" help="Enable WRED for a color">
+      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="wred disable" help="Disable WRED for a color">
+      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable false</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- Buffer Pool leaves                                             -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-buffer-pool-view"
+        prompt="${SYSTEM_NAME}(config-qos-buffer-pool-${poolname})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="type" help="Pool direction">
+      <PARAM name="t" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="mode" help="Pool admission mode">
+      <PARAM name="m" help="static | dynamic" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/mode ${m}</ACTION>
+    </COMMAND>
+    <COMMAND name="size" help="Pool size in bytes">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/size ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="xoff" help="Pool-level xoff threshold">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/xoff ${b}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- Buffer Profile leaves                                          -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-buffer-profile-view"
+        prompt="${SYSTEM_NAME}(config-qos-buffer-profile-${profname})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="pool" help="Bind to a buffer pool">
+      <PARAM name="p" help="Pool name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/pool ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="size" help="Reserved size (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/size ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="static-th" help="Static threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/static_th ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="dynamic-th" help="Dynamic alpha (-8..7)">
+      <PARAM name="a" help="-8..7" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/dynamic_th ${a}</ACTION>
+    </COMMAND>
+    <COMMAND name="xon" help="Xon threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/xon ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="xon-offset" help="Xon offset (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/xon_offset ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="xoff" help="Xoff threshold (bytes)">
+      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/xoff ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="headroom-type" help="Headroom calc strategy">
+      <PARAM name="t" help="static | dynamic" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/headroom_type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="packet-discard-action" help="Discard action">
+      <PARAM name="a" help="drop | trim" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/packet_discard_action ${a}</ACTION>
+    </COMMAND>
   </VIEW>
 
   <!-- ============================================================== -->

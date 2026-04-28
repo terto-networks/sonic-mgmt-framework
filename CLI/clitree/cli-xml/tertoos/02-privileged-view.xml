@@ -386,6 +386,24 @@
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
       <ACTION>show queue counters ${port}</ACTION>
     </COMMAND>
+    <COMMAND name="show qos wred-profile" help="WRED profiles">
+      <ACTION>show qos wred-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'WRED_PROFILE|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-pool" help="Buffer pools">
+      <ACTION>show qos buffer-pool 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'BUFFER_POOL|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-profile" help="Buffer profiles">
+      <ACTION>show qos buffer-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'BUFFER_PROFILE|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-pg" help="Per-port buffer-PG bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_PG|${port}|*"</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-queue" help="Per-port buffer-queue bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_QUEUE|${port}|*"</ACTION>
+    </COMMAND>
+
     <COMMAND name="show priority-group counters" help="Per-port priority-group counters">
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
       <ACTION>show priority-group counters ${port}</ACTION>
