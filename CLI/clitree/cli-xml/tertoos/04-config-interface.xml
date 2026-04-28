@@ -271,6 +271,51 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
 
+    <!-- ===== S6.1 — OSPFv3 per-interface (OSPFV3_INTERFACE) =============== -->
+    <COMMAND name="ipv6 ospf area" help="Attach interface to an OSPFv3 area">
+      <PARAM name="id" help="Area id" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/area-id ${id}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf area" help="Detach interface from OSPFv3">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv6-ospf/area-id</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf cost" help="OSPFv3 cost">
+      <PARAM name="n" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/cost ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf hello-interval" help="OSPFv3 hello interval">
+      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf dead-interval" help="OSPFv3 dead interval">
+      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/dead-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf priority" help="OSPFv3 router priority">
+      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf network" help="OSPFv3 network type">
+      <PARAM name="t" help="broadcast | point-to-point" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/network-type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf bfd" help="Enable BFD for OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf bfd" help="Disable BFD for OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/bfd-enable false</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf passive" help="Mark interface passive in OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/passive true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf passive" help="Re-enable OSPFv3 adjacency">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/passive false</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf instance-id" help="OSPFv3 instance id">
+      <PARAM name="n" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/instance-id ${n}</ACTION>
+    </COMMAND>
+
     <!-- ===== S5 — IS-IS per-interface (ISIS_INTERFACE) ==================== -->
     <COMMAND name="ip router isis" help="Attach interface to an IS-IS instance">
       <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>

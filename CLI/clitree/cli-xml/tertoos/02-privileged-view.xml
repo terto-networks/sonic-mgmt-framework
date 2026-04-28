@@ -310,6 +310,26 @@
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
     </COMMAND>
+    <!-- ===== S6.1 — OSPFv3 show/clear ====================================== -->
+    <COMMAND name="show ipv6 ospf" help="OSPFv3 summary">
+      <ACTION>vtysh -c "show ipv6 ospf6"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf neighbor" help="OSPFv3 neighbors">
+      <ACTION>vtysh -c "show ipv6 ospf6 neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf interface" help="OSPFv3 per-interface state">
+      <ACTION>vtysh -c "show ipv6 ospf6 interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf database" help="OSPFv3 LSA database">
+      <ACTION>vtysh -c "show ipv6 ospf6 database"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf route" help="OSPFv3 computed routes">
+      <ACTION>vtysh -c "show ipv6 ospf6 route"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear ipv6 ospf process" help="Restart OSPFv3 process">
+      <ACTION>vtysh -c "clear ipv6 ospf6 process"</ACTION>
+    </COMMAND>
+
     <!-- ===== S5 — IS-IS show/clear ========================================= -->
     <COMMAND name="show isis summary" help="IS-IS summary">
       <ACTION>vtysh -c "show isis summary"</ACTION>
