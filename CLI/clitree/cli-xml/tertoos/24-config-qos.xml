@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — QoS views (S12.B).
+  Mapeamento bare-minimum para o pipeline SAI via SONiC qosorch:
+    qos map dscp-to-tc <name>   → DSCP_TO_TC_MAP|<name>
+    qos map tc-to-queue <name>  → TC_TO_QUEUE_MAP|<name>
+    qos map tc-to-pg <name>     → TC_TO_PRIORITY_GROUP_MAP|<name>
+    qos scheduler <name>        → SCHEDULER|<name>
+  Bind por interface vive em 04-config-interface.xml (PORT_QOS_MAP|<if>).
+  Class-map XR completo (match ACL/police/shape/WRED) fica para S12.B.2.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+    <COMMAND name="qos map dscp-to-tc"
+             help="Configure DSCP→TC map"
+             view="config-qos-dscp-tc-view"
+             viewid="qosmap=${name}">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-dscp-tc ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos map dscp-to-tc" help="Remove DSCP→TC map">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/dscp-to-tc/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="qos map tc-to-queue"
+             help="Configure TC→Queue map"
+             view="config-qos-tc-queue-view"
+             viewid="qosmap=${name}">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-tc-queue ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos map tc-to-queue" help="Remove TC→Queue map">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/tc-to-queue/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="qos map tc-to-pg"
+             help="Configure TC→Priority-Group map"
+             view="config-qos-tc-pg-view"
+             viewid="qosmap=${name}">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-tc-pg ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos map tc-to-pg" help="Remove TC→PG map">
+      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/tc-to-pg/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="qos scheduler"
+             help="Configure scheduler profile"
+             view="config-qos-scheduler-view"
+             viewid="schedname=${name}">
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context qos-scheduler ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos scheduler" help="Remove scheduler profile">
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete qos/scheduler/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- DSCP → TC map entries                                          -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-dscp-tc-view"
+        prompt="${SYSTEM_NAME}(config-qos-dscp-tc-${qosmap})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="dscp" help="DSCP code-point → traffic-class">
+      <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
+      <PARAM name="tc_kw" help="traffic-class" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/dscp-to-tc/${qosmap}/${dscp} ${tc}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dscp" help="Remove DSCP entry">
+      <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete qos/dscp-to-tc/${qosmap}/${dscp}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- TC → Queue map entries                                         -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-tc-queue-view"
+        prompt="${SYSTEM_NAME}(config-qos-tc-queue-${qosmap})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="tc" help="Traffic-class → queue">
+      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="q_kw" help="queue" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="q" help="Queue index 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/tc-to-queue/${qosmap}/${tc} ${q}</ACTION>
+    </COMMAND>
+    <COMMAND name="no tc" help="Remove TC entry">
+      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete qos/tc-to-queue/${qosmap}/${tc}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- TC → Priority-Group map entries                                -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-tc-pg-view"
+        prompt="${SYSTEM_NAME}(config-qos-tc-pg-${qosmap})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="tc" help="Traffic-class → priority-group">
+      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="pg_kw" help="pg" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="pg" help="Priority-group 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/tc-to-pg/${qosmap}/${tc} ${pg}</ACTION>
+    </COMMAND>
+    <COMMAND name="no tc" help="Remove TC entry">
+      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete qos/tc-to-pg/${qosmap}/${tc}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ============================================================== -->
+  <!-- Scheduler profile leaves                                       -->
+  <!-- ============================================================== -->
+  <VIEW name="config-qos-scheduler-view"
+        prompt="${SYSTEM_NAME}(config-qos-scheduler-${schedname})# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="type" help="Scheduling discipline">
+      <PARAM name="t" help="DWRR | STRICT | WRR" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="weight" help="DWRR/WRR weight (1..100)">
+      <PARAM name="w" help="1..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/weight ${w}</ACTION>
+    </COMMAND>
+    <COMMAND name="meter-type" help="Rate meter unit">
+      <PARAM name="u" help="bytes | packets" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/meter_type ${u}</ACTION>
+    </COMMAND>
+    <COMMAND name="pir" help="Peak information rate">
+      <PARAM name="bps" help="Rate in bps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/pir ${bps}</ACTION>
+    </COMMAND>
+    <COMMAND name="pbs" help="Peak burst size">
+      <PARAM name="bytes" help="Burst in bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/pbs ${bytes}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

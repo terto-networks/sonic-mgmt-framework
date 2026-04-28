@@ -271,6 +271,36 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
 
+    <!-- ===== S12.B — QoS bindings (PORT_QOS_MAP) ========================== -->
+    <COMMAND name="qos service-policy dscp-to-tc-map" help="Bind DSCP→TC map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/dscp-to-tc-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy dscp-to-tc-map" help="Unbind DSCP→TC map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/dscp-to-tc-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos service-policy tc-to-queue-map" help="Bind TC→Queue map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-queue-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy tc-to-queue-map" help="Unbind TC→Queue map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-queue-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos service-policy tc-to-pg-map" help="Bind TC→PG map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-pg-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy tc-to-pg-map" help="Unbind TC→PG map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-pg-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos scheduler-policy" help="Bind scheduler profile">
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/scheduler-policy ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos scheduler-policy" help="Unbind scheduler profile">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/scheduler-policy</ACTION>
+    </COMMAND>
+
     <!-- Show within if-view (candidate-aware) -->
     <COMMAND name="show" help="Show interface configuration"/>
     <COMMAND name="show configuration" help="Show pending changes for this interface">

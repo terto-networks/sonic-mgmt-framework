@@ -310,6 +310,31 @@
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
     </COMMAND>
+    <COMMAND name="show qos map dscp-to-tc" help="DSCP→TC maps">
+      <ACTION>show qos map dscp-tc 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'DSCP_TO_TC_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos map tc-to-queue" help="TC→Queue maps">
+      <ACTION>show qos map tc-queue 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'TC_TO_QUEUE_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos map tc-to-pg" help="TC→PG maps">
+      <ACTION>show qos map tc-pg 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'TC_TO_PRIORITY_GROUP_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos scheduler" help="Scheduler profiles">
+      <ACTION>show qos scheduler 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'SCHEDULER|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos interface" help="Per-port QoS bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>show qos port ${port} 2&gt;/dev/null || sonic-db-cli CONFIG_DB hgetall "PORT_QOS_MAP|${port}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show queue counters" help="Per-port per-queue counters">
+      <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
+      <ACTION>show queue counters ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="show priority-group counters" help="Per-port priority-group counters">
+      <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
+      <ACTION>show priority-group counters ${port}</ACTION>
+    </COMMAND>
+
     <COMMAND name="show horizon status" help="Horizon agent status">
       <ACTION>tertoos-cli horizon status</ACTION>
     </COMMAND>
