@@ -386,6 +386,41 @@
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
       <ACTION>show queue counters ${port}</ACTION>
     </COMMAND>
+    <COMMAND name="show class-map" help="Class-maps">
+      <PARAM name="name" help="Class-map name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then
+            sonic-db-cli CONFIG_DB hgetall "TERTOOS_CLASS_MAP|${name}"
+        else
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_CLASS_MAP|*'
+        fi
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show policy-map" help="Policy-maps">
+      <PARAM name="name" help="Policy-map name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then
+            sonic-db-cli CONFIG_DB keys "TERTOOS_POLICY_MAP_CLASS|${name}|*"
+        else
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_POLICY_MAP|*'
+        fi
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show policy-map interface" help="Per-port service-policy bindings">
+      <PARAM name="port" help="Port" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB hgetall "TERTOOS_PORT_SERVICE_POLICY|${port}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show policer" help="Policer profiles">
+      <PARAM name="name" help="Policer name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then
+            sonic-db-cli CONFIG_DB hgetall "POLICER|${name}"
+        else
+            sonic-db-cli CONFIG_DB keys 'POLICER|*'
+        fi
+      </ACTION>
+    </COMMAND>
+
     <COMMAND name="show qos wred-profile" help="WRED profiles">
       <ACTION>show qos wred-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'WRED_PROFILE|*'</ACTION>
     </COMMAND>

@@ -395,6 +395,22 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/scheduler-policy</ACTION>
     </COMMAND>
 
+    <!-- S12.B.3 — service-policy (TERTOOS_PORT_SERVICE_POLICY) -->
+    <COMMAND name="service-policy input" help="Apply ingress policy-map">
+      <PARAM name="pmap" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/service-policy/input ${pmap}</ACTION>
+    </COMMAND>
+    <COMMAND name="no service-policy input" help="Remove ingress policy">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/service-policy/input</ACTION>
+    </COMMAND>
+    <COMMAND name="service-policy output" help="Apply egress policy-map">
+      <PARAM name="pmap" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/service-policy/output ${pmap}</ACTION>
+    </COMMAND>
+    <COMMAND name="no service-policy output" help="Remove egress policy">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/service-policy/output</ACTION>
+    </COMMAND>
+
     <!-- S12.B.2 — per-queue / per-PG bindings -->
     <COMMAND name="qos queue wred-profile" help="Bind WRED profile to a queue">
       <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
