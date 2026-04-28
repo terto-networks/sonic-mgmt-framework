@@ -81,6 +81,28 @@
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/discovery-hello-interval ${s}</ACTION>
     </COMMAND>
 
+    <!-- ===== S7.x — Graceful Restart (#22) ============================== -->
+    <COMMAND name="graceful-restart" help="Enable LDP graceful restart">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart true</ACTION>
+    </COMMAND>
+    <COMMAND name="no graceful-restart" help="Disable LDP graceful restart">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart false</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart helper" help="Helper-only mode">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper true</ACTION>
+    </COMMAND>
+    <COMMAND name="no graceful-restart helper" help="Disable helper mode">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper false</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart reconnect-time" help="Reconnect timer">
+      <PARAM name="s" help="Seconds (default 120)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_reconnect_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart recovery-time" help="Recovery timer">
+      <PARAM name="s" help="Seconds (default 240)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_recovery_time ${s}</ACTION>
+    </COMMAND>
+
     <COMMAND name="address-family ipv4"
              help="LDP IPv4 address-family"
              view="config-mpls-ldp-af-view"
