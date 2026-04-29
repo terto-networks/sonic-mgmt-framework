@@ -481,6 +481,36 @@
       <ACTION>show priority-group counters ${port}</ACTION>
     </COMMAND>
 
+    <!-- ===== S13.D — OTA image management ================================ -->
+    <COMMAND name="image install" help="Install signed image bundle from URL">
+      <PARAM name="url" help="https://... bundle URL" ptype="STRING"/>
+      <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ "${opt}" = "no-verify" ]; then
+            tertoos-cli image install ${url} no-verify
+        else
+            tertoos-cli image install ${url}
+        fi
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="image activate" help="Set next-boot image">
+      <PARAM name="slot" help="next | image-name" ptype="STRING"/>
+      <ACTION>tertoos-cli image activate ${slot}</ACTION>
+    </COMMAND>
+    <COMMAND name="image commit" help="Commit current image as default">
+      <ACTION>tertoos-cli image commit</ACTION>
+    </COMMAND>
+    <COMMAND name="image rollback" help="Roll back to previous image">
+      <ACTION>tertoos-cli image rollback</ACTION>
+    </COMMAND>
+    <COMMAND name="image list" help="List installed images (sonic-installer list)">
+      <ACTION>tertoos-cli image list</ACTION>
+    </COMMAND>
+    <COMMAND name="image verify" help="Verify a bundle's detached signature">
+      <PARAM name="path" help="Local bundle path" ptype="STRING"/>
+      <ACTION>tertoos-cli image verify ${path}</ACTION>
+    </COMMAND>
+
     <COMMAND name="show horizon status" help="Horizon agent status">
       <ACTION>tertoos-cli horizon status</ACTION>
     </COMMAND>
