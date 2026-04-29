@@ -95,6 +95,41 @@
       <PARAM name="bw" help="Mbps" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/auto-cost-reference-bandwidth ${bw}</ACTION>
     </COMMAND>
+
+    <!-- ===== S8 — Segment Routing (#24) =================================== -->
+    <COMMAND name="segment-routing" help="Enable OSPF Segment Routing">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/segment_routing true</ACTION>
+    </COMMAND>
+    <COMMAND name="no segment-routing" help="Disable OSPF SR">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/segment_routing false</ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing global-block" help="SRGB lower upper">
+      <PARAM name="lower" help="Lower label" ptype="UINT"/>
+      <PARAM name="upper" help="Upper label" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_lower ${lower}
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_upper ${upper}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing local-block" help="SRLB lower upper">
+      <PARAM name="lower" help="Lower" ptype="UINT"/>
+      <PARAM name="upper" help="Upper" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_lower ${lower}
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_upper ${upper}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
+      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/index ${index}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no segment-routing prefix-sid-map" help="Remove prefix-sid">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/prefix-sid/${prefix}</ACTION>
+    </COMMAND>
     <COMMAND name="distance ospf external" help="Distance for external routes">
       <PARAM name="d" help="1..255" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/distance-external ${d}</ACTION>

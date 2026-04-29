@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — segment-routing traffic-eng + PCEP (S9 / P2 #26-#27).
+
+  IOS-XR vs CONFIG_DB (frrcfgd → FRR pathd):
+    segment-routing traffic-eng                   → entrada srte view
+      policy <endpoint> color <c>                 → SR_TE_POLICY|<ep>|<c>
+        binding-sid <label>                       → bsid
+        candidate-path preference <p>             → SR_TE_CANDIDATE_PATH
+          metric-type {igp|te|hopcount|delay}
+          segment-list <name>
+      segment-list <name>                         → SR_TE_SEGMENT_LIST
+        index <n> mpls label <label>              → SR_TE_SEGMENT_LIST_HOP
+      pcep
+        pcc <name>                                → SR_TE_PCC
+          source-address <ip>
+          peer <ip> [port <p>]
+          msd <n>
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+    <COMMAND name="segment-routing traffic-eng"
+             help="Configure SR-TE"
+             view="config-srte-view">
+      <ACTION>tertoos-cli candidate context srte default</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-srte-view"
+        prompt="${SYSTEM_NAME}(config-srte)# ">
+    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="policy"
+             help="Configure SR-TE policy"
+             view="config-srte-policy-view"
+             viewid="srtepol_ep=${endpoint};srtepol_color=${color}">
+      <PARAM name="endpoint" help="Policy endpoint (A.B.C.D)" ptype="STRING"/>
+      <PARAM name="color_kw" help="color" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="color" help="Color (1..4294967295)" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context srte-policy ${endpoint}/${color}
+        tertoos-cli candidate set sr-te/policy/${endpoint}/${color}/enable true
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no policy" help="Remove SR-TE policy">
+      <PARAM name="endpoint" help="Endpoint" ptype="STRING"/>
+      <PARAM name="color_kw" help="color" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="color" help="Color" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete sr-te/policy/${endpoint}/${color}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="segment-list"
+             help="Define a segment-list"
+             view="config-srte-seglist-view"
+             viewid="srteseglist=${name}">
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context srte-seglist ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no segment-list" help="Remove segment-list">
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete sr-te/segment-list/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="pcep"
+             help="PCEP / PCC config"
+             view="config-srte-pcep-view">
+      <ACTION>tertoos-cli candidate context srte-pcep default</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ====== Policy view ====== -->
+  <VIEW name="config-srte-policy-view"
+        prompt="${SYSTEM_NAME}(config-srte-policy-${srtepol_ep}-${srtepol_color})# ">
+    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="binding-sid" help="Binding-SID label">
+      <PARAM name="label" help="MPLS label 16..1048575" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/policy/${srtepol_ep}/${srtepol_color}/bsid ${label}</ACTION>
+    </COMMAND>
+    <COMMAND name="name" help="Policy name">
+      <PARAM name="n" help="Name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/policy/${srtepol_ep}/${srtepol_color}/name ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="candidate-path preference"
+             help="Configure candidate path"
+             view="config-srte-cpath-view"
+             viewid="srtepol_ep=${srtepol_ep};srtepol_color=${srtepol_color};srtecpath=${pref}">
+      <PARAM name="pref" help="Preference 1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate context srte-cpath ${pref}</ACTION>
+    </COMMAND>
+    <COMMAND name="no candidate-path preference" help="Remove candidate path">
+      <PARAM name="pref" help="Preference" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${pref}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-srte-cpath-view"
+        prompt="${SYSTEM_NAME}(config-srte-cpath-${srtecpath})# ">
+    <COMMAND name="exit" view="config-srte-policy-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="name" help="Candidate-path name">
+      <PARAM name="n" help="Name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/name ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="discriminator" help="Path discriminator">
+      <PARAM name="d" help="uint32" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/discriminator ${d}</ACTION>
+    </COMMAND>
+    <COMMAND name="protocol-origin" help="Origin protocol">
+      <PARAM name="p" help="configured | pcep | bgp" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/protocol_origin ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="dynamic" help="Dynamic path">
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/dynamic true</ACTION>
+    </COMMAND>
+    <COMMAND name="metric-type" help="Optimization metric">
+      <PARAM name="m" help="igp | te | hopcount | delay" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/metric_type ${m}</ACTION>
+    </COMMAND>
+    <COMMAND name="bandwidth" help="Required bandwidth (bps)">
+      <PARAM name="bps" help="bps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/bandwidth ${bps}</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity include-any" help="Include-any affinity bitmap">
+      <PARAM name="b" help="hex bitmap" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/affinity_include_any ${b}</ACTION>
+    </COMMAND>
+    <COMMAND name="segment-list" help="Bind segment-list">
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ====== Segment-list view ====== -->
+  <VIEW name="config-srte-seglist-view"
+        prompt="${SYSTEM_NAME}(config-srte-seglist-${srteseglist})# ">
+    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="description" help="Description">
+      <PARAM name="text" help="Free text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set sr-te/segment-list/${srteseglist}/description "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="index" help="Add hop">
+      <PARAM name="i" help="Index 1..65535" ptype="UINT"/>
+      <PARAM name="mpls_kw" help="mpls" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="lbl_kw" help="label" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="lbl" help="MPLS label" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/segment-list-hop/${srteseglist}/${i}/mpls_label ${lbl}</ACTION>
+    </COMMAND>
+    <COMMAND name="no index" help="Remove hop">
+      <PARAM name="i" help="Index" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete sr-te/segment-list-hop/${srteseglist}/${i}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- ====== PCEP view ====== -->
+  <VIEW name="config-srte-pcep-view"
+        prompt="${SYSTEM_NAME}(config-srte-pcep)# ">
+    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="pcc" help="Configure PCC">
+      <PARAM name="name" help="PCC name (or 'global')" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set sr-te/pcc/${name}/enable true
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="pcc source-address" help="PCC source IP">
+      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <PARAM name="ip" help="Source IP" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/source_address ${ip}</ACTION>
+    </COMMAND>
+    <COMMAND name="pcc peer" help="PCE peer address">
+      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <PARAM name="ip" help="Peer IP" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/pce_address ${ip}</ACTION>
+    </COMMAND>
+    <COMMAND name="pcc peer port" help="PCE peer port">
+      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <PARAM name="port" help="port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/pce_port ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="pcc msd" help="Maximum SID Depth">
+      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <PARAM name="n" help="Depth" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/msd ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="no pcc" help="Remove PCC">
+      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete sr-te/pcc/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

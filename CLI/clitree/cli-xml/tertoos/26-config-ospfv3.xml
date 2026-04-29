@@ -88,6 +88,29 @@
     <COMMAND name="no passive-interface default" help="Re-enable adjacencies on all interfaces">
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface-default false</ACTION>
     </COMMAND>
+    <!-- ===== S8 — Segment Routing (#24) =================================== -->
+    <COMMAND name="segment-routing" help="Enable OSPFv3 Segment Routing">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/segment_routing true</ACTION>
+    </COMMAND>
+    <COMMAND name="no segment-routing" help="Disable OSPFv3 SR">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/segment_routing false</ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing global-block" help="SRGB lower upper">
+      <PARAM name="lower" help="Lower" ptype="UINT"/>
+      <PARAM name="upper" help="Upper" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_lower ${lower}
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_upper ${upper}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
+      <PARAM name="prefix" help="prefix/len" ptype="STRING"/>
+      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}
+      </ACTION>
+    </COMMAND>
+
     <COMMAND name="passive-interface" help="Mark interface passive">
       <PARAM name="ifname" help="Interface" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>

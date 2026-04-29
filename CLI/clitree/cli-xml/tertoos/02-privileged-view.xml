@@ -138,6 +138,34 @@
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>vtysh -c "show bgp vpnv6 unicast vrf ${vrf}"</ACTION>
     </COMMAND>
+    <!-- ===== S8/S9 — SR-MPLS + SR-TE + PCEP =============================== -->
+    <COMMAND name="show sr-te policy" help="SR-TE policies">
+      <PARAM name="endpoint" help="Endpoint (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${endpoint}" ]; then
+            vtysh -c "show sr-te policy ${endpoint}"
+        else
+            vtysh -c "show sr-te policy"
+        fi
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show sr-te pcep" help="SR-TE PCEP / PCC status">
+      <ACTION>vtysh -c "show sr-te pcep counters" 2&gt;/dev/null; vtysh -c "show sr-te pcep pcc"</ACTION>
+    </COMMAND>
+    <COMMAND name="show segment-routing prefix-sid" help="OSPF/IS-IS prefix-SIDs">
+      <ACTION>
+        vtysh -c "show ip ospf segment-routing prefix-sid"
+        vtysh -c "show isis segment-routing prefix-sids" 2&gt;/dev/null
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls table" help="zebra MPLS LFIB">
+      <ACTION>vtysh -c "show mpls table"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear sr-te policy" help="Reset SR-TE policy">
+      <PARAM name="endpoint" help="Endpoint" ptype="STRING"/>
+      <ACTION>vtysh -c "clear sr-te policy ${endpoint}"</ACTION>
+    </COMMAND>
+
     <COMMAND name="show l2vpn bridge-domain" help="VPLS bridge-domains (S11.x)">
       <ACTION>vtysh -c "show l2vpn"</ACTION>
     </COMMAND>
