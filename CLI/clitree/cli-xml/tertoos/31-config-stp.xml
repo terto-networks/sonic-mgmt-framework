@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Spanning Tree (S15.A) — IOS-XR style sobre sonic-spanning-tree.yang.
+
+  Tabelas CONFIG_DB programadas:
+    STP|GLOBAL                 → mode, forward_delay, hello_time, max_age,
+                                  priority, rootguard_timeout
+    STP_VLAN|<vlan>            → enabled, forward_delay, hello_time, max_age,
+                                  bridge_priority
+    STP_VLAN_PORT|<vlan>|<if>  → cost, priority
+    STP_PORT|<if>              → portfast, bpdu_guard, bpdu_guard_do_disable,
+                                  root_guard, uplink_fast, edge_port (MST)
+    STP_MST|GLOBAL             → name, revision, max_hops, hello_time
+    STP_MST_INST|<n>           → vlan, bridge_priority
+
+  Comandos IOS-XR (overlay):
+    spanning-tree mode pvst|rapid-pvst|mst
+    spanning-tree forward-time <s>
+    spanning-tree hello-time <s>
+    spanning-tree max-age <s>
+    spanning-tree priority <0..61440>
+    spanning-tree rootguard timeout <s>
+    spanning-tree vlan <id> {priority|forward-time|hello-time|max-age}
+    spanning-tree vlan <id> root primary|secondary    (syntactic sugar)
+    no spanning-tree vlan <id>
+
+    spanning-tree mst configuration       (entra config-mst-view)
+      name <name>
+      revision <n>
+      instance <n> vlan <list>
+    spanning-tree mst <n> priority <0..61440>
+    spanning-tree mst <n> root primary|secondary
+
+  Per-port (em config-if-view) é definido em 04-config-interface.xml.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <!-- Global mode -->
+    <COMMAND name="spanning-tree mode" help="Set STP mode">
+      <PARAM name="m" help="pvst | rapid-pvst | mst" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set stp/global/mode ${m}</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree" help="Disable STP globally">
+      <ACTION>tertoos-cli candidate delete stp/global</ACTION>
+    </COMMAND>
+
+    <!-- Global timers -->
+    <COMMAND name="spanning-tree forward-time" help="STP forward delay (4..30s)">
+      <PARAM name="s" help="Seconds (4..30)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/global/forward_delay ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree hello-time" help="STP hello time (1..10s)">
+      <PARAM name="s" help="Seconds (1..10)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/global/hello_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree max-age" help="STP max age (6..40s)">
+      <PARAM name="s" help="Seconds (6..40)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/global/max_age ${s}</ACTION>
+    </COMMAND>
+
+    <!-- Global priority -->
+    <COMMAND name="spanning-tree priority"
+             help="Bridge priority (0..61440 step 4096; default 32768)">
+      <PARAM name="p" help="Priority" ptype="TERTOOS_STP_PRIORITY"/>
+      <ACTION>tertoos-cli candidate set stp/global/priority ${p}</ACTION>
+    </COMMAND>
+
+    <!-- Root guard timeout -->
+    <COMMAND name="spanning-tree rootguard-timeout"
+             help="Root guard timeout (5..600s; default 30)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/global/rootguard_timeout ${s}</ACTION>
+    </COMMAND>
+
+    <!-- Per-VLAN STP -->
+    <COMMAND name="spanning-tree vlan"
+             help="Enable/configure STP for a VLAN (PVST mode)">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/enabled true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree vlan"
+             help="Disable STP for a VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate delete stp/vlan/${vlan}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree vlan priority"
+             help="Per-VLAN bridge priority">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="p" help="Priority (0..61440 step 4096)" ptype="TERTOOS_STP_PRIORITY"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/bridge_priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan forward-time"
+             help="Per-VLAN forward delay">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="s" help="Seconds (4..30)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/forward_delay ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan hello-time"
+             help="Per-VLAN hello time">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="s" help="Seconds (1..10)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/hello_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan max-age"
+             help="Per-VLAN max age">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="s" help="Seconds (6..40)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/max_age ${s}</ACTION>
+    </COMMAND>
+
+    <!-- Syntactic sugar: root primary/secondary
+         primary  → priority 24576
+         secondary → priority 28672 -->
+    <COMMAND name="spanning-tree vlan root primary"
+             help="Force this bridge as root (priority 24576)">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/bridge_priority 24576</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan root secondary"
+             help="Backup root bridge (priority 28672)">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/bridge_priority 28672</ACTION>
+    </COMMAND>
+
+    <!-- MST configuration entry -->
+    <COMMAND name="spanning-tree mst configuration"
+             help="Enter MST region configuration"
+             view="config-mst-view"
+             viewid="">
+      <ACTION>tertoos-cli candidate context mst</ACTION>
+    </COMMAND>
+
+    <!-- MST per-instance global -->
+    <COMMAND name="spanning-tree mst priority"
+             help="MST instance bridge priority">
+      <PARAM name="inst" help="MST instance (0..15)" ptype="UINT"/>
+      <PARAM name="p" help="Priority (0..61440 step 4096)" ptype="TERTOOS_STP_PRIORITY"/>
+      <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree mst root primary"
+             help="Force this bridge as MST instance root (priority 24576)">
+      <PARAM name="inst" help="MST instance" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority 24576</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree mst root secondary"
+             help="Backup MST instance root (priority 28672)">
+      <PARAM name="inst" help="MST instance" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority 28672</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- Sub-view: config-mst-view -->
+  <VIEW name="config-mst-view"
+        prompt="${SYSTEM_NAME}(config-mst)# ">
+
+    <COMMAND name="exit" help="Exit MST configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="name" help="MST region name (max 32 chars)">
+      <PARAM name="n" help="Region name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set stp/mst/global/name ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="revision" help="MST revision number">
+      <PARAM name="r" help="Revision (0..65535)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/mst/global/revision ${r}</ACTION>
+    </COMMAND>
+    <COMMAND name="max-hops" help="MST max hops (1..40; default 20)">
+      <PARAM name="h" help="Max hops" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set stp/mst/global/max_hops ${h}</ACTION>
+    </COMMAND>
+    <COMMAND name="instance" help="Map VLANs to MST instance">
+      <PARAM name="n" help="MST instance (0..15)" ptype="UINT"/>
+      <PARAM name="vlan-kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlist" help="VLAN list (ex: 100,200,300 or 400-500)"
+             ptype="TERTOOS_VLAN_LIST"/>
+      <ACTION>tertoos-cli candidate set stp/mst_inst/${n}/vlan ${vlist}</ACTION>
+    </COMMAND>
+    <COMMAND name="no instance" help="Remove MST instance VLAN mapping">
+      <PARAM name="n" help="MST instance" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete stp/mst_inst/${n}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>

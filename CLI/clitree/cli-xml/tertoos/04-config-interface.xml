@@ -130,6 +130,33 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/dot1q</ACTION>
     </COMMAND>
 
+    <!-- ====== S15.G — Q-in-Q sub-interface (encapsulation dot1q + second-dot1q) =====
+         Aceita stack de tags na sub-interface:
+           encapsulation dot1q <s-vlan> second-dot1q <c-vlan>
+           encapsulation dot1q <s-vlan> second-dot1q any   (catch-all C-VLAN)
+         Aplica em interface/<sub-if>/encapsulation/dot1q-tunnel/{outer,inner} -->
+    <COMMAND name="encapsulation dot1q second-dot1q"
+             help="802.1Q-in-Q double-tag (sub-interface)">
+      <PARAM name="outer" help="S-VLAN (outer tag)" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="inner" help="C-VLAN (inner tag) or 'any'" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/outer ${outer}
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/inner ${inner}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation dot1q second-dot1q"
+             help="Remove Q-in-Q encap (keeps single dot1q if set)">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/dot1q-tunnel</ACTION>
+    </COMMAND>
+    <COMMAND name="encapsulation untagged"
+             help="Accept only untagged frames (l2transport)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/encapsulation/untagged true</ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation untagged"
+             help="Stop accepting untagged frames">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/untagged</ACTION>
+    </COMMAND>
+
     <!-- LACP / Bundle membership (em interface física apontando para Bundle-EtherN) -->
     <COMMAND name="bundle id"
              help="Make this interface a member of a Bundle-Ether">
@@ -447,6 +474,131 @@
     <COMMAND name="no qos buffer-profile-queue" help="Unbind buffer profile from queue">
       <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-queue/${q}/profile</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.B — Per-port Spanning Tree =================================
+         Mapeia para STP_PORT|<if> e STP_VLAN_PORT|<vlan>|<if>.
+         portfast / bpdu-guard / root-guard / uplink-fast são port-level
+         (PVST/RSTP); edge-port é equivalente em MST. -->
+    <COMMAND name="spanning-tree portfast"
+             help="Skip listening/learning (edge port — only on host-facing ports)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/portfast true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree portfast"
+             help="Re-enable listening/learning">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/portfast false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree bpdu-guard"
+             help="Disable port if it receives a BPDU (host port hardening)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree bpdu-guard disable"
+             help="BPDU-guard with err-disable on violation">
+      <ACTION>
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable true
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree bpdu-guard"
+             help="Disable BPDU-guard">
+      <ACTION>
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard false
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable false
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree root-guard"
+             help="Block superior BPDUs (protect root election)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/root_guard true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree root-guard" help="Disable root-guard">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/root_guard false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree uplink-fast"
+             help="Fast convergence on uplink loss (PVST only)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/uplink_fast true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree uplink-fast" help="Disable uplink-fast">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/uplink_fast false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree edge-port"
+             help="MST edge-port (equivalent to portfast in MST)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/edge_port true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree edge-port" help="Disable MST edge-port">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/edge_port false</ACTION>
+    </COMMAND>
+
+    <!-- Per-VLAN per-port cost / priority (STP_VLAN_PORT) -->
+    <COMMAND name="spanning-tree vlan cost"
+             help="Per-VLAN STP path cost on this port">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="cost" help="Path cost (1..200000000)" ptype="TERTOOS_STP_COST"/>
+      <ACTION>tertoos-cli candidate set stp/vlan_port/${vlan}/${ifname}/cost ${cost}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan port-priority"
+             help="Per-VLAN STP port priority">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="prio" help="Priority (0..240 step 16)" ptype="TERTOOS_STP_PORT_PRIORITY"/>
+      <ACTION>tertoos-cli candidate set stp/vlan_port/${vlan}/${ifname}/priority ${prio}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.D — Storm-control =========================================
+         Mapeia para PORT_STORM_CONTROL|<if>|<storm_type> com kbps.
+         storm_type ∈ {broadcast, multicast, unknown-unicast}. -->
+    <COMMAND name="storm-control" help="Storm-control rate-limit per port">
+      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+             ptype="TERTOOS_STORM_TYPE"/>
+      <PARAM name="unit" help="kbps | pps" ptype="STRING"/>
+      <PARAM name="value" help="Rate limit value" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}
+        tertoos-cli candidate set storm-control/${ifname}/${type}/value ${value}
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no storm-control"
+             help="Remove storm-control for a type">
+      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+             ptype="TERTOOS_STORM_TYPE"/>
+      <ACTION>tertoos-cli candidate delete storm-control/${ifname}/${type}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.H — Per-port MAC learning + MAC limit =====================
+         PORT_TABLE.learn_mode (hardware|disable).
+         MAC limit per-port via FDB_TABLE constraint custom. -->
+    <COMMAND name="mac-learning enable"
+             help="Enable MAC address learning on this port (default)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/learn_mode hardware</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-learning disable"
+             help="Disable MAC learning (port floods unknown unicast)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/learn_mode disable</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-limit" help="Maximum MAC addresses learned on this port">
+      <PARAM name="n" help="Max MACs (0 = unlimited)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="no mac-limit" help="Remove MAC limit">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/mac_limit</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-limit action" help="Action on MAC limit exceeded">
+      <PARAM name="action" help="drop | shutdown | log" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit_action ${action}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.F — interface l2transport mode ============================
+         Marca interface como L2 puro. Usado por bridge-domain attachment
+         para evitar processamento L3. Default mode é routed (sem flag). -->
+    <COMMAND name="l2transport"
+             help="Configure as L2-only port (no L3 processing)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/l2_mode transport</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2transport"
+             help="Revert to L3 routed mode">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/l2_mode</ACTION>
     </COMMAND>
 
     <!-- Show within if-view (candidate-aware) -->

@@ -124,6 +124,36 @@
       <ACTION>tertoos-cli candidate delete banner/exec</ACTION>
     </COMMAND>
 
+    <!-- ====== S15.E — L2 MAC address-table (config side) ====================
+         Aging-time global e static entries vão em FDB_TABLE/SWITCH_TABLE.
+         Show/clear correspondentes em 02-privileged-view.xml. -->
+    <COMMAND name="l2 mac-address-table aging-time"
+             help="Global FDB aging time (seconds; 0 = no aging)">
+      <PARAM name="s" help="Seconds (0..1000000)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set switch/fdb_aging_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2 mac-address-table aging-time"
+             help="Reset aging-time to default (300s)">
+      <ACTION>tertoos-cli candidate delete switch/fdb_aging_time</ACTION>
+    </COMMAND>
+
+    <COMMAND name="l2 mac-address-table static"
+             help="Add a static MAC entry">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <PARAM name="vlan_kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="if_kw" help="interface" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set fdb/static/${vlan}/${mac} ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2 mac-address-table static"
+             help="Remove a static MAC entry">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <PARAM name="vlan_kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate delete fdb/static/${vlan}/${mac}</ACTION>
+    </COMMAND>
+
     <!--
       Sub-views futuras (escopo de sprints S2+):
         interface, vrf, router static, router bgp, router isis, router ospf,

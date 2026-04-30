@@ -69,4 +69,40 @@
          pattern="[0-9a-fA-F:]+/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])"
          help="IPv6 prefix X:X::X/M"/>
 
+  <!-- S15 — MAC address (xx:xx:xx:xx:xx:xx hex) -->
+  <PTYPE name="TERTOOS_MAC"
+         method="regexp"
+         pattern="[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}"
+         help="MAC address aa:bb:cc:dd:ee:ff"/>
+
+  <!-- S15 — STP bridge priority 0..61440 (steps of 4096) -->
+  <PTYPE name="TERTOOS_STP_PRIORITY"
+         method="regexp"
+         pattern="0|4096|8192|12288|16384|20480|24576|28672|32768|36864|40960|45056|49152|53248|57344|61440"
+         help="STP bridge priority (0..61440 in steps of 4096)"/>
+
+  <!-- S15 — STP port priority 0..240 (steps of 16) -->
+  <PTYPE name="TERTOOS_STP_PORT_PRIORITY"
+         method="regexp"
+         pattern="0|16|32|48|64|80|96|112|128|144|160|176|192|208|224|240"
+         help="STP port priority (0..240 in steps of 16)"/>
+
+  <!-- S15 — STP path cost 1..200000000 -->
+  <PTYPE name="TERTOOS_STP_COST"
+         method="regexp"
+         pattern="[1-9][0-9]{0,8}"
+         help="STP path cost (1..200000000)"/>
+
+  <!-- S15 — VLAN range / list (ex: 100, 100-200, 100,200,300, 100-200,300) -->
+  <PTYPE name="TERTOOS_VLAN_LIST"
+         method="regexp"
+         pattern="[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*"
+         help="VLAN id, range, or list (ex: 100, 100-200, 100,200,300)"/>
+
+  <!-- S15 — Storm-control type -->
+  <PTYPE name="TERTOOS_STORM_TYPE"
+         method="regexp"
+         pattern="broadcast|multicast|unknown-unicast"
+         help="broadcast | multicast | unknown-unicast"/>
+
 </CLISH_MODULE>

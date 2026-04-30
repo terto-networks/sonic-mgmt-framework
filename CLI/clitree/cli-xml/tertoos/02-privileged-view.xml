@@ -65,6 +65,133 @@
     <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
       <ACTION>tertoos-cli show ipv4 brief</ACTION>
     </COMMAND>
+
+    <!-- ====== S15.E — VLAN aggregator + L2 MAC address-table =================
+         Agrega VLANs em uso de 4 fontes:
+           sub-interfaces (encapsulation dot1q)
+           l2vpn bridge-domain
+           evpn vxlan vlan-vni mappings
+           dot1q-tunnel outer (Q-in-Q)
+         tertoos-cli show vlan implementa internamente. -->
+    <COMMAND name="show vlan" help="Show all VLANs in use (aggregator)">
+      <ACTION>tertoos-cli show vlan</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan brief" help="Compact VLAN list">
+      <ACTION>tertoos-cli show vlan --brief</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan id" help="Show details for a single VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show vlan --id ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan summary" help="Counts of VLANs by source">
+      <ACTION>tertoos-cli show vlan --summary</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show l2 mac-address-table"
+             help="Show MAC forwarding database">
+      <ACTION>tertoos-cli show fdb</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table vlan"
+             help="MAC entries for a specific VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show fdb --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table interface"
+             help="MAC entries learned on a specific port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show fdb --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table address"
+             help="Show entry for a specific MAC">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <ACTION>tertoos-cli show fdb --address ${mac}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table dynamic"
+             help="Only dynamic entries">
+      <ACTION>tertoos-cli show fdb --type dynamic</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table static"
+             help="Only static entries">
+      <ACTION>tertoos-cli show fdb --type static</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table count"
+             help="Count MAC entries (per-VLAN summary)">
+      <ACTION>tertoos-cli show fdb --count</ACTION>
+    </COMMAND>
+
+    <COMMAND name="clear l2 mac-address-table dynamic"
+             help="Flush dynamic MAC entries (all VLANs)">
+      <ACTION>tertoos-cli clear fdb --type dynamic</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic vlan"
+             help="Flush dynamic MAC entries in a VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic interface"
+             help="Flush dynamic MAC entries on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic address"
+             help="Flush a specific dynamic MAC entry">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --address ${mac}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.A/B/C — Spanning Tree =====================================
+         sonic-stp daemon expõe state via STATE_DB. tertoos-cli show
+         spanning-tree formata em IOS-XR style. -->
+    <COMMAND name="show spanning-tree" help="STP state (all VLANs/instances)">
+      <ACTION>tertoos-cli show spanning-tree</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree summary" help="STP global summary">
+      <ACTION>tertoos-cli show spanning-tree --summary</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree vlan" help="STP state for a VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show spanning-tree --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree interface" help="STP state of a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show spanning-tree --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree mst" help="MST instances">
+      <ACTION>tertoos-cli show spanning-tree --mst</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree mst configuration" help="MST region config">
+      <ACTION>tertoos-cli show spanning-tree --mst-config</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree root" help="STP root bridges">
+      <ACTION>tertoos-cli show spanning-tree --root</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree blocked" help="Blocked STP ports">
+      <ACTION>tertoos-cli show spanning-tree --blocked</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree counters" help="STP counters per port">
+      <ACTION>tertoos-cli show spanning-tree --counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree counters" help="Reset STP counters">
+      <ACTION>tertoos-cli clear spanning-tree counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree counters interface"
+             help="Reset STP counters on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli clear spanning-tree counters --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree detected-protocols"
+             help="Force protocol re-negotiation on all ports">
+      <ACTION>tertoos-cli clear spanning-tree detected-protocols</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.D — Storm-control state ==================================== -->
+    <COMMAND name="show storm-control" help="Storm-control config + counters (all)">
+      <ACTION>tertoos-cli show storm-control</ACTION>
+    </COMMAND>
+    <COMMAND name="show storm-control interface" help="Storm-control on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show storm-control --interface ${ifname}</ACTION>
+    </COMMAND>
     <COMMAND name="show ipv4 route" help="IPv4 routing table">
       <ACTION>tertoos-cli show ipv4 route</ACTION>
     </COMMAND>
