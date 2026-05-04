@@ -82,8 +82,8 @@
   <!-- =================== config-l2vpn-bd-view =============================== -->
   <VIEW name="config-l2vpn-bd-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-bd-${bdname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="description" help="Description">
       <PARAM name="text" help="Free text" ptype="STRING_WITH_PIPE"/>
@@ -134,8 +134,8 @@
   <!-- =================== config-l2vpn-vfi-view ============================== -->
   <VIEW name="config-l2vpn-vfi-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-vfi-${vfiname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="vpn-id" help="VPN identifier">
       <PARAM name="n" help="VPN id" ptype="UINT"/>

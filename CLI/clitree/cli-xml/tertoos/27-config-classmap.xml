@@ -58,8 +58,8 @@
 
   <VIEW name="config-class-map-view"
         prompt="${SYSTEM_NAME}(config-class-map-${cmapname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="match dscp" help="Match DSCP value(s) (CSV accepted)">
       <PARAM name="v" help="0..63 (e.g. 46 or 46,47,48)" ptype="STRING"/>

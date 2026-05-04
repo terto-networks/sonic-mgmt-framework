@@ -107,8 +107,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-wred-view"
         prompt="${SYSTEM_NAME}(config-qos-wred-${wredname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="ecn" help="ECN marking mode">
       <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="STRING"/>
@@ -169,8 +169,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-buffer-pool-view"
         prompt="${SYSTEM_NAME}(config-qos-buffer-pool-${poolname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Pool direction">
       <PARAM name="t" help="ingress | egress" ptype="STRING"/>
@@ -195,8 +195,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-buffer-profile-view"
         prompt="${SYSTEM_NAME}(config-qos-buffer-profile-${profname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="pool" help="Bind to a buffer pool">
       <PARAM name="p" help="Pool name" ptype="TERTOOS_NAME"/>
@@ -241,8 +241,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-dscp-tc-view"
         prompt="${SYSTEM_NAME}(config-qos-dscp-tc-${qosmap})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="dscp" help="DSCP code-point → traffic-class">
       <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
@@ -261,8 +261,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-tc-queue-view"
         prompt="${SYSTEM_NAME}(config-qos-tc-queue-${qosmap})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="tc" help="Traffic-class → queue">
       <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
@@ -281,8 +281,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-tc-pg-view"
         prompt="${SYSTEM_NAME}(config-qos-tc-pg-${qosmap})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="tc" help="Traffic-class → priority-group">
       <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
@@ -301,8 +301,8 @@
   <!-- ============================================================== -->
   <VIEW name="config-qos-scheduler-view"
         prompt="${SYSTEM_NAME}(config-qos-scheduler-${schedname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Scheduling discipline">
       <PARAM name="t" help="DWRR | STRICT | WRR" ptype="STRING"/>

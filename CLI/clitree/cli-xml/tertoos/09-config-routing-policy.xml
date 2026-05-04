@@ -141,7 +141,7 @@
              help="Add a prefix entry (permit)">
       <PARAM name="seq" help="Sequence number 1..4294967295" ptype="UINT"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
-      <PARAM name="range_kw" help="Optional 'le|ge|eq <len>'"
+      <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="STRING" optional="true"/>
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>
@@ -156,7 +156,7 @@
     <COMMAND name="deny" help="Add a prefix entry (deny)">
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
-      <PARAM name="range_kw" help="Optional 'le|ge|eq <len>'"
+      <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="STRING" optional="true"/>
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>

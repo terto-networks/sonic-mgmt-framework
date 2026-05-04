@@ -35,8 +35,8 @@
 
   <VIEW name="config-policer-view"
         prompt="${SYSTEM_NAME}(config-policer-${polname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="mode" help="Policer mode">
       <PARAM name="m" help="sr_tcm | tr_tcm | storm" ptype="STRING"/>

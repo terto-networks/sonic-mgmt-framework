@@ -10,7 +10,7 @@
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
   <!-- TertoOS startup view: KLISH boota direto em exec-view (IOS-XR style). -->
-  <STARTUP view="exec-view" default="exec-view"/>
+  <STARTUP view="exec-view"/>
 
   <VIEW name="exec-view" prompt="${SYSTEM_NAME}&gt; ">
 

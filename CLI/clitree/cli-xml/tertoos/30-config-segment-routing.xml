@@ -33,8 +33,8 @@
 
   <VIEW name="config-srte-view"
         prompt="${SYSTEM_NAME}(config-srte)# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="policy"
              help="Configure SR-TE policy"
@@ -77,8 +77,8 @@
   <!-- ====== Policy view ====== -->
   <VIEW name="config-srte-policy-view"
         prompt="${SYSTEM_NAME}(config-srte-policy-${srtepol_ep}-${srtepol_color})# ">
-    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="binding-sid" help="Binding-SID label">
       <PARAM name="label" help="MPLS label 16..1048575" ptype="UINT"/>
@@ -103,8 +103,8 @@
 
   <VIEW name="config-srte-cpath-view"
         prompt="${SYSTEM_NAME}(config-srte-cpath-${srtecpath})# ">
-    <COMMAND name="exit" view="config-srte-policy-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-srte-policy-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="name" help="Candidate-path name">
       <PARAM name="n" help="Name" ptype="STRING"/>
@@ -142,8 +142,8 @@
   <!-- ====== Segment-list view ====== -->
   <VIEW name="config-srte-seglist-view"
         prompt="${SYSTEM_NAME}(config-srte-seglist-${srteseglist})# ">
-    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="description" help="Description">
       <PARAM name="text" help="Free text" ptype="STRING_WITH_PIPE"/>
@@ -165,8 +165,8 @@
   <!-- ====== PCEP view ====== -->
   <VIEW name="config-srte-pcep-view"
         prompt="${SYSTEM_NAME}(config-srte-pcep)# ">
-    <COMMAND name="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="pcc" help="Configure PCC">
       <PARAM name="name" help="PCC name (or 'global')" ptype="STRING"/>
