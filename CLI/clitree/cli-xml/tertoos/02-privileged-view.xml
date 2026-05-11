@@ -662,5 +662,33 @@
       <ACTION>tertoos-cli terminal length ${lines}</ACTION>
     </COMMAND>
 
+    <!--
+      Candidate apply/discard from privileged-view. IOS-XR semantics:
+      after `end` in config-view the candidate is preserved; operator
+      can review (`show configuration`), then `commit` from privileged
+      to apply, or `abort` to discard. No-op if no candidate is open.
+    -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration"
+             help="Show pending candidate changes (diff vs running)">
+      <ACTION>tertoos-cli candidate show</ACTION>
+    </COMMAND>
+
+    <COMMAND name="rollback configuration last"
+             help="Roll back N most recent commits">
+      <PARAM name="n" help="Number of commits to roll back" ptype="UINT"/>
+      <ACTION>tertoos-cli rollback last ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="rollback configuration to"
+             help="Roll back to a labeled commit">
+      <PARAM name="label" help="Commit label" ptype="STRING"/>
+      <ACTION>tertoos-cli rollback to ${label}</ACTION>
+    </COMMAND>
+
   </VIEW>
 </CLISH_MODULE>
