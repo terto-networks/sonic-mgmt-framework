@@ -388,11 +388,52 @@
     <!-- Operational -->
     <COMMAND name="ping" help="Ping IPv4/IPv6 host">
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
-      <ACTION>ping -c 4 ${target}</ACTION>
+      <ACTION>tertoos-cli ping ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="ping vrf" help="Ping in a specific VRF">
+      <PARAM name="vrf-name" help="VRF name" ptype="STRING"/>
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>tertoos-cli ping vrf ${vrf-name} ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="ping mpls ipv4" help="LDP echo for an IPv4 FEC (LSP validation)">
+      <PARAM name="fec" help="IPv4 prefix (e.g. 10.0.0.1/32)" ptype="STRING"/>
+      <ACTION>tertoos-cli ping mpls ipv4 ${fec}</ACTION>
     </COMMAND>
     <COMMAND name="traceroute" help="Trace route to host">
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
-      <ACTION>traceroute ${target}</ACTION>
+      <ACTION>tertoos-cli traceroute ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="traceroute vrf" help="Traceroute in a specific VRF">
+      <PARAM name="vrf-name" help="VRF name" ptype="STRING"/>
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>tertoos-cli traceroute vrf ${vrf-name} ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="traceroute mpls ipv4" help="LSP traceroute for an IPv4 FEC">
+      <PARAM name="fec" help="IPv4 prefix (e.g. 10.0.0.1/32)" ptype="STRING"/>
+      <ACTION>tertoos-cli traceroute mpls ipv4 ${fec}</ACTION>
+    </COMMAND>
+
+    <!--
+      monitor interface — live tail of `show interfaces counters`.
+      Refreshes every <interval> seconds (default 5s) until Ctrl-C.
+      Optional <ifname> restricts the view to a single port.
+    -->
+    <COMMAND name="monitor interface" help="Live interface counters (Ctrl-C to exit)">
+      <ACTION>tertoos-cli monitor interface</ACTION>
+    </COMMAND>
+    <COMMAND name="monitor interface only" help="Live counters for one interface">
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>tertoos-cli monitor interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="monitor interface interval" help="Live counters at custom interval">
+      <PARAM name="seconds" help="Refresh seconds (≥1)" ptype="UINT"/>
+      <ACTION>tertoos-cli monitor interface interval ${seconds}</ACTION>
+    </COMMAND>
+    <COMMAND name="monitor interface only interval"
+             help="Single-interface counters at custom interval">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="seconds" help="Refresh seconds (≥1)" ptype="UINT"/>
+      <ACTION>tertoos-cli monitor interface ${ifname} interval ${seconds}</ACTION>
     </COMMAND>
     <COMMAND name="ssh" help="Open SSH session">
       <PARAM name="target" help="user@host" ptype="STRING"/>
@@ -648,13 +689,117 @@
       <ACTION>tertoos-cli horizon queue</ACTION>
     </COMMAND>
 
-    <COMMAND name="debug" help="Enable debug for a feature">
-      <PARAM name="feature" help="Feature name" ptype="STRING"/>
-      <ACTION>tertoos-cli debug enable ${feature}</ACTION>
+    <!--
+      Debug (FRR via vtysh). Operator does `debug bgp updates`, etc;
+      tertoos-cli runs `vtysh -c "debug bgp updates"`. `no debug ...`
+      or legacy `undebug ...` disables. Output streams from vtysh
+      (acks like "BGP debugging is on").
+    -->
+    <COMMAND name="debug bgp updates" help="BGP UPDATE messages">
+      <ACTION>tertoos-cli debug bgp updates</ACTION>
     </COMMAND>
-    <COMMAND name="undebug" help="Disable debug for a feature">
-      <PARAM name="feature" help="Feature name" ptype="STRING"/>
-      <ACTION>tertoos-cli debug disable ${feature}</ACTION>
+    <COMMAND name="debug bgp keepalives" help="BGP KEEPALIVE messages">
+      <ACTION>tertoos-cli debug bgp keepalives</ACTION>
+    </COMMAND>
+    <COMMAND name="debug bgp events" help="BGP session events">
+      <ACTION>tertoos-cli debug bgp events</ACTION>
+    </COMMAND>
+    <COMMAND name="debug bgp zebra" help="BGP zebra interaction">
+      <ACTION>tertoos-cli debug bgp zebra</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug isis adjacency" help="IS-IS adjacency state changes">
+      <ACTION>tertoos-cli debug isis adjacency</ACTION>
+    </COMMAND>
+    <COMMAND name="debug isis events" help="IS-IS protocol events">
+      <ACTION>tertoos-cli debug isis events</ACTION>
+    </COMMAND>
+    <COMMAND name="debug isis spf" help="IS-IS SPF computation">
+      <ACTION>tertoos-cli debug isis spf</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug ospf event" help="OSPF events">
+      <ACTION>tertoos-cli debug ospf event</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf ism" help="OSPF interface state machine">
+      <ACTION>tertoos-cli debug ospf ism</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf nsm" help="OSPF neighbor state machine">
+      <ACTION>tertoos-cli debug ospf nsm</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf lsa" help="OSPF LSA flooding">
+      <ACTION>tertoos-cli debug ospf lsa</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf packet" help="OSPF packet RX/TX">
+      <ACTION>tertoos-cli debug ospf packet</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug ipv6 ospf event" help="OSPFv3 events">
+      <ACTION>tertoos-cli debug ospfv3 event</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ipv6 ospf nsm" help="OSPFv3 neighbor state machine">
+      <ACTION>tertoos-cli debug ospfv3 nsm</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ipv6 ospf lsa" help="OSPFv3 LSA flooding">
+      <ACTION>tertoos-cli debug ospfv3 lsa</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug mpls ldp messages" help="MPLS LDP TCP messages">
+      <ACTION>tertoos-cli debug mpls-ldp messages</ACTION>
+    </COMMAND>
+    <COMMAND name="debug mpls ldp events" help="MPLS LDP session events">
+      <ACTION>tertoos-cli debug mpls-ldp events</ACTION>
+    </COMMAND>
+    <COMMAND name="debug mpls ldp errors" help="MPLS LDP errors">
+      <ACTION>tertoos-cli debug mpls-ldp errors</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug zebra rib" help="Zebra RIB updates">
+      <ACTION>tertoos-cli debug zebra rib</ACTION>
+    </COMMAND>
+    <COMMAND name="debug zebra kernel" help="Zebra kernel interaction">
+      <ACTION>tertoos-cli debug zebra kernel</ACTION>
+    </COMMAND>
+    <COMMAND name="debug zebra nht" help="Zebra next-hop tracking">
+      <ACTION>tertoos-cli debug zebra nht</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug route-map" help="Route-map evaluation">
+      <ACTION>tertoos-cli debug route-map</ACTION>
+    </COMMAND>
+
+    <!-- Escape hatch: pass any vtysh debug string through. -->
+    <COMMAND name="debug raw" help="Pass-through to FRR vtysh debug">
+      <PARAM name="vtysh-cmd" help="Verbatim vtysh debug arguments" ptype="STRING"/>
+      <ACTION>tertoos-cli debug ${vtysh-cmd}</ACTION>
+    </COMMAND>
+
+    <!-- Disable variants. -->
+    <COMMAND name="no debug bgp updates" help="Stop BGP UPDATE debug">
+      <ACTION>tertoos-cli debug no bgp updates</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug bgp keepalives" help="Stop BGP KEEPALIVE debug">
+      <ACTION>tertoos-cli debug no bgp keepalives</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug bgp events" help="Stop BGP events debug">
+      <ACTION>tertoos-cli debug no bgp events</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug isis adjacency" help="Stop IS-IS adjacency debug">
+      <ACTION>tertoos-cli debug no isis adjacency</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf event" help="Stop OSPF event debug">
+      <ACTION>tertoos-cli debug no ospf event</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug mpls ldp messages" help="Stop LDP message debug">
+      <ACTION>tertoos-cli debug no mpls-ldp messages</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug all" help="Disable all debug across daemons">
+      <ACTION>tertoos-cli debug no all</ACTION>
+    </COMMAND>
+
+    <!-- Legacy synonym kept for V0.1 compatibility. -->
+    <COMMAND name="undebug all" help="Synonym for `no debug all`">
+      <ACTION>tertoos-cli debug no all</ACTION>
     </COMMAND>
 
     <COMMAND name="terminal length" help="Set terminal pager length">
