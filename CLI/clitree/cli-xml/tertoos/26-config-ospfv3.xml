@@ -147,8 +147,8 @@
 
   <VIEW name="config-router-ospfv3-area-view"
         prompt="${SYSTEM_NAME}(config-router-ospfv3-area-${ospf6area})# ">
-    <COMMAND name="exit" view="config-router-ospfv3-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-router-ospfv3-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="stub" help="Mark area as stub">
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub true</ACTION>

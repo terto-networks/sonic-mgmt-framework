@@ -132,8 +132,7 @@
     <!-- MST configuration entry -->
     <COMMAND name="spanning-tree mst configuration"
              help="Enter MST region configuration"
-             view="config-mst-view"
-             viewid="">
+             view="config-mst-view">
       <ACTION>tertoos-cli candidate context mst</ACTION>
     </COMMAND>
 

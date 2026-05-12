@@ -106,12 +106,12 @@
     <COMMAND name="permit"
              help="Add an ACL rule (sequence + protocol + src + dst)">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
-      <PARAM name="protocol" help="ip | tcp | udp | icmp | <number>"
+      <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
              ptype="STRING"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
-             help="Optional 'eq <port>'"
+             help="Optional 'eq &lt;port&gt;'"
              ptype="STRING"
              optional="true"/>
       <PARAM name="dst_port"
@@ -131,12 +131,12 @@
 
     <COMMAND name="deny" help="Add a deny ACL rule">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
-      <PARAM name="protocol" help="ip | tcp | udp | icmp | <number>"
+      <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
              ptype="STRING"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
-             help="Optional 'eq <port>'"
+             help="Optional 'eq &lt;port&gt;'"
              ptype="STRING"
              optional="true"/>
       <PARAM name="dst_port"
@@ -190,12 +190,12 @@
 
     <COMMAND name="permit" help="Add a permit ACL rule">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
-      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | <number>"
+      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
              ptype="STRING"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
-             help="Optional 'eq <port>'"
+             help="Optional 'eq &lt;port&gt;'"
              ptype="STRING"
              optional="true"/>
       <PARAM name="dst_port"
@@ -215,12 +215,12 @@
 
     <COMMAND name="deny" help="Add a deny ACL rule">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
-      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | <number>"
+      <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
              ptype="STRING"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
-             help="Optional 'eq <port>'"
+             help="Optional 'eq &lt;port&gt;'"
              ptype="STRING"
              optional="true"/>
       <PARAM name="dst_port"
@@ -270,7 +270,7 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
       <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)"
              ptype="STRING"/>
-      <PARAM name="vlan_kw" help="Optional 'vlan <id>'"
+      <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
              ptype="STRING" optional="true"/>
       <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
              optional="true"/>
@@ -286,7 +286,7 @@
     <COMMAND name="deny" help="Deny by ether-type and/or VLAN">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
       <PARAM name="ether_type" help="EtherType" ptype="STRING"/>
-      <PARAM name="vlan_kw" help="Optional 'vlan <id>'"
+      <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
              ptype="STRING" optional="true"/>
       <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
              optional="true"/>

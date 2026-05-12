@@ -105,6 +105,16 @@ def update_view_tag(root, viewlist, filename, out_dirpath):
         if (element_inst.get('prompt') != None) and (element_inst.get('name') not in  SKIP_VIEW_LIST):
             view_name = element_inst.get('name')
 
+            # tertoos: skip views that already define exit/end (avoid duplicates)
+            existing_exit = element_inst.find('{http://www.dellemc.com/sonic/XMLSchema}COMMAND[@name="exit"]')
+            existing_end = element_inst.find('{http://www.dellemc.com/sonic/XMLSchema}COMMAND[@name="end"]')
+            if existing_exit is not None or existing_end is not None:
+                if DBG_FLAG == True:
+                    print("Skipping view %s -- already has exit/end" % view_name)
+                if view_name not in viewlist:
+                    viewlist.append(view_name)
+                continue
+
             if view_name not in viewlist:
                 exit_element = etree.XML(EXIT_CMD)
                 end_element = etree.XML(END_CMD)

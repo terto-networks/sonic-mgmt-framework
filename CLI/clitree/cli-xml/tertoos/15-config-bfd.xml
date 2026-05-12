@@ -18,8 +18,8 @@
 
   <VIEW name="config-bfd-view"
         prompt="${SYSTEM_NAME}(config-bfd)# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="singlehop peer"
              help="Configure single-hop BFD peer"
@@ -53,8 +53,8 @@
 
   <VIEW name="config-bfd-peer-view"
         prompt="${SYSTEM_NAME}(config-bfd-${bfdscope}-${bfdpeer})# ">
-    <COMMAND name="exit" view="config-bfd-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-bfd-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="interface" help="Local interface (single-hop)">
       <PARAM name="ifname" help="Interface" ptype="STRING"/>

@@ -47,8 +47,8 @@
 
   <VIEW name="config-policy-map-view"
         prompt="${SYSTEM_NAME}(config-policy-map-${pmapname})# ">
-    <COMMAND name="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="class"
              help="Bind a class to this policy"
@@ -68,8 +68,8 @@
 
   <VIEW name="config-policy-map-class-view"
         prompt="${SYSTEM_NAME}(config-policy-map-${pmapname}-class-${pmapclass})# ">
-    <COMMAND name="exit" view="config-policy-map-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
-    <COMMAND name="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-policy-map-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="set traffic-class" help="Set traffic class">
       <PARAM name="n" help="0..7" ptype="UINT"/>
