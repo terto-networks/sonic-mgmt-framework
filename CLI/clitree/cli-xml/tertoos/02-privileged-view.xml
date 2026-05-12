@@ -808,6 +808,27 @@
     </COMMAND>
 
     <!--
+      terminal monitor (IOS-XR live log stream). Tail journalctl into
+      the current CLI session; Ctrl-C returns to the prompt. Severity
+      filter follows journalctl priorities; default is `info`.
+    -->
+    <COMMAND name="terminal monitor"
+             help="Stream system journal to this session (Ctrl-C to stop)">
+      <ACTION>tertoos-cli terminal monitor</ACTION>
+    </COMMAND>
+    <COMMAND name="terminal monitor severity"
+             help="Stream logs at or above the given severity">
+      <PARAM name="level"
+             help="emerg|alert|crit|err|warn|notice|info|debug"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli terminal monitor ${level}</ACTION>
+    </COMMAND>
+    <COMMAND name="terminal no monitor"
+             help="Acknowledge log streaming stop (no-op when already stopped)">
+      <ACTION>tertoos-cli terminal no monitor</ACTION>
+    </COMMAND>
+
+    <!--
       Candidate apply/discard from privileged-view. IOS-XR semantics:
       after `end` in config-view the candidate is preserved; operator
       can review (`show configuration`), then `commit` from privileged

@@ -105,4 +105,25 @@
          pattern="broadcast|multicast|unknown-unicast"
          help="broadcast | multicast | unknown-unicast"/>
 
+  <!--
+    A3 — dynamic completion (method="exec"). klish runs the pattern
+    command and treats each line of stdout as a candidate. tertoos-cli
+    completions <kind> emits one name per line; on failure returns an
+    empty list so klish falls back to free-form entry.
+  -->
+  <PTYPE name="TERTOOS_LIVE_INTERFACE"
+         method="exec"
+         pattern="tertoos-cli completions interfaces"
+         help="An existing interface (tab to complete)"/>
+
+  <PTYPE name="TERTOOS_LIVE_VRF"
+         method="exec"
+         pattern="tertoos-cli completions vrfs"
+         help="A configured VRF (tab to complete)"/>
+
+  <PTYPE name="TERTOOS_LIVE_VLAN"
+         method="exec"
+         pattern="tertoos-cli completions vlans"
+         help="A configured VLAN id (tab to complete)"/>
+
 </CLISH_MODULE>
