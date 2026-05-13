@@ -31,7 +31,7 @@ import sys
 import os
 import re
 from lxml import etree
-import klish_replace_macro, klish_insert_pipe, klish_ins_def_cmd
+import klish_replace_macro, klish_insert_pipe, klish_ins_def_cmd, klish_inject_parents
 
 if __name__ == "__main__":
 
@@ -54,5 +54,7 @@ if __name__ == "__main__":
     klish_insert_pipe.insert_pipe (dirpath, debug)
     print("Insert the end, exit commands ...")
     klish_ins_def_cmd.ins_def_cmd (dirpath, dirpath, debug)
+    print("Inject parent COMMAND placeholders for tertoos multi-word commands ...")
+    klish_inject_parents.inject_parents (dirpath, debug)
 
 
