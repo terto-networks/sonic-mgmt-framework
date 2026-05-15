@@ -365,6 +365,58 @@
       </ACTION>
     </COMMAND>
 
+    <!-- ===== S15 — L3VPN BGP/MPLS VPN leaves (#29) =================== -->
+    <!-- These live under `address-family ipv4 unicast` inside a per-VRF
+         router-bgp instance. FRR 10.5 syntax:
+            rd vpn export X:Y
+            rt vpn { export | import | both } X:Y
+            label vpn export { auto | <label> }
+            import vpn
+            export vpn
+         frrcfgd already has matching entries in global_af_key_map.
+         Bgpd Jinja addr_family.j2 also renders these leaves. -->
+    <COMMAND name="rd vpn export" help="Route Distinguisher for VPN export">
+      <PARAM name="rd" help="ASN:NN or A.B.C.D:NN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/rd_vpn_export ${rd}</ACTION>
+    </COMMAND>
+    <COMMAND name="no rd vpn export" help="Remove RD">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/rd_vpn_export</ACTION>
+    </COMMAND>
+    <COMMAND name="rt vpn export" help="Route-target export">
+      <PARAM name="rt" help="ASN:NN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/rt_vpn_export ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="rt vpn import" help="Route-target import">
+      <PARAM name="rt" help="ASN:NN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/rt_vpn_import ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="rt vpn both" help="Route-target both (import + export)">
+      <PARAM name="rt" help="ASN:NN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/rt_vpn_both ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="label vpn export auto" help="Auto-allocate per-VRF VPN service label">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export_auto true</ACTION>
+    </COMMAND>
+    <COMMAND name="no label vpn export auto" help="Disable auto label">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export_auto false</ACTION>
+    </COMMAND>
+    <COMMAND name="label vpn export" help="Pin a specific VPN service label">
+      <PARAM name="lbl" help="MPLS label (16..1048575)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export ${lbl}</ACTION>
+    </COMMAND>
+    <COMMAND name="import vpn" help="Import routes from the global VPN table">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/import_vpn true</ACTION>
+    </COMMAND>
+    <COMMAND name="no import vpn" help="Stop importing from VPN table">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/import_vpn false</ACTION>
+    </COMMAND>
+    <COMMAND name="export vpn" help="Export VRF routes into the global VPN table">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/export_vpn true</ACTION>
+    </COMMAND>
+    <COMMAND name="no export vpn" help="Stop exporting to VPN table">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/export_vpn false</ACTION>
+    </COMMAND>
+
   </VIEW>
 
   <!-- =================== config-router-bgp-sg-view (session-group) ========== -->
