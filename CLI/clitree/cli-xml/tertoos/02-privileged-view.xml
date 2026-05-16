@@ -662,6 +662,30 @@
       <ACTION>tertoos-cli terminal length ${lines}</ACTION>
     </COMMAND>
 
+    <!-- ===== Console log control (IOS-XR `terminal monitor`) ================
+         Liga/desliga as mensagens de kernel/systemd nesta console serial.
+         Util no EVE-NG/console onde o systemd-ssh-generator polui a tela. -->
+    <COMMAND name="terminal monitor"
+             help="Show kernel/system log messages on this console">
+      <ACTION>sudo dmesg -n 7</ACTION>
+    </COMMAND>
+    <COMMAND name="terminal no monitor"
+             help="Silence kernel/system log messages on this console">
+      <ACTION>sudo dmesg -n 1</ACTION>
+    </COMMAND>
+
+    <!-- ===== Operator shell escape (IOS-XR `run`) ===========================
+         bash → shell interativo do sistema; run → um comando unico.
+         Fora da maquina de candidate/commit — mudancas aqui nao sao
+         rastreadas. -->
+    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)">
+      <ACTION>bash -l</ACTION>
+    </COMMAND>
+    <COMMAND name="run" help="Run a single system-shell command">
+      <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
+      <ACTION>bash -lc "${cmd}"</ACTION>
+    </COMMAND>
+
     <!--
       Candidate apply/discard from privileged-view. IOS-XR semantics:
       after `end` in config-view the candidate is preserved; operator
