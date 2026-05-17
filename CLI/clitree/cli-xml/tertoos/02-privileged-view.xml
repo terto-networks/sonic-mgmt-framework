@@ -42,7 +42,10 @@
     </COMMAND>
 
     <!-- Show family -->
-    <COMMAND name="show" help="Display operational state"/>
+    <COMMAND name="show" help="Display operational state (SONiC show passthrough)">
+      <PARAM name="rest" help="show subcommand, e.g. 'ip route'" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli show passthrough ${rest}</ACTION>
+    </COMMAND>
     <COMMAND name="show version" help="Show TertoOS version">
       <ACTION>tertoos-cli show version</ACTION>
     </COMMAND>
