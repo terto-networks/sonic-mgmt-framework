@@ -48,8 +48,8 @@
              viewid="psname=${name}">
       <PARAM name="name" help="Prefix-set name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context prefix-set ${name}
-        tertoos-cli candidate set prefix-set/${name}
+        tertoos-cli candidate context prefix-set ${name}&#xA;
+        tertoos-cli candidate set prefix-set/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no prefix-set" help="Delete a prefix-set">
@@ -63,8 +63,8 @@
              viewid="csname=${name}">
       <PARAM name="name" help="Community-set name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context community-set ${name}
-        tertoos-cli candidate set community-set/${name}
+        tertoos-cli candidate context community-set ${name}&#xA;
+        tertoos-cli candidate set community-set/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no community-set" help="Delete a community-set">
@@ -78,8 +78,8 @@
              viewid="ecsname=${name}">
       <PARAM name="name" help="Extcommunity-set name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context ext-community-set ${name}
-        tertoos-cli candidate set ext-community-set/${name}
+        tertoos-cli candidate context ext-community-set ${name}&#xA;
+        tertoos-cli candidate set ext-community-set/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no extcommunity-set rt" help="Delete an extcommunity-set">
@@ -93,8 +93,8 @@
              viewid="apsname=${name}">
       <PARAM name="name" help="AS-path-set name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context as-path-set ${name}
-        tertoos-cli candidate set as-path-set/${name}
+        tertoos-cli candidate context as-path-set ${name}&#xA;
+        tertoos-cli candidate set as-path-set/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no as-path-set" help="Delete an AS-path-set">
@@ -108,8 +108,8 @@
              viewid="rplname=${name}">
       <PARAM name="name" help="Route-policy name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context route-policy ${name}
-        tertoos-cli candidate set route-policy/${name}
+        tertoos-cli candidate context route-policy ${name}&#xA;
+        tertoos-cli candidate set route-policy/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no route-policy" help="Delete a route-policy">
@@ -146,11 +146,11 @@
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>
       <ACTION>
-        if [ -n "${range_val}" ]; then
-            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix} ${range_kw} ${range_val}"
-        else
-            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix}"
-        fi
+        if [ -n "${range_val}" ]; then&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix} ${range_kw} ${range_val}"&#xA;
+        else&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix}"&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="deny" help="Add a prefix entry (deny)">
@@ -161,11 +161,11 @@
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>
       <ACTION>
-        if [ -n "${range_val}" ]; then
-            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix} ${range_kw} ${range_val}"
-        else
-            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix}"
-        fi
+        if [ -n "${range_val}" ]; then&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix} ${range_kw} ${range_val}"&#xA;
+        else&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix}"&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no" help="Remove a prefix entry">
@@ -278,15 +278,15 @@
              help="Open a permit statement">
       <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context rpl-stmt ${seq}
-        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op permit
+        tertoos-cli candidate context rpl-stmt ${seq}&#xA;
+        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op permit&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="deny" help="Open a deny statement">
       <PARAM name="seq" help="Statement sequence number" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context rpl-stmt ${seq}
-        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op deny
+        tertoos-cli candidate context rpl-stmt ${seq}&#xA;
+        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op deny&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no" help="Remove a statement">

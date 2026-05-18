@@ -27,8 +27,8 @@
              viewid="ospf6vrf=default;ospf6id=${id}">
       <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context router-ospfv3 default
-        tertoos-cli candidate set ospfv3/default/enable true
+        tertoos-cli candidate context router-ospfv3 default&#xA;
+        tertoos-cli candidate set ospfv3/default/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -39,8 +39,8 @@
       <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-ospfv3 ${vrf}
-        tertoos-cli candidate set ospfv3/${vrf}/enable true
+        tertoos-cli candidate context router-ospfv3 ${vrf}&#xA;
+        tertoos-cli candidate set ospfv3/${vrf}/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -67,11 +67,11 @@
     <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">
       <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ "${detail}" = "detail" ]; then
-            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes detail
-        else
-            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes default
-        fi
+        if [ "${detail}" = "detail" ]; then&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes detail&#xA;
+        else&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes default&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="default-metric" help="Default metric for redistributed routes">
@@ -99,15 +99,15 @@
       <PARAM name="lower" help="Lower" ptype="UINT"/>
       <PARAM name="upper" help="Upper" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_lower ${lower}
-        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_upper ${upper}
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_lower ${lower}&#xA;
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_upper ${upper}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
       <PARAM name="prefix" help="prefix/len" ptype="STRING"/>
       <PARAM name="index" help="SID index" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -125,10 +125,10 @@
       <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
       <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT
-        if [ -n "${metric}" ]; then
-            tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT/metric ${metric}
-        fi
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT&#xA;
+        if [ -n "${metric}" ]; then&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT/metric ${metric}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">

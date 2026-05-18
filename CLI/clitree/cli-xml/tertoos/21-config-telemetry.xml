@@ -38,9 +38,9 @@
       <PARAM name="crt" help="Path to server cert" ptype="STRING"/>
       <PARAM name="key" help="Path to server key" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set telemetry/gnmi/ca_crt ${ca}
-        tertoos-cli candidate set telemetry/gnmi/server_crt ${crt}
-        tertoos-cli candidate set telemetry/gnmi/server_key ${key}
+        tertoos-cli candidate set telemetry/gnmi/ca_crt ${ca}&#xA;
+        tertoos-cli candidate set telemetry/gnmi/server_crt ${crt}&#xA;
+        tertoos-cli candidate set telemetry/gnmi/server_key ${key}&#xA;
       </ACTION>
     </COMMAND>
   </VIEW>

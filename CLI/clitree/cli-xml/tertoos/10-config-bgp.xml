@@ -35,8 +35,8 @@
              viewid="bgpvrf=default;bgpasn=${asn}">
       <PARAM name="asn" help="Local AS number" ptype="TERTOOS_ASN"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp default
-        tertoos-cli candidate set bgp/default/local_asn ${asn}
+        tertoos-cli candidate context router-bgp default&#xA;
+        tertoos-cli candidate set bgp/default/local_asn ${asn}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -47,8 +47,8 @@
       <PARAM name="asn" help="Local AS number" ptype="TERTOOS_ASN"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp ${vrf}
-        tertoos-cli candidate set bgp/${vrf}/local_asn ${asn}
+        tertoos-cli candidate context router-bgp ${vrf}&#xA;
+        tertoos-cli candidate set bgp/${vrf}/local_asn ${asn}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -93,8 +93,8 @@
       <PARAM name="keepalive" help="Keepalive seconds" ptype="UINT"/>
       <PARAM name="holdtime" help="Holdtime seconds" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/keepalive ${keepalive}
-        tertoos-cli candidate set bgp/${bgpvrf}/holdtime ${holdtime}
+        tertoos-cli candidate set bgp/${bgpvrf}/keepalive ${keepalive}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/holdtime ${holdtime}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -104,8 +104,8 @@
              view="config-router-bgp-af-view"
              viewid="bgpvrf=${bgpvrf};bgpaf=ipv4_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-af ipv4_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af/ipv4_unicast
+        tertoos-cli candidate context router-bgp-af ipv4_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/ipv4_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family ipv6 unicast"
@@ -113,8 +113,8 @@
              view="config-router-bgp-af-view"
              viewid="bgpvrf=${bgpvrf};bgpaf=ipv6_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-af ipv6_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af/ipv6_unicast
+        tertoos-cli candidate context router-bgp-af ipv6_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/ipv6_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no address-family ipv4 unicast" help="Remove IPv4 unicast AF">
@@ -134,8 +134,8 @@
              view="config-router-bgp-af-view"
              viewid="bgpvrf=${bgpvrf};bgpaf=vpnv4_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-af vpnv4_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv4_unicast
+        tertoos-cli candidate context router-bgp-af vpnv4_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv4_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family vpnv6 unicast"
@@ -143,8 +143,8 @@
              view="config-router-bgp-af-view"
              viewid="bgpvrf=${bgpvrf};bgpaf=vpnv6_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-af vpnv6_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv6_unicast
+        tertoos-cli candidate context router-bgp-af vpnv6_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv6_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family l2vpn evpn"
@@ -152,8 +152,8 @@
              view="config-router-bgp-evpn-view"
              viewid="bgpvrf=${bgpvrf}">
       <ACTION>
-        tertoos-cli candidate context router-bgp-af l2vpn_evpn
-        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn
+        tertoos-cli candidate context router-bgp-af l2vpn_evpn&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no address-family vpnv4 unicast" help="Remove VPNv4 AF">
@@ -172,8 +172,8 @@
              viewid="bgpvrf=${bgpvrf};bgpsg=${name}">
       <PARAM name="name" help="Session-group name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp-sg ${name}
-        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${name}
+        tertoos-cli candidate context router-bgp-sg ${name}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no session-group" help="Remove a session-group">
@@ -187,8 +187,8 @@
              viewid="bgpvrf=${bgpvrf};bgpafg=${name};bgpaf=ipv4_unicast">
       <PARAM name="name" help="AF-group name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp-afg ${name}/ipv4_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${name}/ipv4_unicast
+        tertoos-cli candidate context router-bgp-afg ${name}/ipv4_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${name}/ipv4_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="af-group ipv6 unicast"
@@ -197,8 +197,8 @@
              viewid="bgpvrf=${bgpvrf};bgpafg=${name};bgpaf=ipv6_unicast">
       <PARAM name="name" help="AF-group name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp-afg ${name}/ipv6_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${name}/ipv6_unicast
+        tertoos-cli candidate context router-bgp-afg ${name}/ipv6_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${name}/ipv6_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no af-group ipv4 unicast" help="Remove af-group IPv4">
@@ -216,8 +216,8 @@
              viewid="bgpvrf=${bgpvrf};bgpnbr=${addr}">
       <PARAM name="addr" help="Neighbor IPv4/IPv6 address" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr ${addr}
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}
+        tertoos-cli candidate context router-bgp-nbr ${addr}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no neighbor" help="Remove a BGP neighbor">
@@ -268,8 +268,8 @@
       <PARAM name="start" help="Start label" ptype="UINT"/>
       <PARAM name="end" help="End label" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_start ${start}
-        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_end ${end}
+        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_start ${start}&#xA;
+        tertoos-cli candidate set evpn/globals/${bgpvrf}/mpls_label_block_end ${end}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -290,8 +290,8 @@
       <PARAM name="vni" help="VNI" ptype="UINT"/>
       <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/import ${rt}
-        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/export ${rt}
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/import ${rt}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn/vni/${vni}/rt/export ${rt}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -321,9 +321,9 @@
       <PARAM name="int" help="Internal" ptype="UINT"/>
       <PARAM name="local" help="Local" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ebgp_route_distance ${ext}
-        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ibgp_route_distance ${int}
-        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/local_route_distance ${local}
+        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ebgp_route_distance ${ext}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ibgp_route_distance ${int}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/local_route_distance ${local}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="network" help="Originate a network">
@@ -346,22 +346,22 @@
       <PARAM name="rmap" help="Route-policy name (optional)"
              ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected_rmap ${rmap}
-        else
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected true
-        fi
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected_rmap ${rmap}&#xA;
+        else&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected true&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute static" help="Redistribute static">
       <PARAM name="rmap" help="Route-policy name (optional)"
              ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static_rmap ${rmap}
-        else
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static true
-        fi
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static_rmap ${rmap}&#xA;
+        else&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static true&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -447,17 +447,17 @@
       <PARAM name="keepalive" help="Keepalive seconds" ptype="UINT"/>
       <PARAM name="holdtime" help="Holdtime seconds" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/keepalive ${keepalive}
-        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/holdtime ${holdtime}
+        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/keepalive ${keepalive}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/holdtime ${holdtime}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ebgp-multihop" help="Allow eBGP multihop">
       <PARAM name="ttl" help="Hop count (optional)" ptype="UINT" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ebgp_multihop true
-        if [ -n "${ttl}" ]; then
-            tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ebgp_multihop_ttl ${ttl}
-        fi
+        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ebgp_multihop true&#xA;
+        if [ -n "${ttl}" ]; then&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ebgp_multihop_ttl ${ttl}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ttl-security hops" help="GTSM hop count">
@@ -482,10 +482,10 @@
       <PARAM name="noprepend" help="no-prepend (optional)"
              ptype="STRING" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_asn ${asn}
-        if [ "${noprepend}" = "no-prepend" ]; then
-            tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_as_no_prepend true
-        fi
+        tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_asn ${asn}&#xA;
+        if [ "${noprepend}" = "no-prepend" ]; then&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_as_no_prepend true&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -528,10 +528,10 @@
       <PARAM name="rmap" help="Route-policy name (optional)"
              ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/send_default_route true
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/default_rmap ${rmap}
-        fi
+        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/send_default_route true&#xA;
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/default_rmap ${rmap}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="remove-private-AS" help="Strip private ASNs">
@@ -543,8 +543,8 @@
     <COMMAND name="allowas-in" help="Accept routes with own AS">
       <PARAM name="n" help="Occurrences" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_in true
-        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_count ${n}
+        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_in true&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_count ${n}&#xA;
       </ACTION>
     </COMMAND>
 
@@ -592,8 +592,8 @@
              view="config-router-bgp-nbr-af-view"
              viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=ipv4_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr-af ipv4_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv4_unicast
+        tertoos-cli candidate context router-bgp-nbr-af ipv4_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv4_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family ipv6 unicast"
@@ -601,8 +601,8 @@
              view="config-router-bgp-nbr-af-view"
              viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=ipv6_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr-af ipv6_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv6_unicast
+        tertoos-cli candidate context router-bgp-nbr-af ipv6_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv6_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family vpnv4 unicast"
@@ -610,8 +610,8 @@
              view="config-router-bgp-nbr-af-view"
              viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv4_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr-af vpnv4_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv4_unicast
+        tertoos-cli candidate context router-bgp-nbr-af vpnv4_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv4_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family vpnv6 unicast"
@@ -619,8 +619,8 @@
              view="config-router-bgp-nbr-af-view"
              viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv6_unicast">
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr-af vpnv6_unicast
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv6_unicast
+        tertoos-cli candidate context router-bgp-nbr-af vpnv6_unicast&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv6_unicast&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family l2vpn evpn"
@@ -628,8 +628,8 @@
              view="config-router-bgp-nbr-af-view"
              viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=l2vpn_evpn">
       <ACTION>
-        tertoos-cli candidate context router-bgp-nbr-af l2vpn_evpn
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/l2vpn_evpn
+        tertoos-cli candidate context router-bgp-nbr-af l2vpn_evpn&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/l2vpn_evpn&#xA;
       </ACTION>
     </COMMAND>
 
@@ -677,8 +677,8 @@
     <COMMAND name="allowas-in" help="Accept routes with own AS">
       <PARAM name="n" help="Occurrences" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_in true
-        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_count ${n}
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_in true&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_count ${n}&#xA;
       </ACTION>
     </COMMAND>
 

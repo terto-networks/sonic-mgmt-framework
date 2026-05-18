@@ -37,8 +37,8 @@
              viewid="ospfvrf=default;ospfid=${id}">
       <PARAM name="id" help="OSPF process id (informational)" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context router-ospf default
-        tertoos-cli candidate set ospf/default/enable true
+        tertoos-cli candidate context router-ospf default&#xA;
+        tertoos-cli candidate set ospf/default/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -49,8 +49,8 @@
       <PARAM name="id" help="OSPF process id (informational)" ptype="UINT"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context router-ospf ${vrf}
-        tertoos-cli candidate set ospf/${vrf}/enable true
+        tertoos-cli candidate context router-ospf ${vrf}&#xA;
+        tertoos-cli candidate set ospf/${vrf}/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -80,11 +80,11 @@
     <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">
       <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ "${detail}" = "detail" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/log-adjacency-changes detail
-        else
-            tertoos-cli candidate set ospf/${ospfvrf}/log-adjacency-changes default
-        fi
+        if [ "${detail}" = "detail" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/log-adjacency-changes detail&#xA;
+        else&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/log-adjacency-changes default&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="default-metric" help="Default metric for redistributed routes">
@@ -107,23 +107,23 @@
       <PARAM name="lower" help="Lower label" ptype="UINT"/>
       <PARAM name="upper" help="Upper label" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_lower ${lower}
-        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_upper ${upper}
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_lower ${lower}&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_upper ${upper}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="segment-routing local-block" help="SRLB lower upper">
       <PARAM name="lower" help="Lower" ptype="UINT"/>
       <PARAM name="upper" help="Upper" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_lower ${lower}
-        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_upper ${upper}
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_lower ${lower}&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_upper ${upper}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
       <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
       <PARAM name="index" help="SID index" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/index ${index}
+        tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/index ${index}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no segment-routing prefix-sid-map" help="Remove prefix-sid">
@@ -163,28 +163,28 @@
     <COMMAND name="redistribute connected" help="Redistribute connected routes">
       <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/route-map ${rmap}
-        fi
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected&#xA;
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/route-map ${rmap}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute static" help="Redistribute static routes">
       <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/route-map ${rmap}
-        fi
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static&#xA;
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/route-map ${rmap}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute bgp" help="Redistribute BGP routes">
       <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp
-        if [ -n "${rmap}" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp/route-map ${rmap}
-        fi
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp&#xA;
+        if [ -n "${rmap}" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp/route-map ${rmap}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">
@@ -193,8 +193,8 @@
     </COMMAND>
     <COMMAND name="default-information originate" help="Originate default route">
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel/always true
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel/always true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -205,8 +205,8 @@
              viewid="ospfvrf=${ospfvrf};ospfarea=${id}">
       <PARAM name="id" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate context router-ospf-area ${id}
-        tertoos-cli candidate set ospf/${ospfvrf}/area/${id}
+        tertoos-cli candidate context router-ospf-area ${id}&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/area/${id}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no area" help="Remove an OSPF area">
@@ -255,16 +255,16 @@
       <PARAM name="nosummary" help="no-summary (optional)"
              ptype="STRING" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub true
-        if [ "${nosummary}" = "no-summary" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub-no-summary true
-        fi
+        tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub true&#xA;
+        if [ "${nosummary}" = "no-summary" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub-no-summary true&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no stub" help="Unmark stub">
       <ACTION>
-        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub
-        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub-no-summary
+        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub-no-summary&#xA;
       </ACTION>
     </COMMAND>
 
@@ -272,11 +272,11 @@
       <PARAM name="kind" help="message-digest | text (optional, default text)"
              ptype="STRING" optional="true"/>
       <ACTION>
-        if [ "${kind}" = "message-digest" ]; then
-            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/authentication message-digest
-        else
-            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/authentication text
-        fi
+        if [ "${kind}" = "message-digest" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/authentication message-digest&#xA;
+        else&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/authentication text&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no authentication" help="Disable area authentication">

@@ -157,8 +157,8 @@
       <PARAM name="outer" help="S-VLAN (outer tag)" ptype="TERTOOS_VLAN_ID"/>
       <PARAM name="inner" help="C-VLAN (inner tag) or 'any'" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/outer ${outer}
-        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/inner ${inner}
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/outer ${outer}&#xA;
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/inner ${inner}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no encapsulation dot1q second-dot1q"
@@ -274,8 +274,8 @@
       <PARAM name="md5" help="md5" ptype="STRING"/>
       <PARAM name="key" help="Key string" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}
-        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-md5-key "${key}"
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}&#xA;
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-md5-key "${key}"&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ip ospf mtu-ignore" help="Ignore MTU mismatch">
@@ -392,8 +392,8 @@
       <PARAM name="t" help="clear | md5" ptype="STRING"/>
       <PARAM name="key" help="Password" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set interface/${ifname}/isis/password-type ${t}
-        tertoos-cli candidate set interface/${ifname}/isis/password "${key}"
+        tertoos-cli candidate set interface/${ifname}/isis/password-type ${t}&#xA;
+        tertoos-cli candidate set interface/${ifname}/isis/password "${key}"&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="isis bfd" help="Enable BFD for IS-IS adjacency">
@@ -513,15 +513,15 @@
     <COMMAND name="spanning-tree bpdu-guard disable"
              help="BPDU-guard with err-disable on violation">
       <ACTION>
-        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true
-        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable true
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true&#xA;
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no spanning-tree bpdu-guard"
              help="Disable BPDU-guard">
       <ACTION>
-        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard false
-        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable false
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard false&#xA;
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable false&#xA;
       </ACTION>
     </COMMAND>
 
@@ -572,8 +572,8 @@
       <PARAM name="unit" help="kbps | pps" ptype="STRING"/>
       <PARAM name="value" help="Rate limit value" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}
-        tertoos-cli candidate set storm-control/${ifname}/${type}/value ${value}
+        tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}&#xA;
+        tertoos-cli candidate set storm-control/${ifname}/${type}/value ${value}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no storm-control"

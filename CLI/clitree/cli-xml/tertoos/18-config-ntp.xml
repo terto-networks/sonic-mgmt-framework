@@ -36,15 +36,15 @@
     <COMMAND name="ntp server iburst" help="Add a server with iburst">
       <PARAM name="addr" help="Server IP" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set ntp/server/${addr}
-        tertoos-cli candidate set ntp/server/${addr}/iburst true
+        tertoos-cli candidate set ntp/server/${addr}&#xA;
+        tertoos-cli candidate set ntp/server/${addr}/iburst true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ntp server prefer" help="Add a preferred server">
       <PARAM name="addr" help="Server IP" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set ntp/server/${addr}
-        tertoos-cli candidate set ntp/server/${addr}/association_type preferred
+        tertoos-cli candidate set ntp/server/${addr}&#xA;
+        tertoos-cli candidate set ntp/server/${addr}/association_type preferred&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ntp server key" help="Bind a key id to a server">
@@ -67,8 +67,8 @@
       <PARAM name="alg" help="md5 | sha1" ptype="STRING"/>
       <PARAM name="value" help="Key value" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set ntp/key/${id}/type ${alg}
-        tertoos-cli candidate set ntp/key/${id}/value "${value}"
+        tertoos-cli candidate set ntp/key/${id}/type ${alg}&#xA;
+        tertoos-cli candidate set ntp/key/${id}/value "${value}"&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ntp trusted-key" help="Mark a key as trusted">

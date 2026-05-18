@@ -44,8 +44,8 @@
       <PARAM name="color_kw" help="color" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="color" help="Color (1..4294967295)" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context srte-policy ${endpoint}/${color}
-        tertoos-cli candidate set sr-te/policy/${endpoint}/${color}/enable true
+        tertoos-cli candidate context srte-policy ${endpoint}/${color}&#xA;
+        tertoos-cli candidate set sr-te/policy/${endpoint}/${color}/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no policy" help="Remove SR-TE policy">
@@ -171,7 +171,7 @@
     <COMMAND name="pcc" help="Configure PCC">
       <PARAM name="name" help="PCC name (or 'global')" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set sr-te/pcc/${name}/enable true
+        tertoos-cli candidate set sr-te/pcc/${name}/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="pcc source-address" help="PCC source IP">

@@ -29,8 +29,8 @@
              viewid="pwcname=${name}">
       <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context pw-class ${name}
-        tertoos-cli candidate set pw-class/${name}
+        tertoos-cli candidate context pw-class ${name}&#xA;
+        tertoos-cli candidate set pw-class/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no pw-class" help="Remove pw-class">
@@ -48,7 +48,7 @@
     <COMMAND name="no l2vpn xconnect group" help="Remove an L2VPN group">
       <PARAM name="name" help="Group name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate delete l2vpn/xconnect/${name}/-all
+        tertoos-cli candidate delete l2vpn/xconnect/${name}/-all&#xA;
       </ACTION>
     </COMMAND>
 
@@ -100,21 +100,21 @@
     <COMMAND name="flooding unknown-unicast" help="Flood unknown unicast">
       <PARAM name="state" help="enable | disable" ptype="STRING"/>
       <ACTION>
-        if [ "${state}" = "enable" ]; then
-            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_unknown_unicast true
-        else
-            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_unknown_unicast false
-        fi
+        if [ "${state}" = "enable" ]; then&#xA;
+            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_unknown_unicast true&#xA;
+        else&#xA;
+            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_unknown_unicast false&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="flooding broadcast" help="Flood broadcast">
       <PARAM name="state" help="enable | disable" ptype="STRING"/>
       <ACTION>
-        if [ "${state}" = "enable" ]; then
-            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_broadcast true
-        else
-            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_broadcast false
-        fi
+        if [ "${state}" = "enable" ]; then&#xA;
+            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_broadcast true&#xA;
+        else&#xA;
+            tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/flooding_broadcast false&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="vfi" help="Bind VFI to this bridge-domain">
@@ -223,8 +223,8 @@
              viewid="l2vpngrp=${l2vpngrp};l2vpnp2p=${name}">
       <PARAM name="name" help="P2P name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context l2vpn-p2p ${name}
-        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${name}
+        tertoos-cli candidate context l2vpn-p2p ${name}&#xA;
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no p2p" help="Remove a p2p">
@@ -253,8 +253,8 @@
       <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
       <PARAM name="pwid" help="Pw-id 1..4294967295" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/peer-address ${addr}
-        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id ${pwid}
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/peer-address ${addr}&#xA;
+        tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id ${pwid}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="pw-class" help="Bind a pw-class">

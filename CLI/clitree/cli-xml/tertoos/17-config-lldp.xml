@@ -38,11 +38,11 @@
     <COMMAND name="lldp tlv-select" help="Enable a specific TLV">
       <PARAM name="tlv" help="mgmt-address | system-capabilities" ptype="STRING"/>
       <ACTION>
-        if [ "${tlv}" = "mgmt-address" ]; then
-            tertoos-cli candidate set lldp/supp_mgmt_address_tlv true
-        elif [ "${tlv}" = "system-capabilities" ]; then
-            tertoos-cli candidate set lldp/supp_system_capabilities_tlv true
-        fi
+        if [ "${tlv}" = "mgmt-address" ]; then&#xA;
+            tertoos-cli candidate set lldp/supp_mgmt_address_tlv true&#xA;
+        elif [ "${tlv}" = "system-capabilities" ]; then&#xA;
+            tertoos-cli candidate set lldp/supp_system_capabilities_tlv true&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
   </VIEW>

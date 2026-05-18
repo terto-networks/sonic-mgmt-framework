@@ -37,10 +37,10 @@
       <PARAM name="port" help="UDP port (optional, default 6343)"
              ptype="UINT" optional="true"/>
       <ACTION>
-        tertoos-cli candidate set sflow/collector/${name}/collector_ip ${ip}
-        if [ -n "${port}" ]; then
-            tertoos-cli candidate set sflow/collector/${name}/collector_port ${port}
-        fi
+        tertoos-cli candidate set sflow/collector/${name}/collector_ip ${ip}&#xA;
+        if [ -n "${port}" ]; then&#xA;
+            tertoos-cli candidate set sflow/collector/${name}/collector_port ${port}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="sflow collector vrf" help="Bind a collector to a VRF">

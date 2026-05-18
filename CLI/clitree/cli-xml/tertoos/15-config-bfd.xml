@@ -27,8 +27,8 @@
              viewid="bfdscope=single-hop;bfdpeer=${addr}">
       <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate context bfd-peer single-hop/${addr}
-        tertoos-cli candidate set bfd/single-hop/peer/${addr}
+        tertoos-cli candidate context bfd-peer single-hop/${addr}&#xA;
+        tertoos-cli candidate set bfd/single-hop/peer/${addr}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="multihop peer"
@@ -37,8 +37,8 @@
              viewid="bfdscope=multi-hop;bfdpeer=${addr}">
       <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate context bfd-peer multi-hop/${addr}
-        tertoos-cli candidate set bfd/multi-hop/peer/${addr}
+        tertoos-cli candidate context bfd-peer multi-hop/${addr}&#xA;
+        tertoos-cli candidate set bfd/multi-hop/peer/${addr}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no singlehop peer" help="Remove single-hop BFD peer">

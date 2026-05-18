@@ -272,11 +272,11 @@
     <COMMAND name="show sr-te policy" help="SR-TE policies">
       <PARAM name="endpoint" help="Endpoint (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ -n "${endpoint}" ]; then
-            vtysh -c "show sr-te policy ${endpoint}"
-        else
-            vtysh -c "show sr-te policy"
-        fi
+        if [ -n "${endpoint}" ]; then&#xA;
+            vtysh -c "show sr-te policy ${endpoint}"&#xA;
+        else&#xA;
+            vtysh -c "show sr-te policy"&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show sr-te pcep" help="SR-TE PCEP / PCC status">
@@ -284,8 +284,8 @@
     </COMMAND>
     <COMMAND name="show segment-routing prefix-sid" help="OSPF/IS-IS prefix-SIDs">
       <ACTION>
-        vtysh -c "show ip ospf segment-routing prefix-sid"
-        vtysh -c "show isis segment-routing prefix-sids" 2&gt;/dev/null
+        vtysh -c "show ip ospf segment-routing prefix-sid"&#xA;
+        vtysh -c "show isis segment-routing prefix-sids" 2&gt;/dev/null&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show mpls table" help="zebra MPLS LFIB">
@@ -525,11 +525,11 @@
       <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
       <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ -n "${vrf}" ]; then
-            vtysh -c "clear isis vrf ${vrf}"
-        else
-            vtysh -c "clear isis *"
-        fi
+        if [ -n "${vrf}" ]; then&#xA;
+            vtysh -c "clear isis vrf ${vrf}"&#xA;
+        else&#xA;
+            vtysh -c "clear isis *"&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -556,21 +556,21 @@
     <COMMAND name="show class-map" help="Class-maps">
       <PARAM name="name" help="Class-map name (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ -n "${name}" ]; then
-            sonic-db-cli CONFIG_DB hgetall "TERTOOS_CLASS_MAP|${name}"
-        else
-            sonic-db-cli CONFIG_DB keys 'TERTOOS_CLASS_MAP|*'
-        fi
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB hgetall "TERTOOS_CLASS_MAP|${name}"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_CLASS_MAP|*'&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show policy-map" help="Policy-maps">
       <PARAM name="name" help="Policy-map name (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ -n "${name}" ]; then
-            sonic-db-cli CONFIG_DB keys "TERTOOS_POLICY_MAP_CLASS|${name}|*"
-        else
-            sonic-db-cli CONFIG_DB keys 'TERTOOS_POLICY_MAP|*'
-        fi
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB keys "TERTOOS_POLICY_MAP_CLASS|${name}|*"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_POLICY_MAP|*'&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show policy-map interface" help="Per-port service-policy bindings">
@@ -580,11 +580,11 @@
     <COMMAND name="show policer" help="Policer profiles">
       <PARAM name="name" help="Policer name (optional)" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ -n "${name}" ]; then
-            sonic-db-cli CONFIG_DB hgetall "POLICER|${name}"
-        else
-            sonic-db-cli CONFIG_DB keys 'POLICER|*'
-        fi
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB hgetall "POLICER|${name}"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'POLICER|*'&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -616,11 +616,11 @@
       <PARAM name="url" help="https://... bundle URL" ptype="STRING"/>
       <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
       <ACTION>
-        if [ "${opt}" = "no-verify" ]; then
-            tertoos-cli image install ${url} no-verify
-        else
-            tertoos-cli image install ${url}
-        fi
+        if [ "${opt}" = "no-verify" ]; then&#xA;
+            tertoos-cli image install ${url} no-verify&#xA;
+        else&#xA;
+            tertoos-cli image install ${url}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="image activate" help="Set next-boot image">

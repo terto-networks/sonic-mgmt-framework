@@ -26,8 +26,8 @@
       <PARAM name="name" help="Community name" ptype="STRING"/>
       <PARAM name="access" help="ro | rw" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set snmp/community/${name}
-        tertoos-cli candidate set snmp/community/${name}/type ${access}
+        tertoos-cli candidate set snmp/community/${name}&#xA;
+        tertoos-cli candidate set snmp/community/${name}/type ${access}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no snmp-server community" help="Remove community">
@@ -38,8 +38,8 @@
       <PARAM name="name" help="Username" ptype="STRING"/>
       <PARAM name="auth" help="auth-mode (noauth|auth-md5|auth-sha)" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set snmp/user/${name}
-        tertoos-cli candidate set snmp/user/${name}/auth ${auth}
+        tertoos-cli candidate set snmp/user/${name}&#xA;
+        tertoos-cli candidate set snmp/user/${name}/auth ${auth}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no snmp-server user" help="Remove user">

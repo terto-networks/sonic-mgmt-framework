@@ -25,8 +25,8 @@
              viewid="pmapname=${name};pmaptype=qos">
       <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context policy-map ${name}
-        tertoos-cli candidate set policy-map/${name}/policy_type qos
+        tertoos-cli candidate context policy-map ${name}&#xA;
+        tertoos-cli candidate set policy-map/${name}/policy_type qos&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="policy-map type traffic"
@@ -35,8 +35,8 @@
              viewid="pmapname=${name};pmaptype=traffic">
       <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context policy-map ${name}
-        tertoos-cli candidate set policy-map/${name}/policy_type traffic
+        tertoos-cli candidate context policy-map ${name}&#xA;
+        tertoos-cli candidate set policy-map/${name}/policy_type traffic&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no policy-map" help="Remove policy-map">
@@ -56,8 +56,8 @@
              viewid="pmapname=${pmapname};pmapclass=${name}">
       <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context policy-map-class ${name}
-        tertoos-cli candidate set policy-map/${pmapname}/class/${name}
+        tertoos-cli candidate context policy-map-class ${name}&#xA;
+        tertoos-cli candidate set policy-map/${pmapname}/class/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no class" help="Remove class binding">

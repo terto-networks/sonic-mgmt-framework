@@ -36,9 +36,9 @@
              viewid="aclname=${name}">
       <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context acl ${name}
-        tertoos-cli candidate set acl/${name}/type L3
-        tertoos-cli candidate set acl/${name}/stage INGRESS
+        tertoos-cli candidate context acl ${name}&#xA;
+        tertoos-cli candidate set acl/${name}/type L3&#xA;
+        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv4 access-list" help="Delete an IPv4 access-list">
@@ -52,9 +52,9 @@
              viewid="aclname=${name}">
       <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context acl ${name}
-        tertoos-cli candidate set acl/${name}/type L3V6
-        tertoos-cli candidate set acl/${name}/stage INGRESS
+        tertoos-cli candidate context acl ${name}&#xA;
+        tertoos-cli candidate set acl/${name}/type L3V6&#xA;
+        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 access-list" help="Delete an IPv6 access-list">
@@ -68,9 +68,9 @@
              viewid="aclname=${name}">
       <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context acl ${name}
-        tertoos-cli candidate set acl/${name}/type L2
-        tertoos-cli candidate set acl/${name}/stage INGRESS
+        tertoos-cli candidate context acl ${name}&#xA;
+        tertoos-cli candidate set acl/${name}/type L2&#xA;
+        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-services access-list" help="Delete an L2 access-list">
@@ -119,13 +119,13 @@
              ptype="UINT"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
-        if [ -n "${dst_port}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}&#xA;
+        if [ -n "${dst_port}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -144,13 +144,13 @@
              ptype="UINT"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
-        if [ -n "${dst_port}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}&#xA;
+        if [ -n "${dst_port}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -203,13 +203,13 @@
              ptype="UINT"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
-        if [ -n "${dst_port}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}&#xA;
+        if [ -n "${dst_port}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -228,13 +228,13 @@
              ptype="UINT"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}
-        if [ -n "${dst_port}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/src ${src}&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst ${dst}&#xA;
+        if [ -n "${dst_port}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -275,11 +275,11 @@
       <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}
-        if [ -n "${vlan_id}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}&#xA;
+        if [ -n "${vlan_id}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 
@@ -291,11 +291,11 @@
       <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
              optional="true"/>
       <ACTION>
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP
-        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}
-        if [ -n "${vlan_id}" ]; then
-            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}
-        fi
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
+        tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}&#xA;
+        if [ -n "${vlan_id}" ]; then&#xA;
+            tertoos-cli candidate set acl/${aclname}/rule/${seq}/vlan_id ${vlan_id}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 

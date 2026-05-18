@@ -84,9 +84,9 @@
       <PARAM name="esi" help="ESI value (XX:XX:XX:XX:XX:XX:XX:XX:XX for type-0)"
              ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate set evpn/ethernet-segment/${esname}/interface ${ifname}
-        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_type ${type}
-        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_value "${esi}"
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/interface ${ifname}&#xA;
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_type ${type}&#xA;
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_value "${esi}"&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ethernet-segment redundancy"
@@ -136,20 +136,20 @@
     <COMMAND name="route-target both" help="Import + export route-target">
       <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
       <ACTION>
-        tertoos-cli candidate set evpn/evi/${evivni}/rt/import ${rt}
-        tertoos-cli candidate set evpn/evi/${evivni}/rt/export ${rt}
+        tertoos-cli candidate set evpn/evi/${evivni}/rt/import ${rt}&#xA;
+        tertoos-cli candidate set evpn/evi/${evivni}/rt/export ${rt}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no route-target" help="Remove route-target">
       <PARAM name="dir" help="import | export | both" ptype="STRING"/>
       <PARAM name="rt" help="RT" ptype="TERTOOS_RT"/>
       <ACTION>
-        if [ "${dir}" = "both" ]; then
-            tertoos-cli candidate delete evpn/evi/${evivni}/rt/import ${rt}
-            tertoos-cli candidate delete evpn/evi/${evivni}/rt/export ${rt}
-        else
-            tertoos-cli candidate delete evpn/evi/${evivni}/rt/${dir} ${rt}
-        fi
+        if [ "${dir}" = "both" ]; then&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/import ${rt}&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/export ${rt}&#xA;
+        else&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/${dir} ${rt}&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
 

@@ -27,8 +27,8 @@
              view="config-mpls-ldp-view"
              viewid="ldpvrf=default">
       <ACTION>
-        tertoos-cli candidate context mpls-ldp default
-        tertoos-cli candidate set mpls/ldp/default/enable true
+        tertoos-cli candidate context mpls-ldp default&#xA;
+        tertoos-cli candidate set mpls/ldp/default/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -38,8 +38,8 @@
              viewid="ldpvrf=${vrf}">
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context mpls-ldp ${vrf}
-        tertoos-cli candidate set mpls/ldp/${vrf}/enable true
+        tertoos-cli candidate context mpls-ldp ${vrf}&#xA;
+        tertoos-cli candidate set mpls/ldp/${vrf}/enable true&#xA;
       </ACTION>
     </COMMAND>
 
@@ -108,8 +108,8 @@
              view="config-mpls-ldp-af-view"
              viewid="ldpvrf=${ldpvrf};ldpafi=ipv4">
       <ACTION>
-        tertoos-cli candidate context mpls-ldp-af ipv4
-        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/enable true
+        tertoos-cli candidate context mpls-ldp-af ipv4&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="address-family ipv6"
@@ -117,8 +117,8 @@
              view="config-mpls-ldp-af-view"
              viewid="ldpvrf=${ldpvrf};ldpafi=ipv6">
       <ACTION>
-        tertoos-cli candidate context mpls-ldp-af ipv6
-        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv6/enable true
+        tertoos-cli candidate context mpls-ldp-af ipv6&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv6/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no address-family ipv4" help="Remove IPv4 LDP AF">
@@ -134,8 +134,8 @@
              viewid="ldpvrf=${ldpvrf};ldpafi=ipv4;ldpnbr=${peer}">
       <PARAM name="peer" help="Peer LSR-id (A.B.C.D)" ptype="STRING"/>
       <ACTION>
-        tertoos-cli candidate context mpls-ldp-nbr ${peer}
-        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}
+        tertoos-cli candidate context mpls-ldp-nbr ${peer}&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no neighbor" help="Remove an LDP neighbor">

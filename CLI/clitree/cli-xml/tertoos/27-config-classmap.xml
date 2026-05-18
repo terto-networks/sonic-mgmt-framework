@@ -23,9 +23,9 @@
              viewid="cmapname=${name};cmaptype=qos;cmapop=any">
       <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context class-map ${name}
-        tertoos-cli candidate set class-map/${name}/match_type qos
-        tertoos-cli candidate set class-map/${name}/operator any
+        tertoos-cli candidate context class-map ${name}&#xA;
+        tertoos-cli candidate set class-map/${name}/match_type qos&#xA;
+        tertoos-cli candidate set class-map/${name}/operator any&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="class-map type qos match-all"
@@ -34,9 +34,9 @@
              viewid="cmapname=${name};cmaptype=qos;cmapop=all">
       <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context class-map ${name}
-        tertoos-cli candidate set class-map/${name}/match_type qos
-        tertoos-cli candidate set class-map/${name}/operator all
+        tertoos-cli candidate context class-map ${name}&#xA;
+        tertoos-cli candidate set class-map/${name}/match_type qos&#xA;
+        tertoos-cli candidate set class-map/${name}/operator all&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="class-map type traffic match-any"
@@ -45,9 +45,9 @@
              viewid="cmapname=${name};cmaptype=traffic;cmapop=any">
       <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
       <ACTION>
-        tertoos-cli candidate context class-map ${name}
-        tertoos-cli candidate set class-map/${name}/match_type traffic
-        tertoos-cli candidate set class-map/${name}/operator any
+        tertoos-cli candidate context class-map ${name}&#xA;
+        tertoos-cli candidate set class-map/${name}/match_type traffic&#xA;
+        tertoos-cli candidate set class-map/${name}/operator any&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no class-map" help="Remove class-map">
