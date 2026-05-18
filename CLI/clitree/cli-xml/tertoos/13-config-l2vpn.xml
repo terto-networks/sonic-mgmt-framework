@@ -30,12 +30,12 @@
       <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
       <ACTION>
         tertoos-cli candidate context pw-class ${name}
-        tertoos-cli candidate set l2vpn/pw-class/${name}
+        tertoos-cli candidate set pw-class/${name}
       </ACTION>
     </COMMAND>
     <COMMAND name="no pw-class" help="Remove pw-class">
       <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate delete l2vpn/pw-class/${name}</ACTION>
+      <ACTION>tertoos-cli candidate delete pw-class/${name}</ACTION>
     </COMMAND>
 
     <COMMAND name="l2vpn xconnect group"
@@ -187,21 +187,21 @@
     </COMMAND>
 
     <COMMAND name="encapsulation mpls" help="MPLS encapsulation">
-      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/encapsulation mpls</ACTION>
+      <ACTION>tertoos-cli candidate set pw-class/${pwcname}/encapsulation mpls</ACTION>
     </COMMAND>
     <COMMAND name="control-word" help="Enable PW control-word">
-      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/control-word true</ACTION>
+      <ACTION>tertoos-cli candidate set pw-class/${pwcname}/control-word true</ACTION>
     </COMMAND>
     <COMMAND name="no control-word" help="Disable PW control-word">
-      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/control-word false</ACTION>
+      <ACTION>tertoos-cli candidate set pw-class/${pwcname}/control-word false</ACTION>
     </COMMAND>
     <COMMAND name="mtu" help="PW MTU">
       <PARAM name="bytes" help="64..9216" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/mtu ${bytes}</ACTION>
+      <ACTION>tertoos-cli candidate set pw-class/${pwcname}/mtu ${bytes}</ACTION>
     </COMMAND>
     <COMMAND name="transport-mode" help="Transport mode">
       <PARAM name="mode" help="ethernet | vlan" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate set l2vpn/pw-class/${pwcname}/transport-mode ${mode}</ACTION>
+      <ACTION>tertoos-cli candidate set pw-class/${pwcname}/transport-mode ${mode}</ACTION>
     </COMMAND>
 
   </VIEW>
