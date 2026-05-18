@@ -105,4 +105,12 @@
          pattern="broadcast|multicast|unknown-unicast"
          help="broadcast | multicast | unknown-unicast"/>
 
+  <!-- Interface index — the numeric part after the type keyword in the
+       two-token `interface <type> <num>` form. Accepts a plain index
+       (0, 54) or a sub-interface (<index>.<vlan>, e.g. 0.100). -->
+  <PTYPE name="TERTOOS_IFNUM"
+         method="regexp"
+         pattern="[0-9]+(\.[0-9]+)?"
+         help="Interface index (0) or sub-interface (0.100)"/>
+
 </CLISH_MODULE>

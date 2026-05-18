@@ -25,21 +25,38 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
-  <!-- Entrada na view a partir de config-view -->
+  <!-- Entrada na view a partir de config-view.
+       Forma `interface <type> <num>` em dois tokens: o tipo (Ethernet,
+       Loopback, Bundle-Ether, Mgmt) e' um switch de subcomandos — KLISH
+       o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
+       O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
+       Ethernet0.100) para o resto da config-if-view e para o prompt. -->
   <VIEW name="config-view">
     <COMMAND name="interface"
              help="Configure an interface"
              view="config-if-view"
-             viewid="ifname=${name}">
-      <PARAM name="name" help="Interface name (Ethernet0, Bundle-Ether1, ...)"
-             ptype="STRING"/>
-      <ACTION>tertoos-cli candidate context interface ${name}</ACTION>
+             viewid="ifname=${iftype}${ifnum}">
+      <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="ifnum" help="Index (e.g. 0) or sub-interface (e.g. 0.100)"
+             ptype="TERTOOS_IFNUM"/>
+      <ACTION>tertoos-cli candidate context interface ${iftype}${ifnum}</ACTION>
     </COMMAND>
 
     <COMMAND name="no interface"
              help="Remove interface configuration">
-      <PARAM name="name" help="Interface name" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate delete interface/${name}</ACTION>
+      <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="ifnum" help="Index or sub-interface" ptype="TERTOOS_IFNUM"/>
+      <ACTION>tertoos-cli candidate delete interface/${iftype}${ifnum}</ACTION>
     </COMMAND>
   </VIEW>
 
