@@ -661,6 +661,12 @@
     <COMMAND name="next-hop-self" help="Set next-hop to self">
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/nhself true</ACTION>
     </COMMAND>
+    <COMMAND name="route-reflector-client" help="Configure neighbor as route-reflector client">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient true</ACTION>
+    </COMMAND>
+    <COMMAND name="no route-reflector-client" help="Remove route-reflector client">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient false</ACTION>
+    </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
       <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/send_community ${kind}</ACTION>
