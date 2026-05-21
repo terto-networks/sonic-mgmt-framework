@@ -565,6 +565,13 @@
       <PARAM name="asn" help="Remote AS" ptype="TERTOOS_ASN"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/asn ${asn}</ACTION>
     </COMMAND>
+    <COMMAND name="update-source" help="Source address/interface for the BGP session (iBGP loopback)">
+      <PARAM name="src" help="Loopback0 | interface | A.B.C.D" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr ${src}</ACTION>
+    </COMMAND>
+    <COMMAND name="no update-source" help="Remove update-source">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr</ACTION>
+    </COMMAND>
     <COMMAND name="description" help="Free-text description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/name "${text}"</ACTION>
