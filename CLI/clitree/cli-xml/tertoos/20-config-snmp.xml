@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — SNMP (S12). sonic-snmp.yang upstream.
+    snmp-server contact <s>             → SNMP|CONTACT name
+    snmp-server location <s>            → SNMP|LOCATION name
+    snmp-server community <name> ro|rw  → SNMP_COMMUNITY|<name>
+    snmp-server user <name> ...         → SNMP_USER|<name>
+    snmp-server agent-address <ip> [port P] [vrf V]
+                                        → SNMP_AGENT_ADDRESS_CONFIG|<ip>|<port>|<vrf>
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="snmp-server contact" help="SNMP contact">
+      <PARAM name="text" help="Contact text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set snmp/contact "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="snmp-server location" help="SNMP location">
+      <PARAM name="text" help="Location text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set snmp/location "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="snmp-server community" help="SNMPv2c community">
+      <PARAM name="name" help="Community name" ptype="STRING"/>
+      <PARAM name="access" help="ro | rw" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set snmp/community/${name}&#xA;
+        tertoos-cli candidate set snmp/community/${name}/type ${access}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no snmp-server community" help="Remove community">
+      <PARAM name="name" help="Community name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete snmp/community/${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="snmp-server user" help="SNMPv3 user">
+      <PARAM name="name" help="Username" ptype="STRING"/>
+      <PARAM name="auth" help="auth-mode (noauth|auth-md5|auth-sha)" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set snmp/user/${name}&#xA;
+        tertoos-cli candidate set snmp/user/${name}/auth ${auth}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no snmp-server user" help="Remove user">
+      <PARAM name="name" help="Username" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete snmp/user/${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="snmp-server agent-address" help="Agent listen address">
+      <PARAM name="ip" help="Agent IP" ptype="STRING"/>
+      <PARAM name="port" help="UDP port" ptype="UINT"/>
+      <PARAM name="vrf" help="VRF (default = '')" ptype="TERTOOS_NAME" optional="true"/>
+      <ACTION>tertoos-cli candidate set snmp/agent-address ${ip} ${port} ${vrf}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

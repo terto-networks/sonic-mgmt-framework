@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — types (PTYPE) compartilhados entre todas as views IOS-XR.
+  Centralizar regex aqui evita divergência entre módulos.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- AS number 1..4294967295 (4-byte ASN) -->
+  <PTYPE name="TERTOOS_ASN"
+         method="regexp"
+         pattern="([1-9][0-9]{0,9})|([1-9][0-9]{0,4}\.[0-9]+)"
+         help="AS number (1-4294967295) or asdot (X.Y)"/>
+
+  <!-- IS-IS NET: 49.0001.aabb.ccdd.eeff.00 -->
+  <PTYPE name="TERTOOS_ISIS_NET"
+         method="regexp"
+         pattern="[0-9a-fA-F]{2}(\.[0-9a-fA-F]{4}){3,9}\.00"
+         help="IS-IS NET (e.g. 49.0001.0000.0000.0001.00)"/>
+
+  <!-- MPLS label 16..1048575 (reserved 0-15 excluded) -->
+  <PTYPE name="TERTOOS_MPLS_LABEL"
+         method="regexp"
+         pattern="(1[6-9])|([2-9][0-9])|([1-9][0-9]{2,5})|(10[0-3][0-9]{4})|(104[0-7][0-9]{3})|(1048[0-4][0-9]{2})|(10485[0-6][0-9])|(104857[0-5])"
+         help="MPLS label 16..1048575"/>
+
+  <!-- Bundle-Ether id -->
+  <PTYPE name="TERTOOS_BUNDLE_ID"
+         method="regexp"
+         pattern="[1-9][0-9]{0,3}"
+         help="Bundle-Ether id 1..9999"/>
+
+  <!-- Route Distinguisher: ASN:nn or A.B.C.D:nn -->
+  <PTYPE name="TERTOOS_RD"
+         method="regexp"
+         pattern="([0-9]+:[0-9]+)|([0-9]{1,3}(\.[0-9]{1,3}){3}:[0-9]+)"
+         help="Route Distinguisher (ASN:nn or IP:nn)"/>
+
+  <!-- Route Target same shape as RD -->
+  <PTYPE name="TERTOOS_RT"
+         method="regexp"
+         pattern="([0-9]+:[0-9]+)|([0-9]{1,3}(\.[0-9]{1,3}){3}:[0-9]+)"
+         help="Route Target"/>
+
+  <!-- VLAN id 1..4094 -->
+  <PTYPE name="TERTOOS_VLAN_ID"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9]{1,2})|([1-3][0-9]{3})|(40[0-8][0-9])|(409[0-4])"
+         help="VLAN id 1..4094"/>
+
+  <!-- Identifier (name) -->
+  <PTYPE name="TERTOOS_NAME"
+         method="regexp"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         help="Identifier (alpha first, 1..64 chars)"/>
+
+  <!-- IPv4 prefix -->
+  <PTYPE name="TERTOOS_IPV4_PREFIX"
+         method="regexp"
+         pattern="([0-9]{1,3}\.){3}[0-9]{1,3}/([0-9]|[1-2][0-9]|3[0-2])"
+         help="IPv4 prefix A.B.C.D/M"/>
+
+  <!-- IPv6 prefix (lax — full validation in YANG) -->
+  <PTYPE name="TERTOOS_IPV6_PREFIX"
+         method="regexp"
+         pattern="[0-9a-fA-F:]+/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])"
+         help="IPv6 prefix X:X::X/M"/>
+
+  <!-- S15 — MAC address (xx:xx:xx:xx:xx:xx hex) -->
+  <PTYPE name="TERTOOS_MAC"
+         method="regexp"
+         pattern="[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}"
+         help="MAC address aa:bb:cc:dd:ee:ff"/>
+
+  <!-- S15 — STP bridge priority 0..61440 (steps of 4096) -->
+  <PTYPE name="TERTOOS_STP_PRIORITY"
+         method="regexp"
+         pattern="0|4096|8192|12288|16384|20480|24576|28672|32768|36864|40960|45056|49152|53248|57344|61440"
+         help="STP bridge priority (0..61440 in steps of 4096)"/>
+
+  <!-- S15 — STP port priority 0..240 (steps of 16) -->
+  <PTYPE name="TERTOOS_STP_PORT_PRIORITY"
+         method="regexp"
+         pattern="0|16|32|48|64|80|96|112|128|144|160|176|192|208|224|240"
+         help="STP port priority (0..240 in steps of 16)"/>
+
+  <!-- S15 — STP path cost 1..200000000 -->
+  <PTYPE name="TERTOOS_STP_COST"
+         method="regexp"
+         pattern="[1-9][0-9]{0,8}"
+         help="STP path cost (1..200000000)"/>
+
+  <!-- S15 — VLAN range / list (ex: 100, 100-200, 100,200,300, 100-200,300) -->
+  <PTYPE name="TERTOOS_VLAN_LIST"
+         method="regexp"
+         pattern="[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*"
+         help="VLAN id, range, or list (ex: 100, 100-200, 100,200,300)"/>
+
+  <!-- S15 — Storm-control type -->
+  <PTYPE name="TERTOOS_STORM_TYPE"
+         method="regexp"
+         pattern="broadcast|multicast|unknown-unicast"
+         help="broadcast | multicast | unknown-unicast"/>
+
+  <!-- Interface index — the numeric part after the type keyword in the
+       two-token `interface <type> <num>` form. Accepts a plain index
+       (0, 54) or a sub-interface (<index>.<vlan>, e.g. 0.100). -->
+  <PTYPE name="TERTOOS_IFNUM"
+         method="regexp"
+         pattern="[0-9]+(\.[0-9]+)?"
+         help="Interface index (0) or sub-interface (0.100)"/>
+
+</CLISH_MODULE>

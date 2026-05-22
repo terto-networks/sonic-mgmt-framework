@@ -22,8 +22,16 @@ TOPDIR               := ../..
 # TGT_DIR is the directory wher all prepreocssed cli model, actioner and
 # renderer scripts and temlates will be dumped. Can be overidden from caller.
 TGT_DIR              ?= $(SONIC_CLI_ROOT)/target
-CLI_XML_FILES        := $(shell find $(TOPDIR)/CLI/clitree/cli-xml -name '*.xml' | sort)
+
+# TertoOS overlay: quando TERTOOS_CLI=y a árvore IOS-XR de cli-xml/tertoos/
+# substitui os modos enable/configure do upstream como startup view.
+TERTOOS_CLI          ?= y
+
+CLI_XML_FILES        := $(shell find $(TOPDIR)/CLI/clitree/cli-xml -maxdepth 1 -name '*.xml' | sort)
 CLI_XML_MACRO_FILES  := $(shell find $(TOPDIR)/CLI/clitree/macro -name '*.xml' | sort)
+ifeq ($(TERTOOS_CLI),y)
+CLI_XML_FILES        += $(shell find $(TOPDIR)/CLI/clitree/cli-xml/tertoos -name '*.xml' | sort)
+endif
 cli_done             := ${TGT_DIR}/command-tree/.done
 cli_guide            := ${TGT_DIR}/command-tree/industry_standard_cli_reference_guide.md
 
@@ -33,6 +41,9 @@ $(cli_done): $(CLI_XML_FILES) $(CLI_XML_MACRO_FILES)
 	mkdir -p ${TGT_DIR}/command-tree ${TGT_DIR}/cli-macro ${TGT_DIR}/render-templates ${TGT_DIR}/scripts
 	cp -r cli-xml/include ${TGT_DIR}/command-tree
 	cp cli-xml/*.xml ${TGT_DIR}/command-tree
+ifeq ($(TERTOOS_CLI),y)
+	cp cli-xml/tertoos/*.xml ${TGT_DIR}/command-tree
+endif
 	cp macro/*.xml ${TGT_DIR}/cli-macro
 	(cd scripts;./klish_platform_features_process.sh ../../clicfg ${TGT_DIR})
 	python scripts/klish_preproc_cmdtree.py ${TGT_DIR}/command-tree ${TGT_DIR}/cli-macro 6 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — policer view (S12.B.3).
+    policer <name>
+      mode sr_tcm|tr_tcm|storm
+      meter-type bytes|packets
+      cir <bps>
+      cbs <bytes>
+      pir <bps>
+      pbs <bytes>
+      green-action forward|drop
+      yellow-action forward|drop
+      red-action forward|drop
+  Mapeia para POLICER|<name> (upstream sonic-policer.yang).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+    <COMMAND name="policer"
+             help="Configure a traffic policer"
+             view="config-policer-view"
+             viewid="polname=${name}">
+      <PARAM name="name" help="Policer name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context policer ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no policer" help="Remove policer">
+      <PARAM name="name" help="Policer name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete policer/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-policer-view"
+        prompt="${SYSTEM_NAME}(config-policer-${polname})# ">
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="mode" help="Policer mode">
+      <PARAM name="m" help="sr_tcm | tr_tcm | storm" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/mode ${m}</ACTION>
+    </COMMAND>
+    <COMMAND name="meter-type" help="Metering unit">
+      <PARAM name="u" help="bytes | packets" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/meter_type ${u}</ACTION>
+    </COMMAND>
+    <COMMAND name="color" help="Color awareness mode">
+      <PARAM name="c" help="aware | blind" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/color ${c}</ACTION>
+    </COMMAND>
+    <COMMAND name="cir" help="Committed information rate">
+      <PARAM name="v" help="bytes/sec or packets/sec" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/cir ${v}</ACTION>
+    </COMMAND>
+    <COMMAND name="cbs" help="Committed burst size">
+      <PARAM name="v" help="bytes or packets" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/cbs ${v}</ACTION>
+    </COMMAND>
+    <COMMAND name="pir" help="Peak information rate (tr_tcm)">
+      <PARAM name="v" help="bytes/sec or packets/sec" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/pir ${v}</ACTION>
+    </COMMAND>
+    <COMMAND name="pbs" help="Peak burst size">
+      <PARAM name="v" help="bytes or packets" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/pbs ${v}</ACTION>
+    </COMMAND>
+    <COMMAND name="green-action" help="Action for green packets">
+      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/green_packet_action ${a}</ACTION>
+    </COMMAND>
+    <COMMAND name="yellow-action" help="Action for yellow packets">
+      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/yellow_packet_action ${a}</ACTION>
+    </COMMAND>
+    <COMMAND name="red-action" help="Action for red packets">
+      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set policer/${polname}/red_packet_action ${a}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

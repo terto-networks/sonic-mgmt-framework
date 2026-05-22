@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — LLDP (S12). sonic-lldp.yang upstream.
+    lldp run                       → LLDP|GLOBAL enabled=true
+    lldp hello <s>                 → LLDP|GLOBAL hello_time
+    lldp multiplier <N>            → LLDP|GLOBAL multiplier
+    lldp system-name <s>           → LLDP|GLOBAL system_name
+    lldp system-description <s>    → LLDP|GLOBAL system_description
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="lldp run" help="Enable LLDP">
+      <ACTION>tertoos-cli candidate set lldp/enabled true</ACTION>
+    </COMMAND>
+    <COMMAND name="no lldp run" help="Disable LLDP">
+      <ACTION>tertoos-cli candidate set lldp/enabled false</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp hello" help="Hello time (s)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set lldp/hello_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp multiplier" help="Hold-time multiplier">
+      <PARAM name="n" help="Multiplier" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set lldp/multiplier ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp system-name" help="LLDP system-name">
+      <PARAM name="name" help="Name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set lldp/system_name "${name}"</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp system-description" help="LLDP system-description">
+      <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set lldp/system_description "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp tlv-select" help="Enable a specific TLV">
+      <PARAM name="tlv" help="mgmt-address | system-capabilities" ptype="STRING"/>
+      <ACTION>
+        if [ "${tlv}" = "mgmt-address" ]; then&#xA;
+            tertoos-cli candidate set lldp/supp_mgmt_address_tlv true&#xA;
+        elif [ "${tlv}" = "system-capabilities" ]; then&#xA;
+            tertoos-cli candidate set lldp/supp_system_capabilities_tlv true&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

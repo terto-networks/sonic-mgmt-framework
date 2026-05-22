@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — config-if-view (IOS-XR style).
+  "interface <name>" entra na view; saída via "exit" volta para config-view.
+
+  Suporta:
+    - Ethernet portas físicas (ex.: Ethernet0, GigabitEthernet0/0/0/1 traduzido)
+    - Bundle-EtherN (LACP virtual)
+    - <if>.<vlan> sub-interfaces com encapsulation dot1q
+
+  Mapeamento candidate → CONFIG_DB:
+    interface/<name>/mtu
+    interface/<name>/description
+    interface/<name>/admin_status   (up | down)
+    interface/<name>/ipv4/address/<addr>/<plen>
+    interface/<name>/ipv6/address/<addr>/<plen>
+    interface/<name>/vrf
+    interface/<name>/encapsulation/dot1q/<vlan>
+    interface/<name>/bundle/id
+    interface/<name>/bundle/mode    (active | passive | on)
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <!-- Entrada na view a partir de config-view.
+       Forma `interface <type> <num>` em dois tokens: o tipo (Ethernet,
+       Loopback, Bundle-Ether, Mgmt) e' um switch de subcomandos — KLISH
+       o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
+       O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
+       Ethernet0.100) para o resto da config-if-view e para o prompt. -->
+  <VIEW name="config-view">
+    <COMMAND name="interface"
+             help="Configure an interface"
+             view="config-if-view"
+             viewid="ifname=${iftype}${ifnum}">
+      <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="ifnum" help="Index (e.g. 0) or sub-interface (e.g. 0.100)"
+             ptype="TERTOOS_IFNUM"/>
+      <ACTION>tertoos-cli candidate context interface ${iftype}${ifnum}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="no interface"
+             help="Remove interface configuration">
+      <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="ifnum" help="Index or sub-interface" ptype="TERTOOS_IFNUM"/>
+      <ACTION>tertoos-cli candidate delete interface/${iftype}${ifnum}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-if-view"
+        prompt="${SYSTEM_NAME}(config-if-${ifname})# ">
+
+    <!-- Navegação -->
+    <COMMAND name="exit"
+             help="Exit interface configuration"
+             view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end"
+             help="Return to privileged EXEC"
+             view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="root"
+             help="Return to top of config tree"
+             view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+
+    <!-- Atributos básicos -->
+    <COMMAND name="description"
+             help="Interface description (free text)">
+      <PARAM name="text" help="Description text" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/description "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no description" help="Clear description">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/description</ACTION>
+    </COMMAND>
+
+    <COMMAND name="mtu" help="Interface MTU (576..9216)">
+      <PARAM name="bytes" help="MTU in bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="no mtu" help="Reset MTU to default">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/mtu</ACTION>
+    </COMMAND>
+
+    <COMMAND name="shutdown" help="Administratively disable">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/admin_status down</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Administratively enable">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/admin_status up</ACTION>
+    </COMMAND>
+
+    <COMMAND name="load-interval" help="Counter polling interval seconds">
+      <PARAM name="seconds" help="1..600 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/load_interval ${seconds}</ACTION>
+    </COMMAND>
+
+    <!-- IPv4 / IPv6 addressing -->
+    <COMMAND name="ipv4 address"
+             help="Assign primary IPv4 address (A.B.C.D/M)">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv4/address ${prefix}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 address" help="Remove IPv4 address">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv4/address</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 address" help="Assign IPv6 address (X:X::X/M)">
+      <PARAM name="prefix" help="X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6/address ${prefix}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 address" help="Remove IPv6 address">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv6/address</ACTION>
+    </COMMAND>
+
+    <!-- VRF binding -->
+    <COMMAND name="vrf" help="Bind interface to a VRF">
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/vrf ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vrf" help="Remove VRF binding">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/vrf</ACTION>
+    </COMMAND>
+
+    <!-- Sub-interface encapsulation -->
+    <COMMAND name="encapsulation dot1q"
+             help="802.1Q encapsulation (sub-interfaces)">
+      <PARAM name="vlan" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation dot1q" help="Remove dot1q encap">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/dot1q</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.G — Q-in-Q sub-interface (encapsulation dot1q + second-dot1q) =====
+         Aceita stack de tags na sub-interface:
+           encapsulation dot1q <s-vlan> second-dot1q <c-vlan>
+           encapsulation dot1q <s-vlan> second-dot1q any   (catch-all C-VLAN)
+         Aplica em interface/<sub-if>/encapsulation/dot1q-tunnel/{outer,inner} -->
+    <COMMAND name="encapsulation dot1q second-dot1q"
+             help="802.1Q-in-Q double-tag (sub-interface)">
+      <PARAM name="outer" help="S-VLAN (outer tag)" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="inner" help="C-VLAN (inner tag) or 'any'" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/outer ${outer}&#xA;
+        tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/inner ${inner}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation dot1q second-dot1q"
+             help="Remove Q-in-Q encap (keeps single dot1q if set)">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/dot1q-tunnel</ACTION>
+    </COMMAND>
+    <COMMAND name="encapsulation untagged"
+             help="Accept only untagged frames (l2transport)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/encapsulation/untagged true</ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation untagged"
+             help="Stop accepting untagged frames">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/untagged</ACTION>
+    </COMMAND>
+
+    <!-- LACP / Bundle membership (em interface física apontando para Bundle-EtherN) -->
+    <COMMAND name="bundle id"
+             help="Make this interface a member of a Bundle-Ether">
+      <PARAM name="id" help="Bundle id" ptype="TERTOOS_BUNDLE_ID"/>
+      <PARAM name="mode-kw" help="mode" ptype="STRING"/>
+      <PARAM name="mode" help="active | passive | on" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no bundle id" help="Remove from any bundle">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/bundle</ACTION>
+    </COMMAND>
+
+    <!-- ACL binding (S3.1.1):
+         IOS-XR: `ipv4|ipv6 access-group <ACL-NAME> {ingress|egress}`
+         Maps to: add interface to ACL_TABLE/<NAME>/ports leaf-list.
+         The ACL_TABLE.stage (INGRESS or EGRESS) must already match the
+         direction the user asks for; the helper does NOT auto-create
+         a second ACL_TABLE for the opposite direction. -->
+    <COMMAND name="ipv4 access-group"
+             help="Apply IPv4 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 access-group" help="Remove IPv4 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 access-group"
+             help="Apply IPv6 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 access-group" help="Remove IPv6 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ethernet-services access-group"
+             help="Apply L2 ACL to this interface">
+      <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
+      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ethernet-services access-group" help="Remove L2 ACL binding">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/ports ${ifname}</ACTION>
+    </COMMAND>
+
+    <!-- ====== OSPFv2 per-interface (S6) ===================================
+         Mapeia para OSPFV2_INTERFACE|<if>|null. A chave usa 'null' como
+         endereço — frrcfgd interpreta como interface-wide (vale para todos
+         os IPs configurados). Usar a key concreta com endereço seria
+         possível mas exige saber o IP em commit-time (não temos).
+    -->
+    <COMMAND name="ip ospf area" help="Bind interface to an OSPF area">
+      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <PARAM name="area" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/area-id ${area}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf area" help="Unbind interface from OSPF">
+      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/area-id</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf cost" help="OSPF link cost">
+      <PARAM name="cost" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/metric ${cost}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf hello-interval" help="Hello interval (seconds)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf dead-interval" help="Dead interval (seconds)">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/dead-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf network" help="OSPF network type">
+      <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/network-type ${kind}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf priority" help="DR election priority">
+      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication" help="Per-interface authentication">
+      <PARAM name="kind" help="text | message-digest | null" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-type ${kind}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication-key" help="Plain authentication key">
+      <PARAM name="key" help="Key string" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key "${key}"</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf message-digest-key" help="MD5 key">
+      <PARAM name="id" help="Key id 1..255" ptype="UINT"/>
+      <PARAM name="md5" help="md5" ptype="STRING"/>
+      <PARAM name="key" help="Key string" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}&#xA;
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-md5-key "${key}"&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf mtu-ignore" help="Ignore MTU mismatch">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/mtu-ignore true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf mtu-ignore" help="Re-enable MTU check">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/mtu-ignore false</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf bfd" help="Enable BFD on this OSPF interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf bfd" help="Disable BFD">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/bfd-enable false</ACTION>
+    </COMMAND>
+
+    <!-- ===== S12 — operational per-interface ============================== -->
+    <COMMAND name="lldp transmit" help="Enable LLDP transmit on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode tx</ACTION>
+    </COMMAND>
+    <COMMAND name="lldp receive" help="Enable LLDP receive on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode rx</ACTION>
+    </COMMAND>
+    <COMMAND name="no lldp transmit" help="Disable LLDP transmit">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode disabled-tx</ACTION>
+    </COMMAND>
+    <COMMAND name="no lldp receive" help="Disable LLDP receive">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/lldp/mode disabled-rx</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow enable" help="Enable sFlow sampling on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/admin_state up</ACTION>
+    </COMMAND>
+    <COMMAND name="no sflow enable" help="Disable sFlow on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/admin_state down</ACTION>
+    </COMMAND>
+    <COMMAND name="sflow sample-rate" help="Per-port sample rate override">
+      <PARAM name="n" help="1-in-N" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
+    </COMMAND>
+
+    <!-- ===== S6.1 — OSPFv3 per-interface (OSPFV3_INTERFACE) =============== -->
+    <COMMAND name="ipv6 ospf area" help="Attach interface to an OSPFv3 area">
+      <PARAM name="id" help="Area id" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/area-id ${id}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf area" help="Detach interface from OSPFv3">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv6-ospf/area-id</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf cost" help="OSPFv3 cost">
+      <PARAM name="n" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/cost ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf hello-interval" help="OSPFv3 hello interval">
+      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf dead-interval" help="OSPFv3 dead interval">
+      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/dead-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf priority" help="OSPFv3 router priority">
+      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/priority ${p}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf network" help="OSPFv3 network type">
+      <PARAM name="t" help="broadcast | point-to-point" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/network-type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf bfd" help="Enable BFD for OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf bfd" help="Disable BFD for OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/bfd-enable false</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf passive" help="Mark interface passive in OSPFv3">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/passive true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 ospf passive" help="Re-enable OSPFv3 adjacency">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/passive false</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 ospf instance-id" help="OSPFv3 instance id">
+      <PARAM name="n" help="0..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/instance-id ${n}</ACTION>
+    </COMMAND>
+
+    <!-- ===== S5 — IS-IS per-interface (ISIS_INTERFACE) ==================== -->
+    <COMMAND name="ip router isis" help="Attach interface to an IS-IS instance">
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/instance ${tag}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip router isis" help="Detach interface from IS-IS">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/isis/instance</ACTION>
+    </COMMAND>
+    <COMMAND name="isis circuit-type" help="Per-port adjacency level">
+      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/circuit-type ${t}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis network" help="Per-port network type">
+      <PARAM name="n" help="point-to-point | broadcast" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/network-type ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis hello-interval" help="Hello interval in seconds">
+      <PARAM name="s" help="1..600" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-interval ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis hello-multiplier" help="Hello multiplier">
+      <PARAM name="n" help="2..100" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-multiplier ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis metric" help="Per-port metric">
+      <PARAM name="n" help="1..16777215" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/metric ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="isis password" help="Per-port authentication">
+      <PARAM name="t" help="clear | md5" ptype="STRING"/>
+      <PARAM name="key" help="Password" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/isis/password-type ${t}&#xA;
+        tertoos-cli candidate set interface/${ifname}/isis/password "${key}"&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="isis bfd" help="Enable BFD for IS-IS adjacency">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis bfd" help="Disable BFD for IS-IS">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable false</ACTION>
+    </COMMAND>
+    <COMMAND name="isis passive" help="Mark interface passive in IS-IS">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis passive" help="Re-enable IS-IS adjacency on interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive false</ACTION>
+    </COMMAND>
+
+    <!-- ===== S12.B — QoS bindings (PORT_QOS_MAP) ========================== -->
+    <COMMAND name="qos service-policy dscp-to-tc-map" help="Bind DSCP→TC map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/dscp-to-tc-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy dscp-to-tc-map" help="Unbind DSCP→TC map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/dscp-to-tc-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos service-policy tc-to-queue-map" help="Bind TC→Queue map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-queue-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy tc-to-queue-map" help="Unbind TC→Queue map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-queue-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos service-policy tc-to-pg-map" help="Bind TC→PG map">
+      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-pg-map ${map}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos service-policy tc-to-pg-map" help="Unbind TC→PG map">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-pg-map</ACTION>
+    </COMMAND>
+    <COMMAND name="qos scheduler-policy" help="Bind scheduler profile">
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/scheduler-policy ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos scheduler-policy" help="Unbind scheduler profile">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/scheduler-policy</ACTION>
+    </COMMAND>
+
+    <!-- S12.B.3 — service-policy (TERTOOS_PORT_SERVICE_POLICY) -->
+    <COMMAND name="service-policy input" help="Apply ingress policy-map">
+      <PARAM name="pmap" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/service-policy/input ${pmap}</ACTION>
+    </COMMAND>
+    <COMMAND name="no service-policy input" help="Remove ingress policy">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/service-policy/input</ACTION>
+    </COMMAND>
+    <COMMAND name="service-policy output" help="Apply egress policy-map">
+      <PARAM name="pmap" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/service-policy/output ${pmap}</ACTION>
+    </COMMAND>
+    <COMMAND name="no service-policy output" help="Remove egress policy">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/service-policy/output</ACTION>
+    </COMMAND>
+
+    <!-- S12.B.2 — per-queue / per-PG bindings -->
+    <COMMAND name="qos queue wred-profile" help="Bind WRED profile to a queue">
+      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="prof_kw" help="wred-profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/wred_profile ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos queue wred-profile" help="Unbind WRED from queue">
+      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/queue/${q}/wred_profile</ACTION>
+    </COMMAND>
+    <COMMAND name="qos queue scheduler" help="Bind scheduler to a queue">
+      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="sch_kw" help="scheduler" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/scheduler ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="qos buffer-profile-pg" help="Bind buffer profile to a PG">
+      <PARAM name="pg" help="PG 0..7" ptype="UINT"/>
+      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-pg/${pg}/profile ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos buffer-profile-pg" help="Unbind buffer profile from PG">
+      <PARAM name="pg" help="PG 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-pg/${pg}/profile</ACTION>
+    </COMMAND>
+    <COMMAND name="qos buffer-profile-queue" help="Bind buffer profile to a queue">
+      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-queue/${q}/profile ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos buffer-profile-queue" help="Unbind buffer profile from queue">
+      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-queue/${q}/profile</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.B — Per-port Spanning Tree =================================
+         Mapeia para STP_PORT|<if> e STP_VLAN_PORT|<vlan>|<if>.
+         portfast / bpdu-guard / root-guard / uplink-fast são port-level
+         (PVST/RSTP); edge-port é equivalente em MST. -->
+    <COMMAND name="spanning-tree portfast"
+             help="Skip listening/learning (edge port — only on host-facing ports)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/portfast true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree portfast"
+             help="Re-enable listening/learning">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/portfast false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree bpdu-guard"
+             help="Disable port if it receives a BPDU (host port hardening)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree bpdu-guard disable"
+             help="BPDU-guard with err-disable on violation">
+      <ACTION>
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard true&#xA;
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable true&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree bpdu-guard"
+             help="Disable BPDU-guard">
+      <ACTION>
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard false&#xA;
+        tertoos-cli candidate set stp/port/${ifname}/bpdu_guard_do_disable false&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree root-guard"
+             help="Block superior BPDUs (protect root election)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/root_guard true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree root-guard" help="Disable root-guard">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/root_guard false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree uplink-fast"
+             help="Fast convergence on uplink loss (PVST only)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/uplink_fast true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree uplink-fast" help="Disable uplink-fast">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/uplink_fast false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="spanning-tree edge-port"
+             help="MST edge-port (equivalent to portfast in MST)">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/edge_port true</ACTION>
+    </COMMAND>
+    <COMMAND name="no spanning-tree edge-port" help="Disable MST edge-port">
+      <ACTION>tertoos-cli candidate set stp/port/${ifname}/edge_port false</ACTION>
+    </COMMAND>
+
+    <!-- Per-VLAN per-port cost / priority (STP_VLAN_PORT) -->
+    <COMMAND name="spanning-tree vlan cost"
+             help="Per-VLAN STP path cost on this port">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="cost" help="Path cost (1..200000000)" ptype="TERTOOS_STP_COST"/>
+      <ACTION>tertoos-cli candidate set stp/vlan_port/${vlan}/${ifname}/cost ${cost}</ACTION>
+    </COMMAND>
+    <COMMAND name="spanning-tree vlan port-priority"
+             help="Per-VLAN STP port priority">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="prio" help="Priority (0..240 step 16)" ptype="TERTOOS_STP_PORT_PRIORITY"/>
+      <ACTION>tertoos-cli candidate set stp/vlan_port/${vlan}/${ifname}/priority ${prio}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.D — Storm-control =========================================
+         Mapeia para PORT_STORM_CONTROL|<if>|<storm_type> com kbps.
+         storm_type ∈ {broadcast, multicast, unknown-unicast}. -->
+    <COMMAND name="storm-control" help="Storm-control rate-limit per port">
+      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+             ptype="TERTOOS_STORM_TYPE"/>
+      <PARAM name="unit" help="kbps | pps" ptype="STRING"/>
+      <PARAM name="value" help="Rate limit value" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}&#xA;
+        tertoos-cli candidate set storm-control/${ifname}/${type}/value ${value}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no storm-control"
+             help="Remove storm-control for a type">
+      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+             ptype="TERTOOS_STORM_TYPE"/>
+      <ACTION>tertoos-cli candidate delete storm-control/${ifname}/${type}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.H — Per-port MAC learning + MAC limit =====================
+         PORT_TABLE.learn_mode (hardware|disable).
+         MAC limit per-port via FDB_TABLE constraint custom. -->
+    <COMMAND name="mac-learning enable"
+             help="Enable MAC address learning on this port (default)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/learn_mode hardware</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-learning disable"
+             help="Disable MAC learning (port floods unknown unicast)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/learn_mode disable</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-limit" help="Maximum MAC addresses learned on this port">
+      <PARAM name="n" help="Max MACs (0 = unlimited)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="no mac-limit" help="Remove MAC limit">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/mac_limit</ACTION>
+    </COMMAND>
+    <COMMAND name="mac-limit action" help="Action on MAC limit exceeded">
+      <PARAM name="action" help="drop | shutdown | log" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit_action ${action}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.F — interface l2transport mode ============================
+         Marca interface como L2 puro. Usado por bridge-domain attachment
+         para evitar processamento L3. Default mode é routed (sem flag). -->
+    <COMMAND name="l2transport"
+             help="Configure as L2-only port (no L3 processing)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/l2_mode transport</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2transport"
+             help="Revert to L3 routed mode">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/l2_mode</ACTION>
+    </COMMAND>
+
+    <!-- Show within if-view (candidate-aware) -->
+    <COMMAND name="show" help="Show interface configuration"/>
+    <COMMAND name="show configuration" help="Show pending changes for this interface">
+      <ACTION>tertoos-cli candidate show --filter interface/${ifname}</ACTION>
+    </COMMAND>
+
+    <!-- do <cmd> cross-mode -->
+    <COMMAND name="do"
+             help="Run a privileged EXEC command without leaving config">
+      <PARAM name="cmd" help="Command line" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli do ${cmd}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

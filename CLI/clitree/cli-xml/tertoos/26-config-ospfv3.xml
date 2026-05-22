@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — router ospfv3 views (S6.1, IOS-XR style).
+
+  IOS-XR vs CONFIG_DB (frrcfgd consumer adicionado em S6.1):
+    router ospfv3 <id>                  → OSPFV3_ROUTER|<vrf>
+    router ospfv3 <id> vrf <name>       → OSPFV3_ROUTER|<vrf>
+    router-id <addr>                    → OSPFV3_ROUTER|<vrf> "router-id"
+    area <id> stub                      → OSPFV3_ROUTER_AREA|<vrf>|<id>
+    redistribute <proto>                → OSPFV3_ROUTER_DISTRIBUTE_ROUTE|<vrf>|<proto>
+    [no] passive-interface <if>         → OSPFV3_ROUTER_PASSIVE_INTERFACE|<vrf>|<if>
+
+  OSPFv3 atribui interfaces a area via per-if `ipv6 ospf area <id>`
+  (em 04-config-interface.xml). Não há `network <prefix> area`.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="router ospfv3"
+             help="Configure OSPFv3"
+             view="config-router-ospfv3-view"
+             viewid="ospf6vrf=default;ospf6id=${id}">
+      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context router-ospfv3 default&#xA;
+        tertoos-cli candidate set ospfv3/default/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="router ospfv3 vrf"
+             help="Configure OSPFv3 in a VRF"
+             view="config-router-ospfv3-view"
+             viewid="ospf6vrf=${vrf};ospf6id=${id}">
+      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context router-ospfv3 ${vrf}&#xA;
+        tertoos-cli candidate set ospfv3/${vrf}/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no router ospfv3" help="Remove OSPFv3 configuration">
+      <PARAM name="id" help="OSPFv3 process id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete ospfv3/default</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-router-ospfv3-view"
+        prompt="${SYSTEM_NAME}(config-router-ospfv3-${ospf6id})# ">
+
+    <COMMAND name="exit" help="Exit router ospfv3" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="router-id" help="Set OSPFv3 router-id">
+      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/router-id ${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">
+      <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ "${detail}" = "detail" ]; then&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes detail&#xA;
+        else&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/log-adjacency-changes default&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="default-metric" help="Default metric for redistributed routes">
+      <PARAM name="n" help="metric" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/default-metric ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="distance" help="Administrative distance">
+      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/distance-all ${d}</ACTION>
+    </COMMAND>
+    <COMMAND name="passive-interface default" help="Mark all interfaces passive">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface-default true</ACTION>
+    </COMMAND>
+    <COMMAND name="no passive-interface default" help="Re-enable adjacencies on all interfaces">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface-default false</ACTION>
+    </COMMAND>
+    <!-- ===== S8 — Segment Routing (#24) =================================== -->
+    <COMMAND name="segment-routing" help="Enable OSPFv3 Segment Routing">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/segment_routing true</ACTION>
+    </COMMAND>
+    <COMMAND name="no segment-routing" help="Disable OSPFv3 SR">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/segment_routing false</ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing global-block" help="SRGB lower upper">
+      <PARAM name="lower" help="Lower" ptype="UINT"/>
+      <PARAM name="upper" help="Upper" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_lower ${lower}&#xA;
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/sr_global_block_upper ${upper}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
+      <PARAM name="prefix" help="prefix/len" ptype="STRING"/>
+      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="passive-interface" help="Mark interface passive">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no passive-interface" help="Re-enable interface adjacency">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="redistribute" help="Redistribute from another protocol">
+      <PARAM name="proto" help="connected | static | bgp" ptype="STRING"/>
+      <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT&#xA;
+        if [ -n "${metric}" ]; then&#xA;
+            tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT/metric ${metric}&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no redistribute" help="Stop redistributing">
+      <PARAM name="proto" help="connected | static | bgp" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT</ACTION>
+    </COMMAND>
+
+    <COMMAND name="area"
+             help="Configure an OSPFv3 area"
+             view="config-router-ospfv3-area-view"
+             viewid="ospf6vrf=${ospf6vrf};ospf6area=${id}">
+      <PARAM name="id" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate context router-ospfv3-area ${id}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-router-ospfv3-area-view"
+        prompt="${SYSTEM_NAME}(config-router-ospfv3-area-${ospf6area})# ">
+    <COMMAND name="exit" help="exit" view="config-router-ospfv3-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="stub" help="Mark area as stub">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub true</ACTION>
+    </COMMAND>
+    <COMMAND name="no stub" help="Unmark area as stub">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub false</ACTION>
+    </COMMAND>
+    <COMMAND name="stub no-summary" help="Stub area without summaries (totally stubby)">
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub-no-summary true</ACTION>
+    </COMMAND>
+    <COMMAND name="default-cost" help="Stub default-cost">
+      <PARAM name="n" help="cost" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub-default-cost ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="import-list" help="Apply import filter">
+      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/import-list ${acl}</ACTION>
+    </COMMAND>
+    <COMMAND name="export-list" help="Apply export filter">
+      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/export-list ${acl}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

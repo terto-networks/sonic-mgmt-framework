@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — BFD views (S12).
+    bfd                              → entrada config-bfd-view
+    bfd singlehop|multihop peer <ip> → BFD_PEER_SINGLE_HOP|<ip> | BFD_PEER_MULTI_HOP|<ip>
+  Backend frrcfgd (sonic-frr-mgmt-framework) já consome — zero código novo.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="bfd" help="Configure BFD" view="config-bfd-view">
+      <ACTION>tertoos-cli candidate context bfd</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-bfd-view"
+        prompt="${SYSTEM_NAME}(config-bfd)# ">
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="singlehop peer"
+             help="Configure single-hop BFD peer"
+             view="config-bfd-peer-view"
+             viewid="bfdscope=single-hop;bfdpeer=${addr}">
+      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate context bfd-peer single-hop/${addr}&#xA;
+        tertoos-cli candidate set bfd/single-hop/peer/${addr}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="multihop peer"
+             help="Configure multi-hop BFD peer"
+             view="config-bfd-peer-view"
+             viewid="bfdscope=multi-hop;bfdpeer=${addr}">
+      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate context bfd-peer multi-hop/${addr}&#xA;
+        tertoos-cli candidate set bfd/multi-hop/peer/${addr}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no singlehop peer" help="Remove single-hop BFD peer">
+      <PARAM name="addr" help="Peer addr" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete bfd/single-hop/peer/${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="no multihop peer" help="Remove multi-hop BFD peer">
+      <PARAM name="addr" help="Peer addr" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete bfd/multi-hop/peer/${addr}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-bfd-peer-view"
+        prompt="${SYSTEM_NAME}(config-bfd-${bfdscope}-${bfdpeer})# ">
+    <COMMAND name="exit" help="exit" view="config-bfd-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="interface" help="Local interface (single-hop)">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="vrf" help="VRF context">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/vrf ${vrf}</ACTION>
+    </COMMAND>
+    <COMMAND name="local-address" help="Local source IP">
+      <PARAM name="addr" help="Local IP" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/local_address ${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="interval min-tx" help="Tx interval (ms)">
+      <PARAM name="ms" help="10..60000" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/tx_interval ${ms}</ACTION>
+    </COMMAND>
+    <COMMAND name="interval min-rx" help="Rx interval (ms)">
+      <PARAM name="ms" help="10..60000" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/rx_interval ${ms}</ACTION>
+    </COMMAND>
+    <COMMAND name="detect-multiplier" help="Detection multiplier">
+      <PARAM name="n" help="2..255" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/multiplier ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="passive" help="Passive mode">
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/passive true</ACTION>
+    </COMMAND>
+    <COMMAND name="echo enable" help="Enable BFD echo">
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/echo_active true</ACTION>
+    </COMMAND>
+    <COMMAND name="shutdown" help="Disable peer">
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/shutdown true</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Re-enable peer">
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/shutdown false</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — EVPN-VXLAN views (S10).
+
+  Estrutura IOS-XR vs CONFIG_DB:
+    vxlan source-interface <if>           → VXLAN_TUNNEL|vtep src_ip
+    evpn                                  → entrada na config-evpn-view
+      nvo source-interface <if>           → VXLAN_EVPN_NVO|nvo source_vtep
+      evi <vni>                           → entrada na config-evpn-evi-view
+        route-target import <RT>          → BGP_GLOBALS_EVPN_VNI_RT|default|l2vpn_evpn|<vni>|<RT> rt_type=import
+        route-target export <RT>          → idem rt_type=export
+      interface <if> ethernet-segment ... → EVPN_ETHERNET_SEGMENT|<auto>
+    vlan <V> evi <vni>                    → VXLAN_TUNNEL_MAP|vtep|map_<V>_<vni>
+
+  Backend: swss/orchagent VXLAN + frrcfgd BGP EVPN handlers já existentes.
+  Multi-homing ESI all-active = skeleton (sync MAC entre VTEPs gating swss).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="vxlan source-interface" help="VXLAN VTEP source interface">
+      <PARAM name="ifname" help="Interface name (Loopback0 typical)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set vxlan/source-interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vxlan source-interface" help="Remove VXLAN VTEP">
+      <ACTION>tertoos-cli candidate delete vxlan/source-interface</ACTION>
+    </COMMAND>
+
+    <COMMAND name="evpn"
+             help="Configure EVPN"
+             view="config-evpn-view">
+      <ACTION>tertoos-cli candidate context evpn</ACTION>
+    </COMMAND>
+
+    <COMMAND name="vlan evi"
+             help="Map a VLAN to an EVPN/VXLAN VNI">
+      <PARAM name="vlan" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set vxlan/tunnel-map ${vlan} ${vni}</ACTION>
+    </COMMAND>
+    <COMMAND name="no vlan evi"
+             help="Remove a VLAN-VNI mapping">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete vxlan/tunnel-map ${vlan} ${vni}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-evpn-view =================================== -->
+  <VIEW name="config-evpn-view"
+        prompt="${SYSTEM_NAME}(config-evpn)# ">
+
+    <COMMAND name="exit" help="Exit EVPN" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="nvo source-interface" help="Bind NVO to a source interface">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set evpn/nvo/source-interface ${ifname}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="evi"
+             help="Configure an EVPN Instance"
+             view="config-evpn-evi-view"
+             viewid="evivni=${vni}">
+      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate context evpn-evi ${vni}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ethernet-segment identifier"
+             help="Configure ethernet-segment ESI on an interface (multi-homing)">
+      <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
+      <PARAM name="ifname" help="Interface (Ethernet/PortChannel)" ptype="STRING"/>
+      <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="STRING"/>
+      <PARAM name="esi" help="ESI value (XX:XX:XX:XX:XX:XX:XX:XX:XX for type-0)"
+             ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/interface ${ifname}&#xA;
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_type ${type}&#xA;
+        tertoos-cli candidate set evpn/ethernet-segment/${esname}/esi_value "${esi}"&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="ethernet-segment redundancy"
+             help="Set ES redundancy mode">
+      <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
+      <PARAM name="mode" help="all-active | single-active" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/redundancy_mode ${mode}</ACTION>
+    </COMMAND>
+    <COMMAND name="ethernet-segment df-election"
+             help="DF election method">
+      <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
+      <PARAM name="method" help="service-carving | preference" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_election_method ${method}</ACTION>
+    </COMMAND>
+    <COMMAND name="ethernet-segment df-preference"
+             help="DF preference (with method=preference)">
+      <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
+      <PARAM name="pref" help="0..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_preference ${pref}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ethernet-segment" help="Remove an ethernet-segment">
+      <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete evpn/ethernet-segment/${esname}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-evpn-evi-view =============================== -->
+  <VIEW name="config-evpn-evi-view"
+        prompt="${SYSTEM_NAME}(config-evpn-evi-${evivni})# ">
+
+    <COMMAND name="exit" help="Exit EVI" view="config-evpn-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="route-target import" help="Import route-target">
+      <PARAM name="rt" help="ASN:NN or A.B.C.D:NN" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/rt/import ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="route-target export" help="Export route-target">
+      <PARAM name="rt" help="ASN:NN or A.B.C.D:NN" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/rt/export ${rt}</ACTION>
+    </COMMAND>
+    <COMMAND name="route-target both" help="Import + export route-target">
+      <PARAM name="rt" help="ASN:NN" ptype="TERTOOS_RT"/>
+      <ACTION>
+        tertoos-cli candidate set evpn/evi/${evivni}/rt/import ${rt}&#xA;
+        tertoos-cli candidate set evpn/evi/${evivni}/rt/export ${rt}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no route-target" help="Remove route-target">
+      <PARAM name="dir" help="import | export | both" ptype="STRING"/>
+      <PARAM name="rt" help="RT" ptype="TERTOOS_RT"/>
+      <ACTION>
+        if [ "${dir}" = "both" ]; then&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/import ${rt}&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/export ${rt}&#xA;
+        else&#xA;
+            tertoos-cli candidate delete evpn/evi/${evivni}/rt/${dir} ${rt}&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>

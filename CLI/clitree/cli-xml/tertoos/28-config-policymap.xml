@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — policy-map view (S12.B.3, IOS-XR style).
+    policy-map type qos|traffic <name>
+      class <name>
+        set traffic-class <n>
+        set dscp <n>
+        set precedence <n>
+        police <policer-name>
+        queue <q>
+        wred-profile <name>
+        parent-class <name>
+  Mapeia para TERTOOS_POLICY_MAP|<name> + TERTOOS_POLICY_MAP_CLASS|...
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+    <COMMAND name="policy-map type qos"
+             help="Configure policy-map (QoS)"
+             view="config-policy-map-view"
+             viewid="pmapname=${name};pmaptype=qos">
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context policy-map ${name}&#xA;
+        tertoos-cli candidate set policy-map/${name}/policy_type qos&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="policy-map type traffic"
+             help="Configure policy-map (traffic)"
+             view="config-policy-map-view"
+             viewid="pmapname=${name};pmaptype=traffic">
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context policy-map ${name}&#xA;
+        tertoos-cli candidate set policy-map/${name}/policy_type traffic&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no policy-map" help="Remove policy-map">
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete policy-map/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-policy-map-view"
+        prompt="${SYSTEM_NAME}(config-policy-map-${pmapname})# ">
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="class"
+             help="Bind a class to this policy"
+             view="config-policy-map-class-view"
+             viewid="pmapname=${pmapname};pmapclass=${name}">
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context policy-map-class ${name}&#xA;
+        tertoos-cli candidate set policy-map/${pmapname}/class/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no class" help="Remove class binding">
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete policy-map/${pmapname}/class/${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <VIEW name="config-policy-map-class-view"
+        prompt="${SYSTEM_NAME}(config-policy-map-${pmapname}-class-${pmapclass})# ">
+    <COMMAND name="exit" help="exit" view="config-policy-map-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="set traffic-class" help="Set traffic class">
+      <PARAM name="n" help="0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_traffic_class ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="set dscp" help="Set DSCP">
+      <PARAM name="n" help="0..63" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_dscp ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="set precedence" help="Set IP precedence">
+      <PARAM name="n" help="0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_precedence ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="police" help="Apply policer">
+      <PARAM name="pol" help="Policer name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/police_name ${pol}</ACTION>
+    </COMMAND>
+    <COMMAND name="queue" help="Steer to queue">
+      <PARAM name="q" help="0..7" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/queue_index ${q}</ACTION>
+    </COMMAND>
+    <COMMAND name="wred-profile" help="Bind WRED profile">
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/wred_profile ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="parent-class" help="Hierarchical parent class">
+      <PARAM name="name" help="Parent class name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/parent_class ${name}</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

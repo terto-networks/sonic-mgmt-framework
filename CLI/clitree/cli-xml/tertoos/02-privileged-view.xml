@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — privileged-view ("tertoos#").
+  Equivalente IOS-XR: privileged EXEC. Entrada em config via
+  "configure" ou "configure terminal".
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="privileged-view" prompt="${SYSTEM_NAME}# ">
+
+    <COMMAND name="disable" help="Return to user EXEC" view="exec-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <COMMAND name="exit" help="Exit privileged EXEC" view="exec-view">
+      <ACTION builtin="clish_nop"/>
+    </COMMAND>
+
+    <COMMAND name="logout" help="Exit the CLI" lock="false">
+      <ACTION builtin="clish_close"/>
+    </COMMAND>
+
+    <!-- Enter configuration (candidate) -->
+    <COMMAND name="configure"
+             help="Enter global configuration mode"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin</ACTION>
+    </COMMAND>
+    <COMMAND name="configure terminal"
+             help="Configure from the terminal"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin</ACTION>
+    </COMMAND>
+    <COMMAND name="configure exclusive"
+             help="Configure with exclusive lock"
+             view="config-view">
+      <ACTION>tertoos-cli candidate begin --exclusive</ACTION>
+    </COMMAND>
+
+    <!-- Show family -->
+    <COMMAND name="show" help="Display operational state (SONiC show passthrough)">
+      <PARAM name="rest" help="show subcommand, e.g. 'ip route'" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli show passthrough ${rest}</ACTION>
+    </COMMAND>
+    <COMMAND name="show version" help="Show TertoOS version">
+      <ACTION>tertoos-cli show version</ACTION>
+    </COMMAND>
+    <COMMAND name="show running-config"
+             help="Show running configuration (committed)">
+      <ACTION>tertoos-cli show running</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration commit list"
+             help="List recent commits">
+      <ACTION>tertoos-cli commit list</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration commit changes"
+             help="Show changes of a specific commit">
+      <PARAM name="commit-id" help="Commit id (numeric or label)" ptype="STRING"/>
+      <ACTION>tertoos-cli commit show ${commit-id}</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces" help="Show interfaces">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
+      <ACTION>tertoos-cli show ipv4 brief</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.E — VLAN aggregator + L2 MAC address-table =================
+         Agrega VLANs em uso de 4 fontes:
+           sub-interfaces (encapsulation dot1q)
+           l2vpn bridge-domain
+           evpn vxlan vlan-vni mappings
+           dot1q-tunnel outer (Q-in-Q)
+         tertoos-cli show vlan implementa internamente. -->
+    <COMMAND name="show vlan" help="Show all VLANs in use (aggregator)">
+      <ACTION>tertoos-cli show vlan</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan brief" help="Compact VLAN list">
+      <ACTION>tertoos-cli show vlan --brief</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan id" help="Show details for a single VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show vlan --id ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show vlan summary" help="Counts of VLANs by source">
+      <ACTION>tertoos-cli show vlan --summary</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show l2 mac-address-table"
+             help="Show MAC forwarding database">
+      <ACTION>tertoos-cli show fdb</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table vlan"
+             help="MAC entries for a specific VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show fdb --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table interface"
+             help="MAC entries learned on a specific port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show fdb --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table address"
+             help="Show entry for a specific MAC">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <ACTION>tertoos-cli show fdb --address ${mac}</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table dynamic"
+             help="Only dynamic entries">
+      <ACTION>tertoos-cli show fdb --type dynamic</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table static"
+             help="Only static entries">
+      <ACTION>tertoos-cli show fdb --type static</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2 mac-address-table count"
+             help="Count MAC entries (per-VLAN summary)">
+      <ACTION>tertoos-cli show fdb --count</ACTION>
+    </COMMAND>
+
+    <COMMAND name="clear l2 mac-address-table dynamic"
+             help="Flush dynamic MAC entries (all VLANs)">
+      <ACTION>tertoos-cli clear fdb --type dynamic</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic vlan"
+             help="Flush dynamic MAC entries in a VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic interface"
+             help="Flush dynamic MAC entries on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear l2 mac-address-table dynamic address"
+             help="Flush a specific dynamic MAC entry">
+      <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
+      <ACTION>tertoos-cli clear fdb --type dynamic --address ${mac}</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.A/B/C — Spanning Tree =====================================
+         sonic-stp daemon expõe state via STATE_DB. tertoos-cli show
+         spanning-tree formata em IOS-XR style. -->
+    <COMMAND name="show spanning-tree" help="STP state (all VLANs/instances)">
+      <ACTION>tertoos-cli show spanning-tree</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree summary" help="STP global summary">
+      <ACTION>tertoos-cli show spanning-tree --summary</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree vlan" help="STP state for a VLAN">
+      <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
+      <ACTION>tertoos-cli show spanning-tree --vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree interface" help="STP state of a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show spanning-tree --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree mst" help="MST instances">
+      <ACTION>tertoos-cli show spanning-tree --mst</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree mst configuration" help="MST region config">
+      <ACTION>tertoos-cli show spanning-tree --mst-config</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree root" help="STP root bridges">
+      <ACTION>tertoos-cli show spanning-tree --root</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree blocked" help="Blocked STP ports">
+      <ACTION>tertoos-cli show spanning-tree --blocked</ACTION>
+    </COMMAND>
+    <COMMAND name="show spanning-tree counters" help="STP counters per port">
+      <ACTION>tertoos-cli show spanning-tree --counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree counters" help="Reset STP counters">
+      <ACTION>tertoos-cli clear spanning-tree counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree counters interface"
+             help="Reset STP counters on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli clear spanning-tree counters --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="clear spanning-tree detected-protocols"
+             help="Force protocol re-negotiation on all ports">
+      <ACTION>tertoos-cli clear spanning-tree detected-protocols</ACTION>
+    </COMMAND>
+
+    <!-- ====== S15.D — Storm-control state ==================================== -->
+    <COMMAND name="show storm-control" help="Storm-control config + counters (all)">
+      <ACTION>tertoos-cli show storm-control</ACTION>
+    </COMMAND>
+    <COMMAND name="show storm-control interface" help="Storm-control on a port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli show storm-control --interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv4 route" help="IPv4 routing table">
+      <ACTION>tertoos-cli show ipv4 route</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp summary" help="BGP summary">
+      <ACTION>vtysh -c "show bgp summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp summary vrf" help="BGP summary for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vrf ${vrf} summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp neighbors" help="BGP neighbors detail">
+      <ACTION>vtysh -c "show bgp neighbors"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp neighbor" help="BGP neighbor detail (single peer)">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <ACTION>vtysh -c "show bgp neighbors ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 unicast" help="BGP IPv4 unicast RIB">
+      <ACTION>vtysh -c "show bgp ipv4 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 unicast prefix" help="BGP IPv4 unicast for a prefix">
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>vtysh -c "show bgp ipv4 unicast ${prefix}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv6 unicast" help="BGP IPv6 unicast RIB">
+      <ACTION>vtysh -c "show bgp ipv6 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv6 unicast prefix" help="BGP IPv6 unicast for a prefix">
+      <PARAM name="prefix" help="X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>vtysh -c "show bgp ipv6 unicast ${prefix}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf" help="OSPF process info">
+      <ACTION>vtysh -c "show ip ospf"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf vrf" help="OSPF info for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show ip ospf vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf neighbor" help="OSPF neighbors">
+      <ACTION>vtysh -c "show ip ospf neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf interface" help="OSPF interfaces">
+      <ACTION>vtysh -c "show ip ospf interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database" help="OSPF LSDB">
+      <ACTION>vtysh -c "show ip ospf database"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
+      <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp binding" help="LDP label bindings">
+      <ACTION>vtysh -c "show mpls ldp binding"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp interface" help="LDP enabled interfaces">
+      <ACTION>vtysh -c "show mpls ldp interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls ldp discovery" help="LDP discovery">
+      <ACTION>vtysh -c "show mpls ldp discovery"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv4 unicast" help="BGP VPNv4 unicast RIB">
+      <ACTION>vtysh -c "show bgp vpnv4 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv4 unicast vrf" help="BGP VPNv4 unicast for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vpnv4 unicast vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv6 unicast" help="BGP VPNv6 unicast RIB">
+      <ACTION>vtysh -c "show bgp vpnv6 unicast"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vpnv6 unicast vrf" help="BGP VPNv6 unicast for a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vpnv6 unicast vrf ${vrf}"</ACTION>
+    </COMMAND>
+    <!-- ===== S8/S9 — SR-MPLS + SR-TE + PCEP =============================== -->
+    <COMMAND name="show sr-te policy" help="SR-TE policies">
+      <PARAM name="endpoint" help="Endpoint (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${endpoint}" ]; then&#xA;
+            vtysh -c "show sr-te policy ${endpoint}"&#xA;
+        else&#xA;
+            vtysh -c "show sr-te policy"&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show sr-te pcep" help="SR-TE PCEP / PCC status">
+      <ACTION>vtysh -c "show sr-te pcep counters" 2&gt;/dev/null; vtysh -c "show sr-te pcep pcc"</ACTION>
+    </COMMAND>
+    <COMMAND name="show segment-routing prefix-sid" help="OSPF/IS-IS prefix-SIDs">
+      <ACTION>
+        vtysh -c "show ip ospf segment-routing prefix-sid"&#xA;
+        vtysh -c "show isis segment-routing prefix-sids" 2&gt;/dev/null&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls table" help="zebra MPLS LFIB">
+      <ACTION>vtysh -c "show mpls table"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear sr-te policy" help="Reset SR-TE policy">
+      <PARAM name="endpoint" help="Endpoint" ptype="STRING"/>
+      <ACTION>vtysh -c "clear sr-te policy ${endpoint}"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show l2vpn bridge-domain" help="VPLS bridge-domains (S11.x)">
+      <ACTION>vtysh -c "show l2vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn vfi" help="VPLS VFIs (S11.x)">
+      <ACTION>vtysh -c "show l2vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn encapsulation" help="EVPN encap config">
+      <ACTION>sonic-db-cli CONFIG_DB keys 'EVPN_GLOBALS|*' &amp;&amp; vtysh -c "show bgp l2vpn evpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn xconnect" help="L2VPN xconnect status">
+      <ACTION>vtysh -c "show l2vpn xconnect"</ACTION>
+    </COMMAND>
+    <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
+      <ACTION>vtysh -c "show mpls l2transport vc"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn vni" help="EVPN VNI summary">
+      <ACTION>vtysh -c "show evpn vni"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn vni detail" help="EVPN VNI detail">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn mac vni" help="EVPN MACs for a VNI">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn mac vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn arp-cache vni" help="EVPN ARP/ND cache for a VNI">
+      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn arp-cache vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn es" help="EVPN ethernet-segments">
+      <ACTION>vtysh -c "show evpn es"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp l2vpn evpn" help="BGP L2VPN EVPN RIB">
+      <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform" help="Platform information">
+      <ACTION>tertoos-cli show platform</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform summary" help="Platform summary (alias)">
+      <ACTION>show platform summary</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform inventory" help="EEPROM / serial / model">
+      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform environment" help="Fans, PSU, temperature">
+      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+    </COMMAND>
+    <COMMAND name="show platform controllers" help="PCI controllers and SAI driver">
+      <ACTION>lspci -nn 2&gt;/dev/null | head -40; echo; show platform npu summary 2&gt;/dev/null || true</ACTION>
+    </COMMAND>
+    <COMMAND name="show inventory" help="Inventory (alias for show platform inventory)">
+      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+    </COMMAND>
+    <COMMAND name="show environment" help="Environment (alias)">
+      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show processes" help="Top processes snapshot">
+      <ACTION>top -bn1 -w 200 2&gt;/dev/null | head -40</ACTION>
+    </COMMAND>
+    <COMMAND name="show processes cpu" help="Top processes by CPU">
+      <ACTION>ps -eo pid,user,pcpu,pmem,comm --sort=-pcpu | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show processes memory" help="Top processes by memory">
+      <ACTION>ps -eo pid,user,pmem,rss,comm --sort=-pmem | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show memory summary" help="Memory summary">
+      <ACTION>cat /proc/meminfo 2&gt;/dev/null | head -20</ACTION>
+    </COMMAND>
+    <COMMAND name="show watchdog" help="Watchdog status">
+      <ACTION>systemctl status sonic-watchdog 2&gt;/dev/null | head -15 || echo "watchdog: service not present on this build"</ACTION>
+    </COMMAND>
+    <COMMAND name="show users" help="Logged-in users">
+      <ACTION>who 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <COMMAND name="show uptime" help="System uptime">
+      <ACTION>uptime</ACTION>
+    </COMMAND>
+    <COMMAND name="show clock" help="System clock">
+      <ACTION>date '+%Y-%m-%d %H:%M:%S %Z'</ACTION>
+    </COMMAND>
+    <COMMAND name="show file systems" help="Filesystem usage">
+      <ACTION>df -h 2&gt;/dev/null | grep -vE '^(tmpfs|udev|none)'</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces transceiver" help="SFP/QSFP transceiver presence + EEPROM">
+      <ACTION>show interfaces transceiver presence 2&gt;/dev/null; echo; show interfaces transceiver eeprom 2&gt;/dev/null | head -50</ACTION>
+    </COMMAND>
+    <COMMAND name="show tech-support" help="Collect tech-support bundle">
+      <ACTION>tertoos-cli tech-support</ACTION>
+    </COMMAND>
+
+    <!-- Operational -->
+    <COMMAND name="ping" help="Ping IPv4/IPv6 host">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>ping -c 4 ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="traceroute" help="Trace route to host">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>traceroute ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="ssh" help="Open SSH session">
+      <PARAM name="target" help="user@host" ptype="STRING"/>
+      <ACTION>ssh ${target}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="reload" help="Reload the system">
+      <ACTION>tertoos-cli reload</ACTION>
+    </COMMAND>
+    <COMMAND name="clear" help="Reset operational counters/state"/>
+    <COMMAND name="clear counters" help="Clear interface counters">
+      <ACTION>tertoos-cli clear counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp" help="Reset all BGP sessions">
+      <ACTION>vtysh -c "clear bgp *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp neighbor" help="Reset a specific BGP neighbor">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <ACTION>vtysh -c "clear bgp ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp neighbor soft" help="Soft-clear a BGP neighbor">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="dir" help="in | out" ptype="STRING"/>
+      <ACTION>vtysh -c "clear bgp ${addr} soft ${dir}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp vrf" help="Reset BGP sessions in a VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "clear bgp vrf ${vrf} *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear ip ospf process" help="Reset the OSPF process">
+      <ACTION>vtysh -c "clear ip ospf process"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear mpls ldp neighbor" help="Reset all LDP neighbors">
+      <ACTION>vtysh -c "clear mpls ldp neighbor *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear mpls ldp neighbor peer" help="Reset specific LDP neighbor">
+      <PARAM name="addr" help="Peer LSR-id" ptype="STRING"/>
+      <ACTION>vtysh -c "clear mpls ldp neighbor ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear evpn dup-addr" help="Clear EVPN duplicate-address detection state">
+      <ACTION>vtysh -c "clear evpn dup-addr"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bgp l2vpn evpn" help="Reset all BGP L2VPN EVPN sessions">
+      <ACTION>vtysh -c "clear bgp l2vpn evpn *"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear bfd statistics" help="Reset BFD counters">
+      <ACTION>vtysh -c "clear bfd statistics"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bfd peers" help="BFD peers state">
+      <ACTION>vtysh -c "show bfd peers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bfd peers brief" help="BFD peers brief">
+      <ACTION>vtysh -c "show bfd peers brief"</ACTION>
+    </COMMAND>
+    <COMMAND name="show sflow" help="sFlow status">
+      <ACTION>show sflow</ACTION>
+    </COMMAND>
+    <COMMAND name="show lldp neighbors" help="LLDP neighbors">
+      <ACTION>show lldp neighbors</ACTION>
+    </COMMAND>
+    <COMMAND name="show lldp table" help="LLDP table">
+      <ACTION>show lldp table</ACTION>
+    </COMMAND>
+    <COMMAND name="show ntp associations" help="NTP associations">
+      <ACTION>chronyc sources -v 2&gt;/dev/null || ntpq -p</ACTION>
+    </COMMAND>
+    <COMMAND name="show ntp status" help="NTP status">
+      <ACTION>chronyc tracking 2&gt;/dev/null || ntpq -nc rv</ACTION>
+    </COMMAND>
+    <COMMAND name="show logging" help="Recent log messages">
+      <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
+    </COMMAND>
+    <COMMAND name="show snmp" help="SNMP runtime config">
+      <ACTION>show runningconfiguration snmp 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <COMMAND name="show telemetry" help="Telemetry/gNMI status">
+      <ACTION>systemctl status telemetry 2&gt;/dev/null | head -10</ACTION>
+    </COMMAND>
+    <COMMAND name="show ssh server" help="SSH server config">
+      <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <!-- ===== S6.1 — OSPFv3 show/clear ====================================== -->
+    <COMMAND name="show ipv6 ospf" help="OSPFv3 summary">
+      <ACTION>vtysh -c "show ipv6 ospf6"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf neighbor" help="OSPFv3 neighbors">
+      <ACTION>vtysh -c "show ipv6 ospf6 neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf interface" help="OSPFv3 per-interface state">
+      <ACTION>vtysh -c "show ipv6 ospf6 interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf database" help="OSPFv3 LSA database">
+      <ACTION>vtysh -c "show ipv6 ospf6 database"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 ospf route" help="OSPFv3 computed routes">
+      <ACTION>vtysh -c "show ipv6 ospf6 route"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear ipv6 ospf process" help="Restart OSPFv3 process">
+      <ACTION>vtysh -c "clear ipv6 ospf6 process"</ACTION>
+    </COMMAND>
+
+    <!-- ===== S5 — IS-IS show/clear ========================================= -->
+    <COMMAND name="show isis summary" help="IS-IS summary">
+      <ACTION>vtysh -c "show isis summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis topology" help="IS-IS topology">
+      <ACTION>vtysh -c "show isis topology"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis database" help="IS-IS LSP database">
+      <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
+      <ACTION>vtysh -c "show isis database ${detail}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis neighbor" help="IS-IS neighbors">
+      <ACTION>vtysh -c "show isis neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis interface" help="IS-IS per-interface state">
+      <PARAM name="ifname" help="Interface (optional)" ptype="STRING" optional="true"/>
+      <ACTION>vtysh -c "show isis interface ${ifname}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis route" help="IS-IS computed routes">
+      <ACTION>vtysh -c "show isis route"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis segment-routing prefix-sids" help="SR prefix-SID map">
+      <ACTION>vtysh -c "show isis segment-routing prefix-sids"</ACTION>
+    </COMMAND>
+    <COMMAND name="clear isis" help="Reset IS-IS adjacencies">
+      <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${vrf}" ]; then&#xA;
+            vtysh -c "clear isis vrf ${vrf}"&#xA;
+        else&#xA;
+            vtysh -c "clear isis *"&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="show qos map dscp-to-tc" help="DSCP→TC maps">
+      <ACTION>show qos map dscp-tc 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'DSCP_TO_TC_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos map tc-to-queue" help="TC→Queue maps">
+      <ACTION>show qos map tc-queue 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'TC_TO_QUEUE_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos map tc-to-pg" help="TC→PG maps">
+      <ACTION>show qos map tc-pg 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'TC_TO_PRIORITY_GROUP_MAP|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos scheduler" help="Scheduler profiles">
+      <ACTION>show qos scheduler 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'SCHEDULER|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos interface" help="Per-port QoS bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>show qos port ${port} 2&gt;/dev/null || sonic-db-cli CONFIG_DB hgetall "PORT_QOS_MAP|${port}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show queue counters" help="Per-port per-queue counters">
+      <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
+      <ACTION>show queue counters ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="show class-map" help="Class-maps">
+      <PARAM name="name" help="Class-map name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB hgetall "TERTOOS_CLASS_MAP|${name}"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_CLASS_MAP|*'&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show policy-map" help="Policy-maps">
+      <PARAM name="name" help="Policy-map name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB keys "TERTOOS_POLICY_MAP_CLASS|${name}|*"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'TERTOOS_POLICY_MAP|*'&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="show policy-map interface" help="Per-port service-policy bindings">
+      <PARAM name="port" help="Port" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB hgetall "TERTOOS_PORT_SERVICE_POLICY|${port}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show policer" help="Policer profiles">
+      <PARAM name="name" help="Policer name (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ -n "${name}" ]; then&#xA;
+            sonic-db-cli CONFIG_DB hgetall "POLICER|${name}"&#xA;
+        else&#xA;
+            sonic-db-cli CONFIG_DB keys 'POLICER|*'&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="show qos wred-profile" help="WRED profiles">
+      <ACTION>show qos wred-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'WRED_PROFILE|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-pool" help="Buffer pools">
+      <ACTION>show qos buffer-pool 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'BUFFER_POOL|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-profile" help="Buffer profiles">
+      <ACTION>show qos buffer-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'BUFFER_PROFILE|*'</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-pg" help="Per-port buffer-PG bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_PG|${port}|*"</ACTION>
+    </COMMAND>
+    <COMMAND name="show qos buffer-queue" help="Per-port buffer-queue bindings">
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_QUEUE|${port}|*"</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show priority-group counters" help="Per-port priority-group counters">
+      <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
+      <ACTION>show priority-group counters ${port}</ACTION>
+    </COMMAND>
+
+    <!-- ===== S13.D — OTA image management ================================ -->
+    <COMMAND name="image install" help="Install signed image bundle from URL">
+      <PARAM name="url" help="https://... bundle URL" ptype="STRING"/>
+      <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ "${opt}" = "no-verify" ]; then&#xA;
+            tertoos-cli image install ${url} no-verify&#xA;
+        else&#xA;
+            tertoos-cli image install ${url}&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="image activate" help="Set next-boot image">
+      <PARAM name="slot" help="next | image-name" ptype="STRING"/>
+      <ACTION>tertoos-cli image activate ${slot}</ACTION>
+    </COMMAND>
+    <COMMAND name="image commit" help="Commit current image as default">
+      <ACTION>tertoos-cli image commit</ACTION>
+    </COMMAND>
+    <COMMAND name="image rollback" help="Roll back to previous image">
+      <ACTION>tertoos-cli image rollback</ACTION>
+    </COMMAND>
+    <COMMAND name="image list" help="List installed images (sonic-installer list)">
+      <ACTION>tertoos-cli image list</ACTION>
+    </COMMAND>
+    <COMMAND name="image verify" help="Verify a bundle's detached signature">
+      <PARAM name="path" help="Local bundle path" ptype="STRING"/>
+      <ACTION>tertoos-cli image verify ${path}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show horizon status" help="Horizon agent status">
+      <ACTION>tertoos-cli horizon status</ACTION>
+    </COMMAND>
+    <COMMAND name="show horizon telemetry" help="Last telemetry samples">
+      <ACTION>tertoos-cli horizon telemetry</ACTION>
+    </COMMAND>
+    <COMMAND name="show horizon queue" help="Pending publish queue">
+      <ACTION>tertoos-cli horizon queue</ACTION>
+    </COMMAND>
+
+    <COMMAND name="debug" help="Enable debug for a feature">
+      <PARAM name="feature" help="Feature name" ptype="STRING"/>
+      <ACTION>tertoos-cli debug enable ${feature}</ACTION>
+    </COMMAND>
+    <COMMAND name="undebug" help="Disable debug for a feature">
+      <PARAM name="feature" help="Feature name" ptype="STRING"/>
+      <ACTION>tertoos-cli debug disable ${feature}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="terminal length" help="Set terminal pager length">
+      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
+      <ACTION>tertoos-cli terminal length ${lines}</ACTION>
+    </COMMAND>
+
+    <!-- ===== Console log control (IOS-XR `terminal monitor`) ================
+         Liga/desliga as mensagens de kernel/systemd nesta console serial.
+         Util no EVE-NG/console onde o systemd-ssh-generator polui a tela. -->
+    <COMMAND name="terminal monitor"
+             help="Show kernel/system log messages on this console">
+      <ACTION>sudo dmesg -n 7</ACTION>
+    </COMMAND>
+    <COMMAND name="terminal no monitor"
+             help="Silence kernel/system log messages on this console">
+      <ACTION>sudo dmesg -n 1</ACTION>
+    </COMMAND>
+
+    <!-- ===== Operator shell escape (IOS-XR `run`) ===========================
+         bash → shell interativo do sistema; run → um comando unico.
+         Fora da maquina de candidate/commit — mudancas aqui nao sao
+         rastreadas. -->
+    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)">
+      <ACTION>bash -l</ACTION>
+    </COMMAND>
+    <COMMAND name="run" help="Run a single system-shell command">
+      <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
+      <ACTION>bash -lc "${cmd}"</ACTION>
+    </COMMAND>
+
+    <!--
+      Candidate apply/discard from privileged-view. IOS-XR semantics:
+      after `end` in config-view the candidate is preserved; operator
+      can review (`show configuration`), then `commit` from privileged
+      to apply, or `abort` to discard. No-op if no candidate is open.
+    -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration"
+             help="Show pending candidate changes (diff vs running)">
+      <ACTION>tertoos-cli candidate show</ACTION>
+    </COMMAND>
+
+    <COMMAND name="rollback configuration last"
+             help="Roll back N most recent commits">
+      <PARAM name="n" help="Number of commits to roll back" ptype="UINT"/>
+      <ACTION>tertoos-cli rollback last ${n}</ACTION>
+    </COMMAND>
+    <COMMAND name="rollback configuration to"
+             help="Roll back to a labeled commit">
+      <PARAM name="label" help="Commit label" ptype="STRING"/>
+      <ACTION>tertoos-cli rollback to ${label}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

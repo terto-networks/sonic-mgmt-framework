@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Route Policy Language (RPL) views (IOS-XR style):
+    prefix-set <name>
+    community-set <name>
+    extcommunity-set rt <name>
+    as-path-set <name>
+    route-policy <name>
+
+  Mapeamento candidate → CONFIG_DB:
+    prefix-set/<n>/mode                 → PREFIX_SET|<n>             mode
+    prefix-set/<n>/entry/<seq>/prefix   → PREFIX|<n>|<seq>|<pfx>|<rng>
+    community-set/<n>/match-action      → COMMUNITY_SET|<n>          match_action
+    community-set/<n>/member            → COMMUNITY_SET|<n>          community_member (leaf-list)
+    extcommunity-set/<n>/member         → EXTENDED_COMMUNITY_SET|<n> community_member (leaf-list)
+    as-path-set/<n>/member              → AS_PATH_SET|<n>            as_path_set_member (leaf-list)
+    route-policy/<n>                    → ROUTE_MAP_SET|<n>
+    route-policy/<n>/stmt/<seq>/op      → ROUTE_MAP|<n>|<seq>        route_operation
+    route-policy/<n>/stmt/<seq>/match/destination/prefix-set
+                                        → ROUTE_MAP|<n>|<seq>        match_prefix_set
+    route-policy/<n>/stmt/<seq>/match/community
+                                        → ROUTE_MAP|<n>|<seq>        match_community
+    route-policy/<n>/stmt/<seq>/match/as-path
+                                        → ROUTE_MAP|<n>|<seq>        match_as_path
+    route-policy/<n>/stmt/<seq>/set/local-pref
+                                        → ROUTE_MAP|<n>|<seq>        set_local_pref
+    route-policy/<n>/stmt/<seq>/set/med → ROUTE_MAP|<n>|<seq>        set_med
+    route-policy/<n>/stmt/<seq>/set/next-hop
+                                        → ROUTE_MAP|<n>|<seq>        set_next_hop
+    route-policy/<n>/stmt/<seq>/set/community
+                                        → ROUTE_MAP|<n>|<seq>        set_community_inline (leaf-list)
+
+  O daemon `terto-horizon-rpld` consome essas tabelas em CONFIG_DB e
+  renderiza para FRR via vtysh (route-map, ip prefix-list, bgp
+  community-list, bgp as-path access-list).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="prefix-set"
+             help="Configure a named prefix-set"
+             view="config-prefix-set-view"
+             viewid="psname=${name}">
+      <PARAM name="name" help="Prefix-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context prefix-set ${name}&#xA;
+        tertoos-cli candidate set prefix-set/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no prefix-set" help="Delete a prefix-set">
+      <PARAM name="name" help="Prefix-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete prefix-set/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="community-set"
+             help="Configure a named community-set"
+             view="config-community-set-view"
+             viewid="csname=${name}">
+      <PARAM name="name" help="Community-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context community-set ${name}&#xA;
+        tertoos-cli candidate set community-set/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no community-set" help="Delete a community-set">
+      <PARAM name="name" help="Community-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete community-set/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="extcommunity-set rt"
+             help="Configure a named extended-community (RT) set"
+             view="config-ext-community-set-view"
+             viewid="ecsname=${name}">
+      <PARAM name="name" help="Extcommunity-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context ext-community-set ${name}&#xA;
+        tertoos-cli candidate set ext-community-set/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no extcommunity-set rt" help="Delete an extcommunity-set">
+      <PARAM name="name" help="Extcommunity-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete ext-community-set/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="as-path-set"
+             help="Configure a named AS-path-set"
+             view="config-as-path-set-view"
+             viewid="apsname=${name}">
+      <PARAM name="name" help="AS-path-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context as-path-set ${name}&#xA;
+        tertoos-cli candidate set as-path-set/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no as-path-set" help="Delete an AS-path-set">
+      <PARAM name="name" help="AS-path-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete as-path-set/${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="route-policy"
+             help="Configure a route-policy (RPL)"
+             view="config-route-policy-view"
+             viewid="rplname=${name}">
+      <PARAM name="name" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context route-policy ${name}&#xA;
+        tertoos-cli candidate set route-policy/${name}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no route-policy" help="Delete a route-policy">
+      <PARAM name="name" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete route-policy/${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================ prefix-set ============================== -->
+  <VIEW name="config-prefix-set-view"
+        prompt="${SYSTEM_NAME}(config-prefix-set-${psname})# ">
+
+    <COMMAND name="exit" help="Exit prefix-set" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="mode"
+             help="Address family of the prefix-set">
+      <PARAM name="af" help="ipv4 | ipv6" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set prefix-set/${psname}/mode ${af}</ACTION>
+    </COMMAND>
+
+    <!-- Forma simples: <seq> <prefix> [le|ge|eq <len>] -->
+    <COMMAND name="permit"
+             help="Add a prefix entry (permit)">
+      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="UINT"/>
+      <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
+      <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
+             ptype="STRING" optional="true"/>
+      <PARAM name="range_val" help="Length"
+             ptype="UINT" optional="true"/>
+      <ACTION>
+        if [ -n "${range_val}" ]; then&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix} ${range_kw} ${range_val}"&#xA;
+        else&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix}"&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="deny" help="Add a prefix entry (deny)">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
+      <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
+             ptype="STRING" optional="true"/>
+      <PARAM name="range_val" help="Length"
+             ptype="UINT" optional="true"/>
+      <ACTION>
+        if [ -n "${range_val}" ]; then&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix} ${range_kw} ${range_val}"&#xA;
+        else&#xA;
+            tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix}"&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no" help="Remove a prefix entry">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete prefix-set/${psname}/entry/${seq}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================ community-set =========================== -->
+  <VIEW name="config-community-set-view"
+        prompt="${SYSTEM_NAME}(config-community-set-${csname})# ">
+
+    <COMMAND name="exit" help="Exit community-set" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="match-action"
+             help="any | all (how members are combined for match)">
+      <PARAM name="action" help="any | all" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set community-set/${csname}/match-action ${action}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="member" help="Add a community value to the set">
+      <PARAM name="value" help="Community AS:NN, well-known name, or regex"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add community-set/${csname}/member ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="no member" help="Remove a community value">
+      <PARAM name="value" help="Community AS:NN" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate del-list community-set/${csname}/member ${value}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ========================== extcommunity-set ========================== -->
+  <VIEW name="config-ext-community-set-view"
+        prompt="${SYSTEM_NAME}(config-extcomm-set-${ecsname})# ">
+
+    <COMMAND name="exit" help="Exit extcommunity-set" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="member" help="Add an RT (extended community) to the set">
+      <PARAM name="value" help="RT in AS:NN or A.B.C.D:NN form" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate add ext-community-set/${ecsname}/member ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="no member" help="Remove an RT">
+      <PARAM name="value" help="RT" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate del-list ext-community-set/${ecsname}/member ${value}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================ as-path-set ============================= -->
+  <VIEW name="config-as-path-set-view"
+        prompt="${SYSTEM_NAME}(config-as-path-set-${apsname})# ">
+
+    <COMMAND name="exit" help="Exit as-path-set" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="member" help="Add an AS-path regex to the set">
+      <PARAM name="regex" help='Posix regex (ex.: ^65000_)' ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add as-path-set/${apsname}/member "${regex}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no member" help="Remove an AS-path regex">
+      <PARAM name="regex" help="Regex" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate del-list as-path-set/${apsname}/member "${regex}"</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- ============================ route-policy ============================ -->
+  <VIEW name="config-route-policy-view"
+        prompt="${SYSTEM_NAME}(config-route-policy-${rplname})# ">
+
+    <COMMAND name="exit" help="Exit route-policy" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <!--
+      Statement-style RPL (flat, no nested if/elseif/endif yet — those
+      compile down to multiple ROUTE_MAP entries per stmt anyway).
+
+      <seq> permit|deny [match ... ] [set ...]
+      Em vez de digitar tudo em uma linha, oferecemos um bloco:
+        10 permit
+          match destination prefix-set PFX-IN
+          match community CSET-IN
+          set local-preference 200
+          set med 100
+        20 deny
+          match as-path APATH-DENY
+        30 permit
+    -->
+    <COMMAND name="permit"
+             help="Open a permit statement">
+      <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context rpl-stmt ${seq}&#xA;
+        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op permit&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="deny" help="Open a deny statement">
+      <PARAM name="seq" help="Statement sequence number" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context rpl-stmt ${seq}&#xA;
+        tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op deny&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no" help="Remove a statement">
+      <PARAM name="seq" help="Statement sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete route-policy/${rplname}/stmt/${seq}</ACTION>
+    </COMMAND>
+
+    <!-- Match clauses (operate on the most-recent statement context) -->
+    <COMMAND name="match destination prefix-set"
+             help="Match destination against named prefix-set">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="ps" help="prefix-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/destination/prefix-set ${ps}</ACTION>
+    </COMMAND>
+    <COMMAND name="match community"
+             help="Match community against named community-set">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="cs" help="community-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/community ${cs}</ACTION>
+    </COMMAND>
+    <COMMAND name="match extcommunity-rt"
+             help="Match extended-community RT against named set">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="ecs" help="ext-community-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/extcommunity ${ecs}</ACTION>
+    </COMMAND>
+    <COMMAND name="match as-path"
+             help="Match AS-path against named set">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="aps" help="as-path-set name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/as-path ${aps}</ACTION>
+    </COMMAND>
+    <COMMAND name="match med" help="Match MED value">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="MED value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/med ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="match local-preference" help="Match local-preference">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="LP value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/local-pref ${value}</ACTION>
+    </COMMAND>
+
+    <!-- Set actions -->
+    <COMMAND name="set local-preference" help="Set local-preference">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="LP value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/local-pref ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="set med" help="Set MED">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="MED value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/med ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="set next-hop" help="Set next-hop">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="addr" help="Next-hop address" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/next-hop ${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="set origin" help="Set origin code">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="origin" help="igp | egp | incomplete" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/origin ${origin}</ACTION>
+    </COMMAND>
+    <COMMAND name="set tag" help="Set route tag">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="tag" help="Tag value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/tag ${tag}</ACTION>
+    </COMMAND>
+    <COMMAND name="set community" help="Append a community value">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="Community AS:NN or well-known" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate add route-policy/${rplname}/stmt/${seq}/set/community ${value}</ACTION>
+    </COMMAND>
+    <COMMAND name="set extcommunity-rt" help="Append an RT extended-community">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="value" help="RT" ptype="TERTOOS_RT"/>
+      <ACTION>tertoos-cli candidate add route-policy/${rplname}/stmt/${seq}/set/extcommunity ${value}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>

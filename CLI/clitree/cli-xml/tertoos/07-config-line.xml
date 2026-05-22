@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — line console / line default / line template (IOS-XR style).
+
+  Mapeamento candidate → CONFIG_DB:
+    line/console/exec-timeout            → CONSOLE_PORT|console0   "exec_timeout"
+    line/console/baud-rate               → CONSOLE_PORT|console0   "baud_rate"
+    line/console/login                   → CONSOLE_PORT|console0   "login"
+    line/default/exec-timeout            → AAA|line.default        "exec_timeout"
+    line/default/transport/input         → AAA|line.default        "transport_input"
+    line/default/access-class            → AAA|line.default        "access_class"
+    line/template/<name>/...             → LINE_TEMPLATE|<name>    "..."
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="line console"
+             help="Configure the console line"
+             view="config-line-view"
+             viewid="lineid=console;linekey=console">
+      <ACTION>tertoos-cli candidate context line console</ACTION>
+    </COMMAND>
+
+    <COMMAND name="line default"
+             help="Configure default line parameters (vty)"
+             view="config-line-view"
+             viewid="lineid=default;linekey=default">
+      <ACTION>tertoos-cli candidate context line default</ACTION>
+    </COMMAND>
+
+    <COMMAND name="line template"
+             help="Configure a named line template"
+             view="config-line-view"
+             viewid="lineid=template-${name};linekey=template/${name}">
+      <PARAM name="name" help="Template name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context line template ${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <VIEW name="config-line-view"
+        prompt="${SYSTEM_NAME}(config-line-${lineid})# ">
+
+    <COMMAND name="exit" help="Exit line configuration" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="exec-timeout"
+             help="EXEC inactivity timeout (minutes [seconds])">
+      <PARAM name="minutes" help="Minutes 0..35791" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set line/${linekey}/exec-timeout ${minutes}</ACTION>
+    </COMMAND>
+    <COMMAND name="no exec-timeout" help="Reset EXEC timeout">
+      <ACTION>tertoos-cli candidate delete line/${linekey}/exec-timeout</ACTION>
+    </COMMAND>
+
+    <COMMAND name="transport input"
+             help="Permitted inbound transports">
+      <PARAM name="transport" help="ssh | telnet | all | none" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set line/${linekey}/transport/input ${transport}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="access-class"
+             help="Apply IPv4 access-list to inbound connections">
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set line/${linekey}/access-class ${acl}</ACTION>
+    </COMMAND>
+    <COMMAND name="no access-class" help="Remove access-class">
+      <ACTION>tertoos-cli candidate delete line/${linekey}/access-class</ACTION>
+    </COMMAND>
+
+    <!-- Console-specific -->
+    <COMMAND name="baud-rate" help="Console baud rate">
+      <PARAM name="rate" help="9600 | 19200 | 38400 | 57600 | 115200" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set line/${linekey}/baud-rate ${rate}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="login local" help="Use local credentials for login">
+      <ACTION>tertoos-cli candidate set line/${linekey}/login local</ACTION>
+    </COMMAND>
+    <COMMAND name="no login" help="Remove login requirement">
+      <ACTION>tertoos-cli candidate delete line/${linekey}/login</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — mpls ldp views (IOS-XR style).
+
+  Estrutura IOS-XR vs CONFIG_DB (frrcfgd em sonic-frr-mgmt-framework):
+    mpls ldp [vrf <name>]                          → MPLS_LDP_ROUTER|<vrf>
+    address-family ipv4|ipv6                       → MPLS_LDP_AF|<vrf>|<afi>
+    interface <if> (dentro de af)                  → MPLS_LDP_INTERFACE|<vrf>|<afi>|<if>
+    neighbor <peer-lsr>                            → MPLS_LDP_NEIGHBOR|<vrf>|<afi>|<peer>
+
+  Backend: frrcfgd consome essas tabelas e renderiza para FRR ldpd via
+  templates/ldpd/*.j2 (adicionados em S7).
+
+  Gating SAI: dataplane MPLS não está disponível no AS5912 (Trident III) —
+  control-plane fica completo, forwarding gated em hardware Centec.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="mpls ldp"
+             help="Configure MPLS LDP"
+             view="config-mpls-ldp-view"
+             viewid="ldpvrf=default">
+      <ACTION>
+        tertoos-cli candidate context mpls-ldp default&#xA;
+        tertoos-cli candidate set mpls/ldp/default/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="mpls ldp vrf"
+             help="Configure MPLS LDP for a VRF"
+             view="config-mpls-ldp-view"
+             viewid="ldpvrf=${vrf}">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context mpls-ldp ${vrf}&#xA;
+        tertoos-cli candidate set mpls/ldp/${vrf}/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no mpls ldp" help="Remove MPLS LDP">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/default</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-mpls-ldp-view =============================== -->
+  <VIEW name="config-mpls-ldp-view"
+        prompt="${SYSTEM_NAME}(config-mpls-ldp)# ">
+
+    <COMMAND name="exit" help="Exit MPLS LDP" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="router-id" help="LDP router-id">
+      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/router-id ${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="holdtime" help="Session holdtime">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/holdtime ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="keepalive" help="Session keepalive">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/keepalive ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="discovery hello holdtime" help="Hello holdtime">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/discovery-hello-holdtime ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="discovery hello interval" help="Hello interval">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/discovery-hello-interval ${s}</ACTION>
+    </COMMAND>
+
+    <!-- ===== S7.x — Graceful Restart (#22) ============================== -->
+    <COMMAND name="graceful-restart" help="Enable LDP graceful restart">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart true</ACTION>
+    </COMMAND>
+    <COMMAND name="no graceful-restart" help="Disable LDP graceful restart">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart false</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart helper" help="Helper-only mode">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper true</ACTION>
+    </COMMAND>
+    <COMMAND name="no graceful-restart helper" help="Disable helper mode">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper false</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart reconnect-time" help="Reconnect timer">
+      <PARAM name="s" help="Seconds (default 120)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_reconnect_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="graceful-restart recovery-time" help="Recovery timer">
+      <PARAM name="s" help="Seconds (default 240)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_recovery_time ${s}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="address-family ipv4"
+             help="LDP IPv4 address-family"
+             view="config-mpls-ldp-af-view"
+             viewid="ldpvrf=${ldpvrf};ldpafi=ipv4">
+      <ACTION>
+        tertoos-cli candidate context mpls-ldp-af ipv4&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="address-family ipv6"
+             help="LDP IPv6 address-family"
+             view="config-mpls-ldp-af-view"
+             viewid="ldpvrf=${ldpvrf};ldpafi=ipv6">
+      <ACTION>
+        tertoos-cli candidate context mpls-ldp-af ipv6&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv6/enable true&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no address-family ipv4" help="Remove IPv4 LDP AF">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/ipv4</ACTION>
+    </COMMAND>
+    <COMMAND name="no address-family ipv6" help="Remove IPv6 LDP AF">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/ipv6</ACTION>
+    </COMMAND>
+
+    <COMMAND name="neighbor"
+             help="Configure an LDP neighbor"
+             view="config-mpls-ldp-nbr-view"
+             viewid="ldpvrf=${ldpvrf};ldpafi=ipv4;ldpnbr=${peer}">
+      <PARAM name="peer" help="Peer LSR-id (A.B.C.D)" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate context mpls-ldp-nbr ${peer}&#xA;
+        tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no neighbor" help="Remove an LDP neighbor">
+      <PARAM name="peer" help="Peer LSR-id" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-mpls-ldp-af-view ============================ -->
+  <VIEW name="config-mpls-ldp-af-view"
+        prompt="${SYSTEM_NAME}(config-mpls-ldp-af-${ldpafi})# ">
+
+    <COMMAND name="exit" help="Exit LDP address-family" view="config-mpls-ldp-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="discovery transport-address" help="Transport address for discovery">
+      <PARAM name="addr" help="A.B.C.D or X:X::X" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/discovery-transport-address ${addr}</ACTION>
+    </COMMAND>
+    <COMMAND name="discovery targeted-hello accept" help="Accept targeted hellos">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/discovery-targeted-hello-accept true</ACTION>
+    </COMMAND>
+    <COMMAND name="label local allocate host-routes" help="Allocate labels for /32 only">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/label-local-allocate-host-only true</ACTION>
+    </COMMAND>
+
+    <COMMAND name="interface" help="Enable LDP on interface">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no interface" help="Disable LDP on interface">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-mpls-ldp-nbr-view =========================== -->
+  <VIEW name="config-mpls-ldp-nbr-view"
+        prompt="${SYSTEM_NAME}(config-mpls-ldp-nbr-${ldpnbr})# ">
+
+    <COMMAND name="exit" help="Exit LDP neighbor" view="config-mpls-ldp-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="password" help="MD5 password for this neighbor">
+      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="STRING"/>
+      <PARAM name="secret" help="Password" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password "${secret}"</ACTION>
+    </COMMAND>
+    <COMMAND name="targeted" help="Mark as targeted neighbor">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/targeted true</ACTION>
+    </COMMAND>
+    <COMMAND name="holdtime" help="Per-neighbor holdtime">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/holdtime ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="keepalive" help="Per-neighbor keepalive">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/keepalive ${s}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>
