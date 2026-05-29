@@ -408,6 +408,12 @@
     <COMMAND name="no isis passive" help="Re-enable IS-IS adjacency on interface">
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive false</ACTION>
     </COMMAND>
+    <COMMAND name="isis padding" help="Pad IS-IS hellos to the interface MTU (default)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-padding true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis padding" help="Disable IS-IS hello padding (needed on low-MTU / VS sub-interfaces)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-padding false</ACTION>
+    </COMMAND>
 
     <!-- ===== S12.B — QoS bindings (PORT_QOS_MAP) ========================== -->
     <COMMAND name="qos service-policy dscp-to-tc-map" help="Bind DSCP→TC map">
