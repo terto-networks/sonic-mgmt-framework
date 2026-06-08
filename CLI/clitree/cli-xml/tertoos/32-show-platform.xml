@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — show platform * commands (V1 do tos-platform).
+
+  Backend: /usr/sbin/tos-platform (tertoos-base/components-go/tos-platform).
+  Lê /etc/tertoos/platform.json + driver compilado-estaticamente pro SKU.
+  Sem container, sem Redis. Mesmo binary serve PE x86 e Lite ARM —
+  divergência só em qual driver responde, não em qual comando o usuário roda.
+
+  Escopo V1 (este arquivo): comandos NOVOS que ainda não existiam.
+    show platform temperature
+    show platform memory
+    show platform storage
+    show platform * json    (variantes machine-readable)
+
+  Escopo V2 (FUTURO — coordenar com sessão Pi cluster):
+  os comandos abaixo JÁ existem em 02-privileged-view.xml apontando pra
+  sonic-utilities Python / tertoos-cli show platform. Pra unificação V2,
+  trocar as ACTIONs deles pra /usr/sbin/tos-platform:
+    show platform              -> /usr/sbin/tos-platform summary
+    show platform summary      -> /usr/sbin/tos-platform summary
+    show platform inventory    -> /usr/sbin/tos-platform inventory
+    show platform environment  -> /usr/sbin/tos-platform temperature  (ou composto)
+    show platform controllers  -> mantém (lspci + npu — escopo diferente)
+    show inventory             -> /usr/sbin/tos-platform inventory
+    show environment           -> /usr/sbin/tos-platform temperature
+
+  Extends VIEW "privileged-view" já definida em 02-privileged-view.xml.
+  Klish faz merge de COMMANDs entre arquivos pra mesma VIEW.
+
+  Design: docs/architecture/tos-platform-v1-design.md
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="privileged-view">
+
+    <!-- ============================================================
+         Comandos NOVOS em V1 — sem conflito com show platform*
+         existentes em 02-privileged-view.xml
+         ============================================================ -->
+
+    <COMMAND name="show platform temperature"
+             help="Temperature sensors and thresholds">
+      <ACTION>/usr/sbin/tos-platform temperature</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show platform memory"
+             help="Memory utilization and SoC information">
+      <ACTION>/usr/sbin/tos-platform memory</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show platform storage"
+             help="Storage devices and usage">
+      <ACTION>/usr/sbin/tos-platform storage</ACTION>
+    </COMMAND>
+
+    <!-- JSON variants for scripts / telemetry consumers.
+         Use "show platform SUBCMD json" (klish não passa flags). -->
+
+    <COMMAND name="show platform temperature json"
+             help="Temperature in JSON format">
+      <ACTION>/usr/sbin/tos-platform temperature --format=json</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show platform memory json"
+             help="Memory in JSON format">
+      <ACTION>/usr/sbin/tos-platform memory --format=json</ACTION>
+    </COMMAND>
+
+    <COMMAND name="show platform storage json"
+             help="Storage in JSON format">
+      <ACTION>/usr/sbin/tos-platform storage --format=json</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>
