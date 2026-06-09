@@ -46,6 +46,33 @@
       <PARAM name="rest" help="show subcommand, e.g. 'ip route'" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli show passthrough ${rest}</ACTION>
     </COMMAND>
+    <!-- Causa E / naming aliases (Full-safe, ADITIVOS): apontam pros backends do
+         tertoos-cli (show arp/fdb/ospf/ipv4 route). No Lite usam o nativo
+         (iproute2/bridge/Store); no Full caem no sonic-utilities/vtysh via o
+         despacho aditivo shelloutOrNative. Sem eles, esses comandos caíam no
+         'show' genérico -> passthrough -> sonic-utilities ausente. -->
+    <COMMAND name="show arp" help="IPv4 ARP / neighbor cache">
+      <PARAM name="host" help="Filter by IP address" ptype="STRING" optional="true"/>
+      <ACTION>tertoos-cli show arp ${host}</ACTION>
+    </COMMAND>
+    <COMMAND name="show mac-address-table" help="L2 MAC table (alias of 'show l2 mac-address-table')">
+      <ACTION>tertoos-cli show fdb</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route" help="IPv4 routing table (alias of 'show ipv4 route')">
+      <ACTION>tertoos-cli show ipv4 route</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip ospf" help="OSPFv2 (alias of 'show ospf')">
+      <ACTION>tertoos-cli show ospf</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip ospf neighbor" help="OSPFv2 neighbors">
+      <ACTION>tertoos-cli show ospf neighbor</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip ospf interface" help="OSPFv2 interfaces">
+      <ACTION>tertoos-cli show ospf interface</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip ospf database" help="OSPFv2 link-state database">
+      <ACTION>tertoos-cli show ospf database</ACTION>
+    </COMMAND>
     <COMMAND name="show version" help="Show TertoOS version">
       <ACTION>tertoos-cli show version</ACTION>
     </COMMAND>
