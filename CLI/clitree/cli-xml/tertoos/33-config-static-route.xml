@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Static routes (IOS-XR style).
+  Configurado direto em config-view (sem sub-view "router static").
+
+  Sintaxe suportada:
+    ip   route <A.B.C.D/M>  <next-hop A.B.C.D | ifname>  [distance <1-255>]
+    ipv6 route <X:X::X/M>   <next-hop X:X::X  | ifname>  [distance <1-255>]
+    no   ip   route <A.B.C.D/M>
+    no   ipv6 route <X:X::X/M>
+
+  Mapping CONFIG_DB (sonic-static-route.yang):
+    STATIC_ROUTE|default|<prefix>
+      nexthop  = <ip | ifname>
+      distance = <1-255>  (opcional)
+
+  O prefix carrega "/" (CIDR) e por isso usamos `candidate set-raw` (S13.E.7)
+  para escrever direto na tabela — evita o split por "/" do candidate path
+  hierárquico. Ambas as familias (v4/v6) compartilham a mesma tabela.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <!-- ===== IPv4 ===== -->
+    <COMMAND name="ip route"
+             help="Add an IPv4 static route">
+      <PARAM name="prefix"  help="Destination prefix A.B.C.D/M"
+                            ptype="TERTOOS_IPV4_PREFIX"/>
+      <PARAM name="nexthop" help="Next-hop A.B.C.D or egress interface name"
+                            ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} nexthop ${nexthop}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ip route distance"
+             help="Add an IPv4 static route with administrative distance">
+      <PARAM name="prefix"   help="Destination prefix A.B.C.D/M"
+                             ptype="TERTOOS_IPV4_PREFIX"/>
+      <PARAM name="nexthop"  help="Next-hop A.B.C.D or egress interface name"
+                             ptype="STRING"/>
+      <PARAM name="distance" help="Administrative distance (1..255)"
+                             ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} nexthop ${nexthop}&#xA;
+        tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} distance ${distance}&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no ip route"
+             help="Remove an IPv4 static route">
+      <PARAM name="prefix" help="Destination prefix A.B.C.D/M"
+                           ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>
+        tertoos-cli candidate delete-raw STATIC_ROUTE default|${prefix} distance&#xA;
+        tertoos-cli candidate delete-raw STATIC_ROUTE default|${prefix} nexthop&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <!-- ===== IPv6 ===== -->
+    <COMMAND name="ipv6 route"
+             help="Add an IPv6 static route">
+      <PARAM name="prefix"  help="Destination prefix X:X::X/M"
+                            ptype="TERTOOS_IPV6_PREFIX"/>
+      <PARAM name="nexthop" help="Next-hop X:X::X or egress interface name"
+                            ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} nexthop ${nexthop}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="ipv6 route distance"
+             help="Add an IPv6 static route with administrative distance">
+      <PARAM name="prefix"   help="Destination prefix X:X::X/M"
+                             ptype="TERTOOS_IPV6_PREFIX"/>
+      <PARAM name="nexthop"  help="Next-hop X:X::X or egress interface name"
+                             ptype="STRING"/>
+      <PARAM name="distance" help="Administrative distance (1..255)"
+                             ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} nexthop ${nexthop}&#xA;
+        tertoos-cli candidate set-raw STATIC_ROUTE default|${prefix} distance ${distance}&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="no ipv6 route"
+             help="Remove an IPv6 static route">
+      <PARAM name="prefix" help="Destination prefix X:X::X/M"
+                           ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>
+        tertoos-cli candidate delete-raw STATIC_ROUTE default|${prefix} distance&#xA;
+        tertoos-cli candidate delete-raw STATIC_ROUTE default|${prefix} nexthop&#xA;
+      </ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>
