@@ -242,6 +242,51 @@
     <COMMAND name="show ospf database" help="OSPF LSDB">
       <ACTION>vtysh -c "show ip ospf database"</ACTION>
     </COMMAND>
+    <!-- ====================================================================
+         SR-OSPF DEBUG (added 2026-06-14): cobre o caminho de diag operacional
+         usado quando 'show ip ospf database opaque-area' fica vazio mesmo
+         com `segment-routing on` (gap descoberto no smoke 5-PE Frente 1a).
+         Investigação concluiu que NÃO é bug do patch C — é race condition
+         entre `capability opaque` e ospfd já rodando, mitigada via
+         `clear ip ospf process` ou restart limpo.
+         ==================================================================== -->
+    <COMMAND name="show ospf database opaque-area"
+             help="OSPF Area-Local Opaque LSAs (Router Info / Prefix-SID / Adj-SID)">
+      <ACTION>vtysh -c "show ip ospf database opaque-area"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database opaque-area self-originate"
+             help="Apenas LSAs originados por este PE">
+      <ACTION>vtysh -c "show ip ospf database opaque-area self-originate"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database opaque-area adv-router"
+             help="LSAs originados por um advertising router específico">
+      <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
+      <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf router-info"
+             help="OSPF Router Information LSA (Capabilities + SR Algorithms + SRGB/SRLB)">
+      <ACTION>vtysh -c "show ip ospf router-info"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf opaque-lsa"
+             help="Trace de Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf opaque-lsa" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf opaque-lsa" help="Para o trace de Opaque LSA">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf opaque-lsa" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf sr"
+             help="Trace de Segment Routing (SRGB/SRLB alloc, Prefix-SID, Adj-SID)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf sr" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf sr" help="Para o trace de Segment Routing">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf sr" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf event" help="Trace de OSPF FSM events (interface, neighbor, area)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf event" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf event" help="Para o trace de eventos">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf event" -c "end"</ACTION>
+    </COMMAND>
     <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
       <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
     </COMMAND>
