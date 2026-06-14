@@ -39,7 +39,7 @@
     <COMMAND name="policy"
              help="Configure SR-TE policy"
              view="config-srte-policy-view"
-             viewid="srtepol_ep=${endpoint};srtepol_color=${color}">
+             viewid="srtepol_ep=${endpoint};srtepol_color=${color_val}">
       <PARAM name="endpoint" help="Policy endpoint (A.B.C.D)" ptype="STRING"/>
       <!-- WRAP em switch parent: SUBCOMMAND mode=subcommand sozinho eh rejeitado pelo
            parser klish. Wrap num PARAM switch (vide exemplo "interface" em
