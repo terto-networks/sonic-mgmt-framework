@@ -145,6 +145,31 @@
       <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}</ACTION>
     </COMMAND>
+    <!-- Alias UX IOS-XR canonical: `explicit segment-list <name>`. Em FRR
+         pathd a forma escrita no running-config é `candidate-path preference
+         N name X explicit segment-list Y`, então o operador habituado a IOS-XR
+         espera digitar `explicit segment-list <n>` aqui dentro do
+         candidate-path view. Aceitar tanto a forma curta (`segment-list <n>`)
+         quanto a canonical (`explicit segment-list <n>`) sem quebrar
+         compatibilidade. Também seta protocol_origin=configured + dynamic=false
+         (path explícito implica origem configured, não dynamic).
+
+         Caminho IOS-XR copy-paste real:
+           policy 10.255.0.5 color 100
+            binding-sid 24000
+            candidate-path preference 100
+             name cp-explicit
+             explicit segment-list sl-r1r5-linka
+            exit
+           exit -->
+    <COMMAND name="explicit segment-list" help="Bind explicit (configured) segment-list">
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}&#xA;
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/protocol_origin configured&#xA;
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/dynamic false&#xA;
+      </ACTION>
+    </COMMAND>
   </VIEW>
 
   <!-- ====== Segment-list view ====== -->
