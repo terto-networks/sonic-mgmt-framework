@@ -45,6 +45,26 @@
       <ACTION>traceroute ${target}</ACTION>
     </COMMAND>
 
+    <COMMAND name="mtr" help="My traceroute (ping + traceroute combinado)">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>mtr -r -c 10 ${target}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="nslookup" help="DNS lookup">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>nslookup ${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="dig" help="DNS dig (debug avancado de DNS)">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>dig ${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="host" help="DNS resolver simples">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>host ${name}</ACTION>
+    </COMMAND>
+
     <COMMAND name="terminal" help="Set terminal parameters"/>
     <COMMAND name="terminal length" help="Set terminal pager length">
       <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
