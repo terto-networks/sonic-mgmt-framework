@@ -225,6 +225,36 @@
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${addr}</ACTION>
     </COMMAND>
 
+    <!-- One-liner styles for the most common neighbor leaves — espelha IOS-XR
+         e FRR `neighbor X remote-as Y` numa unica linha sem precisar entrar
+         em config-router-bgp-nbr-view. Atalhos para operacao do dia-a-dia.
+         Descoberto smoke v0.7.16 com CEO: digitar `neighbor X remote-as Y`
+         na config-router-bgp-view falhava porque so existia a versao que
+         transiciona pra view nbr. -->
+    <COMMAND name="neighbor remote-as" help="Quick: set neighbor + remote-as in one line">
+      <PARAM name="addr" help="Neighbor IPv4/IPv6 address" ptype="STRING"/>
+      <PARAM name="asn" help="Remote AS" ptype="TERTOOS_ASN"/>
+      <ACTION>
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}&#xA;
+        tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}/asn ${asn}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="neighbor update-source" help="Quick: neighbor + update-source iface">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="ifname" help="Source interface (Loopback0 typical)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}/update_source ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="neighbor description" help="Quick: neighbor description">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}/name "${text}"</ACTION>
+    </COMMAND>
+    <COMMAND name="neighbor peer-group" help="Quick: assign neighbor to peer-group">
+      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="pgname" help="Peer-group name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${addr}/peer_group ${pgname}</ACTION>
+    </COMMAND>
+
   </VIEW>
 
   <!-- =================== config-router-bgp-evpn-view (S10) ================== -->
