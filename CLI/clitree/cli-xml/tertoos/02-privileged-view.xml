@@ -442,6 +442,22 @@
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
       <ACTION>traceroute ${target}</ACTION>
     </COMMAND>
+    <COMMAND name="mtr" help="My traceroute (ping + traceroute combinado, 10 ciclos)">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>mtr -r -c 10 ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="nslookup" help="DNS lookup">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>nslookup ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="dig" help="DNS dig (debug avancado de DNS)">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>dig ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="host" help="DNS resolver simples">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>host ${name}</ACTION>
+    </COMMAND>
     <COMMAND name="ssh" help="Open SSH session">
       <PARAM name="target" help="user@host" ptype="STRING"/>
       <ACTION>ssh ${target}</ACTION>
