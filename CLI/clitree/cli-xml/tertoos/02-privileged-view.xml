@@ -287,6 +287,92 @@
     <COMMAND name="no debug ospf event" help="Para o trace de eventos">
       <ACTION>vtysh -c "configure terminal" -c "no debug ospf event" -c "end"</ACTION>
     </COMMAND>
+    <!-- ====== BGP show commands (wrappers vtysh) ============================
+         Espelha IOS-XR `show bgp ...` em comandos klish estruturados pra
+         operador nao precisar fazer `bash -> vtysh -c ...`. Mantem
+         passthrough generico `show <rest>` no topo do view tambem. -->
+    <COMMAND name="show ip bgp summary" help="BGP IPv4 unicast summary">
+      <ACTION>vtysh -c "show ip bgp summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp" help="BGP IPv4 unicast routes">
+      <ACTION>vtysh -c "show ip bgp"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp neighbors" help="BGP neighbors detalhe">
+      <ACTION>vtysh -c "show ip bgp neighbors"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp neighbor" help="Detalhe de um neighbor">
+      <PARAM name="addr" help="Neighbor IP" ptype="STRING"/>
+      <ACTION>vtysh -c "show ip bgp neighbor ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 vpn summary" help="VPNv4 BGP summary (L3VPN)">
+      <ACTION>vtysh -c "show bgp ipv4 vpn summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 vpn" help="VPNv4 BGP routes (L3VPN)">
+      <ACTION>vtysh -c "show bgp ipv4 vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp l2vpn evpn summary" help="EVPN BGP summary">
+      <ACTION>vtysh -c "show bgp l2vpn evpn summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp l2vpn evpn" help="EVPN BGP routes (type-1/2/3/4/5)">
+      <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vrf" help="BGP routes for a specific VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vrf ${vrf}"</ACTION>
+    </COMMAND>
+
+    <!-- ====== EVPN show commands ============================================ -->
+    <COMMAND name="show evpn vni" help="Local EVPN VNIs (L2 bridge domain map)">
+      <ACTION>vtysh -c "show evpn vni"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn vni detail" help="EVPN VNIs detalhe">
+      <ACTION>vtysh -c "show evpn vni detail"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn mac vni" help="MAC table EVPN por VNI">
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn mac vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn arp-cache vni" help="ARP cache EVPN por VNI">
+      <PARAM name="vni" help="VNI" ptype="UINT"/>
+      <ACTION>vtysh -c "show evpn arp-cache vni ${vni}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show evpn es" help="EVPN Ethernet Segments (multi-homing)">
+      <ACTION>vtysh -c "show evpn es"</ACTION>
+    </COMMAND>
+
+    <!-- ====== L2VPN VPWS show =============================================== -->
+    <COMMAND name="show l2vpn atom vc" help="L2VPN pseudowire state (FRR ldpd)">
+      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn atom binding" help="L2VPN PW label bindings">
+      <ACTION>vtysh -c "show l2vpn atom binding"</ACTION>
+    </COMMAND>
+
+    <!-- ====== ISIS show ==================================================== -->
+    <COMMAND name="show isis neighbor" help="IS-IS adjacencies">
+      <ACTION>vtysh -c "show isis neighbor"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis neighbor detail" help="IS-IS adjacencies detalhe">
+      <ACTION>vtysh -c "show isis neighbor detail"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis database" help="IS-IS LSDB">
+      <ACTION>vtysh -c "show isis database"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis interface" help="IS-IS interfaces">
+      <ACTION>vtysh -c "show isis interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis route" help="IS-IS RIB">
+      <ACTION>vtysh -c "show isis route"</ACTION>
+    </COMMAND>
+
+    <!-- ====== SR-TE show =================================================== -->
+    <COMMAND name="show sr-te policy" help="SR-TE policies">
+      <ACTION>vtysh -c "show sr-te policy"</ACTION>
+    </COMMAND>
+    <COMMAND name="show sr-te policy detail" help="SR-TE policies detalhe">
+      <ACTION>vtysh -c "show sr-te policy detail"</ACTION>
+    </COMMAND>
+
     <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
       <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
     </COMMAND>

@@ -246,7 +246,7 @@
 
     <COMMAND name="dscp" help="DSCP code-point → traffic-class">
       <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
-      <PARAM name="tc_kw" help="traffic-class" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="tc_kw" help="traffic-class" ptype="SUBCOMMAND" mode="subcommand" value="traffic-class"/>
       <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set qos/dscp-to-tc/${qosmap}/${dscp} ${tc}</ACTION>
     </COMMAND>
@@ -266,7 +266,7 @@
 
     <COMMAND name="tc" help="Traffic-class → queue">
       <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
-      <PARAM name="q_kw" help="queue" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="q_kw" help="queue" ptype="SUBCOMMAND" mode="subcommand" value="queue"/>
       <PARAM name="q" help="Queue index 0..7" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set qos/tc-to-queue/${qosmap}/${tc} ${q}</ACTION>
     </COMMAND>
@@ -286,7 +286,7 @@
 
     <COMMAND name="tc" help="Traffic-class → priority-group">
       <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
-      <PARAM name="pg_kw" help="pg" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="pg_kw" help="pg" ptype="SUBCOMMAND" mode="subcommand" value="pg"/>
       <PARAM name="pg" help="Priority-group 0..7" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set qos/tc-to-pg/${qosmap}/${tc} ${pg}</ACTION>
     </COMMAND>

@@ -159,7 +159,7 @@
              view="config-router-isis-af-view"
              viewid="isisvrf=${isisvrf};isistag=${isistag};isisaf=${af}_unicast">
       <PARAM name="af" help="ipv4 | ipv6" ptype="STRING"/>
-      <PARAM name="kw" help="unicast" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="kw" help="unicast" ptype="SUBCOMMAND" mode="subcommand" value="unicast"/>
       <ACTION>
         tertoos-cli candidate context router-isis-af ${af}_unicast&#xA;
         tertoos-cli candidate set isis/af/${isisvrf}/${isistag}/${af}_unicast&#xA;

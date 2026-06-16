@@ -165,7 +165,7 @@
     </COMMAND>
     <COMMAND name="neighbor" help="Add manual peer">
       <PARAM name="addr" help="Peer address" ptype="STRING"/>
-      <PARAM name="pwid_kw" help="pw-id" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="pwid_kw" help="pw-id" ptype="SUBCOMMAND" mode="subcommand" value="pw-id"/>
       <PARAM name="pwid" help="PW id" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set l2vpn/bd-neighbor/${vfiname}/${addr}/pw_id ${pwid}</ACTION>
     </COMMAND>
