@@ -365,14 +365,6 @@
       <ACTION>vtysh -c "show isis route"</ACTION>
     </COMMAND>
 
-    <!-- ====== SR-TE show =================================================== -->
-    <COMMAND name="show sr-te policy" help="SR-TE policies">
-      <ACTION>vtysh -c "show sr-te policy"</ACTION>
-    </COMMAND>
-    <COMMAND name="show sr-te policy detail" help="SR-TE policies detalhe">
-      <ACTION>vtysh -c "show sr-te policy detail"</ACTION>
-    </COMMAND>
-
     <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
       <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
     </COMMAND>
