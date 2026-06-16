@@ -69,6 +69,22 @@
       <ACTION>tertoos-cli show ipv4 brief</ACTION>
     </COMMAND>
 
+    <!-- show arp / show ip arp / show ipv6 neighbors — leitura nativa via
+         netlink (iproute2 ja' instalado no rootfs). Sonic-utilities `show arp`
+         dependia de Redis APP_DB que o Lite nao tem; o `ip neigh show`
+         fornece a mesma info diretamente do kernel ARP cache. Implementado
+         como alias 2026-06-16 — bug detectado smoke v0.7.27 (show arp caia
+         em "tertoos-cli: show not found in PATH"). -->
+    <COMMAND name="show arp" help="Show IPv4 ARP / IPv6 neighbor cache (kernel)">
+      <ACTION>ip neigh show</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip arp" help="Show IPv4 ARP cache (kernel)">
+      <ACTION>ip -4 neigh show</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 neighbors" help="Show IPv6 neighbor cache (kernel)">
+      <ACTION>ip -6 neigh show</ACTION>
+    </COMMAND>
+
     <!-- ====== S15.E — VLAN aggregator + L2 MAC address-table =================
          Agrega VLANs em uso de 4 fontes:
            sub-interfaces (encapsulation dot1q)
