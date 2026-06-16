@@ -313,56 +313,18 @@
     <COMMAND name="show bgp l2vpn evpn summary" help="EVPN BGP summary">
       <ACTION>vtysh -c "show bgp l2vpn evpn summary"</ACTION>
     </COMMAND>
-    <COMMAND name="show bgp l2vpn evpn" help="EVPN BGP routes (type-1/2/3/4/5)">
-      <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
-    </COMMAND>
     <COMMAND name="show bgp vrf" help="BGP routes for a specific VRF">
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
       <ACTION>vtysh -c "show bgp vrf ${vrf}"</ACTION>
     </COMMAND>
 
-    <!-- ====== EVPN show commands ============================================ -->
-    <COMMAND name="show evpn vni" help="Local EVPN VNIs (L2 bridge domain map)">
-      <ACTION>vtysh -c "show evpn vni"</ACTION>
-    </COMMAND>
-    <COMMAND name="show evpn vni detail" help="EVPN VNIs detalhe">
-      <ACTION>vtysh -c "show evpn vni detail"</ACTION>
-    </COMMAND>
-    <COMMAND name="show evpn mac vni" help="MAC table EVPN por VNI">
-      <PARAM name="vni" help="VNI" ptype="UINT"/>
-      <ACTION>vtysh -c "show evpn mac vni ${vni}"</ACTION>
-    </COMMAND>
-    <COMMAND name="show evpn arp-cache vni" help="ARP cache EVPN por VNI">
-      <PARAM name="vni" help="VNI" ptype="UINT"/>
-      <ACTION>vtysh -c "show evpn arp-cache vni ${vni}"</ACTION>
-    </COMMAND>
-    <COMMAND name="show evpn es" help="EVPN Ethernet Segments (multi-homing)">
-      <ACTION>vtysh -c "show evpn es"</ACTION>
-    </COMMAND>
-
-    <!-- ====== L2VPN VPWS show =============================================== -->
-    <COMMAND name="show l2vpn atom vc" help="L2VPN pseudowire state (FRR ldpd)">
-      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
-    </COMMAND>
-    <COMMAND name="show l2vpn atom binding" help="L2VPN PW label bindings">
-      <ACTION>vtysh -c "show l2vpn atom binding"</ACTION>
-    </COMMAND>
-
-    <!-- ====== ISIS show ==================================================== -->
-    <COMMAND name="show isis neighbor" help="IS-IS adjacencies">
-      <ACTION>vtysh -c "show isis neighbor"</ACTION>
-    </COMMAND>
+    <!-- NOTA: show evpn vni/mac/arp-cache/es, show l2vpn atom vc/binding,
+         show bgp l2vpn evpn, show isis * estao definidos mais abaixo no
+         bloco EVPN/L2VPN/ISIS show existente — nao duplicar aqui.
+         show isis neighbor detail e' novo (so' detail; o sem detail
+         ja' existe). -->
     <COMMAND name="show isis neighbor detail" help="IS-IS adjacencies detalhe">
       <ACTION>vtysh -c "show isis neighbor detail"</ACTION>
-    </COMMAND>
-    <COMMAND name="show isis database" help="IS-IS LSDB">
-      <ACTION>vtysh -c "show isis database"</ACTION>
-    </COMMAND>
-    <COMMAND name="show isis interface" help="IS-IS interfaces">
-      <ACTION>vtysh -c "show isis interface"</ACTION>
-    </COMMAND>
-    <COMMAND name="show isis route" help="IS-IS RIB">
-      <ACTION>vtysh -c "show isis route"</ACTION>
     </COMMAND>
 
     <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
