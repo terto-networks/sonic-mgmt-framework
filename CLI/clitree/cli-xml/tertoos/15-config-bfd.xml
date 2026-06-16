@@ -56,9 +56,23 @@
     <COMMAND name="exit" help="exit" view="config-bfd-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
+    <!--
+      Sintaxe SUBCOMMAND alinhada com 04-config-interface.xml: o operador
+      digita `interface Ethernet 4` (com espaco) em qualquer view do
+      TertoOS — config-view, config-bfd-peer-view, etc. Antes (ate
+      2026-06-16) o bfd-peer-view aceitava apenas `interface Ethernet4`
+      colado via PARAM STRING simples — inconsistencia detectada smoke
+      combinado v0.7.27 ("interface Ethernet 4" dava Invalid input
+      stdin:49 quando dentro de bfd peer view).
+    -->
     <COMMAND name="interface" help="Local interface (single-hop)">
-      <PARAM name="ifname" help="Interface" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/interface ${ifname}</ACTION>
+      <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="Ethernet" help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Loopback" help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle"   help="Port-channel"           mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="ifnum" help="Interface number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/interface ${iftype}${ifnum}</ACTION>
     </COMMAND>
     <COMMAND name="vrf" help="VRF context">
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
