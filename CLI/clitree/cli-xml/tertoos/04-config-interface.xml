@@ -47,42 +47,14 @@
       <ACTION>tertoos-cli candidate context interface ${iftype}${ifnum}</ACTION>
     </COMMAND>
 
-    <!-- Aliases IOS-XR/Cisco classico: operador digita `interface Hu N`
-         (HundredGigE), `interface Te N` (TenGigE) ou `interface
-         GigabitEthernet N` e o klish redireciona pro nome canonico
-         Ethernet<N>. ifname dentro do view fica Ethernet<N> — bate com
-         candidate context, com os 90+ COMMANDs filhos que dependem de
-         ${ifname}, e com o show running-config (que mostra Ethernet<N>
-         conforme convencao SONiC).
-         O ganho de UX: Tab help mostra Hu/Te/GigabitEthernet pro
-         operador Cisco/IOS-XR-formado; klish aceita ambos.
-         Limitacao consciente: indice N direto (nao slot/subslot/instance);
-         no VS o port_config tem portas em multiplos de 4 (Ethernet0/4/8/12)
-         entao operador digita Hu 0, Hu 4, Hu 8, Hu 12 — formato simplificado.
-         Pra full slot-path IOS-XR (Hu 0/0/0/N) seria necessario port_naming
-         no platform.json (Caminho B do roadmap). Adicionado 2026-06-16 a
-         pedido do CEO. -->
-    <COMMAND name="interface Hu"
-             help="Configure HundredGig (alias 100G IOS-XR → Ethernet)"
-             view="config-if-view"
-             viewid="ifname=Ethernet${ifnum}">
-      <PARAM name="ifnum" help="Port index (e.g. 0)" ptype="TERTOOS_IFNUM"/>
-      <ACTION>tertoos-cli candidate context interface Ethernet${ifnum}</ACTION>
-    </COMMAND>
-    <COMMAND name="interface Te"
-             help="Configure TenGig (alias 10G IOS-XR → Ethernet)"
-             view="config-if-view"
-             viewid="ifname=Ethernet${ifnum}">
-      <PARAM name="ifnum" help="Port index (e.g. 0)" ptype="TERTOOS_IFNUM"/>
-      <ACTION>tertoos-cli candidate context interface Ethernet${ifnum}</ACTION>
-    </COMMAND>
-    <COMMAND name="interface GigabitEthernet"
-             help="Configure GigE (alias IOS classico → Ethernet)"
-             view="config-if-view"
-             viewid="ifname=Ethernet${ifnum}">
-      <PARAM name="ifnum" help="Port index (e.g. 0)" ptype="TERTOOS_IFNUM"/>
-      <ACTION>tertoos-cli candidate context interface Ethernet${ifnum}</ACTION>
-    </COMMAND>
+    <!-- NOTA: os aliases `interface Hu/Te/GigabitEthernet N` (introduzidos
+         em 2026-06-16, PR mgmt-fw #30) foram REMOVIDOS por decisão do CEO:
+         o SKU VS/lab usa a numeração de porta Ethernet em sequência
+         crescente (Ethernet0,1,2,3...) alinhada ao EVE-NG, e a CLI mantém
+         apenas o nome canônico `Ethernet N` (sem camada de apresentação
+         Hu/Te). Para hardware real com faceplate IOS-XR, o naming será
+         derivado do port_config no platform.json (Caminho B), não de
+         aliases klish. -->
 
     <COMMAND name="no interface"
              help="Remove interface configuration">
