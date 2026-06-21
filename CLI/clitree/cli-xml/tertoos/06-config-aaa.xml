@@ -106,11 +106,15 @@
     </COMMAND>
 
     <!-- ============================ Local users ============================= -->
+    <!-- RBAC 3-tier alinhado: o role (admin/operator/view) e' o vocabulario
+         user-facing. rbacGroupsForRole no cli traduz para os grupos Linux
+         cumulativos (admin->sysadmin,netadmin,netoperator; operator->netadmin,
+         netoperator; view->netoperator). O grupo netoperator e' o tier 'view'. -->
     <COMMAND name="username"
-             help="Configure a local user (group/role + password)">
+             help="Configure a local user (role + password)">
       <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
       <PARAM name="group-kw" help="group" ptype="STRING"/>
-      <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="STRING"/>
+      <PARAM name="group" help="admin | operator | view" ptype="STRING"/>
       <PARAM name="password-kw" help="password" ptype="STRING"/>
       <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
