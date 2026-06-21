@@ -809,14 +809,18 @@
       <ACTION>sudo dmesg -n 1</ACTION>
     </COMMAND>
 
-    <!-- ===== Operator shell escape (IOS-XR `run`) ===========================
+    <!-- ===== System shell escape (IOS-XR `run`) =============================
          bash → shell interativo do sistema; run → um comando unico.
-         Fora da maquina de candidate/commit — mudancas aqui nao sao
-         rastreadas. -->
-    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)">
+         Fora da maquina de candidate/commit — mudancas aqui nao sao rastreadas.
+
+         RBAC CRITICO: access="sysadmin" (admin-only). O escape de shell PRECISA
+         ser gated — senao operator/view fazem `enable` (aberto p/ anti-lockout)
+         e escapam pro bash, furando todo o RBAC do klish. Admin continua usando
+         o bash como comando; operator/view nem veem. -->
+    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)" access="sysadmin">
       <ACTION>bash -l</ACTION>
     </COMMAND>
-    <COMMAND name="run" help="Run a single system-shell command">
+    <COMMAND name="run" help="Run a single system-shell command" access="sysadmin">
       <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
       <ACTION>bash -lc "${cmd}"</ACTION>
     </COMMAND>
