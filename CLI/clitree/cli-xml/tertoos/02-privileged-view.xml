@@ -522,6 +522,17 @@
     <COMMAND name="reload" help="Reload the system">
       <ACTION>tertoos-cli reload</ACTION>
     </COMMAND>
+
+    <COMMAND name="reset" help="Reset saved configuration to factory default"/>
+    <COMMAND name="reset configuration"
+             help="Erase the entire saved configuration (factory default)">
+      <ACTION>tertoos-cli reset configuration</ACTION>
+    </COMMAND>
+    <COMMAND name="reset configuration keep-management"
+             help="Erase everything except management (Mgmt0 + Horizon enrollment)">
+      <ACTION>tertoos-cli reset configuration keep-management</ACTION>
+    </COMMAND>
+
     <COMMAND name="clear" help="Reset operational counters/state"/>
     <COMMAND name="clear counters" help="Clear interface counters">
       <ACTION>tertoos-cli clear counters</ACTION>
