@@ -24,18 +24,19 @@
       <ACTION builtin="clish_close"/>
     </COMMAND>
 
-    <!-- Enter configuration (candidate) -->
-    <COMMAND name="configure"
+    <!-- Enter configuration (candidate). RBAC: configurar exige operador
+         (access="netadmin"); o nivel view (netoperator) nao entra em config. -->
+    <COMMAND name="configure" access="netadmin"
              help="Enter global configuration mode"
              view="config-view">
       <ACTION>tertoos-cli candidate begin</ACTION>
     </COMMAND>
-    <COMMAND name="configure terminal"
+    <COMMAND name="configure terminal" access="netadmin"
              help="Configure from the terminal"
              view="config-view">
       <ACTION>tertoos-cli candidate begin</ACTION>
     </COMMAND>
-    <COMMAND name="configure exclusive"
+    <COMMAND name="configure exclusive" access="netadmin"
              help="Configure with exclusive lock"
              view="config-view">
       <ACTION>tertoos-cli candidate begin --exclusive</ACTION>
@@ -519,16 +520,19 @@
       <ACTION>ssh ${target}</ACTION>
     </COMMAND>
 
-    <COMMAND name="reload" help="Reload the system">
+    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only). -->
+    <COMMAND name="reload" help="Reload the system" access="sysadmin">
       <ACTION>tertoos-cli reload</ACTION>
     </COMMAND>
 
-    <COMMAND name="reset" help="Reset saved configuration to factory default"/>
-    <COMMAND name="reset configuration"
+    <!-- RBAC: factory reset e' destrutivo → access="sysadmin" (so' admin ve/roda).
+         Defesa em profundidade no tertoos-cli (rbac.Require(RoleAdmin)). -->
+    <COMMAND name="reset" help="Reset saved configuration to factory default" access="sysadmin"/>
+    <COMMAND name="reset configuration" access="sysadmin"
              help="Erase the entire saved configuration (factory default)">
       <ACTION>tertoos-cli reset configuration</ACTION>
     </COMMAND>
-    <COMMAND name="reset configuration keep-management"
+    <COMMAND name="reset configuration keep-management" access="sysadmin"
              help="Erase everything except management (Mgmt0 + Horizon enrollment)">
       <ACTION>tertoos-cli reset configuration keep-management</ACTION>
     </COMMAND>
