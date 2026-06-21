@@ -14,8 +14,11 @@
 
   <VIEW name="exec-view" prompt="${SYSTEM_NAME}&gt; ">
 
+    <!-- RBAC: qualquer role autenticado (>= netoperator) entra na privileged-view
+         para rodar SHOWS; os comandos destrutivos/config la' dentro sao gated
+         individualmente (reset/reload=sysadmin, configure=netadmin). -->
     <COMMAND name="enable" help="Enter privileged EXEC mode"
-             view="privileged-view">
+             view="privileged-view" access="netoperator">
       <ACTION builtin="clish_nop"/>
     </COMMAND>
 
