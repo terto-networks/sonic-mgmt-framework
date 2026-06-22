@@ -26,10 +26,21 @@ if [ -n "$CLI_UID" ] && command -v setpriv >/dev/null 2>&1; then
     # usuario, ele nao consegue (re)abrir /dev/stdout (os ACTIONs do clish rodam
     # via sh e redirecionam pro pty) -> "cannot create /dev/stdout: Permission
     # denied". Chown o pty pro usuario ANTES do setpriv (igual login/su).
+    # O gid PRIMARIO do usuario SSH (CLI_GID) pode nao existir DENTRO do container:
+    # usuario local criado com grupo-privado (useradd -m), ou mapeado via NSS
+    # (TACACS/RADIUS/LDAP). O clish TRAVA se rodar com um gid primario desconhecido.
+    # O RBAC vem dos grupos SUPLEMENTARES (CLI_GROUPS) — o gid primario nao importa
+    # pro role — entao se CLI_GID nao resolve no container, caimos para netoperator
+    # (grupo base RBAC, sempre presente). Bug pego no smoke RBAC #6 2026-06-22.
+    _regid="${CLI_GID:-$CLI_UID}"
+    if ! getent group "$_regid" >/dev/null 2>&1; then
+        _no=$(getent group netoperator | cut -d: -f3)
+        _regid="${_no:-$CLI_UID}"
+    fi
     _tty=$(tty 2>/dev/null || true)
-    [ -n "$_tty" ] && [ -e "$_tty" ] && chown "$CLI_UID:${CLI_GID:-$CLI_UID}" "$_tty" 2>/dev/null || true
+    [ -n "$_tty" ] && [ -e "$_tty" ] && chown "$CLI_UID:$_regid" "$_tty" 2>/dev/null || true
     if [ -n "$CLI_GROUPS" ]; then GRP="--groups $CLI_GROUPS"; else GRP="--clear-groups"; fi
-    exec setpriv --reuid "$CLI_UID" --regid "${CLI_GID:-$CLI_UID}" $GRP \
+    exec setpriv --reuid "$CLI_UID" --regid "$_regid" $GRP \
         "$SONIC_CLI_ROOT/clish" -o "$@"
 fi
 
