@@ -117,11 +117,11 @@
       <PARAM name="group" help="admin | operator | view" ptype="STRING"/>
       <PARAM name="password-kw" help="password" ptype="STRING"/>
       <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
     </COMMAND>
     <COMMAND name="no username" help="Remove a local user">
       <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate delete user/${name}</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; tertoos-cli candidate delete user/${name}</ACTION>
     </COMMAND>
 
   </VIEW>
