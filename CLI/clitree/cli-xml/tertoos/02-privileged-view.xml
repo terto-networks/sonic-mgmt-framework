@@ -29,12 +29,12 @@
     <COMMAND name="configure" access="netadmin"
              help="Enter global configuration mode"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
     <COMMAND name="configure terminal" access="netadmin"
              help="Configure from the terminal"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
     <COMMAND name="configure exclusive" access="netadmin"
              help="Configure with exclusive lock"
@@ -817,12 +817,16 @@
          ser gated — senao operator/view fazem `enable` (aberto p/ anti-lockout)
          e escapam pro bash, furando todo o RBAC do klish. Admin continua usando
          o bash como comando; operator/view nem veem. -->
+    <!-- RBAC: o clish 2.1.4 NAO enforca access= (decorativo). A enforcement real
+         e' no binario: `tertoos-cli gate sysadmin` sai !=0 (com mensagem) se o
+         operador nao for admin, e o `&&` curto-circuita o shell escape. Sem isto,
+         operator/view escapavam pro bash (smoke RBAC 2026-06-21). -->
     <COMMAND name="bash" help="Drop into the system shell (outside the CLI)" access="sysadmin">
-      <ACTION>bash -l</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -l</ACTION>
     </COMMAND>
     <COMMAND name="run" help="Run a single system-shell command" access="sysadmin">
       <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
-      <ACTION>bash -lc "${cmd}"</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -lc "${cmd}"</ACTION>
     </COMMAND>
 
     <!--
