@@ -496,6 +496,24 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/scheduler-policy</ACTION>
     </COMMAND>
 
+    <!-- Banda simples por porta (estilo IOS rate-limit). No Lite o qosreconcile
+         do saibridge consome PORT_QOS_MAP e aplica via tc (policer ingress /
+         TBF egress). `no` zera o campo (0 = remover). -->
+    <COMMAND name="qos rate-limit input" help="Rate-limit ingress traffic (policer)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input ${kbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos rate-limit input" help="Remove ingress rate-limit">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input 0</ACTION>
+    </COMMAND>
+    <COMMAND name="qos rate-limit output" help="Shape egress traffic (TBF)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/output ${kbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos rate-limit output" help="Remove egress shaper">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/output 0</ACTION>
+    </COMMAND>
+
     <!-- S12.B.3 — service-policy (TERTOOS_PORT_SERVICE_POLICY) -->
     <COMMAND name="service-policy input" help="Apply ingress policy-map">
       <PARAM name="pmap" help="Policy-map name" ptype="TERTOOS_NAME"/>
