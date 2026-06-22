@@ -23,7 +23,7 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
 
     <!-- ================================ AAA ================================ -->
     <COMMAND name="aaa authentication login"

@@ -31,7 +31,7 @@
        o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
        O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
        Ethernet0.100) para o resto da config-if-view e para o prompt. -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
     <COMMAND name="interface"
              help="Configure an interface"
              view="config-if-view"

@@ -28,7 +28,7 @@
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
   <!-- Entrada via config-view -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
 
     <COMMAND name="ipv4 access-list"
              help="Configure an IPv4 access-list"
