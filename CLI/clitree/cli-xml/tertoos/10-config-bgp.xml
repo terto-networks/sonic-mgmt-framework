@@ -225,6 +225,25 @@
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${addr}</ACTION>
     </COMMAND>
 
+    <!-- One-liner styles for the most common neighbor leaves — espelha IOS-XR
+         e FRR `neighbor X remote-as Y` numa unica linha sem precisar entrar
+         em config-router-bgp-nbr-view. Atalhos para operacao do dia-a-dia.
+         Descoberto smoke v0.7.16 com CEO: digitar `neighbor X remote-as Y`
+         na config-router-bgp-view falhava porque so existia a versao que
+         transiciona pra view nbr. -->
+    <!-- TODO: IOS-XR one-liner `neighbor X.X.X.X remote-as Y` no klish
+         exige refactor maior: conflito com `name="neighbor"` que ja'
+         entra na view nbr (definido em config-router-bgp-view acima).
+         Klish 2.x nao deixa 2 COMMAND com mesmo name root.
+         Workaround atual: usar a view aninhada:
+            router bgp 65000
+             neighbor 10.255.0.5         <- entra em config-router-bgp-nbr-view
+              remote-as 65000
+              update-source lo
+              exit
+            exit
+         Tracking gap em [[project_klish_bgp_nbr_oneliner]]. -->
+
   </VIEW>
 
   <!-- =================== config-router-bgp-evpn-view (S10) ================== -->
@@ -504,11 +523,11 @@
 
     <COMMAND name="route-policy in" help="Inbound route-policy">
       <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate add bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_in ${rmap}</ACTION>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_in ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="route-policy out" help="Outbound route-policy">
       <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate add bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_out ${rmap}</ACTION>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
       <PARAM name="n" help="Limit" ptype="UINT"/>
@@ -564,6 +583,13 @@
     <COMMAND name="remote-as" help="Peer AS number">
       <PARAM name="asn" help="Remote AS" ptype="TERTOOS_ASN"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/asn ${asn}</ACTION>
+    </COMMAND>
+    <COMMAND name="update-source" help="Source address/interface for the BGP session (iBGP loopback)">
+      <PARAM name="src" help="Loopback0 | interface | A.B.C.D" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr ${src}</ACTION>
+    </COMMAND>
+    <COMMAND name="no update-source" help="Remove update-source">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr</ACTION>
     </COMMAND>
     <COMMAND name="description" help="Free-text description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
@@ -648,11 +674,11 @@
 
     <COMMAND name="route-policy in" help="Inbound route-policy">
       <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate add bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_in ${rmap}</ACTION>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_in ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="route-policy out" help="Outbound route-policy">
       <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate add bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_out ${rmap}</ACTION>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
       <PARAM name="n" help="Limit" ptype="UINT"/>
@@ -660,6 +686,12 @@
     </COMMAND>
     <COMMAND name="next-hop-self" help="Set next-hop to self">
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/nhself true</ACTION>
+    </COMMAND>
+    <COMMAND name="route-reflector-client" help="Configure neighbor as route-reflector client">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient true</ACTION>
+    </COMMAND>
+    <COMMAND name="no route-reflector-client" help="Remove route-reflector client">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient false</ACTION>
     </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
       <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>

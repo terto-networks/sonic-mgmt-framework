@@ -24,18 +24,19 @@
       <ACTION builtin="clish_close"/>
     </COMMAND>
 
-    <!-- Enter configuration (candidate) -->
-    <COMMAND name="configure"
+    <!-- Enter configuration (candidate). RBAC: configurar exige operador
+         (access="netadmin"); o nivel view (netoperator) nao entra em config. -->
+    <COMMAND name="configure" access="netadmin"
              help="Enter global configuration mode"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
-    <COMMAND name="configure terminal"
+    <COMMAND name="configure terminal" access="netadmin"
              help="Configure from the terminal"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
-    <COMMAND name="configure exclusive"
+    <COMMAND name="configure exclusive" access="netadmin"
              help="Configure with exclusive lock"
              view="config-view">
       <ACTION>tertoos-cli candidate begin --exclusive</ACTION>
@@ -67,6 +68,22 @@
     </COMMAND>
     <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
       <ACTION>tertoos-cli show ipv4 brief</ACTION>
+    </COMMAND>
+
+    <!-- show arp / show ip arp / show ipv6 neighbors — leitura nativa via
+         netlink (iproute2 ja' instalado no rootfs). Sonic-utilities `show arp`
+         dependia de Redis APP_DB que o Lite nao tem; o `ip neigh show`
+         fornece a mesma info diretamente do kernel ARP cache. Implementado
+         como alias 2026-06-16 — bug detectado smoke v0.7.27 (show arp caia
+         em "tertoos-cli: show not found in PATH"). -->
+    <COMMAND name="show arp" help="Show IPv4 ARP / IPv6 neighbor cache (kernel)">
+      <ACTION>ip neigh show</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip arp" help="Show IPv4 ARP cache (kernel)">
+      <ACTION>ip -4 neigh show</ACTION>
+    </COMMAND>
+    <COMMAND name="show ipv6 neighbors" help="Show IPv6 neighbor cache (kernel)">
+      <ACTION>ip -6 neigh show</ACTION>
     </COMMAND>
 
     <!-- ====== S15.E — VLAN aggregator + L2 MAC address-table =================
@@ -242,6 +259,91 @@
     <COMMAND name="show ospf database" help="OSPF LSDB">
       <ACTION>vtysh -c "show ip ospf database"</ACTION>
     </COMMAND>
+    <!-- ====================================================================
+         SR-OSPF DEBUG (added 2026-06-14): cobre o caminho de diag operacional
+         usado quando 'show ip ospf database opaque-area' fica vazio mesmo
+         com `segment-routing on` (gap descoberto no smoke 5-PE Frente 1a).
+         Investigação concluiu que NÃO é bug do patch C — é race condition
+         entre `capability opaque` e ospfd já rodando, mitigada via
+         `clear ip ospf process` ou restart limpo.
+         ==================================================================== -->
+    <COMMAND name="show ospf database opaque-area"
+             help="OSPF Area-Local Opaque LSAs (Router Info / Prefix-SID / Adj-SID)">
+      <ACTION>vtysh -c "show ip ospf database opaque-area"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database opaque-area self-originate"
+             help="Apenas LSAs originados por este PE">
+      <ACTION>vtysh -c "show ip ospf database opaque-area self-originate"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database opaque-area adv-router"
+             help="LSAs originados por um advertising router específico">
+      <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
+      <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf router-info"
+             help="OSPF Router Information LSA (Capabilities + SR Algorithms + SRGB/SRLB)">
+      <ACTION>vtysh -c "show ip ospf router-info"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf opaque-lsa"
+             help="Trace de Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf opaque-lsa" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf opaque-lsa" help="Para o trace de Opaque LSA">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf opaque-lsa" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf sr"
+             help="Trace de Segment Routing (SRGB/SRLB alloc, Prefix-SID, Adj-SID)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf sr" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf sr" help="Para o trace de Segment Routing">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf sr" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="debug ospf event" help="Trace de OSPF FSM events (interface, neighbor, area)">
+      <ACTION>vtysh -c "configure terminal" -c "debug ospf event" -c "end"</ACTION>
+    </COMMAND>
+    <COMMAND name="no debug ospf event" help="Para o trace de eventos">
+      <ACTION>vtysh -c "configure terminal" -c "no debug ospf event" -c "end"</ACTION>
+    </COMMAND>
+    <!-- ====== BGP show commands (wrappers vtysh) ============================
+         Espelha IOS-XR `show bgp ...` em comandos klish estruturados pra
+         operador nao precisar fazer `bash -> vtysh -c ...`. Mantem
+         passthrough generico `show <rest>` no topo do view tambem. -->
+    <COMMAND name="show ip bgp summary" help="BGP IPv4 unicast summary">
+      <ACTION>vtysh -c "show ip bgp summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp" help="BGP IPv4 unicast routes">
+      <ACTION>vtysh -c "show ip bgp"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp neighbors" help="BGP neighbors detalhe">
+      <ACTION>vtysh -c "show ip bgp neighbors"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip bgp neighbor" help="Detalhe de um neighbor">
+      <PARAM name="addr" help="Neighbor IP" ptype="STRING"/>
+      <ACTION>vtysh -c "show ip bgp neighbor ${addr}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 vpn summary" help="VPNv4 BGP summary (L3VPN)">
+      <ACTION>vtysh -c "show bgp ipv4 vpn summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp ipv4 vpn" help="VPNv4 BGP routes (L3VPN)">
+      <ACTION>vtysh -c "show bgp ipv4 vpn"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp l2vpn evpn summary" help="EVPN BGP summary">
+      <ACTION>vtysh -c "show bgp l2vpn evpn summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show bgp vrf" help="BGP routes for a specific VRF">
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <ACTION>vtysh -c "show bgp vrf ${vrf}"</ACTION>
+    </COMMAND>
+
+    <!-- NOTA: show evpn vni/mac/arp-cache/es, show l2vpn atom vc/binding,
+         show bgp l2vpn evpn, show isis * estao definidos mais abaixo no
+         bloco EVPN/L2VPN/ISIS show existente — nao duplicar aqui.
+         show isis neighbor detail e' novo (so' detail; o sem detail
+         ja' existe). -->
+    <COMMAND name="show isis neighbor detail" help="IS-IS adjacencies detalhe">
+      <ACTION>vtysh -c "show isis neighbor detail"</ACTION>
+    </COMMAND>
+
     <COMMAND name="show mpls ldp neighbor" help="LDP neighbors">
       <ACTION>vtysh -c "show mpls ldp neighbor"</ACTION>
     </COMMAND>
@@ -397,14 +499,44 @@
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
       <ACTION>traceroute ${target}</ACTION>
     </COMMAND>
+    <COMMAND name="mtr" help="My traceroute (ping + traceroute combinado, 10 ciclos)">
+      <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
+      <ACTION>mtr -r -c 10 ${target}</ACTION>
+    </COMMAND>
+    <COMMAND name="nslookup" help="DNS lookup">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>nslookup ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="dig" help="DNS dig (debug avancado de DNS)">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>dig ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="host" help="DNS resolver simples">
+      <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
+      <ACTION>host ${name}</ACTION>
+    </COMMAND>
     <COMMAND name="ssh" help="Open SSH session">
       <PARAM name="target" help="user@host" ptype="STRING"/>
       <ACTION>ssh ${target}</ACTION>
     </COMMAND>
 
-    <COMMAND name="reload" help="Reload the system">
+    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only). -->
+    <COMMAND name="reload" help="Reload the system" access="sysadmin">
       <ACTION>tertoos-cli reload</ACTION>
     </COMMAND>
+
+    <!-- RBAC: factory reset e' destrutivo → access="sysadmin" (so' admin ve/roda).
+         Defesa em profundidade no tertoos-cli (rbac.Require(RoleAdmin)). -->
+    <COMMAND name="reset" help="Reset saved configuration to factory default" access="sysadmin"/>
+    <COMMAND name="reset configuration" access="sysadmin"
+             help="Erase the entire saved configuration (factory default)">
+      <ACTION>tertoos-cli reset configuration</ACTION>
+    </COMMAND>
+    <COMMAND name="reset configuration keep-management" access="sysadmin"
+             help="Erase everything except management (Mgmt0 + Horizon enrollment)">
+      <ACTION>tertoos-cli reset configuration keep-management</ACTION>
+    </COMMAND>
+
     <COMMAND name="clear" help="Reset operational counters/state"/>
     <COMMAND name="clear counters" help="Clear interface counters">
       <ACTION>tertoos-cli clear counters</ACTION>
@@ -677,16 +809,24 @@
       <ACTION>sudo dmesg -n 1</ACTION>
     </COMMAND>
 
-    <!-- ===== Operator shell escape (IOS-XR `run`) ===========================
+    <!-- ===== System shell escape (IOS-XR `run`) =============================
          bash → shell interativo do sistema; run → um comando unico.
-         Fora da maquina de candidate/commit — mudancas aqui nao sao
-         rastreadas. -->
-    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)">
-      <ACTION>bash -l</ACTION>
+         Fora da maquina de candidate/commit — mudancas aqui nao sao rastreadas.
+
+         RBAC CRITICO: access="sysadmin" (admin-only). O escape de shell PRECISA
+         ser gated — senao operator/view fazem `enable` (aberto p/ anti-lockout)
+         e escapam pro bash, furando todo o RBAC do klish. Admin continua usando
+         o bash como comando; operator/view nem veem. -->
+    <!-- RBAC: o clish 2.1.4 NAO enforca access= (decorativo). A enforcement real
+         e' no binario: `tertoos-cli gate sysadmin` sai !=0 (com mensagem) se o
+         operador nao for admin, e o `&&` curto-circuita o shell escape. Sem isto,
+         operator/view escapavam pro bash (smoke RBAC 2026-06-21). -->
+    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)" access="sysadmin">
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -l</ACTION>
     </COMMAND>
-    <COMMAND name="run" help="Run a single system-shell command">
+    <COMMAND name="run" help="Run a single system-shell command" access="sysadmin">
       <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
-      <ACTION>bash -lc "${cmd}"</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -lc "${cmd}"</ACTION>
     </COMMAND>
 
     <!--

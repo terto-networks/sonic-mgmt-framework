@@ -39,20 +39,28 @@
     <COMMAND name="policy"
              help="Configure SR-TE policy"
              view="config-srte-policy-view"
-             viewid="srtepol_ep=${endpoint};srtepol_color=${color}">
+             viewid="srtepol_ep=${endpoint};srtepol_color=${color_val}">
       <PARAM name="endpoint" help="Policy endpoint (A.B.C.D)" ptype="STRING"/>
-      <PARAM name="color_kw" help="color" ptype="SUBCOMMAND" mode="subcommand"/>
-      <PARAM name="color" help="Color (1..4294967295)" ptype="UINT"/>
+      <!-- WRAP em switch parent: SUBCOMMAND mode=subcommand sozinho eh rejeitado pelo
+           parser klish. Wrap num PARAM switch (vide exemplo "interface" em
+           04-config-interface.xml/iftype) faz o parser aceitar o token literal.
+           Bug detectado 2026-06-10 sessao 5 smoke SR-TE; ver known-gaps.md Gap 1. -->
+      <PARAM name="color_sw" help="color" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="color" help="color" mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="color_val" help="Color (1..4294967295)" ptype="UINT"/>
       <ACTION>
-        tertoos-cli candidate context srte-policy ${endpoint}/${color}&#xA;
-        tertoos-cli candidate set sr-te/policy/${endpoint}/${color}/enable true&#xA;
+        tertoos-cli candidate context srte-policy ${endpoint}/${color_val}&#xA;
+        tertoos-cli candidate set sr-te/policy/${endpoint}/${color_val}/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no policy" help="Remove SR-TE policy">
       <PARAM name="endpoint" help="Endpoint" ptype="STRING"/>
-      <PARAM name="color_kw" help="color" ptype="SUBCOMMAND" mode="subcommand"/>
-      <PARAM name="color" help="Color" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate delete sr-te/policy/${endpoint}/${color}</ACTION>
+      <PARAM name="color_sw" help="color" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="color" help="color" mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="color_val" help="Color" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete sr-te/policy/${endpoint}/${color_val}</ACTION>
     </COMMAND>
 
     <COMMAND name="segment-list"
@@ -137,6 +145,31 @@
       <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}</ACTION>
     </COMMAND>
+    <!-- Alias UX IOS-XR canonical: `explicit segment-list <name>`. Em FRR
+         pathd a forma escrita no running-config é `candidate-path preference
+         N name X explicit segment-list Y`, então o operador habituado a IOS-XR
+         espera digitar `explicit segment-list <n>` aqui dentro do
+         candidate-path view. Aceitar tanto a forma curta (`segment-list <n>`)
+         quanto a canonical (`explicit segment-list <n>`) sem quebrar
+         compatibilidade. Também seta protocol_origin=configured + dynamic=false
+         (path explícito implica origem configured, não dynamic).
+
+         Caminho IOS-XR copy-paste real:
+           policy 10.255.0.5 color 100
+            binding-sid 24000
+            candidate-path preference 100
+             name cp-explicit
+             explicit segment-list sl-r1r5-linka
+            exit
+           exit -->
+    <COMMAND name="explicit segment-list" help="Bind explicit (configured) segment-list">
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}&#xA;
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/protocol_origin configured&#xA;
+        tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/dynamic false&#xA;
+      </ACTION>
+    </COMMAND>
   </VIEW>
 
   <!-- ====== Segment-list view ====== -->
@@ -151,8 +184,13 @@
     </COMMAND>
     <COMMAND name="index" help="Add hop">
       <PARAM name="i" help="Index 1..65535" ptype="UINT"/>
-      <PARAM name="mpls_kw" help="mpls" ptype="SUBCOMMAND" mode="subcommand"/>
-      <PARAM name="lbl_kw" help="label" ptype="SUBCOMMAND" mode="subcommand"/>
+      <!-- WRAP SUBCOMMAND em switch parent — vide policy acima. -->
+      <PARAM name="mpls_sw" help="mpls" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="mpls" help="mpls" mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <PARAM name="label_sw" help="label" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="label" help="label" mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
       <PARAM name="lbl" help="MPLS label" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set sr-te/segment-list-hop/${srteseglist}/${i}/mpls_label ${lbl}</ACTION>
     </COMMAND>

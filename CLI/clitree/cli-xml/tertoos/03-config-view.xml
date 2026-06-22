@@ -10,7 +10,14 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
-  <VIEW name="config-view" prompt="${SYSTEM_NAME}(config)# ">
+  <!-- RBAC: a VIEW config-view e' gateada em access="netadmin". O klish, para
+       comandos que TROCAM de view (configure ... view="config-view"), checa o
+       access= da VIEW-DESTINO, nao do comando — entao gatear so' o comando
+       `configure` nao basta (view/netoperator entrava). Aqui o operador
+       (netadmin) e o admin (sysadmin, cumulativo) entram; view (netoperator)
+       e' barrado. As sub-views (config-if/vrf/aaa/...) sao entradas DE DENTRO
+       da config-view, logo herdam a protecao. -->
+  <VIEW name="config-view" access="netadmin" prompt="${SYSTEM_NAME}(config)# ">
 
     <!-- Commit machinery -->
     <COMMAND name="commit"

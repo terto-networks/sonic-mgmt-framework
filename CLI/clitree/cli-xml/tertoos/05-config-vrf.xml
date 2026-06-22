@@ -19,7 +19,7 @@
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
   <!-- Entrada via config-view -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
     <COMMAND name="vrf"
              help="Configure VRF (L3 Virtual Routing and Forwarding)"
              view="config-vrf-view"

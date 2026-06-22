@@ -31,7 +31,7 @@
        o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
        O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
        Ethernet0.100) para o resto da config-if-view e para o prompt. -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
     <COMMAND name="interface"
              help="Configure an interface"
              view="config-if-view"
@@ -46,6 +46,15 @@
              ptype="TERTOOS_IFNUM"/>
       <ACTION>tertoos-cli candidate context interface ${iftype}${ifnum}</ACTION>
     </COMMAND>
+
+    <!-- NOTA: os aliases `interface Hu/Te/GigabitEthernet N` (introduzidos
+         em 2026-06-16, PR mgmt-fw #30) foram REMOVIDOS por decisão do CEO:
+         o SKU VS/lab usa a numeração de porta Ethernet em sequência
+         crescente (Ethernet0,1,2,3...) alinhada ao EVE-NG, e a CLI mantém
+         apenas o nome canônico `Ethernet N` (sem camada de apresentação
+         Hu/Te). Para hardware real com faceplate IOS-XR, o naming será
+         derivado do port_config no platform.json (Caminho B), não de
+         aliases klish. -->
 
     <COMMAND name="no interface"
              help="Remove interface configuration">
@@ -243,6 +252,54 @@
     <COMMAND name="ip ospf cost" help="OSPF link cost">
       <PARAM name="cost" help="1..65535" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/metric ${cost}</ACTION>
+    </COMMAND>
+    <!-- Frente 1a — Adj-SID persistente por interface (PR FRR #69).
+         Operador fixa um label/index do SRLB que sobrevive a flap e a
+         restart do ospfd. CLI espelha o vty FRR:
+           ip ospf adjacency-sid <16..1048575> [absolute|index] [unprotected]
+         Variantes via SUBCOMMAND ordenados para o parser klish (value=
+         nomeia cada token literal — ver project_klish_subcommand_value_fix).
+         Leaves no CONFIG_DB schema klish (consumidos pelo cfgd):
+           OSPFV2_INTERFACE.adj-sid-value      uint (label ou index)
+           OSPFV2_INTERFACE.adj-sid-index      bool (true = index)
+           OSPFV2_INTERFACE.adj-sid-unprotected bool (B-flag=0)
+         Caminho típico (SR-TE estrito): `ip ospf adjacency-sid 15013 absolute unprotected`. -->
+    <COMMAND name="ip ospf adjacency-sid"
+             help="Pin persistent Adj-SID (sobrevive a flap e restart do ospfd)">
+      <PARAM name="value" help="16..1048575 (label se absolute; offset se index)" ptype="UINT"/>
+      <!-- absolute|index é opcional; default = absolute. -->
+      <PARAM name="kind_kw" help="absolute|index" ptype="SUBCOMMAND" mode="switch" optional="true">
+        <PARAM name="absolute" help="Treat value as absolute MPLS label (default)"
+               value="absolute" ptype="SUBCOMMAND" mode="subcommand"/>
+        <PARAM name="index" help="Treat value as index within local SRLB"
+               value="index" ptype="SUBCOMMAND" mode="subcommand"/>
+      </PARAM>
+      <!-- unprotected é opcional standalone — wrap em switch parent (mesmo
+           padrão do PR #14, SR-TE) pra evitar rejeição do parser klish. -->
+      <PARAM name="unprot_kw" help="unprotected" ptype="SUBCOMMAND" mode="switch" optional="true">
+        <PARAM name="unprotected" help="Do not allocate backup Adj-SID (B-flag=0, RFC 8665)"
+               value="unprotected" ptype="SUBCOMMAND" mode="subcommand"/>
+      </PARAM>
+      <ACTION>
+        tertoos-cli candidate set interface/${ifname}/ip-ospf/adj-sid-value ${value}&#xA;
+        if test "${index}" = "index"; then
+          tertoos-cli candidate set interface/${ifname}/ip-ospf/adj-sid-index true&#xA;
+        else
+          tertoos-cli candidate set interface/${ifname}/ip-ospf/adj-sid-index false&#xA;
+        fi&#xA;
+        if test "${unprotected}" = "unprotected"; then
+          tertoos-cli candidate set interface/${ifname}/ip-ospf/adj-sid-unprotected true&#xA;
+        else
+          tertoos-cli candidate set interface/${ifname}/ip-ospf/adj-sid-unprotected false&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf adjacency-sid" help="Remove pinned Adj-SID (volta ao dinâmico do SRLB)">
+      <ACTION>
+        tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-value&#xA;
+        tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-index&#xA;
+        tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-unprotected&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="ip ospf hello-interval" help="Hello interval (seconds)">
       <PARAM name="s" help="Seconds" ptype="UINT"/>
@@ -458,7 +515,7 @@
     <!-- S12.B.2 — per-queue / per-PG bindings -->
     <COMMAND name="qos queue wred-profile" help="Bind WRED profile to a queue">
       <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
-      <PARAM name="prof_kw" help="wred-profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="prof_kw" help="wred-profile" ptype="SUBCOMMAND" mode="subcommand" value="wred-profile"/>
       <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/wred_profile ${name}</ACTION>
     </COMMAND>
@@ -468,13 +525,13 @@
     </COMMAND>
     <COMMAND name="qos queue scheduler" help="Bind scheduler to a queue">
       <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
-      <PARAM name="sch_kw" help="scheduler" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="sch_kw" help="scheduler" ptype="SUBCOMMAND" mode="subcommand" value="scheduler"/>
       <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/scheduler ${name}</ACTION>
     </COMMAND>
     <COMMAND name="qos buffer-profile-pg" help="Bind buffer profile to a PG">
       <PARAM name="pg" help="PG 0..7" ptype="UINT"/>
-      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand" value="profile"/>
       <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-pg/${pg}/profile ${name}</ACTION>
     </COMMAND>
@@ -484,7 +541,7 @@
     </COMMAND>
     <COMMAND name="qos buffer-profile-queue" help="Bind buffer profile to a queue">
       <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
-      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand" value="profile"/>
       <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-queue/${q}/profile ${name}</ACTION>
     </COMMAND>

@@ -165,7 +165,7 @@
     </COMMAND>
     <COMMAND name="neighbor" help="Add manual peer">
       <PARAM name="addr" help="Peer address" ptype="STRING"/>
-      <PARAM name="pwid_kw" help="pw-id" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="pwid_kw" help="pw-id" ptype="SUBCOMMAND" mode="subcommand" value="pw-id"/>
       <PARAM name="pwid" help="PW id" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set l2vpn/bd-neighbor/${vfiname}/${addr}/pw_id ${pwid}</ACTION>
     </COMMAND>
@@ -249,12 +249,30 @@
       <PARAM name="ifname" help="Interface name" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/interface ${ifname}</ACTION>
     </COMMAND>
-    <COMMAND name="neighbor ipv4 pw-id" help="Remote PE peer + PW id">
+    <!--
+      Sintaxe: neighbor ipv4 <addr> pw-id <pwid>
+      Klish 2.x: em PARAM ptype="SUBCOMMAND" mode="subcommand", o `name`
+      do PARAM vira o keyword literal que o usuário digita. `help` é só
+      display text. Por isso name="ipv4" e name="pw-id" — NÃO `ipv4_kw`
+      ou `pwid_kw` (esses viram literais e o usuário teria que digitar
+      'ipv4_kw' / 'pwid_kw' — bug).
+    -->
+    <COMMAND name="neighbor" help="Remote PE peer + PW id">
+      <PARAM name="ipv4" help="IPv4 address family" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <PARAM name="pw-id" help="Pseudowire identifier keyword" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="pwid" help="Pw-id 1..4294967295" ptype="UINT"/>
       <ACTION>
         tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/peer-address ${addr}&#xA;
         tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id ${pwid}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no neighbor" help="Remove the remote PE peer binding">
+      <PARAM name="ipv4" help="IPv4 address family" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <ACTION>
+        tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/peer-address&#xA;
+        tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="pw-class" help="Bind a pw-class">
