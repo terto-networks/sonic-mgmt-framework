@@ -15,7 +15,7 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
   <VIEW name="config-view">
-    <COMMAND name="web-server enable" help="Enable the local web/API server (UI nativa)">
+    <COMMAND name="web-server enable" help="Enable the local web/API server (native UI)">
       <ACTION>tertoos-cli candidate set webserver/admin_state up</ACTION>
     </COMMAND>
     <COMMAND name="no web-server enable" help="Disable the local web/API server">
