@@ -54,7 +54,7 @@
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
     </COMMAND>
-    <COMMAND name="show acl" help="Show configured ACLs (tabelas + regras)">
+    <COMMAND name="show acl" help="Show configured ACLs (tables and rules)">
       <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
     </COMMAND>
@@ -276,11 +276,11 @@
       <ACTION>vtysh -c "show ip ospf database opaque-area"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area self-originate"
-             help="Apenas LSAs originados por este PE">
+             help="Only LSAs originated by this PE">
       <ACTION>vtysh -c "show ip ospf database opaque-area self-originate"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area adv-router"
-             help="LSAs originados por um advertising router específico">
+             help="LSAs originated by a specific advertising router">
       <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
       <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
     </COMMAND>

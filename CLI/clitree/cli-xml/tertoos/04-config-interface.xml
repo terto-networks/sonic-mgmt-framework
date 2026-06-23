@@ -306,7 +306,7 @@
         fi&#xA;
       </ACTION>
     </COMMAND>
-    <COMMAND name="no ip ospf adjacency-sid" help="Remove pinned Adj-SID (volta ao dinâmico do SRLB)">
+    <COMMAND name="no ip ospf adjacency-sid" help="Remove pinned Adj-SID (revert to dynamic from SRLB)">
       <ACTION>
         tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-value&#xA;
         tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-index&#xA;
