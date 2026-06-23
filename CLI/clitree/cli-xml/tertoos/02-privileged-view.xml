@@ -276,11 +276,11 @@
       <ACTION>vtysh -c "show ip ospf database opaque-area"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area self-originate"
-             help="Apenas LSAs originados por este PE">
+             help="Only LSAs originated by this PE">
       <ACTION>vtysh -c "show ip ospf database opaque-area self-originate"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area adv-router"
-             help="LSAs originados por um advertising router específico">
+             help="LSAs originated by a specific advertising router">
       <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
       <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
     </COMMAND>
