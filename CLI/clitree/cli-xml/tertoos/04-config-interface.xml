@@ -197,15 +197,19 @@
 
     <!-- ACL binding (S3.1.1):
          IOS-XR: `ipv4|ipv6 access-group <ACL-NAME> {ingress|egress}`
-         Maps to: add interface to ACL_TABLE/<NAME>/ports leaf-list.
-         The ACL_TABLE.stage (INGRESS or EGRESS) must already match the
-         direction the user asks for; the helper does NOT auto-create
-         a second ACL_TABLE for the opposite direction. -->
+         Maps to: ACL_TABLE/<NAME>/stage = direção pedida (INGRESS|EGRESS) +
+         add da interface ao ports leaf-list. ACL_TABLE tem 1 stage só: ligar a
+         mesma ACL em direções opostas troca o stage (limitação SONiC; use ACLs
+         separadas por direção). -->
     <COMMAND name="ipv4 access-group"
              help="Apply IPv4 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ipv4 access-group" help="Remove IPv4 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
@@ -216,7 +220,11 @@
              help="Apply IPv6 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 access-group" help="Remove IPv6 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
@@ -227,7 +235,11 @@
              help="Apply L2 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-services access-group" help="Remove L2 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>

@@ -160,6 +160,12 @@
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/remark "${text}"</ACTION>
     </COMMAND>
 
+    <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
+    </COMMAND>
+
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
@@ -236,6 +242,12 @@
             tertoos-cli candidate set acl/${aclname}/rule/${seq}/dst_port ${dst_port}&#xA;
         fi&#xA;
       </ACTION>
+    </COMMAND>
+
+    <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
