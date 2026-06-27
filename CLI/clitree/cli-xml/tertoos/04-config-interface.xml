@@ -471,6 +471,12 @@
     <COMMAND name="no isis bfd" help="Disable BFD for IS-IS">
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable false</ACTION>
     </COMMAND>
+    <COMMAND name="isis fast-reroute ti-lfa" help="Enable TI-LFA fast-reroute on this IS-IS interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/fast-reroute-tilfa true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis fast-reroute ti-lfa" help="Disable TI-LFA on this interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/fast-reroute-tilfa false</ACTION>
+    </COMMAND>
     <COMMAND name="isis passive" help="Mark interface passive in IS-IS">
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive true</ACTION>
     </COMMAND>
