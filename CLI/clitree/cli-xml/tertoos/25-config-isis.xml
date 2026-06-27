@@ -165,6 +165,22 @@
         tertoos-cli candidate set isis/af/${isisvrf}/${isistag}/${af}_unicast&#xA;
       </ACTION>
     </COMMAND>
+
+    <!-- Flex-Algo (Flexible Algorithm Definition) — IS-IS FAD id 128..255 -->
+    <COMMAND name="flex-algo"
+             help="Configure an IS-IS Flexible Algorithm (FAD)"
+             view="config-router-isis-flexalgo-view"
+             viewid="isisvrf=${isisvrf};isistag=${isistag};flexid=${id}">
+      <PARAM name="id" help="Flex-Algo id 128..255" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context router-isis-flexalgo ${id}&#xA;
+        tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${id}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no flex-algo" help="Remove a Flex-Algo definition">
+      <PARAM name="id" help="Flex-Algo id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete isis/flex-algo/${isisvrf}/${isistag}/${id}</ACTION>
+    </COMMAND>
   </VIEW>
 
   <!-- =================== config-router-isis-af-view ========================= -->
@@ -206,6 +222,56 @@
       <ACTION>
         tertoos-cli candidate delete isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}&#xA;
       </ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- =================== config-router-isis-flexalgo-view =================== -->
+  <!-- FRR isisd: `router isis` → `flex-algo <128-255>` submode →
+       advertise-definition / affinity {include-any|include-all|exclude-any} /
+       prefix-metric / dataplane sr-mpls. Leaves em hífen no klish; translate.go
+       hifeniza→underscore p/ IS-IS (campo ISIS_FLEX_ALGO underscore). -->
+  <VIEW name="config-router-isis-flexalgo-view"
+        prompt="${SYSTEM_NAME}(config-router-isis-flexalgo-${flexid})# ">
+
+    <COMMAND name="exit" help="Exit flex-algo" view="config-router-isis-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="advertise-definition" help="Advertise the Flex-Algo Definition (FAD)">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/advertise-definition true</ACTION>
+    </COMMAND>
+    <COMMAND name="no advertise-definition" help="Do not advertise the FAD">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/advertise-definition false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="dataplane sr-mpls" help="Participate in the SR-MPLS data-plane">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/dataplane-sr-mpls true</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane sr-mpls" help="Stop participating in SR-MPLS data-plane">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/dataplane-sr-mpls false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="prefix-metric" help="Use the Flex-Algo prefix metric">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/prefix-metric true</ACTION>
+    </COMMAND>
+    <COMMAND name="no prefix-metric" help="Do not use the Flex-Algo prefix metric">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/prefix-metric false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="affinity include-any" help="Affinity constraint: include-any color list">
+      <PARAM name="names" help="Affinity color name(s), space-separated" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/affinity-include-any "${names}"</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity include-all" help="Affinity constraint: include-all color list">
+      <PARAM name="names" help="Affinity color name(s), space-separated" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/affinity-include-all "${names}"</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity exclude-any" help="Affinity constraint: exclude-any color list">
+      <PARAM name="names" help="Affinity color name(s), space-separated" ptype="STRING_WITH_PIPE"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${flexid}/affinity-exclude-any "${names}"</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>
