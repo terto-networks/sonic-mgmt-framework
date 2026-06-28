@@ -288,6 +288,18 @@
              help="OSPF Router Information LSA (Capabilities + SR Algorithms + SRGB/SRLB)">
       <ACTION>vtysh -c "show ip ospf router-info"</ACTION>
     </COMMAND>
+    <COMMAND name="show ospf route" help="OSPF routing table (intra/inter/external; TI-LFA backups com detail)">
+      <ACTION>vtysh -c "show ip ospf route"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf border-routers" help="OSPF ABR/ASBR routes">
+      <ACTION>vtysh -c "show ip ospf border-routers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf reachable-routers" help="OSPF reachable routers (SR/TI-LFA)">
+      <ACTION>vtysh -c "show ip ospf reachable-routers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database segment-routing" help="OSPF SR opaque LSDB (Extended Prefix/Link)">
+      <ACTION>vtysh -c "show ip ospf database segment-routing"</ACTION>
+    </COMMAND>
     <COMMAND name="debug ospf opaque-lsa"
              help="Trace de Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
       <ACTION>vtysh -c "configure terminal" -c "debug ospf opaque-lsa" -c "end"</ACTION>
