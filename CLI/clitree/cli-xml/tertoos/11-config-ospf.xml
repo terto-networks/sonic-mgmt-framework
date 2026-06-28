@@ -96,6 +96,68 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/auto-cost-reference-bandwidth ${bw}</ACTION>
     </COMMAND>
 
+    <!-- ===== Timers (SPF / LSA throttle) ================================== -->
+    <!-- FRR ospfd: `timers throttle spf <delay> <init-holdtime> <max-holdtime>`.
+         As 3 leaves CONFIG_DB casam por POSICAO com o frrcfgd
+         (spf-initial-delay=delay, spf-maximum-delay=init-holdtime,
+         spf-throttle-delay=max-holdtime). Nomes herdados do YANG upstream. -->
+    <COMMAND name="timers throttle spf" help="SPF schedule throttling (ms)">
+      <PARAM name="delay" help="Initial delay (ms)" ptype="UINT"/>
+      <PARAM name="init" help="Initial holdtime (ms)" ptype="UINT"/>
+      <PARAM name="max" help="Maximum holdtime (ms)" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/spf-initial-delay ${delay}&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/spf-maximum-delay ${init}&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/spf-throttle-delay ${max}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no timers throttle spf" help="Reset SPF throttling to defaults">
+      <ACTION>
+        tertoos-cli candidate delete ospf/${ospfvrf}/spf-initial-delay&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/spf-maximum-delay&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/spf-throttle-delay&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="timers throttle lsa all" help="Minimum interval between LSA refreshes (ms)">
+      <PARAM name="delay" help="Delay (ms)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/lsa-min-interval-timer ${delay}</ACTION>
+    </COMMAND>
+    <COMMAND name="no timers throttle lsa all" help="Reset LSA throttle to default">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/lsa-min-interval-timer</ACTION>
+    </COMMAND>
+    <COMMAND name="timers lsa min-arrival" help="Minimum interval between accepted LSAs (ms)">
+      <PARAM name="ms" help="Milliseconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/lsa-min-arrival-timer ${ms}</ACTION>
+    </COMMAND>
+    <COMMAND name="no timers lsa min-arrival" help="Reset LSA min-arrival to default">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/lsa-min-arrival-timer</ACTION>
+    </COMMAND>
+
+    <!-- ===== Stub-router advertisement (max-metric router-lsa) ============ -->
+    <!-- FRR ospfd: `max-metric router-lsa administrative` (manual stub-router),
+         `... on-startup <5-86400>` e `... on-shutdown <5-100>`. 3 leaves
+         independentes; casam BYTE-A-BYTE com ospfv2_global_key_map do frrcfgd. -->
+    <COMMAND name="max-metric router-lsa administrative" help="Advertise as stub router (administrative)">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/max-metric-administrative true</ACTION>
+    </COMMAND>
+    <COMMAND name="no max-metric router-lsa administrative" help="Stop administrative stub-router">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/max-metric-administrative false</ACTION>
+    </COMMAND>
+    <COMMAND name="max-metric router-lsa on-startup" help="Stub router for N seconds after startup">
+      <PARAM name="sec" help="5..86400 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/max-metric-on-startup ${sec}</ACTION>
+    </COMMAND>
+    <COMMAND name="no max-metric router-lsa on-startup" help="Disable on-startup stub-router">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/max-metric-on-startup</ACTION>
+    </COMMAND>
+    <COMMAND name="max-metric router-lsa on-shutdown" help="Stub router for N seconds before shutdown">
+      <PARAM name="sec" help="5..100 seconds" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/max-metric-on-shutdown ${sec}</ACTION>
+    </COMMAND>
+    <COMMAND name="no max-metric router-lsa on-shutdown" help="Disable on-shutdown stub-router">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/max-metric-on-shutdown</ACTION>
+    </COMMAND>
+
     <!-- ===== IP-FRR — TI-LFA ============================================== -->
     <!-- FRR ospfd: instance-level `fast-reroute ti-lfa [node-protection]`.
          Protege link por padrão; node-protection com a keyword. Requer SR/SPF
@@ -319,6 +381,26 @@
       <ACTION>
         tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub&#xA;
         tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/stub-no-summary&#xA;
+      </ACTION>
+    </COMMAND>
+
+    <!-- nssa espelha o stub: `area X nssa` e a variante `nssa no-summary`
+         (NSSA totally-stubby). Leaves nssa / nssa-no-summary casam com o
+         ospfv2_area_key_map do frrcfgd. -->
+    <COMMAND name="nssa" help="Mark area as NSSA (not-so-stubby)">
+      <PARAM name="nosummary" help="no-summary (optional, totally-stubby NSSA)"
+             ptype="STRING" optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/nssa true&#xA;
+        if [ "${nosummary}" = "no-summary" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/nssa-no-summary true&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no nssa" help="Unmark NSSA">
+      <ACTION>
+        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/nssa&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/area/${ospfarea}/nssa-no-summary&#xA;
       </ACTION>
     </COMMAND>
 
