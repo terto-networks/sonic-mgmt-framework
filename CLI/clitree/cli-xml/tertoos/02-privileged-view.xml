@@ -657,6 +657,24 @@
     <COMMAND name="show isis segment-routing prefix-sids" help="SR prefix-SID map">
       <ACTION>vtysh -c "show isis segment-routing prefix-sids"</ACTION>
     </COMMAND>
+    <COMMAND name="show isis hostname" help="IS-IS dynamic-hostname mappings">
+      <ACTION>vtysh -c "show isis hostname"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis flex-algo" help="IS-IS Flex-Algorithm definitions/state">
+      <ACTION>vtysh -c "show isis flex-algo"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis fast-reroute summary" help="IS-IS LFA/TI-LFA fast-reroute summary">
+      <ACTION>vtysh -c "show isis fast-reroute summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis mpls-te router" help="IS-IS MPLS-TE router info (TE router-id)">
+      <ACTION>vtysh -c "show isis mpls-te router"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis mpls-te interface" help="IS-IS MPLS-TE per-interface state">
+      <ACTION>vtysh -c "show isis mpls-te interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis spf-delay-ietf" help="IS-IS SPF back-off delay (IETF)">
+      <ACTION>vtysh -c "show isis spf-delay-ietf"</ACTION>
+    </COMMAND>
     <COMMAND name="clear isis" help="Reset IS-IS adjacencies">
       <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
       <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>

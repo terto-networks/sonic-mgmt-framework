@@ -194,9 +194,11 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="default-information originate" help="Originate default route">
+    <COMMAND name="default-information originate" help="Originate default route (per level)">
+      <PARAM name="level" help="level-1 | level-2" ptype="STRING"/>
       <ACTION>
         tertoos-cli candidate set isis/af/${isisvrf}/${isistag}/${isisaf}/default_information_originate true&#xA;
+        tertoos-cli candidate set isis/af/${isisvrf}/${isistag}/${isisaf}/default_information_level ${level}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no default-information originate" help="Stop originating default">
