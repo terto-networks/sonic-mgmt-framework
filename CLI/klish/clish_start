@@ -39,7 +39,16 @@ if [ -n "$CLI_UID" ] && command -v setpriv >/dev/null 2>&1; then
     fi
     _tty=$(tty 2>/dev/null || true)
     [ -n "$_tty" ] && [ -e "$_tty" ] && chown "$CLI_UID:$_regid" "$_tty" 2>/dev/null || true
-    if [ -n "$CLI_GROUPS" ]; then GRP="--groups $CLI_GROUPS"; else GRP="--clear-groups"; fi
+    # TertoOS: vtysh (show operacionais do FRR no Full) faz getpwuid(CLI_UID) no
+    # startup; o user-mgmt cria os grupos de role no container mas NAO um usuario no
+    # uid do operador. Garantimos um (so pro getpwuid) se faltar — nao conflita com o
+    # user-mgmt, que so cria grupos.
+    if ! getent passwd "$CLI_UID" >/dev/null 2>&1; then
+        echo "cli$CLI_UID:x:$CLI_UID:$_regid::/tmp:/usr/sbin/nologin" >> /etc/passwd
+    fi
+    # frrvty (gid do socket vty 0770) + frr (ler /etc/frr/frr.conf 0640) dao ao
+    # processo do CLI acesso ao FRR via /var/run/frr compartilhado com a docker bgp.
+    if [ -n "$CLI_GROUPS" ]; then GRP="--groups $CLI_GROUPS,frrvty,frr"; else GRP="--clear-groups"; fi
     exec setpriv --reuid "$CLI_UID" --regid "$_regid" $GRP \
         "$SONIC_CLI_ROOT/clish" -o "$@"
 fi
