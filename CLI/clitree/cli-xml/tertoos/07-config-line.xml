@@ -17,7 +17,7 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
 
     <COMMAND name="line console"
              help="Configure the console line"
@@ -51,6 +51,16 @@
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
       <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <!-- Candidate ops no sub-modo (commit-and-stay; abort sai) -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration" help="Show candidate (uncommitted) configuration">
+      <ACTION>tertoos-cli candidate show</ACTION>
     </COMMAND>
 
     <COMMAND name="exec-timeout"

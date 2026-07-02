@@ -31,7 +31,7 @@
        o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
        O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
        Ethernet0.100) para o resto da config-if-view e para o prompt. -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
     <COMMAND name="interface"
              help="Configure an interface"
              view="config-if-view"
@@ -87,6 +87,18 @@
              help="Return to top of config tree"
              view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+
+    <!-- Candidate ops no sub-modo: IOS-XR permite commit/abort de qualquer
+         nivel. commit fica no mesmo modo (commit-and-stay); abort sai. -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+    <COMMAND name="show configuration" help="Show candidate (uncommitted) configuration">
+      <ACTION>tertoos-cli candidate show</ACTION>
     </COMMAND>
 
     <!-- Atributos básicos -->
@@ -197,15 +209,19 @@
 
     <!-- ACL binding (S3.1.1):
          IOS-XR: `ipv4|ipv6 access-group <ACL-NAME> {ingress|egress}`
-         Maps to: add interface to ACL_TABLE/<NAME>/ports leaf-list.
-         The ACL_TABLE.stage (INGRESS or EGRESS) must already match the
-         direction the user asks for; the helper does NOT auto-create
-         a second ACL_TABLE for the opposite direction. -->
+         Maps to: ACL_TABLE/<NAME>/stage = direção pedida (INGRESS|EGRESS) +
+         add da interface ao ports leaf-list. ACL_TABLE tem 1 stage só: ligar a
+         mesma ACL em direções opostas troca o stage (limitação SONiC; use ACLs
+         separadas por direção). -->
     <COMMAND name="ipv4 access-group"
              help="Apply IPv4 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ipv4 access-group" help="Remove IPv4 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
@@ -216,7 +232,11 @@
              help="Apply IPv6 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 access-group" help="Remove IPv6 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
@@ -227,7 +247,11 @@
              help="Apply L2 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
       <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
-      <ACTION>tertoos-cli candidate add acl/${acl}/ports ${ifname}</ACTION>
+      <ACTION>
+        if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
+        tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
+        tertoos-cli candidate add acl/${acl}/ports ${ifname}&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-services access-group" help="Remove L2 ACL binding">
       <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
@@ -294,7 +318,7 @@
         fi&#xA;
       </ACTION>
     </COMMAND>
-    <COMMAND name="no ip ospf adjacency-sid" help="Remove pinned Adj-SID (volta ao dinâmico do SRLB)">
+    <COMMAND name="no ip ospf adjacency-sid" help="Remove pinned Adj-SID (revert to dynamic from SRLB)">
       <ACTION>
         tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-value&#xA;
         tertoos-cli candidate delete interface/${ifname}/ip-ospf/adj-sid-index&#xA;
@@ -459,6 +483,12 @@
     <COMMAND name="no isis bfd" help="Disable BFD for IS-IS">
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/bfd-enable false</ACTION>
     </COMMAND>
+    <COMMAND name="isis fast-reroute ti-lfa" help="Enable TI-LFA fast-reroute on this IS-IS interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/fast-reroute-tilfa true</ACTION>
+    </COMMAND>
+    <COMMAND name="no isis fast-reroute ti-lfa" help="Disable TI-LFA on this interface">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/isis/fast-reroute-tilfa false</ACTION>
+    </COMMAND>
     <COMMAND name="isis passive" help="Mark interface passive in IS-IS">
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/passive true</ACTION>
     </COMMAND>
@@ -494,6 +524,24 @@
     </COMMAND>
     <COMMAND name="no qos scheduler-policy" help="Unbind scheduler profile">
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/scheduler-policy</ACTION>
+    </COMMAND>
+
+    <!-- Banda simples por porta (estilo IOS rate-limit). No Lite o qosreconcile
+         do saibridge consome PORT_QOS_MAP e aplica via tc (policer ingress /
+         TBF egress). `no` zera o campo (0 = remover). -->
+    <COMMAND name="qos rate-limit input" help="Rate-limit ingress traffic (policer)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input ${kbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos rate-limit input" help="Remove ingress rate-limit">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input 0</ACTION>
+    </COMMAND>
+    <COMMAND name="qos rate-limit output" help="Shape egress traffic (TBF)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/output ${kbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos rate-limit output" help="Remove egress shaper">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/output 0</ACTION>
     </COMMAND>
 
     <!-- S12.B.3 — service-policy (TERTOOS_PORT_SERVICE_POLICY) -->
