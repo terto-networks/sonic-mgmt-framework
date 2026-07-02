@@ -29,12 +29,12 @@
     <COMMAND name="configure" access="netadmin"
              help="Enter global configuration mode"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
     <COMMAND name="configure terminal" access="netadmin"
              help="Configure from the terminal"
              view="config-view">
-      <ACTION>tertoos-cli candidate begin</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; tertoos-cli candidate begin</ACTION>
     </COMMAND>
     <COMMAND name="configure exclusive" access="netadmin"
              help="Configure with exclusive lock"
@@ -43,7 +43,7 @@
     </COMMAND>
 
     <!-- Show family -->
-    <COMMAND name="show" help="Display operational state (SONiC show passthrough)">
+    <COMMAND name="show" help="Display operational state">
       <PARAM name="rest" help="show subcommand, e.g. 'ip route'" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli show passthrough ${rest}</ACTION>
     </COMMAND>
@@ -53,6 +53,10 @@
     <COMMAND name="show running-config"
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
+    </COMMAND>
+    <COMMAND name="show acl" help="Show configured ACLs (tables and rules)">
+      <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_NAME" optional="true"/>
+      <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
     </COMMAND>
     <COMMAND name="show configuration commit list"
              help="List recent commits">
@@ -272,17 +276,29 @@
       <ACTION>vtysh -c "show ip ospf database opaque-area"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area self-originate"
-             help="Apenas LSAs originados por este PE">
+             help="Only LSAs originated by this PE">
       <ACTION>vtysh -c "show ip ospf database opaque-area self-originate"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf database opaque-area adv-router"
-             help="LSAs originados por um advertising router específico">
+             help="LSAs originated by a specific advertising router">
       <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
       <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf router-info"
              help="OSPF Router Information LSA (Capabilities + SR Algorithms + SRGB/SRLB)">
       <ACTION>vtysh -c "show ip ospf router-info"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf route" help="OSPF routing table (intra/inter/external; TI-LFA backups com detail)">
+      <ACTION>vtysh -c "show ip ospf route"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf border-routers" help="OSPF ABR/ASBR routes">
+      <ACTION>vtysh -c "show ip ospf border-routers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf reachable-routers" help="OSPF reachable routers (SR/TI-LFA)">
+      <ACTION>vtysh -c "show ip ospf reachable-routers"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ospf database segment-routing" help="OSPF SR opaque LSDB (Extended Prefix/Link)">
+      <ACTION>vtysh -c "show ip ospf database segment-routing"</ACTION>
     </COMMAND>
     <COMMAND name="debug ospf opaque-lsa"
              help="Trace de Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
@@ -653,6 +669,24 @@
     <COMMAND name="show isis segment-routing prefix-sids" help="SR prefix-SID map">
       <ACTION>vtysh -c "show isis segment-routing prefix-sids"</ACTION>
     </COMMAND>
+    <COMMAND name="show isis hostname" help="IS-IS dynamic-hostname mappings">
+      <ACTION>vtysh -c "show isis hostname"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis flex-algo" help="IS-IS Flex-Algorithm definitions/state">
+      <ACTION>vtysh -c "show isis flex-algo"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis fast-reroute summary" help="IS-IS LFA/TI-LFA fast-reroute summary">
+      <ACTION>vtysh -c "show isis fast-reroute summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis mpls-te router" help="IS-IS MPLS-TE router info (TE router-id)">
+      <ACTION>vtysh -c "show isis mpls-te router"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis mpls-te interface" help="IS-IS MPLS-TE per-interface state">
+      <ACTION>vtysh -c "show isis mpls-te interface"</ACTION>
+    </COMMAND>
+    <COMMAND name="show isis spf-delay-ietf" help="IS-IS SPF back-off delay (IETF)">
+      <ACTION>vtysh -c "show isis spf-delay-ietf"</ACTION>
+    </COMMAND>
     <COMMAND name="clear isis" help="Reset IS-IS adjacencies">
       <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
       <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>
@@ -809,16 +843,24 @@
       <ACTION>sudo dmesg -n 1</ACTION>
     </COMMAND>
 
-    <!-- ===== Operator shell escape (IOS-XR `run`) ===========================
+    <!-- ===== System shell escape (IOS-XR `run`) =============================
          bash → shell interativo do sistema; run → um comando unico.
-         Fora da maquina de candidate/commit — mudancas aqui nao sao
-         rastreadas. -->
-    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)">
-      <ACTION>bash -l</ACTION>
+         Fora da maquina de candidate/commit — mudancas aqui nao sao rastreadas.
+
+         RBAC CRITICO: access="sysadmin" (admin-only). O escape de shell PRECISA
+         ser gated — senao operator/view fazem `enable` (aberto p/ anti-lockout)
+         e escapam pro bash, furando todo o RBAC do klish. Admin continua usando
+         o bash como comando; operator/view nem veem. -->
+    <!-- RBAC: o clish 2.1.4 NAO enforca access= (decorativo). A enforcement real
+         e' no binario: `tertoos-cli gate sysadmin` sai !=0 (com mensagem) se o
+         operador nao for admin, e o `&&` curto-circuita o shell escape. Sem isto,
+         operator/view escapavam pro bash (smoke RBAC 2026-06-21). -->
+    <COMMAND name="bash" help="Drop into the system shell (outside the CLI)" access="sysadmin">
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -l</ACTION>
     </COMMAND>
-    <COMMAND name="run" help="Run a single system-shell command">
+    <COMMAND name="run" help="Run a single system-shell command" access="sysadmin">
       <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
-      <ACTION>bash -lc "${cmd}"</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -lc "${cmd}"</ACTION>
     </COMMAND>
 
     <!--

@@ -28,7 +28,7 @@
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
   <!-- Entrada via config-view -->
-  <VIEW name="config-view">
+  <VIEW name="config-view" access="netadmin">
 
     <COMMAND name="ipv4 access-list"
              help="Configure an IPv4 access-list"
@@ -83,6 +83,14 @@
   <!-- ============================== IPv4 view ============================ -->
   <VIEW name="config-ipv4-acl-view"
         prompt="${SYSTEM_NAME}(config-ipv4-acl-${aclname})# ">
+
+    <!-- Candidate ops no sub-modo (commit-and-stay; abort sai) -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
 
     <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
@@ -160,6 +168,12 @@
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/remark "${text}"</ACTION>
     </COMMAND>
 
+    <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
+    </COMMAND>
+
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
@@ -175,6 +189,14 @@
   <!-- ============================== IPv6 view ============================ -->
   <VIEW name="config-ipv6-acl-view"
         prompt="${SYSTEM_NAME}(config-ipv6-acl-${aclname})# ">
+
+    <!-- Candidate ops no sub-modo (commit-and-stay; abort sai) -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
 
     <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
@@ -238,6 +260,12 @@
       </ACTION>
     </COMMAND>
 
+    <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
+    </COMMAND>
+
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
@@ -253,6 +281,14 @@
   <!-- ============================ L2 (Eth-services) view ================== -->
   <VIEW name="config-l2-acl-view"
         prompt="${SYSTEM_NAME}(config-l2-acl-${aclname})# ">
+
+    <!-- Candidate ops no sub-modo (commit-and-stay; abort sai) -->
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
 
     <COMMAND name="exit" help="Exit ACL configuration" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
