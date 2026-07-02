@@ -43,7 +43,7 @@
     </COMMAND>
 
     <!-- Show family -->
-    <COMMAND name="show" help="Display operational state">
+    <COMMAND name="show" help="Display operational state (SONiC show passthrough)">
       <PARAM name="rest" help="show subcommand, e.g. 'ip route'" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli show passthrough ${rest}</ACTION>
     </COMMAND>
@@ -421,7 +421,7 @@
       <ACTION>vtysh -c "show l2vpn"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn encapsulation" help="EVPN encap config">
-      <ACTION>sonic-db-cli CONFIG_DB keys 'EVPN_GLOBALS|*' &amp;&amp; vtysh -c "show bgp l2vpn evpn"</ACTION>
+      <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
     </COMMAND>
     <COMMAND name="show l2vpn xconnect" help="L2VPN xconnect status">
       <ACTION>vtysh -c "show l2vpn xconnect"</ACTION>
@@ -485,7 +485,7 @@
       <ACTION>cat /proc/meminfo 2&gt;/dev/null | head -20</ACTION>
     </COMMAND>
     <COMMAND name="show watchdog" help="Watchdog status">
-      <ACTION>systemctl status sonic-watchdog 2&gt;/dev/null | head -15 || echo "watchdog: service not present on this build"</ACTION>
+      <ACTION>systemctl is-active sonic-watchdog &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "Hardware watchdog: running" || echo "Hardware watchdog: not running"</ACTION>
     </COMMAND>
     <COMMAND name="show users" help="Logged-in users">
       <ACTION>who 2&gt;/dev/null</ACTION>
@@ -620,7 +620,7 @@
       <ACTION>show runningconfiguration snmp 2&gt;/dev/null</ACTION>
     </COMMAND>
     <COMMAND name="show telemetry" help="Telemetry/gNMI status">
-      <ACTION>systemctl status telemetry 2&gt;/dev/null | head -10</ACTION>
+      <ACTION>systemctl is-active telemetry &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "Telemetry/gNMI: running" || echo "Telemetry/gNMI: not running"</ACTION>
     </COMMAND>
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
