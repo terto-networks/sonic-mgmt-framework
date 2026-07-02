@@ -97,9 +97,8 @@
     <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
       <ACTION>tertoos-cli candidate abort</ACTION>
     </COMMAND>
-    <COMMAND name="show configuration" help="Show candidate (uncommitted) configuration">
-      <ACTION>tertoos-cli candidate show</ACTION>
-    </COMMAND>
+    <!-- (show configuration ja' existe mais abaixo nesta view, com filtro por
+         interface — nao duplicar aqui, senao o klish falha ao parsear a view) -->
 
     <!-- Atributos básicos -->
     <COMMAND name="description"
