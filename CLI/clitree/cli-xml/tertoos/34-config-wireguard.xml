@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — WireGuard overlay tunnel interface (transport resilience).
+
+  Estrutura:
+    interface WireGuard <name>              → entra na config-wg-view
+      address <A.B.C.D/M>                   → WIREGUARD_INTERFACE|<name> address
+      listen-port <port>                    → WIREGUARD_INTERFACE|<name> listen_port
+      mtu <bytes>                           → WIREGUARD_INTERFACE|<name> mtu
+      peer public-key <label> <key>         → WIREGUARD_PEER|<name>|<label> public_key
+      peer endpoint <label> <host:port>     → WIREGUARD_PEER|<name>|<label> endpoint
+      peer allowed-ips <label> <cidr,...>   → WIREGUARD_PEER|<name>|<label> allowed_ips
+      peer persistent-keepalive <label> <s> → WIREGUARD_PEER|<name>|<label> persistent_keepalive
+
+  A chave PRIVADA e' a identidade do device: gerada 1x no firstboot em
+  /etc/wireguard/privatekey (0640 root:systemd-network) e referenciada pelo
+  cfgd via PrivateKeyFile no .netdev — nunca digitada nem no CONFIG_DB. A chave
+  publica local sai em `show wireguard public-key`.
+
+  Backend: cfgd loadKlishWireGuard + EmitNetworkd (systemd-networkd nativo:
+  .netdev [WireGuard]/[WireGuardPeer] + .network). O operador compoe a
+  resiliencia sobre este primitivo usando OSPF/BFD (failover) + EVPN-VXLAN (L2),
+  que ja existem.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+
+  <VIEW name="config-view">
+
+    <COMMAND name="interface WireGuard"
+             help="Configure a WireGuard overlay tunnel interface"
+             view="config-wg-view"
+             viewid="wgname=${name}">
+      <PARAM name="name" help="WireGuard interface name (e.g. wg0, wg-core)" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context wireguard ${name}</ACTION>
+    </COMMAND>
+
+    <COMMAND name="no interface WireGuard"
+             help="Remove a WireGuard interface">
+      <PARAM name="name" help="WireGuard interface name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete wireguard/interface/${name}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+  <!-- =================== config-wg-view ==================================== -->
+  <VIEW name="config-wg-view"
+        prompt="${SYSTEM_NAME}(config-wg-${wgname})# ">
+
+    <COMMAND name="exit" help="Exit WireGuard interface" view="config-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
+    <COMMAND name="abort" help="Discard candidate configuration" view="privileged-view">
+      <ACTION>tertoos-cli candidate abort</ACTION>
+    </COMMAND>
+
+    <!-- Interface attributes -->
+    <COMMAND name="address" help="Overlay IPv4 address (CIDR)">
+      <PARAM name="cidr" help="A.B.C.D/M (e.g. 10.99.0.1/30)" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/address ${cidr}</ACTION>
+    </COMMAND>
+    <COMMAND name="no address" help="Clear overlay address">
+      <ACTION>tertoos-cli candidate delete wireguard/interface/${wgname}/address</ACTION>
+    </COMMAND>
+
+    <COMMAND name="listen-port" help="UDP listen port">
+      <PARAM name="port" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/listen_port ${port}</ACTION>
+    </COMMAND>
+    <COMMAND name="no listen-port" help="Clear listen port">
+      <ACTION>tertoos-cli candidate delete wireguard/interface/${wgname}/listen_port</ACTION>
+    </COMMAND>
+
+    <COMMAND name="mtu" help="Tunnel MTU (typical 1420)">
+      <PARAM name="bytes" help="MTU in bytes" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="no mtu" help="Reset tunnel MTU">
+      <ACTION>tertoos-cli candidate delete wireguard/interface/${wgname}/mtu</ACTION>
+    </COMMAND>
+
+    <!-- Peers (keyed by an operator-chosen label; the pubkey is a value) -->
+    <COMMAND name="peer public-key" help="Set a peer's public key">
+      <PARAM name="label" help="Peer label (e.g. hub)" ptype="TERTOOS_NAME"/>
+      <PARAM name="key" help="Peer WireGuard public key (base64)" ptype="TERTOOS_WGKEY"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/public_key "${key}"</ACTION>
+    </COMMAND>
+    <COMMAND name="peer endpoint" help="Set a peer's UDP endpoint (host:port)">
+      <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
+      <PARAM name="endpoint" help="host:port (headend/hub)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/endpoint "${endpoint}"</ACTION>
+    </COMMAND>
+    <COMMAND name="peer allowed-ips" help="Set a peer's allowed IPs (comma-separated CIDRs)">
+      <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
+      <PARAM name="cidrs" help="e.g. 10.99.0.0/30,172.16.0.2/32" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/allowed_ips "${cidrs}"</ACTION>
+    </COMMAND>
+    <COMMAND name="peer persistent-keepalive" help="Set a peer's keepalive (seconds)">
+      <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
+      <PARAM name="seconds" help="1..65535 (25 typical to punch CGNAT)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/persistent_keepalive ${seconds}</ACTION>
+    </COMMAND>
+    <COMMAND name="no peer" help="Remove a peer">
+      <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete wireguard/interface/${wgname}/peer/${label}</ACTION>
+    </COMMAND>
+
+  </VIEW>
+
+</CLISH_MODULE>
