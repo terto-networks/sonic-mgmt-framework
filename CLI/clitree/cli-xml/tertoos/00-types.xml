@@ -113,4 +113,10 @@
          pattern="[0-9]+(\.[0-9]+)?"
          help="Interface index (0) or sub-interface (0.100)"/>
 
+  <!-- WireGuard base64 key (32 bytes -> 44 chars, trailing '='). Lax on length. -->
+  <PTYPE name="TERTOOS_WGKEY"
+         method="regexp"
+         pattern="[A-Za-z0-9+/]{42,43}={0,2}"
+         help="WireGuard base64 public key (44 chars)"/>
+
 </CLISH_MODULE>

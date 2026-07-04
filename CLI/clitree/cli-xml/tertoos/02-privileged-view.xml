@@ -598,6 +598,15 @@
     <COMMAND name="show bfd peers brief" help="BFD peers brief">
       <ACTION>vtysh -c "show bfd peers brief"</ACTION>
     </COMMAND>
+
+    <!-- WireGuard overlay (transport resilience). `wg` recebe cap_net_admin no
+         firstboot, entao roda sem sudo. A public-key e' leitura de arquivo. -->
+    <COMMAND name="show wireguard" help="WireGuard overlay tunnels (interfaces + peers + handshake)">
+      <ACTION>wg show</ACTION>
+    </COMMAND>
+    <COMMAND name="show wireguard public-key" help="This device's WireGuard public key (give to the peer/Horizon)">
+      <ACTION>cat /etc/wireguard/publickey 2>/dev/null || echo "(no key yet - generated at first boot)"</ACTION>
+    </COMMAND>
     <COMMAND name="show sflow" help="sFlow status">
       <ACTION>show sflow</ACTION>
     </COMMAND>
