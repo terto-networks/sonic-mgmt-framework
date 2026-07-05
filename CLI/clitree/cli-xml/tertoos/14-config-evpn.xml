@@ -6,7 +6,7 @@
     vxlan source-interface <if>           → VXLAN_TUNNEL|vtep src_ip
     evpn                                  → entrada na config-evpn-view
       nvo source-interface <if>           → VXLAN_EVPN_NVO|nvo source_vtep
-      evi <vni>                           → entrada na config-evpn-evi-view
+      evi <vni>                           → EVPN_VNI|<vni> id + entrada na config-evpn-evi-view
         route-target import <RT>          → BGP_GLOBALS_EVPN_VNI_RT|default|l2vpn_evpn|<vni>|<RT> rt_type=import
         route-target export <RT>          → idem rt_type=export
       interface <if> ethernet-segment ... → EVPN_ETHERNET_SEGMENT|<auto>
@@ -73,7 +73,8 @@
              view="config-evpn-evi-view"
              viewid="evivni=${vni}">
       <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate context evpn-evi ${vni}</ACTION>
+      <ACTION>tertoos-cli candidate set evpn/evi/${vni}&#xA;
+              tertoos-cli candidate context evpn-evi ${vni}</ACTION>
     </COMMAND>
 
     <COMMAND name="ethernet-segment identifier"
