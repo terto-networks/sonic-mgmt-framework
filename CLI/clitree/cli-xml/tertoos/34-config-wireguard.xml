@@ -114,6 +114,30 @@
       <ACTION>tertoos-cli candidate delete wireguard/interface/${wgname}/peer/${label}</ACTION>
     </COMMAND>
 
+    <!-- OSPF sobre o tunnel WireGuard. Permite compor resiliencia: rodar o IGP
+         no overlay WG (backup "Starlink") e diferenciar o caminho pela metrica.
+         Sem `ip ospf cost` na iface WG, o wg0 fica com custo default (= igual a
+         uma perna de fibra) e o OSPF faz ECMP ativo-ativo — indesejado num link
+         metrado. Mesmos leaves das portas Ethernet (interface/<if>/ip-ospf/*),
+         keyed pelo nome do tunnel. Bind na area vem do `network` sob router ospf. -->
+    <COMMAND name="ip ospf cost" help="OSPF link cost (use alto p/ backup ocioso, ex 1000)">
+      <PARAM name="cost" help="1..65535" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/metric ${cost}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf cost" help="Reset OSPF cost">
+      <ACTION>tertoos-cli candidate delete interface/${wgname}/ip-ospf/metric</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf network" help="OSPF network type (point-to-point tipico no tunnel)">
+      <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/network-type ${kind}</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf bfd" help="Enable BFD on this OSPF interface">
+      <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/bfd-enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip ospf bfd" help="Disable BFD">
+      <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/bfd-enable false</ACTION>
+    </COMMAND>
+
   </VIEW>
 
 </CLISH_MODULE>
