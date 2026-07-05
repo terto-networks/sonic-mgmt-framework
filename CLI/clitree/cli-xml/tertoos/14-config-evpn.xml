@@ -154,6 +154,19 @@
       </ACTION>
     </COMMAND>
 
+    <!-- Attachment circuit: bind a local access port (CE-facing) into this
+         EVI/VNI's L2 bridge. Sem isto o trafego de um host L2 (CPE/BRAS)
+         atras da porta de acesso nao entra no VXLAN — so' o SVI do br<vni>
+         alcancava o dominio EVPN. O cfgd enslava a porta em br<vni>. -->
+    <COMMAND name="interface" help="Attach a local access interface (AC) to this EVI/VNI bridge">
+      <PARAM name="ifname" help="Interface name (Ethernet/PortChannel)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/interface/${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no interface" help="Detach an access interface from this EVI/VNI bridge">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate delete evpn/evi/${evivni}/interface/${ifname}</ACTION>
+    </COMMAND>
+
   </VIEW>
 
 </CLISH_MODULE>
