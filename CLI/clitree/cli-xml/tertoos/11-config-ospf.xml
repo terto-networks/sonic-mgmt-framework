@@ -96,6 +96,29 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/auto-cost-reference-bandwidth ${bw}</ACTION>
     </COMMAND>
 
+    <!-- ===== IP-FRR — TI-LFA ============================================== -->
+    <!-- FRR ospfd: instance-level `fast-reroute ti-lfa [node-protection]`.
+         Protege link por padrão; node-protection com a keyword. Requer SR/SPF
+         (segment-routing + capability opaque já acima). Dataplane: backup
+         next-hop pré-instalado (SAI Centec: confirmar protection NHG, F2). -->
+    <COMMAND name="fast-reroute ti-lfa" help="Enable TI-LFA fast-reroute (IP-FRR)">
+      <PARAM name="np" help="node-protection (optional)" ptype="STRING" optional="true"/>
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/fast_reroute_tilfa true&#xA;
+        if [ "${np}" = "node-protection" ]; then&#xA;
+            tertoos-cli candidate set ospf/${ospfvrf}/tilfa_node_protection true&#xA;
+        else&#xA;
+            tertoos-cli candidate delete ospf/${ospfvrf}/tilfa_node_protection&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no fast-reroute ti-lfa" help="Disable TI-LFA fast-reroute">
+      <ACTION>
+        tertoos-cli candidate set ospf/${ospfvrf}/fast_reroute_tilfa false&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/tilfa_node_protection&#xA;
+      </ACTION>
+    </COMMAND>
+
     <!-- ===== S8 — Segment Routing (#24) =================================== -->
     <COMMAND name="segment-routing" help="Enable OSPF Segment Routing">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/segment_routing true</ACTION>
