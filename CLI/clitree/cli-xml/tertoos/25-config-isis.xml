@@ -165,6 +165,22 @@
         tertoos-cli candidate set isis/af/${isisvrf}/${isistag}/${af}_unicast&#xA;
       </ACTION>
     </COMMAND>
+
+    <!-- Flex-Algo (RFC 9350) entry — backend translate/cfgd/frrcfgd já suportam -->
+    <COMMAND name="flex-algo"
+             help="Enter IS-IS Flexible Algorithm definition"
+             view="config-router-isis-flexalgo-view"
+             viewid="isisvrf=${isisvrf};isistag=${isistag};isisalgo=${id}">
+      <PARAM name="id" help="Flex-Algo ID (128..255)" ptype="UINT"/>
+      <ACTION>
+        tertoos-cli candidate context router-isis-flexalgo ${id}&#xA;
+        tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${id}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no flex-algo" help="Remove a Flex-Algo definition">
+      <PARAM name="id" help="Flex-Algo ID" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete isis/flex-algo/${isisvrf}/${isistag}/${id}</ACTION>
+    </COMMAND>
   </VIEW>
 
   <!-- =================== config-router-isis-af-view ========================= -->
@@ -206,6 +222,49 @@
       <ACTION>
         tertoos-cli candidate delete isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}&#xA;
       </ACTION>
+    </COMMAND>
+  </VIEW>
+
+  <!-- =================== config-router-isis-flexalgo-view =================== -->
+  <VIEW name="config-router-isis-flexalgo-view"
+        prompt="${SYSTEM_NAME}(config-router-isis-flexalgo-${isisalgo})# ">
+
+    <COMMAND name="exit" help="Exit flex-algo" view="config-router-isis-view">
+      <ACTION>tertoos-cli candidate context pop</ACTION>
+    </COMMAND>
+    <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
+      <ACTION>tertoos-cli candidate end</ACTION>
+    </COMMAND>
+
+    <COMMAND name="advertise-definition" help="Advertise this Flex-Algo definition (FAD)">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/advertise-definition true</ACTION>
+    </COMMAND>
+    <COMMAND name="no advertise-definition" help="Stop advertising the definition">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/advertise-definition false</ACTION>
+    </COMMAND>
+    <COMMAND name="dataplane sr-mpls" help="Use SR-MPLS data-plane for this algo">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/dataplane-sr-mpls true</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane sr-mpls" help="Disable SR-MPLS data-plane">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/dataplane-sr-mpls false</ACTION>
+    </COMMAND>
+    <COMMAND name="prefix-metric" help="Use prefix-metric for this algo">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/prefix-metric true</ACTION>
+    </COMMAND>
+    <COMMAND name="no prefix-metric" help="Disable prefix-metric">
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/prefix-metric false</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity include-any" help="Affinity: include-any admin-group set">
+      <PARAM name="name" help="Affinity/admin-group name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/affinity-include-any ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity include-all" help="Affinity: include-all admin-group set">
+      <PARAM name="name" help="Affinity/admin-group name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/affinity-include-all ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="affinity exclude-any" help="Affinity: exclude-any admin-group set">
+      <PARAM name="name" help="Affinity/admin-group name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${isisalgo}/affinity-exclude-any ${name}</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>
