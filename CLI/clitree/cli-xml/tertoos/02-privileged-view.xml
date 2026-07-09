@@ -451,25 +451,25 @@
       <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
     </COMMAND>
     <COMMAND name="show platform" help="Platform information">
-      <ACTION>tertoos-cli show platform</ACTION>
+      <ACTION>/usr/sbin/tos-platform summary 2&gt;/dev/null || tertoos-cli show platform</ACTION>
     </COMMAND>
     <COMMAND name="show platform summary" help="Platform summary (alias)">
-      <ACTION>show platform summary</ACTION>
+      <ACTION>/usr/sbin/tos-platform summary 2&gt;/dev/null || show platform summary</ACTION>
     </COMMAND>
     <COMMAND name="show platform inventory" help="EEPROM / serial / model">
-      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+      <ACTION>/usr/sbin/tos-platform inventory 2&gt;/dev/null || show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
     </COMMAND>
     <COMMAND name="show platform environment" help="Fans, PSU, temperature">
-      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+      <ACTION>/usr/sbin/tos-platform environment 2&gt;/dev/null || { show platform fan; echo; show platform psustatus; echo; show platform temperature; }</ACTION>
     </COMMAND>
     <COMMAND name="show platform controllers" help="PCI controllers and SAI driver">
       <ACTION>lspci -nn 2&gt;/dev/null | head -40; echo; show platform npu summary 2&gt;/dev/null || true</ACTION>
     </COMMAND>
     <COMMAND name="show inventory" help="Inventory (alias for show platform inventory)">
-      <ACTION>show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
+      <ACTION>/usr/sbin/tos-platform inventory 2&gt;/dev/null || show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
     </COMMAND>
     <COMMAND name="show environment" help="Environment (alias)">
-      <ACTION>show platform fan; echo; show platform psustatus; echo; show platform temperature</ACTION>
+      <ACTION>/usr/sbin/tos-platform environment 2&gt;/dev/null || { show platform fan; echo; show platform psustatus; echo; show platform temperature; }</ACTION>
     </COMMAND>
 
     <COMMAND name="show processes" help="Top processes snapshot">
