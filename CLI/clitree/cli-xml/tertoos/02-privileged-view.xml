@@ -608,13 +608,13 @@
       <ACTION>cat /etc/wireguard/publickey 2>/dev/null || echo "(no key yet - generated at first boot)"</ACTION>
     </COMMAND>
     <COMMAND name="show sflow" help="sFlow status">
-      <ACTION>show sflow</ACTION>
+      <ACTION>echo "== sFlow (hsflowd) =="; echo "status: $(systemctl is-active hsflowd 2&gt;/dev/null)"; sed -n '1,40p' /etc/hsflowd.conf 2&gt;/dev/null</ACTION>
     </COMMAND>
     <COMMAND name="show lldp neighbors" help="LLDP neighbors">
-      <ACTION>show lldp neighbors</ACTION>
+      <ACTION>lldpcli show neighbors 2&gt;/dev/null || show lldp neighbors 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
     </COMMAND>
     <COMMAND name="show lldp table" help="LLDP table">
-      <ACTION>show lldp table</ACTION>
+      <ACTION>lldpcli show neighbors summary 2&gt;/dev/null || show lldp table 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
     </COMMAND>
     <COMMAND name="show ntp associations" help="NTP associations">
       <ACTION>chronyc sources -v 2&gt;/dev/null || ntpq -p</ACTION>
@@ -726,7 +726,7 @@
     </COMMAND>
     <COMMAND name="show queue counters" help="Per-port per-queue counters">
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
-      <ACTION>show queue counters ${port}</ACTION>
+      <ACTION>tc -s qdisc show dev ${port} 2&gt;/dev/null || show queue counters ${port}</ACTION>
     </COMMAND>
     <COMMAND name="show class-map" help="Class-maps">
       <PARAM name="name" help="Class-map name (optional)" ptype="STRING" optional="true"/>
@@ -783,7 +783,7 @@
 
     <COMMAND name="show priority-group counters" help="Per-port priority-group counters">
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
-      <ACTION>show priority-group counters ${port}</ACTION>
+      <ACTION>tc -s qdisc show dev ${port} 2&gt;/dev/null || show priority-group counters ${port}</ACTION>
     </COMMAND>
 
     <!-- ===== S13.D — OTA image management ================================ -->
