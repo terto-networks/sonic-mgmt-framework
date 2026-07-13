@@ -82,7 +82,7 @@
 
     <!-- Navigation -->
     <COMMAND name="exit"
-             help="Exit configuration mode (discard candidate if not committed)"
+             help="Exit config mode (keeps uncommitted candidate; use 'abort' to discard)"
              view="privileged-view">
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
