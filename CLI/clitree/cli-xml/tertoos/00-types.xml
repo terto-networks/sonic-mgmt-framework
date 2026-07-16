@@ -110,8 +110,8 @@
        (0, 54) or a sub-interface (<index>.<vlan>, e.g. 0.100). -->
   <PTYPE name="TERTOOS_IFNUM"
          method="regexp"
-         pattern="[0-9]+(\.[0-9]+)?"
-         help="Interface index (0) or sub-interface (0.100)"/>
+         pattern="([0-9]+(\.[0-9]+)?)|(\.[0-9]+)"
+         help="Index (0), sub-interface (0.100), or .vlan for named ports (e.g. .100 -&gt; sfp1.100)"/>
 
   <!-- WireGuard base64 key (32 bytes -> 44 chars, trailing '='). Lax on length. -->
   <PTYPE name="TERTOOS_WGKEY"
