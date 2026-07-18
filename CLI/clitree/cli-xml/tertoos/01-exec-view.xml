@@ -37,6 +37,12 @@
     <COMMAND name="show version" help="Show TertoOS version">
       <ACTION>tertoos-cli show version</ACTION>
     </COMMAND>
+    <COMMAND name="show image" help="Show installed A/B firmware slots">
+      <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
+    </COMMAND>
+    <COMMAND name="show image list" help="Show installed A/B firmware slots">
+      <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
+    </COMMAND>
     <COMMAND name="show clock" help="Show current system time">
       <ACTION>date</ACTION>
     </COMMAND>
