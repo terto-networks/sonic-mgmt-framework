@@ -50,6 +50,12 @@
     <COMMAND name="show version" help="Show TertoOS version">
       <ACTION>tertoos-cli show version</ACTION>
     </COMMAND>
+    <COMMAND name="show image" help="Show installed A/B firmware slots">
+      <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
+    </COMMAND>
+    <COMMAND name="show image list" help="Show installed A/B firmware slots">
+      <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
+    </COMMAND>
     <COMMAND name="show running-config"
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
@@ -69,6 +75,10 @@
     </COMMAND>
     <COMMAND name="show interfaces" help="Show interfaces">
       <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show interface" help="Show a single interface">
+      <PARAM name="name" help="Interface name (e.g. sfp1, wan, lan1)" ptype="STRING"/>
+      <ACTION>tertoos-cli show interfaces ${name}</ACTION>
     </COMMAND>
     <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
       <ACTION>tertoos-cli show ipv4 brief</ACTION>
@@ -611,10 +621,10 @@
       <ACTION>echo "== sFlow (hsflowd) =="; echo "status: $(systemctl is-active hsflowd 2&gt;/dev/null)"; sed -n '1,40p' /etc/hsflowd.conf 2&gt;/dev/null</ACTION>
     </COMMAND>
     <COMMAND name="show lldp neighbors" help="LLDP neighbors">
-      <ACTION>lldpcli show neighbors 2&gt;/dev/null || show lldp neighbors 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
+      <ACTION>sudo lldpcli show neighbors 2&gt;/dev/null || show lldp neighbors 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
     </COMMAND>
     <COMMAND name="show lldp table" help="LLDP table">
-      <ACTION>lldpcli show neighbors summary 2&gt;/dev/null || show lldp table 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
+      <ACTION>sudo lldpcli show neighbors summary 2&gt;/dev/null || show lldp table 2&gt;/dev/null || echo "LLDP: lldpd not running on this platform (enable LLDP first)"</ACTION>
     </COMMAND>
     <COMMAND name="show ntp associations" help="NTP associations">
       <ACTION>chronyc sources -v 2&gt;/dev/null || ntpq -p</ACTION>
@@ -792,24 +802,24 @@
       <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
-            tertoos-cli image install ${url} no-verify&#xA;
+            sudo /usr/bin/tertoos-cli image install ${url} no-verify&#xA;
         else&#xA;
-            tertoos-cli image install ${url}&#xA;
+            sudo /usr/bin/tertoos-cli image install ${url}&#xA;
         fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="image activate" help="Set next-boot image">
       <PARAM name="slot" help="next | image-name" ptype="STRING"/>
-      <ACTION>tertoos-cli image activate ${slot}</ACTION>
+      <ACTION>sudo /usr/bin/tertoos-cli image activate ${slot}</ACTION>
     </COMMAND>
     <COMMAND name="image commit" help="Commit current image as default">
-      <ACTION>tertoos-cli image commit</ACTION>
+      <ACTION>sudo /usr/bin/tertoos-cli image commit</ACTION>
     </COMMAND>
     <COMMAND name="image rollback" help="Roll back to previous image">
-      <ACTION>tertoos-cli image rollback</ACTION>
+      <ACTION>sudo /usr/bin/tertoos-cli image rollback</ACTION>
     </COMMAND>
     <COMMAND name="image list" help="List installed images (sonic-installer list)">
-      <ACTION>tertoos-cli image list</ACTION>
+      <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
     </COMMAND>
     <COMMAND name="image verify" help="Verify a bundle's detached signature">
       <PARAM name="path" help="Local bundle path" ptype="STRING"/>
