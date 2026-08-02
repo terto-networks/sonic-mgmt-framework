@@ -77,6 +77,19 @@
       <ACTION>tertoos-cli candidate delete l2vpn/vfi/${name}</ACTION>
     </COMMAND>
 
+    <!-- ===== Static-PW (Horizon-orchestrated, sem sinalizacao) =========== -->
+    <COMMAND name="l2vpn static-pw"
+             help="Configure a static pseudowire (Horizon-orchestrated)"
+             view="config-l2vpn-static-pw-view"
+             viewid="spwname=${name}">
+      <PARAM name="name" help="Static PW name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate context l2vpn-static-pw ${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="no l2vpn static-pw" help="Remove a static pseudowire">
+      <PARAM name="name" help="Static PW name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete l2vpn/static-pw/${name}</ACTION>
+    </COMMAND>
+
   </VIEW>
 
   <!-- =================== config-l2vpn-bd-view =============================== -->
@@ -290,6 +303,62 @@
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/enabled true</ACTION>
     </COMMAND>
 
+  </VIEW>
+
+  <!-- =================== config-l2vpn-static-pw-view ====================== -->
+  <!-- Pseudowire ESTATICO orquestrado pelo Horizon (TOS-ARCH-MICROPOP-L2-001).
+       Uso tipico: os labels/transporte sao alocados/empurrados pelo Horizon; estes
+       comandos sao o caminho MANUAL (bring-up/debug). mac_learning fica false por
+       schema (regra de ouro VPWS estrito) — nao ha comando para liga-lo. -->
+  <VIEW name="config-l2vpn-static-pw-view"
+        prompt="${SYSTEM_NAME}(config-l2vpn-static-pw-${spwname})# ">
+    <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
+
+    <COMMAND name="ac interface" help="Attachment-circuit port (OLT/BRAS-facing)">
+      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/ac_interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="ac svlan" help="QinQ S-VLAN (outer) of the AC">
+      <PARAM name="vid" help="S-VLAN id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/ac_svlan ${vid}</ACTION>
+    </COMMAND>
+    <COMMAND name="ac cvlan" help="QinQ C-VLAN (inner) of the AC">
+      <PARAM name="vid" help="C-VLAN id" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/ac_cvlan ${vid}</ACTION>
+    </COMMAND>
+    <COMMAND name="peer loopback" help="Peer node loopback (SR transport destination)">
+      <PARAM name="ip" help="Peer loopback IPv4" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/peer_loopback ${ip}</ACTION>
+    </COMMAND>
+    <COMMAND name="in-label" help="Local disposition PW-label (this node pops)">
+      <PARAM name="label" help="MPLS label" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/local_in_label ${label}</ACTION>
+    </COMMAND>
+    <COMMAND name="out-label" help="Imposition PW-label (this node pushes)">
+      <PARAM name="label" help="MPLS label" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/remote_out_label ${label}</ACTION>
+    </COMMAND>
+    <COMMAND name="transport-sid" help="SR transport label stack to peer (comma-separated; empty = IGP)">
+      <PARAM name="sids" help="e.g. 16002 or 16002,16005" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/transport_sid ${sids}</ACTION>
+    </COMMAND>
+    <COMMAND name="mtu" help="Pseudowire MTU">
+      <PARAM name="bytes" help="MTU (64..9216)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/mtu ${bytes}</ACTION>
+    </COMMAND>
+    <COMMAND name="control-word" help="Enable RFC 4385 control word">
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/control_word true</ACTION>
+    </COMMAND>
+    <COMMAND name="no control-word" help="Disable control word">
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/control_word false</ACTION>
+    </COMMAND>
+    <COMMAND name="shutdown" help="Administratively down">
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/admin_status down</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Administratively up">
+      <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/admin_status up</ACTION>
+    </COMMAND>
   </VIEW>
 
 </CLISH_MODULE>
