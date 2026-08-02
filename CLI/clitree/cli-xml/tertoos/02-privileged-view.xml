@@ -800,8 +800,8 @@
     </COMMAND>
 
     <!-- ===== S13.D — OTA image management ================================ -->
-    <COMMAND name="image install" help="Install signed image bundle from URL">
-      <PARAM name="url" help="https://... bundle URL" ptype="STRING"/>
+    <COMMAND name="image install" help="Install firmware bundle to the standby slot (usb: | local path | URL)">
+      <PARAM name="url" help="usb:[name] | /path/bundle.tos | https://... URL" ptype="STRING"/>
       <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
@@ -821,7 +821,7 @@
     <COMMAND name="image rollback" help="Roll back to previous image">
       <ACTION>sudo /usr/bin/tertoos-cli image rollback</ACTION>
     </COMMAND>
-    <COMMAND name="image list" help="List installed images (sonic-installer list)">
+    <COMMAND name="image list" help="Show A/B firmware slots (active/standby/bootcount)">
       <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
     </COMMAND>
     <COMMAND name="image verify" help="Verify a bundle's detached signature">
