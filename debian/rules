@@ -6,6 +6,11 @@
 override_dh_shlibdeps:
 	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info -l$(shell pwd)/build/cli/target/.libs/:$(shell pwd)/build/cli/.libs/
 
+# Force the libyang 1.0.73 dev headers back in before compiling cvl/translib:
+# the shared build slave may carry libyang-dev 3.12.2 (needed by the python yang
+# tooling), whose API is incompatible with cvl's libyang-1.x usage. Arch must be
+# dynamic ($(DEB_HOST_ARCH), exported by dpkg-buildpackage) so this works on
+# arm64/native and cross builds, not just amd64.
 override_dh_auto_build:
-	sudo dpkg -i --force-downgrade /sonic/target/debs/bookworm/libyang_1.0.73_amd64.deb /sonic/target/debs/bookworm/libyang-dev_1.0.73_amd64.deb /sonic/target/debs/bookworm/libyang-cpp_1.0.73_amd64.deb
+	sudo dpkg -i --force-downgrade /sonic/target/debs/bookworm/libyang_1.0.73_$(DEB_HOST_ARCH).deb /sonic/target/debs/bookworm/libyang-dev_1.0.73_$(DEB_HOST_ARCH).deb /sonic/target/debs/bookworm/libyang-cpp_1.0.73_$(DEB_HOST_ARCH).deb
 	dh_auto_build
