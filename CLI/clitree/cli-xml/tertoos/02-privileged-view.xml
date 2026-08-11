@@ -546,9 +546,13 @@
       <ACTION>ssh ${target}</ACTION>
     </COMMAND>
 
-    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only). -->
-    <COMMAND name="reload" help="Reload the system" access="sysadmin">
-      <ACTION>tertoos-cli reload</ACTION>
+    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only).
+         O comando digitado no operator-CLI JA' e' a confirmacao -> passamos `force`.
+         (prompt interativo nao funciona num ACTION do klish: o stdin e' o pty do
+          ssh mas o read retorna EOF, cancelando sempre.) Consistente com
+          `reset configuration` acima, que tambem roda direto sem prompt. -->
+    <COMMAND name="reload" help="Reload the system (immediate reboot)" access="sysadmin">
+      <ACTION>tertoos-cli reload force</ACTION>
     </COMMAND>
 
     <!-- RBAC: factory reset e' destrutivo → access="sysadmin" (so' admin ve/roda).
