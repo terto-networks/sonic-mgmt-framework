@@ -546,13 +546,17 @@
       <ACTION>ssh ${target}</ACTION>
     </COMMAND>
 
-    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only). O tertoos-cli
-         confirma com o operador lendo do /dev/tty (o terminal controlador), NAO do
-         stdin — no ACTION do klish o stdin vem drenado (EOF) e cancelaria sempre,
-         entao lemos /dev/tty como sudo/ssh/passwd fazem. `reload force` pula a
-         confirmacao (uso em script). -->
-    <COMMAND name="reload" help="Reload the system (asks for confirmation)" access="sysadmin">
-      <ACTION>tertoos-cli reload</ACTION>
+    <!-- RBAC: reboot e' destrutivo → access="sysadmin" (admin-only).
+         Confirmacao em DOIS TOKENS (Cisco-style): `reload` sozinho AVISA e NAO
+         reinicia; `reload confirm` reinicia. Um ACTION do klish NAO le entrada
+         interativa (stdin E /dev/tty retornam EOF na hora — provado), entao um
+         prompt yes/no cancelaria sempre. O segundo token e' a confirmacao explicita.
+         Gate real = access="sysadmin" + rbac.Require(RoleAdmin) no tertoos-cli. -->
+    <COMMAND name="reload" help="Reload the system (type 'reload confirm' to proceed)" access="sysadmin">
+      <ACTION>echo "This will reboot the system now. To confirm, run: reload confirm"</ACTION>
+    </COMMAND>
+    <COMMAND name="reload confirm" help="Confirm and reboot the system now" access="sysadmin">
+      <ACTION>tertoos-cli reload force</ACTION>
     </COMMAND>
 
     <!-- RBAC: factory reset e' destrutivo → access="sysadmin" (so' admin ve/roda).
