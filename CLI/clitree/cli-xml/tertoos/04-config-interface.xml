@@ -130,6 +130,34 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/load_interval ${seconds}</ACTION>
     </COMMAND>
 
+    <!-- Physical layer (Centec datapath: cfgd -> saibridge SAI_PORT_ATTR_*) -->
+    <COMMAND name="speed" help="Set port speed in Mbps (1000|10000|25000|40000|100000)">
+      <PARAM name="mbps" help="Port speed in Mbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/speed ${mbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="no speed" help="Reset port speed to platform default">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/speed</ACTION>
+    </COMMAND>
+
+    <COMMAND name="media" help="Set transceiver media type">
+      <PARAM name="type" help="Media type" mode="switch" ptype="SUBCOMMAND">
+        <PARAM name="copper"    help="Copper (SGMII / 1000BASE-T / DAC)"    mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="fiber"     help="Fiber optics (1000BASE-X / SR / LR)"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="backplane" help="Backplane"                            mode="subcommand" ptype="SUBCOMMAND"/>
+      </PARAM>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/media_type ${type}</ACTION>
+    </COMMAND>
+    <COMMAND name="no media" help="Reset media type to default">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/media_type</ACTION>
+    </COMMAND>
+
+    <COMMAND name="negotiation auto" help="Enable auto-negotiation on this port">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/autoneg on</ACTION>
+    </COMMAND>
+    <COMMAND name="no negotiation auto" help="Disable auto-negotiation (force fixed speed)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/autoneg off</ACTION>
+    </COMMAND>
+
     <!-- IPv4 / IPv6 addressing -->
     <COMMAND name="ipv4 address"
              help="Assign primary IPv4 address (A.B.C.D/M)">

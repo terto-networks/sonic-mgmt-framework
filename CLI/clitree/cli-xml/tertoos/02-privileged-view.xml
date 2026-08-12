@@ -80,6 +80,9 @@
       <PARAM name="name" help="Interface name (e.g. sfp1, wan, lan1)" ptype="STRING"/>
       <ACTION>tertoos-cli show interfaces ${name}</ACTION>
     </COMMAND>
+    <COMMAND name="show interface mapping" help="Panel port (1..N) &lt;-&gt; TertoOS interface &lt;-&gt; alias">
+      <ACTION>tertoos-cli show interface mapping</ACTION>
+    </COMMAND>
     <COMMAND name="show ipv4 interface brief" help="IPv4 interface brief">
       <ACTION>tertoos-cli show ipv4 brief</ACTION>
     </COMMAND>
@@ -835,6 +838,22 @@
     <COMMAND name="image verify" help="Verify a bundle's detached signature">
       <PARAM name="path" help="Local bundle path" ptype="STRING"/>
       <ACTION>tertoos-cli image verify ${path}</ACTION>
+    </COMMAND>
+
+    <!-- Feature modules (patches à-la-carte: WebUI, ...) — camada Patch&Feature.
+         So' existiam no tertoos-cli; expostos no klish aqui. Persistem em /data
+         (sobrevivem A/B). `no-verify` fixo por ora (assinatura ainda nao impl.). -->
+    <COMMAND name="feature list" help="List optional feature modules and their state" access="sysadmin">
+      <ACTION>sudo /usr/bin/tertoos-cli feature list</ACTION>
+    </COMMAND>
+    <COMMAND name="feature enable" help="Enable a feature module from a URL or file bundle" access="sysadmin">
+      <PARAM name="name" help="Feature name (e.g. webui)" ptype="STRING"/>
+      <PARAM name="src" help="URL or file of the module bundle (.tar.gz)" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli feature enable ${name} ${src} no-verify</ACTION>
+    </COMMAND>
+    <COMMAND name="feature disable" help="Disable and remove a feature module" access="sysadmin">
+      <PARAM name="name" help="Feature name" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli feature disable ${name}</ACTION>
     </COMMAND>
 
     <COMMAND name="show horizon status" help="Horizon agent status">
