@@ -469,6 +469,9 @@
     <COMMAND name="show platform summary" help="Platform summary (alias)">
       <ACTION>/usr/sbin/tos-platform summary 2&gt;/dev/null || show platform summary</ACTION>
     </COMMAND>
+    <COMMAND name="show platform fib" help="Forwarding entries programmed in hardware (ASIC): routes/MPLS/vlan/fdb">
+      <ACTION>tertoos-cli show platform fib</ACTION>
+    </COMMAND>
     <COMMAND name="show platform inventory" help="EEPROM / serial / model">
       <ACTION>/usr/sbin/tos-platform inventory 2&gt;/dev/null || show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
     </COMMAND>
