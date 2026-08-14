@@ -472,6 +472,12 @@
     <COMMAND name="show platform fib" help="Forwarding entries programmed in hardware (ASIC): routes/MPLS/vlan/fdb">
       <ACTION>tertoos-cli show platform fib</ACTION>
     </COMMAND>
+    <COMMAND name="show platform limits" help="Hardware forwarding limits (ASIC FIB/RAM ceilings) vs current usage">
+      <ACTION>tertoos-cli show platform limits</ACTION>
+    </COMMAND>
+    <COMMAND name="show limits" help="Hardware forwarding limits (alias for show platform limits)">
+      <ACTION>tertoos-cli show platform limits</ACTION>
+    </COMMAND>
     <COMMAND name="show platform inventory" help="EEPROM / serial / model">
       <ACTION>/usr/sbin/tos-platform inventory 2&gt;/dev/null || show platform syseeprom 2&gt;/dev/null || decode-syseeprom</ACTION>
     </COMMAND>
@@ -615,6 +621,32 @@
     </COMMAND>
     <COMMAND name="clear bfd statistics" help="Reset BFD counters">
       <ACTION>vtysh -c "clear bfd statistics"</ACTION>
+    </COMMAND>
+
+    <!-- Restart de daemon de roteamento (recuperacao). `clear` faz soft-reset da
+         sessao; `restart` DERRUBA e sobe o processo (usar quando o daemon travou).
+         Roteia pelo tertoos-cli (NOPASSWD no sudoers) que re-exec via sudo e chama
+         frrinit.sh restart <daemon> (per-daemon) ou systemctl restart frr (all). -->
+    <COMMAND name="restart bgp" help="Restart the BGP daemon (bgpd) — sessions drop briefly">
+      <ACTION>tertoos-cli restart bgp</ACTION>
+    </COMMAND>
+    <COMMAND name="restart ospf" help="Restart the OSPFv2 daemon (ospfd)">
+      <ACTION>tertoos-cli restart ospf</ACTION>
+    </COMMAND>
+    <COMMAND name="restart ospf6" help="Restart the OSPFv3 daemon (ospf6d)">
+      <ACTION>tertoos-cli restart ospf6</ACTION>
+    </COMMAND>
+    <COMMAND name="restart isis" help="Restart the IS-IS daemon (isisd)">
+      <ACTION>tertoos-cli restart isis</ACTION>
+    </COMMAND>
+    <COMMAND name="restart ldp" help="Restart the MPLS LDP daemon (ldpd)">
+      <ACTION>tertoos-cli restart ldp</ACTION>
+    </COMMAND>
+    <COMMAND name="restart zebra" help="Restart the zebra RIB manager (impacts all routing)">
+      <ACTION>tertoos-cli restart zebra</ACTION>
+    </COMMAND>
+    <COMMAND name="restart frr" help="Restart ALL FRR daemons (full routing restart)">
+      <ACTION>tertoos-cli restart frr</ACTION>
     </COMMAND>
     <COMMAND name="show bfd peers" help="BFD peers state">
       <ACTION>vtysh -c "show bfd peers"</ACTION>
