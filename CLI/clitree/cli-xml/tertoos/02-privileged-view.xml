@@ -580,15 +580,27 @@
     </COMMAND>
 
     <!-- RBAC: factory reset e' destrutivo → access="sysadmin" (so' admin ve/roda).
-         Defesa em profundidade no tertoos-cli (rbac.Require(RoleAdmin)). -->
+         Defesa em profundidade no tertoos-cli (rbac.Require(RoleAdmin)).
+         DOIS TOKENS (como `reload confirm`): `reset configuration [keep-management]`
+         AVISA mas NAO executa — o prompt interativo "Type 'yes'" do ACTION do klish
+         le EOF (stdin/tty fechados) e auto-cancela; entao `... confirm` EXECUTA com
+         `force` (que pula a confirmacao no tertoos-cli). -->
     <COMMAND name="reset" help="Reset saved configuration to factory default" access="sysadmin"/>
     <COMMAND name="reset configuration" access="sysadmin"
              help="Erase the entire saved configuration (factory default)">
-      <ACTION>tertoos-cli reset configuration</ACTION>
+      <ACTION>echo "WARNING: this wipes ALL configuration and restores factory default (remote access may drop)."; echo "Type 'reset configuration confirm' to proceed (or add keep-management to keep Mgmt0 + Horizon enrollment)."</ACTION>
+    </COMMAND>
+    <COMMAND name="reset configuration confirm" access="sysadmin"
+             help="Confirm: erase the entire saved configuration (factory default)">
+      <ACTION>tertoos-cli reset configuration force</ACTION>
     </COMMAND>
     <COMMAND name="reset configuration keep-management" access="sysadmin"
              help="Erase everything except management (Mgmt0 + Horizon enrollment)">
-      <ACTION>tertoos-cli reset configuration keep-management</ACTION>
+      <ACTION>echo "WARNING: this wipes all configuration except management (Mgmt0 + Horizon enrollment)."; echo "Type 'reset configuration keep-management confirm' to proceed."</ACTION>
+    </COMMAND>
+    <COMMAND name="reset configuration keep-management confirm" access="sysadmin"
+             help="Confirm: erase everything except management">
+      <ACTION>tertoos-cli reset configuration keep-management force</ACTION>
     </COMMAND>
 
     <COMMAND name="clear" help="Reset operational counters/state"/>
