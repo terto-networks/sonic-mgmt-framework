@@ -128,6 +128,14 @@
              help="Show MAC forwarding database">
       <ACTION>tertoos-cli show fdb</ACTION>
     </COMMAND>
+    <COMMAND name="show mac-address-table"
+             help="Show MAC forwarding database (alias de 'show l2 mac-address-table')">
+      <ACTION>tertoos-cli show fdb</ACTION>
+    </COMMAND>
+    <COMMAND name="show fdb"
+             help="Show MAC forwarding database (alias de 'show l2 mac-address-table')">
+      <ACTION>tertoos-cli show fdb</ACTION>
+    </COMMAND>
     <COMMAND name="show l2 mac-address-table vlan"
              help="MAC entries for a specific VLAN">
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
