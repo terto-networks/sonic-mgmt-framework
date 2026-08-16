@@ -667,10 +667,10 @@
       <ACTION>echo "== sFlow (hsflowd) =="; echo "status: $(systemctl is-active hsflowd 2&gt;/dev/null)"; sed -n '1,40p' /etc/hsflowd.conf 2&gt;/dev/null</ACTION>
     </COMMAND>
     <COMMAND name="show lldp neighbors" help="LLDP neighbors">
-      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; sudo lldpcli show neighbors || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
+      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; lldpcli show neighbors || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
     </COMMAND>
     <COMMAND name="show lldp table" help="LLDP table">
-      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; sudo lldpcli show neighbors summary || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
+      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; lldpcli show neighbors summary || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
     </COMMAND>
     <COMMAND name="show lldp status" help="LLDP daemon status">
       <ACTION>echo "== LLDP (lldpd) =="; echo "enabled: $(systemctl is-enabled lldpd 2&gt;/dev/null)"; echo "active:  $(systemctl is-active lldpd 2&gt;/dev/null)"; systemctl is-active --quiet lldpd || journalctl -u lldpd -n 15 --no-pager 2&gt;/dev/null</ACTION>
