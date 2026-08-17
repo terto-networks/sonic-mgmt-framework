@@ -625,6 +625,19 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-queue/${q}/profile</ACTION>
     </COMMAND>
 
+    <!-- Priority Flow Control (PFC): habilita pause por-prioridade. Lista de
+         prioridades 0..7 separadas por vírgula (ex.: "3,4"). Vira o bitmap
+         pfc_enable em PORT_QOS_MAP|<if>, consumido pelo bufreconcile do saibridge
+         (SAI_PORT_ATTR_PRIORITY_FLOW_CONTROL). Requer buffer lossless (xon/xoff)
+         no PG da prioridade. -->
+    <COMMAND name="qos priority-flow-control" help="Enable PFC on priorities (comma list, e.g. 3,4)">
+      <PARAM name="prios" help="Priority list 0..7 (e.g. 3,4)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/qos/pfc-enable ${prios}</ACTION>
+    </COMMAND>
+    <COMMAND name="no qos priority-flow-control" help="Disable PFC on the port">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/pfc-enable</ACTION>
+    </COMMAND>
+
     <!-- ====== S15.B — Per-port Spanning Tree =================================
          Mapeia para STP_PORT|<if> e STP_VLAN_PORT|<vlan>|<if>.
          portfast / bpdu-guard / root-guard / uplink-fast são port-level

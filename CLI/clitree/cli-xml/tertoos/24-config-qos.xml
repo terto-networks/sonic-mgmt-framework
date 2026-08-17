@@ -316,9 +316,13 @@
       <PARAM name="u" help="bytes | packets" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/meter_type ${u}</ACTION>
     </COMMAND>
-    <COMMAND name="pir" help="Peak information rate">
-      <PARAM name="bps" help="Rate in bps" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/pir ${bps}</ACTION>
+    <COMMAND name="cir" help="Committed rate / min-bandwidth garantida (kbps)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/cir ${kbps}</ACTION>
+    </COMMAND>
+    <COMMAND name="pir" help="Peak rate / teto (kbps)">
+      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/pir ${kbps}</ACTION>
     </COMMAND>
     <COMMAND name="pbs" help="Peak burst size">
       <PARAM name="bytes" help="Burst in bytes" ptype="UINT"/>
