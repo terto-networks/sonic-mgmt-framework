@@ -240,6 +240,9 @@
     <COMMAND name="show ipv4 route" help="IPv4 routing table">
       <ACTION>tertoos-cli show ipv4 route</ACTION>
     </COMMAND>
+    <COMMAND name="show ipv6 route" help="IPv6 routing table (kernel FIB: connected/OSPFv3/static/BGP instalados)">
+      <ACTION>tertoos-cli show ipv6 route</ACTION>
+    </COMMAND>
     <COMMAND name="show bgp summary" help="BGP summary">
       <ACTION>vtysh -c "show bgp summary"</ACTION>
     </COMMAND>
