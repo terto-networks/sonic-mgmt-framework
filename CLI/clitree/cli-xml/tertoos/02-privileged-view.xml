@@ -701,6 +701,14 @@
     <COMMAND name="show ntp status" help="NTP status">
       <ACTION>chronyc tracking 2&gt;/dev/null || ntpq -nc rv</ACTION>
     </COMMAND>
+    <!-- LED localizador (idn): beacon p/ achar a caixa no rack. O saibridge
+         (root) escreve /sys/class/leds/idn via o endpoint /led-locator. -->
+    <COMMAND name="led locator on" help="Turn on the locator/beacon LED (identify the chassis in a rack)">
+      <ACTION>curl -s "http://127.0.0.1:7651/led-locator?on=1" &gt;/dev/null &amp;&amp; echo "locator LED: on" || echo "locator: saibridge unreachable"</ACTION>
+    </COMMAND>
+    <COMMAND name="led locator off" help="Turn off the locator/beacon LED">
+      <ACTION>curl -s "http://127.0.0.1:7651/led-locator?on=0" &gt;/dev/null &amp;&amp; echo "locator LED: off" || echo "locator: saibridge unreachable"</ACTION>
+    </COMMAND>
     <COMMAND name="show logging" help="Recent log messages">
       <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
     </COMMAND>
