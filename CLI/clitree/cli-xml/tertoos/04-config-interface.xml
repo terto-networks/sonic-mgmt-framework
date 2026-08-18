@@ -422,6 +422,10 @@
       <PARAM name="n" help="1-in-N" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
+    <COMMAND name="sflow sample-direction" help="Per-port sample direction override">
+      <PARAM name="dir" help="rx | tx | both" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_direction ${dir}</ACTION>
+    </COMMAND>
 
     <!-- ===== S6.1 — OSPFv3 per-interface (OSPFV3_INTERFACE) =============== -->
     <COMMAND name="ipv6 ospf area" help="Attach interface to an OSPFv3 area">
