@@ -31,6 +31,10 @@
       <PARAM name="dir" help="rx | tx | both" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set sflow/sample_direction ${dir}</ACTION>
     </COMMAND>
+    <COMMAND name="sflow sample-rate" help="Global sample rate (1 in N packets, ASIC)">
+      <PARAM name="n" help="Sample rate (1..N)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set sflow/sample_rate ${n}</ACTION>
+    </COMMAND>
     <COMMAND name="sflow collector" help="Add a collector">
       <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
       <PARAM name="ip" help="Collector IP" ptype="STRING"/>
