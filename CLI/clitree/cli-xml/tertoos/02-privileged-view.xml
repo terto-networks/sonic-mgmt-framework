@@ -76,9 +76,17 @@
     <COMMAND name="show interfaces" help="Show interfaces">
       <ACTION>tertoos-cli show interfaces</ACTION>
     </COMMAND>
-    <COMMAND name="show interface" help="Show a single interface">
-      <PARAM name="name" help="Interface name (e.g. sfp1, wan, lan1)" ptype="STRING"/>
-      <ACTION>tertoos-cli show interfaces ${name}</ACTION>
+    <COMMAND name="show interface" help="Show a single interface in detail (add 'summary' for one line)">
+      <PARAM name="name" help="Interface name (e.g. Ethernet1, Bundle-Ether2)" ptype="STRING"/>
+      <PARAM name="summary" help="one-line summary instead of the full detail"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
+      <ACTION>
+        if [ -n "${summary}" ]; then&#xA;
+            tertoos-cli show interfaces ${name} summary&#xA;
+        else&#xA;
+            tertoos-cli show interfaces ${name}&#xA;
+        fi&#xA;
+      </ACTION>
     </COMMAND>
     <COMMAND name="show interface mapping" help="Panel port (1..N) &lt;-&gt; TertoOS interface &lt;-&gt; alias">
       <ACTION>tertoos-cli show interface mapping</ACTION>
