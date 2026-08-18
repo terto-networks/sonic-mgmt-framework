@@ -21,6 +21,12 @@
     <COMMAND name="no grpc server enable" help="Disable gNMI/gRPC server">
       <ACTION>tertoos-cli candidate set telemetry/gnmi/enabled false</ACTION>
     </COMMAND>
+    <COMMAND name="grpc server write-enable" help="Enable gNMI Set (config write via candidate/commit; default read-only)">
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/write_enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no grpc server write-enable" help="Disable gNMI Set (server stays read-only)">
+      <ACTION>tertoos-cli candidate set telemetry/gnmi/write_enable false</ACTION>
+    </COMMAND>
     <COMMAND name="grpc server port" help="gNMI/gRPC TCP port">
       <PARAM name="port" help="TCP port" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set telemetry/gnmi/port ${port}</ACTION>
