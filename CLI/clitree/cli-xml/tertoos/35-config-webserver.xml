@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Web server / API local (UI nativa, modelo UniFi UDM).
+    web-server enable      → WEBSERVER|global admin_state=up
+    no web-server enable   → WEBSERVER|global admin_state=down
+
+  Toggle GLOBAL do servidor HTTP local de gerência. Consumido pelo agent
+  (terto-horizon-agent), que sobe/desce o listener do pacote nativeapi conforme
+  WEBSERVER|global admin_state (default: habilitado se ausente). Independente do
+  Horizon (modelo freeware standalone).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="web-server enable" help="Enable the local web/API server (native UI)">
+      <ACTION>tertoos-cli candidate set webserver/admin_state up</ACTION>
+    </COMMAND>
+    <COMMAND name="no web-server enable" help="Disable the local web/API server">
+      <ACTION>tertoos-cli candidate set webserver/admin_state down</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>
