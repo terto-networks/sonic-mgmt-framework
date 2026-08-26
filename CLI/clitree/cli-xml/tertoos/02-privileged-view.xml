@@ -534,8 +534,15 @@
     <COMMAND name="show uptime" help="System uptime">
       <ACTION>uptime</ACTION>
     </COMMAND>
-    <COMMAND name="show clock" help="System clock">
-      <ACTION>date '+%Y-%m-%d %H:%M:%S %Z'</ACTION>
+    <COMMAND name="show clock" help="System clock (time, timezone, NTP sync)">
+      <ACTION>/usr/bin/tertoos-cli clock show</ACTION>
+    </COMMAND>
+    <COMMAND name="clock set" help="Set the system clock manually (hh:mm:ss day month year)" access="sysadmin">
+      <PARAM name="time" help="Time HH:MM:SS (24h)" ptype="STRING"/>
+      <PARAM name="day" help="Day of month (1-31)" ptype="STRING"/>
+      <PARAM name="month" help="Month (name or 1-12)" ptype="STRING"/>
+      <PARAM name="year" help="Year (e.g. 2026)" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli clock set ${time} ${day} ${month} ${year}</ACTION>
     </COMMAND>
     <COMMAND name="show file systems" help="Filesystem usage">
       <ACTION>df -h 2&gt;/dev/null | grep -vE '^(tmpfs|udev|none)'</ACTION>

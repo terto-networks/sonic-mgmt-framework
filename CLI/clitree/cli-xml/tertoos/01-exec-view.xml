@@ -43,8 +43,8 @@
     <COMMAND name="show image list" help="Show installed A/B firmware slots">
       <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
     </COMMAND>
-    <COMMAND name="show clock" help="Show current system time">
-      <ACTION>date</ACTION>
+    <COMMAND name="show clock" help="Show current system time (time, timezone, NTP sync)">
+      <ACTION>/usr/bin/tertoos-cli clock show</ACTION>
     </COMMAND>
 
     <COMMAND name="ping" help="Ping IPv4/IPv6 host">

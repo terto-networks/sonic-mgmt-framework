@@ -14,6 +14,14 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
   <VIEW name="config-view">
+    <COMMAND name="clock timezone" help="Set the system timezone (IANA zone, e.g. America/Sao_Paulo)">
+      <PARAM name="zone" help="IANA timezone name (e.g. America/Sao_Paulo, Etc/UTC)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set clock/timezone ${zone}</ACTION>
+    </COMMAND>
+    <COMMAND name="no clock timezone" help="Reset the system timezone to UTC">
+      <ACTION>tertoos-cli candidate delete clock/timezone</ACTION>
+    </COMMAND>
+
     <COMMAND name="ntp authenticate" help="Enable NTP authentication">
       <ACTION>tertoos-cli candidate set ntp/authentication enable</ACTION>
     </COMMAND>
