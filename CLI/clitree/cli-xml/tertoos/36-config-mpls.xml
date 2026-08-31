@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — MPLS global (master switch do datapath MPLS de ingresso).
+    mpls enable      -> MPLS|global admin_state=up
+    no mpls enable   -> MPLS|global admin_state=down
+
+  Modelo Huawei/Cisco 2-niveis: master global + `mpls enable` por-interface (config-
+  interface). O saibridge (ReconcileMPLSEnable) so liga o AdminMplsState da RIF (o
+  lookup de label de ingresso) se AMBOS estiverem ON. Default OFF (opt-in) — porta de
+  acesso nao faz MPLS por acidente. Distinto do `mpls ldp` (control-plane LDP).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="mpls enable" help="Enable MPLS forwarding globally (master switch)">
+      <ACTION>tertoos-cli candidate set mpls/admin_state up</ACTION>
+    </COMMAND>
+    <COMMAND name="no mpls enable" help="Disable MPLS forwarding globally">
+      <ACTION>tertoos-cli candidate set mpls/admin_state down</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>

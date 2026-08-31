@@ -151,6 +151,13 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/media_type</ACTION>
     </COMMAND>
 
+    <COMMAND name="mpls enable" help="Enable MPLS forwarding on this interface (requires global 'mpls enable')">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/mpls_enable true</ACTION>
+    </COMMAND>
+    <COMMAND name="no mpls enable" help="Disable MPLS forwarding on this interface">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/mpls_enable</ACTION>
+    </COMMAND>
+
     <COMMAND name="negotiation auto" help="Enable auto-negotiation on this port">
       <ACTION>tertoos-cli candidate set interface/${ifname}/autoneg on</ACTION>
     </COMMAND>
