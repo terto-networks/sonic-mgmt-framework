@@ -19,7 +19,7 @@
       <ACTION>tertoos-cli candidate set mpls/admin_state up</ACTION>
     </COMMAND>
     <COMMAND name="no mpls enable" help="Disable MPLS forwarding globally">
-      <ACTION>tertoos-cli candidate set mpls/admin_state down</ACTION>
+      <ACTION>tertoos-cli candidate delete mpls/admin_state</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>
