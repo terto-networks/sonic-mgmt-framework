@@ -76,17 +76,24 @@
     <COMMAND name="show interfaces" help="Show interfaces">
       <ACTION>tertoos-cli show interfaces</ACTION>
     </COMMAND>
-    <COMMAND name="show interface" help="Show a single interface in detail (add 'summary' for one line)">
-      <PARAM name="name" help="Interface name (e.g. Ethernet1, Bundle-Ether2)" ptype="STRING"/>
+    <COMMAND name="show interface" help="Show a single interface in detail (add 'summary' for one line, 'rate' for live bps/pps)">
+      <PARAM name="name" help="Interface name (e.g. Ethernet1, Bundle-Ether2)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="summary" help="one-line summary instead of the full detail"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
+      <PARAM name="rate" help="live RX/TX rate (bps + pps) from the ASIC HW counters"
              ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
       <ACTION>
         if [ -n "${summary}" ]; then&#xA;
             tertoos-cli show interfaces ${name} summary&#xA;
+        elif [ -n "${rate}" ]; then&#xA;
+            tertoos-cli show interfaces ${name} rate&#xA;
         else&#xA;
             tertoos-cli show interfaces ${name}&#xA;
         fi&#xA;
       </ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces rate" help="Live RX/TX rate (bps + pps) of all ports, from the ASIC HW counters">
+      <ACTION>tertoos-cli show interfaces rate</ACTION>
     </COMMAND>
     <COMMAND name="show interface mapping" help="Panel port (1..N) &lt;-&gt; TertoOS interface &lt;-&gt; alias">
       <ACTION>tertoos-cli show interface mapping</ACTION>
@@ -151,7 +158,7 @@
     </COMMAND>
     <COMMAND name="show l2 mac-address-table interface"
              help="MAC entries learned on a specific port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli show fdb --interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="show l2 mac-address-table address"
@@ -183,7 +190,7 @@
     </COMMAND>
     <COMMAND name="clear l2 mac-address-table dynamic interface"
              help="Flush dynamic MAC entries on a port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli clear fdb --type dynamic --interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="clear l2 mac-address-table dynamic address"
@@ -206,7 +213,7 @@
       <ACTION>tertoos-cli show spanning-tree --vlan ${vlan}</ACTION>
     </COMMAND>
     <COMMAND name="show spanning-tree interface" help="STP state of a port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli show spanning-tree --interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="show spanning-tree mst" help="MST instances">
@@ -229,7 +236,7 @@
     </COMMAND>
     <COMMAND name="clear spanning-tree counters interface"
              help="Reset STP counters on a port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli clear spanning-tree counters --interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="clear spanning-tree detected-protocols"
@@ -242,7 +249,7 @@
       <ACTION>tertoos-cli show storm-control</ACTION>
     </COMMAND>
     <COMMAND name="show storm-control interface" help="Storm-control on a port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli show storm-control --interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="show ipv4 route" help="IPv4 routing table">
@@ -547,8 +554,16 @@
     <COMMAND name="show file systems" help="Filesystem usage">
       <ACTION>df -h 2&gt;/dev/null | grep -vE '^(tmpfs|udev|none)'</ACTION>
     </COMMAND>
+    <!-- Nativo (tertoos-cli): o action antigo chamava o `show` do
+         sonic-utilities, que NAO existe no Lite -> saia VAZIO (2>/dev/null
+         escondia o erro). O alias singular existe porque o operador digita
+         `show interface transceiver` e caia no ${name} do `show interface`
+         (virava "interface chamada transceiver"). -->
     <COMMAND name="show interfaces transceiver" help="SFP/QSFP transceiver presence + EEPROM">
-      <ACTION>show interfaces transceiver presence 2&gt;/dev/null; echo; show interfaces transceiver eeprom 2&gt;/dev/null | head -50</ACTION>
+      <ACTION>tertoos-cli show interfaces transceiver</ACTION>
+    </COMMAND>
+    <COMMAND name="show interface transceiver" help="SFP/QSFP transceiver presence + EEPROM">
+      <ACTION>tertoos-cli show interfaces transceiver</ACTION>
     </COMMAND>
     <COMMAND name="show tech-support" help="Collect tech-support bundle">
       <ACTION>tertoos-cli tech-support</ACTION>
@@ -774,7 +789,7 @@
       <ACTION>vtysh -c "show isis neighbor"</ACTION>
     </COMMAND>
     <COMMAND name="show isis interface" help="IS-IS per-interface state">
-      <PARAM name="ifname" help="Interface (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="ifname" help="Interface (optional)" ptype="TERTOOS_IFNAME" optional="true"/>
       <ACTION>vtysh -c "show isis interface ${ifname}"</ACTION>
     </COMMAND>
     <COMMAND name="show isis route" help="IS-IS computed routes">
@@ -826,7 +841,7 @@
       <ACTION>show qos scheduler 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'SCHEDULER|*'</ACTION>
     </COMMAND>
     <COMMAND name="show qos interface" help="Per-port QoS bindings">
-      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="TERTOOS_IFNAME"/>
       <ACTION>show qos port ${port} 2&gt;/dev/null || sonic-db-cli CONFIG_DB hgetall "PORT_QOS_MAP|${port}"</ACTION>
     </COMMAND>
     <COMMAND name="show queue counters" help="Per-port per-queue counters">
@@ -854,7 +869,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="show policy-map interface" help="Per-port service-policy bindings">
-      <PARAM name="port" help="Port" ptype="STRING"/>
+      <PARAM name="port" help="Port" ptype="TERTOOS_IFNAME"/>
       <ACTION>sonic-db-cli CONFIG_DB hgetall "TERTOOS_PORT_SERVICE_POLICY|${port}"</ACTION>
     </COMMAND>
     <COMMAND name="show policer" help="Policer profiles">
@@ -878,11 +893,11 @@
       <ACTION>show qos buffer-profile 2&gt;/dev/null || sonic-db-cli CONFIG_DB keys 'BUFFER_PROFILE|*'</ACTION>
     </COMMAND>
     <COMMAND name="show qos buffer-pg" help="Per-port buffer-PG bindings">
-      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="TERTOOS_IFNAME"/>
       <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_PG|${port}|*"</ACTION>
     </COMMAND>
     <COMMAND name="show qos buffer-queue" help="Per-port buffer-queue bindings">
-      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="STRING"/>
+      <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="TERTOOS_IFNAME"/>
       <ACTION>sonic-db-cli CONFIG_DB keys "BUFFER_QUEUE|${port}|*"</ACTION>
     </COMMAND>
 

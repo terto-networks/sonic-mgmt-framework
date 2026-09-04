@@ -119,4 +119,17 @@
          pattern="[A-Za-z0-9+/]{42,43}={0,2}"
          help="WireGuard base64 public key (44 chars)"/>
 
+  <!-- Single-token interface name with Tab-completion (Dell klish extension:
+       method="regexp_select" validates against `pattern` but offers the
+       `ext_pattern` Name(value) items as Tab/? candidates). Candidates cover
+       the E530-24x2c panel (Ethernet1..26) plus Ethernet0 (VS/x86 SKU) and
+       the logical types; validation stays permissive so any interface-ish
+       token (sub-interfaces Ethernet1.100, PortChannel1, mgmt0) is accepted
+       exactly as the old STRING ptype did. -->
+  <PTYPE name="TERTOOS_IFNAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9._/-]*"
+         ext_pattern="Ethernet0(Ethernet0) Ethernet1(Ethernet1) Ethernet2(Ethernet2) Ethernet3(Ethernet3) Ethernet4(Ethernet4) Ethernet5(Ethernet5) Ethernet6(Ethernet6) Ethernet7(Ethernet7) Ethernet8(Ethernet8) Ethernet9(Ethernet9) Ethernet10(Ethernet10) Ethernet11(Ethernet11) Ethernet12(Ethernet12) Ethernet13(Ethernet13) Ethernet14(Ethernet14) Ethernet15(Ethernet15) Ethernet16(Ethernet16) Ethernet17(Ethernet17) Ethernet18(Ethernet18) Ethernet19(Ethernet19) Ethernet20(Ethernet20) Ethernet21(Ethernet21) Ethernet22(Ethernet22) Ethernet23(Ethernet23) Ethernet24(Ethernet24) Ethernet25(Ethernet25) Ethernet26(Ethernet26) Bundle-Ether(Bundle-Ether) Loopback(Loopback) Mgmt(Mgmt)"
+         help="Interface name (e.g. Ethernet1, Ethernet1.100, Bundle-Ether2, Loopback0)"/>
+
 </CLISH_MODULE>
