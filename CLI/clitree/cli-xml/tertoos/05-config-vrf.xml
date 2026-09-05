@@ -61,6 +61,18 @@
       <ACTION>tertoos-cli candidate delete vrf/${vrfname}/rd</ACTION>
     </COMMAND>
 
+    <!-- Tabela de rotas do kernel = a chave estavel de TODO o datapath L3VPN
+         (zebra instala a RIB da VRF nela; saibridge mapeia table->virtual_router
+         e o inseg pop->VRF). Sem setar, o cfgd auto-atribui 100, 101, ... em
+         ordem de nome — sempre setar explicito em producao. -->
+    <COMMAND name="table" help="Kernel routing table for this VRF (set explicitly in production)">
+      <PARAM name="table" help="1..252 or 256+ (0 and 253-255 are reserved)" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set vrf/${vrfname}/table ${table}</ACTION>
+    </COMMAND>
+    <COMMAND name="no table" help="Remove explicit table (cfgd auto-assigns)">
+      <ACTION>tertoos-cli candidate delete vrf/${vrfname}/table</ACTION>
+    </COMMAND>
+
     <!-- S10 — EVPN Type-5 anchor: VRF→L3 VNI binding. -->
     <COMMAND name="vni" help="Bind L3 VNI to this VRF (EVPN Type-5)">
       <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
