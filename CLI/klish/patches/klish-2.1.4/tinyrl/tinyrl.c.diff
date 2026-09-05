@@ -1,4 +1,31 @@
-1414a1415,1430
+1349a1350,1375
+> /*-------------------------------------------------------- */
+> /* Natural-order string compare for completion listing (Terto): numeric runs
+>  * compare by value and letters case-insensitively, so Ethernet2 sorts before
+>  * Ethernet10. The plain nocasecmp sort listed Ethernet1, Ethernet10, ... */
+> static int tinyrl_natural_nocasecmp(const char *a, const char *b)
+> {
+> 	while (*a && *b) {
+> 		if (isdigit((unsigned char)*a) && isdigit((unsigned char)*b)) {
+> 			unsigned long na, nb;
+> 			char *ea, *eb;
+> 			na = strtoul(a, &ea, 10);
+> 			nb = strtoul(b, &eb, 10);
+> 			if (na != nb)
+> 				return (na < nb) ? -1 : 1;
+> 			a = ea;
+> 			b = eb;
+> 		} else {
+> 			if (tolower((unsigned char)*a) != tolower((unsigned char)*b))
+> 				return tolower((unsigned char)*a) - tolower((unsigned char)*b);
+> 			a++;
+> 			b++;
+> 		}
+> 	}
+> 	return (int)(unsigned char)*a - (int)(unsigned char)*b;
+> }
+> 
+1414a1441,1456
 >                         int indexi,indexj;
 >                         char * temp = NULL;
 >                         for (indexi=1;indexi<len-1;indexi++) {
@@ -7,7 +34,7 @@
 >                                     if ((matches[indexi] == NULL) || (matches[indexj] == NULL))
 >                                         continue;
 > 
->                                     if(lub_string_nocasecmp(matches[indexi],matches[indexj]) > 0) {
+>                                     if(tinyrl_natural_nocasecmp(matches[indexi],matches[indexj]) > 0) {
 >                                         temp = matches[indexi];
 >                                         matches[indexi] = matches[indexj];
 >                                         matches[indexj] = temp;
@@ -15,7 +42,7 @@
 >                                 }
 >                         }
 > 
-1435a1452,1496
+1435a1478,1522
 > static void
 > tinyrl_do_complete_ignore_error(tinyrl_t * this, bool_t with_extensions)
 > {
@@ -61,14 +88,14 @@
 > }
 > 
 > /*-------------------------------------------------------- */
-1447a1509,1514
+1447a1535,1540
 > void tinyrl_complete_ignore_error(tinyrl_t * this)
 > {
 >         return tinyrl_do_complete_ignore_error(this, BOOL_FALSE);
 > }
 > 
 > /*-------------------------------------------------------- */
-1656a1724,1730
+1656a1750,1756
 > 
 > /*-------------------------------------------------------- */
 > bool_t tinyrl_is_cursor_in_middle(const tinyrl_t *this)
