@@ -455,7 +455,7 @@
 >                                                 if (matched == BOOL_TRUE) {
 >                                                 	while (isspace(*tmp))
 >                                                         	tmp++;
->                                                                 new_result = lub_string_dup(name);
+>                                                                 new_result = lub_string_dupn(name, get_index(name));
 >                                                                 lub_string_cat(&new_result, tmp);
 > 								lub_string_free(result);
 >                                                                 result = new_result;
