@@ -323,8 +323,8 @@
            OSPFV2_INTERFACE.adj-sid-unprotected bool (B-flag=0)
          Caminho típico (SR-TE estrito): `ip ospf adjacency-sid 15013 absolute unprotected`. -->
     <COMMAND name="ip ospf adjacency-sid"
-             help="Pin persistent Adj-SID (sobrevive a flap e restart do ospfd)">
-      <PARAM name="value" help="16..1048575 (label se absolute; offset se index)" ptype="UINT"/>
+             help="Pin persistent Adj-SID (survives flap and ospfd restart)">
+      <PARAM name="value" help="16..1048575 (label if absolute; offset if index)" ptype="UINT"/>
       <!-- absolute|index é opcional; default = absolute. -->
       <PARAM name="kind_kw" help="absolute|index" ptype="SUBCOMMAND" mode="switch" optional="true">
         <PARAM name="absolute" help="Treat value as absolute MPLS label (default)"

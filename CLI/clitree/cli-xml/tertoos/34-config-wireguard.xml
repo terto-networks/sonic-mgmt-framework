@@ -127,7 +127,7 @@
     <COMMAND name="no ip ospf cost" help="Reset OSPF cost">
       <ACTION>tertoos-cli candidate delete interface/${wgname}/ip-ospf/metric</ACTION>
     </COMMAND>
-    <COMMAND name="ip ospf network" help="OSPF network type (point-to-point tipico no tunnel)">
+    <COMMAND name="ip ospf network" help="OSPF network type (point-to-point is typical for tunnels)">
       <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/network-type ${kind}</ACTION>
     </COMMAND>

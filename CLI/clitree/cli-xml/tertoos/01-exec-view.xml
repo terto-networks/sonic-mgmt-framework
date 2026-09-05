@@ -67,7 +67,7 @@
       <ACTION>nslookup ${name}</ACTION>
     </COMMAND>
 
-    <COMMAND name="dig" help="DNS dig (debug avancado de DNS)">
+    <COMMAND name="dig" help="DNS dig (advanced DNS debugging)">
       <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
       <ACTION>dig ${name}</ACTION>
     </COMMAND>

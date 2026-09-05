@@ -159,29 +159,29 @@
          dependendo de race com o opaque-area FSM. Investigacao registrada
          no PR mgmt-fw#18 + tertoos#78. -->
     <COMMAND name="segment-routing node-msd"
-             help="Maximum SID Depth (limite de labels empilhaveis por este nó)">
-      <PARAM name="msd" help="1..16 (8 é típico em FRR)" ptype="UINT"/>
+             help="Maximum SID Depth (max label stack depth for this node)">
+      <PARAM name="msd" help="1..16 (8 is typical for FRR)" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/sr-node-msd ${msd}</ACTION>
     </COMMAND>
-    <COMMAND name="no segment-routing node-msd" help="Remove MSD (volta ao default do ospfd)">
+    <COMMAND name="no segment-routing node-msd" help="Remove MSD (revert to ospfd default)">
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/sr-node-msd</ACTION>
     </COMMAND>
     <COMMAND name="capability opaque"
-             help="Habilita Opaque LSAs (necessário para SR-MPLS Type 4/7/8)">
+             help="Enable Opaque LSAs (required for SR-MPLS Type 4/7/8)">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/capability-opaque true</ACTION>
     </COMMAND>
-    <COMMAND name="no capability opaque" help="Desabilita Opaque LSAs">
+    <COMMAND name="no capability opaque" help="Disable Opaque LSAs">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/capability-opaque false</ACTION>
     </COMMAND>
     <COMMAND name="router-info area"
-             help="Originar Router Information LSA com escopo Area-Local (SR/PCE)">
+             help="Originate Router Information LSA with Area-Local scope (SR/PCE)">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/router-info-scope area</ACTION>
     </COMMAND>
     <COMMAND name="router-info as"
-             help="Originar Router Information LSA com escopo AS (inter-area)">
+             help="Originate Router Information LSA with AS scope (inter-area)">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/router-info-scope as</ACTION>
     </COMMAND>
-    <COMMAND name="no router-info" help="Desabilitar Router Information LSA">
+    <COMMAND name="no router-info" help="Disable Router Information LSA">
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/router-info-scope</ACTION>
     </COMMAND>
     <COMMAND name="distance ospf external" help="Distance for external routes">

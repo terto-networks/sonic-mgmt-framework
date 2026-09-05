@@ -144,11 +144,11 @@
       <ACTION>tertoos-cli show fdb</ACTION>
     </COMMAND>
     <COMMAND name="show mac-address-table"
-             help="Show MAC forwarding database (alias de 'show l2 mac-address-table')">
+             help="Show MAC forwarding database (alias of 'show l2 mac-address-table')">
       <ACTION>tertoos-cli show fdb</ACTION>
     </COMMAND>
     <COMMAND name="show fdb"
-             help="Show MAC forwarding database (alias de 'show l2 mac-address-table')">
+             help="Show MAC forwarding database (alias of 'show l2 mac-address-table')">
       <ACTION>tertoos-cli show fdb</ACTION>
     </COMMAND>
     <COMMAND name="show l2 mac-address-table vlan"
@@ -320,14 +320,14 @@
     </COMMAND>
     <COMMAND name="show ospf database opaque-area adv-router"
              help="LSAs originated by a specific advertising router">
-      <PARAM name="rid" help="Router-ID do advertiser (A.B.C.D)" ptype="STRING"/>
+      <PARAM name="rid" help="Advertiser Router-ID (A.B.C.D)" ptype="STRING"/>
       <ACTION>vtysh -c "show ip ospf database opaque-area adv-router ${rid}"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf router-info"
              help="OSPF Router Information LSA (Capabilities + SR Algorithms + SRGB/SRLB)">
       <ACTION>vtysh -c "show ip ospf router-info"</ACTION>
     </COMMAND>
-    <COMMAND name="show ospf route" help="OSPF routing table (intra/inter/external; TI-LFA backups com detail)">
+    <COMMAND name="show ospf route" help="OSPF routing table (intra/inter/external; TI-LFA backups with detail)">
       <ACTION>vtysh -c "show ip ospf route"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf border-routers" help="OSPF ABR/ASBR routes">
@@ -340,23 +340,23 @@
       <ACTION>vtysh -c "show ip ospf database segment-routing"</ACTION>
     </COMMAND>
     <COMMAND name="debug ospf opaque-lsa"
-             help="Trace de Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
+             help="Trace Opaque LSA originate/flood/decode (Router Info, Extended Prefix/Link)">
       <ACTION>vtysh -c "configure terminal" -c "debug ospf opaque-lsa" -c "end"</ACTION>
     </COMMAND>
-    <COMMAND name="no debug ospf opaque-lsa" help="Para o trace de Opaque LSA">
+    <COMMAND name="no debug ospf opaque-lsa" help="Stop Opaque LSA tracing">
       <ACTION>vtysh -c "configure terminal" -c "no debug ospf opaque-lsa" -c "end"</ACTION>
     </COMMAND>
     <COMMAND name="debug ospf sr"
-             help="Trace de Segment Routing (SRGB/SRLB alloc, Prefix-SID, Adj-SID)">
+             help="Trace Segment Routing (SRGB/SRLB alloc, Prefix-SID, Adj-SID)">
       <ACTION>vtysh -c "configure terminal" -c "debug ospf sr" -c "end"</ACTION>
     </COMMAND>
-    <COMMAND name="no debug ospf sr" help="Para o trace de Segment Routing">
+    <COMMAND name="no debug ospf sr" help="Stop Segment Routing tracing">
       <ACTION>vtysh -c "configure terminal" -c "no debug ospf sr" -c "end"</ACTION>
     </COMMAND>
-    <COMMAND name="debug ospf event" help="Trace de OSPF FSM events (interface, neighbor, area)">
+    <COMMAND name="debug ospf event" help="Trace OSPF FSM events (interface, neighbor, area)">
       <ACTION>vtysh -c "configure terminal" -c "debug ospf event" -c "end"</ACTION>
     </COMMAND>
-    <COMMAND name="no debug ospf event" help="Para o trace de eventos">
+    <COMMAND name="no debug ospf event" help="Stop OSPF event tracing">
       <ACTION>vtysh -c "configure terminal" -c "no debug ospf event" -c "end"</ACTION>
     </COMMAND>
     <!-- ====== BGP show commands (wrappers vtysh) ============================
@@ -369,10 +369,10 @@
     <COMMAND name="show ip bgp" help="BGP IPv4 unicast routes">
       <ACTION>vtysh -c "show ip bgp"</ACTION>
     </COMMAND>
-    <COMMAND name="show ip bgp neighbors" help="BGP neighbors detalhe">
+    <COMMAND name="show ip bgp neighbors" help="BGP neighbors detail">
       <ACTION>vtysh -c "show ip bgp neighbors"</ACTION>
     </COMMAND>
-    <COMMAND name="show ip bgp neighbor" help="Detalhe de um neighbor">
+    <COMMAND name="show ip bgp neighbor" help="Detail for a single neighbor">
       <PARAM name="addr" help="Neighbor IP" ptype="STRING"/>
       <ACTION>vtysh -c "show ip bgp neighbor ${addr}"</ACTION>
     </COMMAND>
@@ -395,7 +395,7 @@
          bloco EVPN/L2VPN/ISIS show existente — nao duplicar aqui.
          show isis neighbor detail e' novo (so' detail; o sem detail
          ja' existe). -->
-    <COMMAND name="show isis neighbor detail" help="IS-IS adjacencies detalhe">
+    <COMMAND name="show isis neighbor detail" help="IS-IS adjacencies detail">
       <ACTION>vtysh -c "show isis neighbor detail"</ACTION>
     </COMMAND>
 
@@ -586,7 +586,7 @@
       <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
       <ACTION>nslookup ${name}</ACTION>
     </COMMAND>
-    <COMMAND name="dig" help="DNS dig (debug avancado de DNS)">
+    <COMMAND name="dig" help="DNS dig (advanced DNS debugging)">
       <PARAM name="name" help="Hostname/FQDN" ptype="STRING"/>
       <ACTION>dig ${name}</ACTION>
     </COMMAND>
