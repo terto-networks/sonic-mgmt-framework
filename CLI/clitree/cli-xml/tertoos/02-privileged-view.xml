@@ -454,19 +454,22 @@
     </COMMAND>
 
     <COMMAND name="show l2vpn bridge-domain" help="VPLS bridge-domains (S11.x)">
-      <ACTION>vtysh -c "show l2vpn"</ACTION>
+      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
     </COMMAND>
     <COMMAND name="show l2vpn vfi" help="VPLS VFIs (S11.x)">
-      <ACTION>vtysh -c "show l2vpn"</ACTION>
+      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn encapsulation" help="EVPN encap config">
       <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
     </COMMAND>
-    <COMMAND name="show l2vpn xconnect" help="L2VPN xconnect status">
-      <ACTION>vtysh -c "show l2vpn xconnect"</ACTION>
+    <COMMAND name="show l2vpn xconnect" help="L2VPN pseudowire (VC) status">
+      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
+    </COMMAND>
+    <COMMAND name="show l2vpn binding" help="L2VPN pseudowire label bindings (local+remote)">
+      <ACTION>vtysh -c "show l2vpn atom binding"</ACTION>
     </COMMAND>
     <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
-      <ACTION>vtysh -c "show mpls l2transport vc"</ACTION>
+      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn vni" help="EVPN VNI summary">
       <ACTION>vtysh -c "show evpn vni"</ACTION>
