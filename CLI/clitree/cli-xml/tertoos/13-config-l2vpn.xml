@@ -288,6 +288,21 @@
         tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-id&#xA;
       </ACTION>
     </COMMAND>
+    <!--
+      AC tagged vs untagged (datapath SAI):
+        encapsulation dot1q <vlan>  = AC tagged (cliente manda com a VLAN;
+                                      SUB_PORT TAGGED convive com o bridge 1Q)
+        (sem encapsulation)         = AC untagged, o DEFAULT (caso PPPoE;
+                                      a porta sai do 1Q e vira SUB_PORT UNTAGGED)
+    -->
+    <COMMAND name="encapsulation" help="Attachment-circuit encapsulation">
+      <PARAM name="dot1q" help="802.1Q tagged AC" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="vlan" help="VLAN id 1..4094" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/ac-vlan ${vlan}</ACTION>
+    </COMMAND>
+    <COMMAND name="no encapsulation" help="Untagged AC (default)">
+      <ACTION>tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/ac-vlan</ACTION>
+    </COMMAND>
     <COMMAND name="pw-class" help="Bind a pw-class">
       <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-class ${name}</ACTION>
