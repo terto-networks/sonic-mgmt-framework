@@ -296,6 +296,12 @@
       <PARAM name="bytes" help="64..9216" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/mtu ${bytes}</ACTION>
     </COMMAND>
+    <COMMAND name="control-word" help="Enable PW control word (RFC 4385); default on">
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/control-word true</ACTION>
+    </COMMAND>
+    <COMMAND name="no control-word" help="Disable control word (interop Datacom/MikroTik)">
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/control-word false</ACTION>
+    </COMMAND>
     <COMMAND name="shutdown" help="Disable the p2p">
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/enabled false</ACTION>
     </COMMAND>
