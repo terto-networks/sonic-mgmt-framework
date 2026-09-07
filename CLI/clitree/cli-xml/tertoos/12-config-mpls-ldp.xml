@@ -53,6 +53,9 @@
   <VIEW name="config-mpls-ldp-view"
         prompt="${SYSTEM_NAME}(config-mpls-ldp)# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit MPLS LDP" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
@@ -149,6 +152,9 @@
   <VIEW name="config-mpls-ldp-af-view"
         prompt="${SYSTEM_NAME}(config-mpls-ldp-af-${ldpafi})# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit LDP address-family" view="config-mpls-ldp-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
@@ -182,6 +188,9 @@
   <VIEW name="config-mpls-ldp-nbr-view"
         prompt="${SYSTEM_NAME}(config-mpls-ldp-nbr-${ldpnbr})# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit LDP neighbor" view="config-mpls-ldp-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>

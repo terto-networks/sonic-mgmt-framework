@@ -95,6 +95,7 @@
   <!-- =================== config-l2vpn-bd-view =============================== -->
   <VIEW name="config-l2vpn-bd-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-bd-${bdname})# ">
+    <COMMAND name="commit" help="Apply candidate configuration to running"><ACTION>tertoos-cli candidate commit</ACTION></COMMAND>
     <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
@@ -147,6 +148,7 @@
   <!-- =================== config-l2vpn-vfi-view ============================== -->
   <VIEW name="config-l2vpn-vfi-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-vfi-${vfiname})# ">
+    <COMMAND name="commit" help="Apply candidate configuration to running"><ACTION>tertoos-cli candidate commit</ACTION></COMMAND>
     <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
@@ -192,6 +194,9 @@
   <VIEW name="config-pw-class-view"
         prompt="${SYSTEM_NAME}(config-pw-class-${pwcname})# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit pw-class" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
@@ -223,6 +228,9 @@
   <VIEW name="config-l2vpn-group-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-${l2vpngrp})# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit l2vpn group" view="config-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
@@ -251,6 +259,9 @@
   <VIEW name="config-l2vpn-p2p-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-${l2vpngrp}-p2p-${l2vpnp2p})# ">
 
+    <COMMAND name="commit" help="Apply candidate configuration to running">
+      <ACTION>tertoos-cli candidate commit</ACTION>
+    </COMMAND>
     <COMMAND name="exit" help="Exit p2p" view="config-l2vpn-group-view">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
@@ -333,6 +344,7 @@
        schema (regra de ouro VPWS estrito) — nao ha comando para liga-lo. -->
   <VIEW name="config-l2vpn-static-pw-view"
         prompt="${SYSTEM_NAME}(config-l2vpn-static-pw-${spwname})# ">
+    <COMMAND name="commit" help="Apply candidate configuration to running"><ACTION>tertoos-cli candidate commit</ACTION></COMMAND>
     <COMMAND name="exit" help="exit" view="config-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
