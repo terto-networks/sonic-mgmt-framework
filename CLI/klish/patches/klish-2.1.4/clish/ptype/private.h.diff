@@ -12,12 +12,13 @@
 >       lub_argv_t *alt_items;
 > };
 > 
-30a42,47
+30a42,48
 > 
 >       char *ext_pattern;
 >       char *ext_help;
 >       char *alt_ext_pattern;
 >       char *alt_pattern;
+>       char *ext_pattern_cmd; /* TertoOS — dynamic completion helper */
 >       help_type_t usename;
-38a56
+38a57
 >               clish_ptype_regexp_select_t regexp_select;

@@ -27,14 +27,14 @@
              help="Configure a pseudowire class"
              view="config-pw-class-view"
              viewid="pwcname=${name}">
-      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_PW_CLASS_NAME"/>
       <ACTION>
         tertoos-cli candidate context pw-class ${name}&#xA;
         tertoos-cli candidate set pw-class/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no pw-class" help="Remove pw-class">
-      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_PW_CLASS_NAME"/>
       <ACTION>tertoos-cli candidate delete pw-class/${name}</ACTION>
     </COMMAND>
 
@@ -42,11 +42,11 @@
              help="Configure an L2VPN xconnect group"
              view="config-l2vpn-group-view"
              viewid="l2vpngrp=${name}">
-      <PARAM name="name" help="Group name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Group name" ptype="TERTOOS_XCONNECT_GROUP_NAME"/>
       <ACTION>tertoos-cli candidate context l2vpn-group ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no l2vpn xconnect group" help="Remove an L2VPN group">
-      <PARAM name="name" help="Group name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Group name" ptype="TERTOOS_XCONNECT_GROUP_NAME"/>
       <ACTION>
         tertoos-cli candidate delete l2vpn/xconnect/${name}/-all&#xA;
       </ACTION>
@@ -57,11 +57,11 @@
              help="Configure VPLS bridge-domain"
              view="config-l2vpn-bd-view"
              viewid="bdname=${name}">
-      <PARAM name="name" help="Bridge-domain name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Bridge-domain name" ptype="TERTOOS_BD_NAME"/>
       <ACTION>tertoos-cli candidate context l2vpn-bd ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no bridge-domain" help="Remove bridge-domain">
-      <PARAM name="name" help="Bridge-domain name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Bridge-domain name" ptype="TERTOOS_BD_NAME"/>
       <ACTION>tertoos-cli candidate delete l2vpn/bridge-domain/${name}</ACTION>
     </COMMAND>
 
@@ -69,11 +69,11 @@
              help="Configure VFI (Virtual Forwarding Instance)"
              view="config-l2vpn-vfi-view"
              viewid="vfiname=${name}">
-      <PARAM name="name" help="VFI name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VFI name" ptype="TERTOOS_VFI_NAME"/>
       <ACTION>tertoos-cli candidate context l2vpn-vfi ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no vfi" help="Remove VFI">
-      <PARAM name="name" help="VFI name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VFI name" ptype="TERTOOS_VFI_NAME"/>
       <ACTION>tertoos-cli candidate delete l2vpn/vfi/${name}</ACTION>
     </COMMAND>
 
@@ -82,11 +82,11 @@
              help="Configure a static pseudowire (Horizon-orchestrated)"
              view="config-l2vpn-static-pw-view"
              viewid="spwname=${name}">
-      <PARAM name="name" help="Static PW name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Static PW name" ptype="TERTOOS_STATIC_PW_NAME"/>
       <ACTION>tertoos-cli candidate context l2vpn-static-pw ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no l2vpn static-pw" help="Remove a static pseudowire">
-      <PARAM name="name" help="Static PW name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Static PW name" ptype="TERTOOS_STATIC_PW_NAME"/>
       <ACTION>tertoos-cli candidate delete l2vpn/static-pw/${name}</ACTION>
     </COMMAND>
 
@@ -132,7 +132,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="vfi" help="Bind VFI to this bridge-domain">
-      <PARAM name="name" help="VFI name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VFI name" ptype="TERTOOS_VFI_NAME"/>
       <ACTION>tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/vfi_name ${name}</ACTION>
     </COMMAND>
     <COMMAND name="interface" help="Add attachment circuit (interface)">
@@ -157,7 +157,7 @@
       <ACTION>tertoos-cli candidate set l2vpn/vfi/${vfiname}/vpn_id ${n}</ACTION>
     </COMMAND>
     <COMMAND name="pw-class" help="Pseudowire class">
-      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_PW_CLASS_NAME"/>
       <ACTION>tertoos-cli candidate set l2vpn/vfi/${vfiname}/pw_class ${name}</ACTION>
     </COMMAND>
     <COMMAND name="manual-signaling" help="Manual full-mesh PWs">
@@ -315,7 +315,7 @@
       <ACTION>tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/ac-vlan</ACTION>
     </COMMAND>
     <COMMAND name="pw-class" help="Bind a pw-class">
-      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Pw-class name" ptype="TERTOOS_PW_CLASS_NAME"/>
       <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/pw-class ${name}</ACTION>
     </COMMAND>
     <COMMAND name="mtu" help="P2P MTU override">

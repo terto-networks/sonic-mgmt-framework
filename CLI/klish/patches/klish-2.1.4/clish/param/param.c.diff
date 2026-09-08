@@ -143,12 +143,15 @@
 > 		if (method != CLISH_PTYPE_METHOD_REGEXP_SELECT)
 > 			name = clish_param__get_value(this);
 > 	} else {
-113a209,277
+113a209,280
 > 	}
 > 
 > 	if (method == CLISH_PTYPE_METHOD_REGEXP_SELECT) {
 > 		clish_ptype_t *ptype = this->ptype;
 > 		usename = clish_ptype__get_usename(ptype);
+> 		/* TertoOS — refresh dynamic candidates (ext_pattern_cmd) so `?`
+> 		 * lists objects created after boot. */
+> 		clish_ptype_regexp_select_refresh(ptype);
 > 		int i = 0, cnt = clish_ptype_regexp_select__get_argv_count(ptype);
 > 		const char *pname = NULL;
 > 		char *val_str = NULL;
@@ -213,7 +216,7 @@
 > 			lub_string_cat(&str, name);
 > 		}
 > 	}
-115,123c279,312
+115,123c282,315
 < 	lub_string_cat(&str, this->text);
 < 	if (range) {
 < 		lub_string_cat(&str, " (");
@@ -258,7 +261,7 @@
 > 	if(str) {
 > 		lub_string_free(str);
 > 	}
-135,166c324,328
+135,166c327,331
 < CLISH_SET_STR(param, ptype_name);
 < CLISH_GET_STR(param, ptype_name);
 < CLISH_SET_STR(param, access);
@@ -297,35 +300,35 @@
 > 	unsigned index)
 > {
 > 	return clish_paramv__get_param(this->paramv, index);
-170c332
+170c335
 < _CLISH_GET_STR(param, range)
 ---
 > clish_paramv_t *clish_param__get_paramv(clish_param_t * this)
-172,173c334
+172,173c337
 < 	assert(inst);
 < 	return clish_ptype__get_range(inst->ptype);
 ---
 > 	return this->paramv;
-177,178c338
+177,178c341
 < clish_param_t *clish_param__get_param(const clish_param_t * this,
 < 	unsigned int index)
 ---
 > unsigned int clish_param__get_param_count(const clish_param_t * this)
-180,181c340
+180,181c343
 < 	assert(this);
 < 	return clish_paramv__get_param(this->paramv, index);
 ---
 > 	return clish_paramv__get_count(this->paramv);
-185c344
+185c347
 < _CLISH_GET(param, unsigned int, param_count)
 ---
 > void clish_param__set_optional(clish_param_t * this, bool_t optional)
-187,188c346
+187,188c349
 < 	assert(inst);
 < 	return clish_paramv__get_count(inst->paramv);
 ---
 > 	this->optional = optional;
-189a348,471
+189a351,474
 > 
 > /*--------------------------------------------------------- */
 > bool_t clish_param__get_optional(const clish_param_t * this)
