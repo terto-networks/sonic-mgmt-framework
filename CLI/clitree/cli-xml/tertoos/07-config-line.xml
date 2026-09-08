@@ -65,7 +65,7 @@
 
     <COMMAND name="exec-timeout"
              help="EXEC inactivity timeout (minutes [seconds])">
-      <PARAM name="minutes" help="Minutes 0..35791" ptype="UINT"/>
+      <PARAM name="minutes" help="Minutes 0..35791" ptype="TERTOOS_RANGE_0_35791"/>
       <ACTION>tertoos-cli candidate set line/${linekey}/exec-timeout ${minutes}</ACTION>
     </COMMAND>
     <COMMAND name="no exec-timeout" help="Reset EXEC timeout">
@@ -74,7 +74,7 @@
 
     <COMMAND name="transport input"
              help="Permitted inbound transports">
-      <PARAM name="transport" help="ssh | telnet | all | none" ptype="STRING"/>
+      <PARAM name="transport" help="ssh | telnet | all | none" ptype="TERTOOS_LINE_TRANSPORT"/>
       <ACTION>tertoos-cli candidate set line/${linekey}/transport/input ${transport}</ACTION>
     </COMMAND>
 
@@ -89,7 +89,7 @@
 
     <!-- Console-specific -->
     <COMMAND name="baud-rate" help="Console baud rate">
-      <PARAM name="rate" help="9600 | 19200 | 38400 | 57600 | 115200" ptype="UINT"/>
+      <PARAM name="rate" help="9600 | 19200 | 38400 | 57600 | 115200" ptype="TERTOOS_BAUD_RATE"/>
       <ACTION>tertoos-cli candidate set line/${linekey}/baud-rate ${rate}</ACTION>
     </COMMAND>
 

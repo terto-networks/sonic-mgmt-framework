@@ -113,9 +113,9 @@
     -->
     <COMMAND name="permit"
              help="Add an ACL rule (sequence + protocol + src + dst)">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
-             ptype="STRING"/>
+             ptype="TERTOOS_ACL_PROTO_V4"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
@@ -138,9 +138,9 @@
     </COMMAND>
 
     <COMMAND name="deny" help="Add a deny ACL rule">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
-             ptype="STRING"/>
+             ptype="TERTOOS_ACL_PROTO_V4"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
@@ -211,9 +211,9 @@
     </COMMAND>
 
     <COMMAND name="permit" help="Add a permit ACL rule">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
-             ptype="STRING"/>
+             ptype="TERTOOS_ACL_PROTO_V6"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
@@ -236,9 +236,9 @@
     </COMMAND>
 
     <COMMAND name="deny" help="Add a deny ACL rule">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
-             ptype="STRING"/>
+             ptype="TERTOOS_ACL_PROTO_V6"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst_port_kw"
@@ -303,7 +303,7 @@
     </COMMAND>
 
     <COMMAND name="permit" help="Permit by ether-type and/or VLAN">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)"
              ptype="STRING"/>
       <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
@@ -320,7 +320,7 @@
     </COMMAND>
 
     <COMMAND name="deny" help="Deny by ether-type and/or VLAN">
-      <PARAM name="seq" help="Sequence number 1..9999" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="ether_type" help="EtherType" ptype="STRING"/>
       <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
              ptype="STRING" optional="true"/>

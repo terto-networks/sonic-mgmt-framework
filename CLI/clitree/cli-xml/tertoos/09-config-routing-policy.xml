@@ -132,17 +132,17 @@
 
     <COMMAND name="mode"
              help="Address family of the prefix-set">
-      <PARAM name="af" help="ipv4 | ipv6" ptype="STRING"/>
+      <PARAM name="af" help="ipv4 | ipv6" ptype="TERTOOS_IPV4_IPV6"/>
       <ACTION>tertoos-cli candidate set prefix-set/${psname}/mode ${af}</ACTION>
     </COMMAND>
 
     <!-- Forma simples: <seq> <prefix> [le|ge|eq <len>] -->
     <COMMAND name="permit"
              help="Add a prefix entry (permit)">
-      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
-             ptype="STRING" optional="true"/>
+             ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>
       <ACTION>
@@ -157,7 +157,7 @@
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
-             ptype="STRING" optional="true"/>
+             ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
       <PARAM name="range_val" help="Length"
              ptype="UINT" optional="true"/>
       <ACTION>
@@ -188,7 +188,7 @@
 
     <COMMAND name="match-action"
              help="any | all (how members are combined for match)">
-      <PARAM name="action" help="any | all" ptype="STRING"/>
+      <PARAM name="action" help="any | all" ptype="TERTOOS_ANY_ALL"/>
       <ACTION>tertoos-cli candidate set community-set/${csname}/match-action ${action}</ACTION>
     </COMMAND>
 
@@ -276,7 +276,7 @@
     -->
     <COMMAND name="permit"
              help="Open a permit statement">
-      <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="UINT"/>
+      <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>
         tertoos-cli candidate context rpl-stmt ${seq}&#xA;
         tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op permit&#xA;
@@ -348,7 +348,7 @@
     </COMMAND>
     <COMMAND name="set origin" help="Set origin code">
       <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
-      <PARAM name="origin" help="igp | egp | incomplete" ptype="STRING"/>
+      <PARAM name="origin" help="igp | egp | incomplete" ptype="TERTOOS_BGP_ORIGIN"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/origin ${origin}</ACTION>
     </COMMAND>
     <COMMAND name="set tag" help="Set route tag">

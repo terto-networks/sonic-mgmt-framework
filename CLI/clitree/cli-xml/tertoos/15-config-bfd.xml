@@ -83,15 +83,15 @@
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/local_address ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="interval min-tx" help="Tx interval (ms)">
-      <PARAM name="ms" help="10..60000" ptype="UINT"/>
+      <PARAM name="ms" help="10..60000" ptype="TERTOOS_RANGE_10_60000"/>
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/tx_interval ${ms}</ACTION>
     </COMMAND>
     <COMMAND name="interval min-rx" help="Rx interval (ms)">
-      <PARAM name="ms" help="10..60000" ptype="UINT"/>
+      <PARAM name="ms" help="10..60000" ptype="TERTOOS_RANGE_10_60000"/>
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/rx_interval ${ms}</ACTION>
     </COMMAND>
     <COMMAND name="detect-multiplier" help="Detection multiplier">
-      <PARAM name="n" help="2..255" ptype="UINT"/>
+      <PARAM name="n" help="2..255" ptype="TERTOOS_RANGE_2_255"/>
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/multiplier ${n}</ACTION>
     </COMMAND>
     <COMMAND name="passive" help="Passive mode">

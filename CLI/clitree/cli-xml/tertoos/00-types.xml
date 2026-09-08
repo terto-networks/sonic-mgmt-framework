@@ -99,10 +99,11 @@
          pattern="[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*"
          help="VLAN id, range, or list (ex: 100, 100-200, 100,200,300)"/>
 
-  <!-- S15 — Storm-control type -->
+  <!-- S15 — Storm-control type (regexp_select -> Tab lists the values) -->
   <PTYPE name="TERTOOS_STORM_TYPE"
-         method="regexp"
+         method="regexp_select"
          pattern="broadcast|multicast|unknown-unicast"
+         ext_pattern="broadcast(broadcast) multicast(multicast) unknown-unicast(unknown-unicast)"
          help="broadcast | multicast | unknown-unicast"/>
 
   <!-- Interface index — the numeric part after the type keyword in the
@@ -205,5 +206,529 @@
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
          ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
+
+  <!-- ================================================================
+       Enums estaticos (backlog secao 2 da matriz klish-ptype):
+       regexp_select SEM ext_pattern_cmd = candidatos fixos no Tab/?,
+       validacao pelo pattern. Um PTYPE por conjunto de valores;
+       reusado em todos os params com o mesmo conjunto.
+       ================================================================ -->
+
+  <!-- Toggles / pares genericos -->
+  <PTYPE name="TERTOOS_TRUE_FALSE"
+         method="regexp_select"
+         pattern="true|false"
+         ext_pattern="true(true) false(false)"
+         help="true | false"/>
+
+  <PTYPE name="TERTOOS_ON_OFF"
+         method="regexp_select"
+         pattern="on|off"
+         ext_pattern="on(on) off(off)"
+         help="on | off"/>
+
+  <PTYPE name="TERTOOS_IN_OUT"
+         method="regexp_select"
+         pattern="in|out"
+         ext_pattern="in(in) out(out)"
+         help="in | out"/>
+
+  <PTYPE name="TERTOOS_INGRESS_EGRESS"
+         method="regexp_select"
+         pattern="ingress|egress"
+         ext_pattern="ingress(ingress) egress(egress)"
+         help="ingress | egress"/>
+
+  <PTYPE name="TERTOOS_RX_TX_BOTH"
+         method="regexp_select"
+         pattern="rx|tx|both"
+         ext_pattern="rx(rx) tx(tx) both(both)"
+         help="rx | tx | both"/>
+
+  <PTYPE name="TERTOOS_FORWARD_DROP"
+         method="regexp_select"
+         pattern="forward|drop"
+         ext_pattern="forward(forward) drop(drop)"
+         help="forward | drop"/>
+
+  <PTYPE name="TERTOOS_STATIC_DYNAMIC"
+         method="regexp_select"
+         pattern="static|dynamic"
+         ext_pattern="static(static) dynamic(dynamic)"
+         help="static | dynamic"/>
+
+  <PTYPE name="TERTOOS_ANY_ALL"
+         method="regexp_select"
+         pattern="any|all"
+         ext_pattern="any(any) all(all)"
+         help="any | all"/>
+
+  <PTYPE name="TERTOOS_IPV4_IPV6"
+         method="regexp_select"
+         pattern="ipv4|ipv6"
+         ext_pattern="ipv4(ipv4) ipv6(ipv6)"
+         help="ipv4 | ipv6"/>
+
+  <PTYPE name="TERTOOS_UDP_TCP"
+         method="regexp_select"
+         pattern="udp|tcp"
+         ext_pattern="udp(udp) tcp(tcp)"
+         help="udp | tcp"/>
+
+  <PTYPE name="TERTOOS_RO_RW"
+         method="regexp_select"
+         pattern="ro|rw"
+         ext_pattern="ro(ro) rw(rw)"
+         help="ro (read-only) | rw (read-write)"/>
+
+  <PTYPE name="TERTOOS_BYTES_PACKETS"
+         method="regexp_select"
+         pattern="bytes|packets"
+         ext_pattern="bytes(bytes) packets(packets)"
+         help="bytes | packets"/>
+
+  <!-- 0=plain | 7=encrypted (estilo IOS) -->
+  <PTYPE name="TERTOOS_PASSWORD_ENC"
+         method="regexp_select"
+         pattern="0|7"
+         ext_pattern="0(0) 7(7)"
+         help="0 (plain) | 7 (encrypted)"/>
+
+  <PTYPE name="TERTOOS_IMPORT_EXPORT_BOTH"
+         method="regexp_select"
+         pattern="import|export|both"
+         ext_pattern="import(import) export(export) both(both)"
+         help="import | export | both"/>
+
+  <!-- Interface / L2 -->
+  <PTYPE name="TERTOOS_LACP_MODE"
+         method="regexp_select"
+         pattern="active|passive|on"
+         ext_pattern="active(active) passive(passive) on(on)"
+         help="active | passive | on"/>
+
+  <PTYPE name="TERTOOS_STORM_UNIT"
+         method="regexp_select"
+         pattern="kbps|pps"
+         ext_pattern="kbps(kbps) pps(pps)"
+         help="kbps | pps"/>
+
+  <PTYPE name="TERTOOS_MAC_LIMIT_ACTION"
+         method="regexp_select"
+         pattern="drop|shutdown|log"
+         ext_pattern="drop(drop) shutdown(shutdown) log(log)"
+         help="drop | shutdown | log"/>
+
+  <!-- OSPF / OSPFv3 -->
+  <PTYPE name="TERTOOS_OSPF_NETWORK_TYPE"
+         method="regexp_select"
+         pattern="point-to-point|broadcast|non-broadcast|point-to-multipoint"
+         ext_pattern="point-to-point(point-to-point) broadcast(broadcast) non-broadcast(non-broadcast) point-to-multipoint(point-to-multipoint)"
+         help="point-to-point | broadcast | non-broadcast | point-to-multipoint"/>
+
+  <PTYPE name="TERTOOS_OSPF_IF_AUTH"
+         method="regexp_select"
+         pattern="text|message-digest|null"
+         ext_pattern="text(text) message-digest(message-digest) null(null)"
+         help="text | message-digest | null"/>
+
+  <PTYPE name="TERTOOS_OSPF_AREA_AUTH"
+         method="regexp_select"
+         pattern="message-digest|text"
+         ext_pattern="message-digest(message-digest) text(text)"
+         help="message-digest | text"/>
+
+  <!-- broadcast | point-to-point (OSPFv3 network / IS-IS network) -->
+  <PTYPE name="TERTOOS_P2P_BROADCAST"
+         method="regexp_select"
+         pattern="broadcast|point-to-point"
+         ext_pattern="broadcast(broadcast) point-to-point(point-to-point)"
+         help="broadcast | point-to-point"/>
+
+  <!-- redistribute nas views OSPF/OSPFv3 -->
+  <PTYPE name="TERTOOS_REDIST_PROTO"
+         method="regexp_select"
+         pattern="connected|static|bgp"
+         ext_pattern="connected(connected) static(static) bgp(bgp)"
+         help="connected | static | bgp"/>
+
+  <!-- IS-IS -->
+  <PTYPE name="TERTOOS_ISIS_LEVEL_TYPE"
+         method="regexp_select"
+         pattern="level-1|level-2-only|level-1-2"
+         ext_pattern="level-1(level-1) level-2-only(level-2-only) level-1-2(level-1-2)"
+         help="level-1 | level-2-only | level-1-2"/>
+
+  <PTYPE name="TERTOOS_ISIS_LEVEL"
+         method="regexp_select"
+         pattern="level-1|level-2|level-1-2"
+         ext_pattern="level-1(level-1) level-2(level-2) level-1-2(level-1-2)"
+         help="level-1 | level-2 | level-1-2"/>
+
+  <PTYPE name="TERTOOS_ISIS_AUTH_TYPE"
+         method="regexp_select"
+         pattern="clear|md5"
+         ext_pattern="clear(clear) md5(md5)"
+         help="clear | md5"/>
+
+  <PTYPE name="TERTOOS_ISIS_METRIC_STYLE"
+         method="regexp_select"
+         pattern="narrow|wide|transition"
+         ext_pattern="narrow(narrow) wide(wide) transition(transition)"
+         help="narrow | wide | transition"/>
+
+  <!-- redistribute na view IS-IS (inclui ospf) -->
+  <PTYPE name="TERTOOS_REDIST_PROTO_ISIS"
+         method="regexp_select"
+         pattern="connected|static|bgp|ospf"
+         ext_pattern="connected(connected) static(static) bgp(bgp) ospf(ospf)"
+         help="connected | static | bgp | ospf"/>
+
+  <!-- AAA / seguranca / linha -->
+  <PTYPE name="TERTOOS_TACACS_AUTH_TYPE"
+         method="regexp_select"
+         pattern="pap|chap|login|mschap"
+         ext_pattern="pap(pap) chap(chap) login(login) mschap(mschap)"
+         help="pap | chap | login | mschap"/>
+
+  <PTYPE name="TERTOOS_USER_ROLE"
+         method="regexp_select"
+         pattern="admin|operator|netadmin|secadmin|read-only"
+         ext_pattern="admin(admin) operator(operator) netadmin(netadmin) secadmin(secadmin) read-only(read-only)"
+         help="admin | operator | netadmin | secadmin | read-only"/>
+
+  <PTYPE name="TERTOOS_LINE_TRANSPORT"
+         method="regexp_select"
+         pattern="ssh|telnet|all|none"
+         ext_pattern="ssh(ssh) telnet(telnet) all(all) none(none)"
+         help="ssh | telnet | all | none"/>
+
+  <!-- ACL: pattern aceita numero de protocolo tambem; Tab so lista os nomes -->
+  <PTYPE name="TERTOOS_ACL_PROTO_V4"
+         method="regexp_select"
+         pattern="ip|tcp|udp|icmp|[0-9]{1,3}"
+         ext_pattern="ip(ip) tcp(tcp) udp(udp) icmp(icmp)"
+         help="ip | tcp | udp | icmp | protocol number"/>
+
+  <PTYPE name="TERTOOS_ACL_PROTO_V6"
+         method="regexp_select"
+         pattern="ipv6|tcp|udp|icmpv6|[0-9]{1,3}"
+         ext_pattern="ipv6(ipv6) tcp(tcp) udp(udp) icmpv6(icmpv6)"
+         help="ipv6 | tcp | udp | icmpv6 | protocol number"/>
+
+  <!-- Routing-policy -->
+  <PTYPE name="TERTOOS_PREFIX_MATCH_KW"
+         method="regexp_select"
+         pattern="le|ge|eq"
+         ext_pattern="le(le) ge(ge) eq(eq)"
+         help="le | ge | eq"/>
+
+  <PTYPE name="TERTOOS_BGP_ORIGIN"
+         method="regexp_select"
+         pattern="igp|egp|incomplete"
+         ext_pattern="igp(igp) egp(egp) incomplete(incomplete)"
+         help="igp | egp | incomplete"/>
+
+  <!-- BGP -->
+  <PTYPE name="TERTOOS_SEND_COMMUNITY"
+         method="regexp_select"
+         pattern="standard|extended|both|large|all|none"
+         ext_pattern="standard(standard) extended(extended) both(both) large(large) all(all) none(none)"
+         help="standard | extended | both | large | all | none"/>
+
+  <!-- EVPN -->
+  <PTYPE name="TERTOOS_EVPN_ENCAP"
+         method="regexp_select"
+         pattern="vxlan|mpls"
+         ext_pattern="vxlan(vxlan) mpls(mpls)"
+         help="vxlan | mpls"/>
+
+  <PTYPE name="TERTOOS_ES_ID_TYPE"
+         method="regexp_select"
+         pattern="type-0|type-1|type-3|type-5"
+         ext_pattern="type-0(type-0) type-1(type-1) type-3(type-3) type-5(type-5)"
+         help="type-0 | type-1 | type-3 | type-5"/>
+
+  <PTYPE name="TERTOOS_ES_RED_MODE"
+         method="regexp_select"
+         pattern="all-active|single-active"
+         ext_pattern="all-active(all-active) single-active(single-active)"
+         help="all-active | single-active"/>
+
+  <PTYPE name="TERTOOS_DF_ELECTION"
+         method="regexp_select"
+         pattern="service-carving|preference"
+         ext_pattern="service-carving(service-carving) preference(preference)"
+         help="service-carving | preference"/>
+
+  <!-- Servicos de sistema -->
+  <PTYPE name="TERTOOS_LLDP_TLV"
+         method="regexp_select"
+         pattern="mgmt-address|system-capabilities"
+         ext_pattern="mgmt-address(mgmt-address) system-capabilities(system-capabilities)"
+         help="mgmt-address | system-capabilities"/>
+
+  <PTYPE name="TERTOOS_NTP_KEY_ALG"
+         method="regexp_select"
+         pattern="md5|sha1"
+         ext_pattern="md5(md5) sha1(sha1)"
+         help="md5 | sha1"/>
+
+  <PTYPE name="TERTOOS_LOG_SEVERITY"
+         method="regexp_select"
+         pattern="emerg|alert|crit|error|warning|notice|info|debug"
+         ext_pattern="emerg(emerg) alert(alert) crit(crit) error(error) warning(warning) notice(notice) info(info) debug(debug)"
+         help="emerg | alert | crit | error | warning | notice | info | debug"/>
+
+  <PTYPE name="TERTOOS_SNMP_AUTH_MODE"
+         method="regexp_select"
+         pattern="noauth|auth-md5|auth-sha"
+         ext_pattern="noauth(noauth) auth-md5(auth-md5) auth-sha(auth-sha)"
+         help="noauth | auth-md5 | auth-sha"/>
+
+  <PTYPE name="TERTOOS_GRPC_CLIENT_AUTH"
+         method="regexp_select"
+         pattern="cert|password|none"
+         ext_pattern="cert(cert) password(password) none(none)"
+         help="cert | password | none"/>
+
+  <!-- QoS -->
+  <PTYPE name="TERTOOS_WRED_ECN"
+         method="regexp_select"
+         pattern="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all"
+         ext_pattern="ecn_none(ecn_none) ecn_green(ecn_green) ecn_yellow(ecn_yellow) ecn_red(ecn_red) ecn_green_yellow(ecn_green_yellow) ecn_green_red(ecn_green_red) ecn_yellow_red(ecn_yellow_red) ecn_all(ecn_all)"
+         help="ECN marking mode (ecn_none .. ecn_all)"/>
+
+  <PTYPE name="TERTOOS_WRED_COLOR"
+         method="regexp_select"
+         pattern="green|yellow|red"
+         ext_pattern="green(green) yellow(yellow) red(red)"
+         help="green | yellow | red"/>
+
+  <PTYPE name="TERTOOS_DISCARD_ACTION"
+         method="regexp_select"
+         pattern="drop|trim"
+         ext_pattern="drop(drop) trim(trim)"
+         help="drop | trim"/>
+
+  <PTYPE name="TERTOOS_SCHEDULER_TYPE"
+         method="regexp_select"
+         pattern="DWRR|STRICT|WRR"
+         ext_pattern="DWRR(DWRR) STRICT(STRICT) WRR(WRR)"
+         help="DWRR | STRICT | WRR"/>
+
+  <!-- Policer -->
+  <PTYPE name="TERTOOS_POLICER_MODE"
+         method="regexp_select"
+         pattern="sr_tcm|tr_tcm|storm"
+         ext_pattern="sr_tcm(sr_tcm) tr_tcm(tr_tcm) storm(storm)"
+         help="sr_tcm | tr_tcm | storm"/>
+
+  <PTYPE name="TERTOOS_POLICER_COLOR"
+         method="regexp_select"
+         pattern="aware|blind"
+         ext_pattern="aware(aware) blind(blind)"
+         help="aware | blind"/>
+
+  <!-- SR-TE -->
+  <PTYPE name="TERTOOS_SRTE_PROTO_ORIGIN"
+         method="regexp_select"
+         pattern="configured|pcep|bgp"
+         ext_pattern="configured(configured) pcep(pcep) bgp(bgp)"
+         help="configured | pcep | bgp"/>
+
+  <PTYPE name="TERTOOS_SRTE_METRIC_TYPE"
+         method="regexp_select"
+         pattern="igp|te|hopcount|delay"
+         ext_pattern="igp(igp) te(te) hopcount(hopcount) delay(delay)"
+         help="igp | te | hopcount | delay"/>
+
+  <!-- STP -->
+  <PTYPE name="TERTOOS_STP_MODE"
+         method="regexp_select"
+         pattern="pvst|rapid-pvst|mst"
+         ext_pattern="pvst(pvst) rapid-pvst(rapid-pvst) mst(mst)"
+         help="pvst | rapid-pvst | mst"/>
+
+  <!-- image activate: aceita nome de imagem livre; Tab oferece 'next' -->
+  <PTYPE name="TERTOOS_IMAGE_SLOT"
+         method="regexp_select"
+         pattern="[A-Za-z0-9][A-Za-z0-9._\-]*"
+         ext_pattern="next(next)"
+         help="next | image-name"/>
+
+  <!-- ================================================================
+       Ranges numericos (backlog secao 4 da matriz klish-ptype):
+       regexp de range gerado+auto-testado por script (gen_range_regex.py,
+       algoritmo range-regex) — NAO editar o pattern a mao; regerar.
+       Um PTYPE por range, reusado em todos os params com o mesmo range.
+       ================================================================ -->
+
+  <PTYPE name="TERTOOS_RANGE_0_7"
+         method="regexp"
+         pattern="([0-7])"
+         help="0..7"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_9"
+         method="regexp"
+         pattern="([0-9])"
+         help="0..9"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_10"
+         method="regexp"
+         pattern="([0-9])|(10)"
+         help="0..10"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_15"
+         method="regexp"
+         pattern="([0-9])|(1[0-5])"
+         help="0..15"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_63"
+         method="regexp"
+         pattern="([0-9])|([1-5][0-9])|(6[0-3])"
+         help="0..63"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_100"
+         method="regexp"
+         pattern="([0-9])|([1-9][0-9])|(100)"
+         help="0..100"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_255"
+         method="regexp"
+         pattern="([0-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-5])"
+         help="0..255"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_35791"
+         method="regexp"
+         pattern="([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-2][0-9]{4})|(3[0-4][0-9]{3})|(35[0-6][0-9]{2})|(357[0-8][0-9])|(3579[0-1])"
+         help="0..35791"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_65535"
+         method="regexp"
+         pattern="([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-5][0-9]{4})|(6[0-4][0-9]{3})|(65[0-4][0-9]{2})|(655[0-2][0-9])|(6553[0-5])"
+         help="0..65535"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_1000000"
+         method="regexp"
+         pattern="([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|(1000000)"
+         help="0..1000000"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_10"
+         method="regexp"
+         pattern="([1-9])|(10)"
+         help="1..10"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_16"
+         method="regexp"
+         pattern="([1-9])|(1[0-6])"
+         help="1..16"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_60"
+         method="regexp"
+         pattern="([1-9])|([1-5][0-9])|(60)"
+         help="1..60"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_100"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|(100)"
+         help="1..100"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_254"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-4])"
+         help="1..254"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_255"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-5])"
+         help="1..255"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_256"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-6])"
+         help="1..256"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_600"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-5][0-9]{2})|(600)"
+         help="1..600"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_9999"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})"
+         help="1..9999"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_65235"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-5][0-9]{4})|(6[0-4][0-9]{3})|(65[0-1][0-9]{2})|(652[0-2][0-9])|(6523[0-5])"
+         help="1..65235"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_65535"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-5][0-9]{4})|(6[0-4][0-9]{3})|(65[0-4][0-9]{2})|(655[0-2][0-9])|(6553[0-5])"
+         help="1..65535"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_16777215"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|(1[0-5][0-9]{6})|(16[0-6][0-9]{5})|(167[0-6][0-9]{4})|(1677[0-6][0-9]{3})|(16777[0-1][0-9]{2})|(1677720[0-9])|(1677721[0-5])"
+         help="1..16777215"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_4294967295"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|([1-9][0-9]{7})|([1-9][0-9]{8})|([1-3][0-9]{9})|(4[0-1][0-9]{8})|(42[0-8][0-9]{7})|(429[0-3][0-9]{6})|(4294[0-8][0-9]{5})|(42949[0-5][0-9]{4})|(429496[0-6][0-9]{3})|(4294967[0-1][0-9]{2})|(42949672[0-8][0-9])|(429496729[0-5])"
+         help="1..4294967295"/>
+
+  <PTYPE name="TERTOOS_RANGE_2_100"
+         method="regexp"
+         pattern="([2-9])|([1-9][0-9])|(100)"
+         help="2..100"/>
+
+  <PTYPE name="TERTOOS_RANGE_2_255"
+         method="regexp"
+         pattern="([2-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-5])"
+         help="2..255"/>
+
+  <PTYPE name="TERTOOS_RANGE_4_30"
+         method="regexp"
+         pattern="([4-9])|([1-2][0-9])|(30)"
+         help="4..30"/>
+
+  <PTYPE name="TERTOOS_RANGE_5_3600"
+         method="regexp"
+         pattern="([5-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-2][0-9]{3})|(3[0-5][0-9]{2})|(3600)"
+         help="5..3600"/>
+
+  <PTYPE name="TERTOOS_RANGE_6_40"
+         method="regexp"
+         pattern="([6-9])|([1-3][0-9])|(40)"
+         help="6..40"/>
+
+  <PTYPE name="TERTOOS_RANGE_10_60000"
+         method="regexp"
+         pattern="(1[0-9])|([2-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-5][0-9]{4})|(60000)"
+         help="10..60000"/>
+
+  <PTYPE name="TERTOOS_RANGE_128_255"
+         method="regexp"
+         pattern="(12[8-9])|(1[3-9][0-9])|(2[0-4][0-9])|(25[0-5])"
+         help="128..255"/>
+
+  <PTYPE name="TERTOOS_RANGE_350_65535"
+         method="regexp"
+         pattern="(35[0-9])|(3[6-9][0-9])|([4-9][0-9]{2})|([1-9][0-9]{3})|([1-5][0-9]{4})|(6[0-4][0-9]{3})|(65[0-4][0-9]{2})|(655[0-2][0-9])|(6553[0-5])"
+         help="350..65535"/>
+
+  <PTYPE name="TERTOOS_VRF_TABLE_ID"
+         method="regexp"
+         pattern="([1-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-2])|(25[6-9])|(2[6-9][0-9])|([3-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|([1-9][0-9]{7})|([1-9][0-9]{8})|([1-3][0-9]{9})|(4[0-1][0-9]{8})|(42[0-8][0-9]{7})|(429[0-3][0-9]{6})|(4294[0-8][0-9]{5})|(42949[0-5][0-9]{4})|(429496[0-6][0-9]{3})|(4294967[0-1][0-9]{2})|(42949672[0-8][0-9])|(429496729[0-5])"
+         help="Table id 1..252 or 256..4294967295 (0, 253-255 reserved)"/>
+
+  <!-- Console baud rate (valores discretos) -->
+  <PTYPE name="TERTOOS_BAUD_RATE"
+         method="regexp_select"
+         pattern="9600|19200|38400|57600|115200"
+         ext_pattern="9600(9600) 19200(19200) 38400(38400) 57600(57600) 115200(115200)"
+         help="9600 | 19200 | 38400 | 57600 | 115200"/>
 
 </CLISH_MODULE>

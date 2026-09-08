@@ -75,7 +75,7 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/net ${net}</ACTION>
     </COMMAND>
     <COMMAND name="is-type" help="IS level">
-      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="STRING"/>
+      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="TERTOOS_ISIS_LEVEL_TYPE"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/is_type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="dynamic-hostname" help="Advertise dynamic hostname TLV">
@@ -85,15 +85,15 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/dynamic_hostname false</ACTION>
     </COMMAND>
     <COMMAND name="metric-style" help="Metric style">
-      <PARAM name="s" help="narrow | wide | transition" ptype="STRING"/>
+      <PARAM name="s" help="narrow | wide | transition" ptype="TERTOOS_ISIS_METRIC_STYLE"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/metric_style ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lsp-lifetime" help="LSP lifetime in seconds">
-      <PARAM name="s" help="350..65535" ptype="UINT"/>
+      <PARAM name="s" help="350..65535" ptype="TERTOOS_RANGE_350_65535"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/lsp_lifetime ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lsp-refresh-interval" help="LSP refresh interval in seconds">
-      <PARAM name="s" help="1..65235" ptype="UINT"/>
+      <PARAM name="s" help="1..65235" ptype="TERTOOS_RANGE_1_65235"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/lsp_refresh_interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="area-password" help="Area authentication password">
@@ -107,7 +107,7 @@
 
     <!-- SR readiness (#18) — control-plane bare. Data-plane SAI MPLS gating S0. -->
     <COMMAND name="segment-routing" help="Segment routing toggle">
-      <PARAM name="state" help="on | off" ptype="STRING"/>
+      <PARAM name="state" help="on | off" ptype="TERTOOS_ON_OFF"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/segment_routing ${state}</ACTION>
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
@@ -122,7 +122,7 @@
       <ACTION>tertoos-cli candidate delete isis/prefix-sid/${isisvrf}/${isistag}/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="mpls-te" help="MPLS-TE toggle (control-plane)">
-      <PARAM name="state" help="on | off" ptype="STRING"/>
+      <PARAM name="state" help="on | off" ptype="TERTOOS_ON_OFF"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te ${state}</ACTION>
     </COMMAND>
     <COMMAND name="mpls-te router-address" help="MPLS-TE router address">
@@ -134,8 +134,8 @@
 
     <!-- Redistribute (top-level, agnóstico de AF — frrcfgd duplica para AFs habilitados) -->
     <COMMAND name="redistribute" help="Redistribute routes from another protocol">
-      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="STRING"/>
-      <PARAM name="lvl_kw" help="level-1 | level-2 | level-1-2" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
+      <PARAM name="lvl_kw" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
       <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
       <ACTION>
@@ -146,8 +146,8 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">
-      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="STRING"/>
-      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
+      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <ACTION>
         tertoos-cli candidate delete isis/redist/${isisvrf}/${isistag}/ipv4_unicast/${proto}/${lvl}&#xA;
       </ACTION>
@@ -158,7 +158,7 @@
              help="Enter IS-IS address-family"
              view="config-router-isis-af-view"
              viewid="isisvrf=${isisvrf};isistag=${isistag};isisaf=${af}_unicast">
-      <PARAM name="af" help="ipv4 | ipv6" ptype="STRING"/>
+      <PARAM name="af" help="ipv4 | ipv6" ptype="TERTOOS_IPV4_IPV6"/>
       <PARAM name="kw" help="unicast" ptype="SUBCOMMAND" mode="subcommand" value="unicast"/>
       <ACTION>
         tertoos-cli candidate context router-isis-af ${af}_unicast&#xA;
@@ -171,14 +171,14 @@
              help="Enter IS-IS Flexible Algorithm definition"
              view="config-router-isis-flexalgo-view"
              viewid="isisvrf=${isisvrf};isistag=${isistag};isisalgo=${id}">
-      <PARAM name="id" help="Flex-Algo ID (128..255)" ptype="UINT"/>
+      <PARAM name="id" help="Flex-Algo ID (128..255)" ptype="TERTOOS_RANGE_128_255"/>
       <ACTION>
         tertoos-cli candidate context router-isis-flexalgo ${id}&#xA;
         tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${id}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no flex-algo" help="Remove a Flex-Algo definition">
-      <PARAM name="id" help="Flex-Algo ID" ptype="UINT"/>
+      <PARAM name="id" help="Flex-Algo ID" ptype="TERTOOS_RANGE_128_255"/>
       <ACTION>tertoos-cli candidate delete isis/flex-algo/${isisvrf}/${isistag}/${id}</ACTION>
     </COMMAND>
   </VIEW>
@@ -205,8 +205,8 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute" help="AF-scoped redistribute">
-      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="STRING"/>
-      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
+      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
       <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
       <ACTION>
@@ -217,8 +217,8 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop AF-scoped redistribute">
-      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="STRING"/>
-      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
+      <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <ACTION>
         tertoos-cli candidate delete isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}&#xA;
       </ACTION>

@@ -48,7 +48,7 @@
       <PARAM name="color_sw" help="color" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="color" help="color" mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
-      <PARAM name="color_val" help="Color (1..4294967295)" ptype="UINT"/>
+      <PARAM name="color_val" help="Color (1..4294967295)" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>
         tertoos-cli candidate context srte-policy ${endpoint}/${color_val}&#xA;
         tertoos-cli candidate set sr-te/policy/${endpoint}/${color_val}/enable true&#xA;
@@ -89,7 +89,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="binding-sid" help="Binding-SID label">
-      <PARAM name="label" help="MPLS label 16..1048575" ptype="UINT"/>
+      <PARAM name="label" help="MPLS label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>tertoos-cli candidate set sr-te/policy/${srtepol_ep}/${srtepol_color}/bsid ${label}</ACTION>
     </COMMAND>
     <COMMAND name="name" help="Policy name">
@@ -100,7 +100,7 @@
              help="Configure candidate path"
              view="config-srte-cpath-view"
              viewid="srtepol_ep=${srtepol_ep};srtepol_color=${srtepol_color};srtecpath=${pref}">
-      <PARAM name="pref" help="Preference 1..65535" ptype="UINT"/>
+      <PARAM name="pref" help="Preference 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate context srte-cpath ${pref}</ACTION>
     </COMMAND>
     <COMMAND name="no candidate-path preference" help="Remove candidate path">
@@ -123,14 +123,14 @@
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/discriminator ${d}</ACTION>
     </COMMAND>
     <COMMAND name="protocol-origin" help="Origin protocol">
-      <PARAM name="p" help="configured | pcep | bgp" ptype="STRING"/>
+      <PARAM name="p" help="configured | pcep | bgp" ptype="TERTOOS_SRTE_PROTO_ORIGIN"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/protocol_origin ${p}</ACTION>
     </COMMAND>
     <COMMAND name="dynamic" help="Dynamic path">
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/dynamic true</ACTION>
     </COMMAND>
     <COMMAND name="metric-type" help="Optimization metric">
-      <PARAM name="m" help="igp | te | hopcount | delay" ptype="STRING"/>
+      <PARAM name="m" help="igp | te | hopcount | delay" ptype="TERTOOS_SRTE_METRIC_TYPE"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/metric_type ${m}</ACTION>
     </COMMAND>
     <COMMAND name="bandwidth" help="Required bandwidth (bps)">
@@ -183,7 +183,7 @@
       <ACTION>tertoos-cli candidate set sr-te/segment-list/${srteseglist}/description "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="index" help="Add hop">
-      <PARAM name="i" help="Index 1..65535" ptype="UINT"/>
+      <PARAM name="i" help="Index 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <!-- WRAP SUBCOMMAND em switch parent — vide policy acima. -->
       <PARAM name="mpls_sw" help="mpls" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="mpls" help="mpls" mode="subcommand" ptype="SUBCOMMAND"/>

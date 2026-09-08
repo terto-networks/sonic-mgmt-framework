@@ -274,7 +274,7 @@
 
     <!-- ===== S11.x — EVPN-MPLS encap (#37) ============================== -->
     <COMMAND name="encapsulation" help="EVPN encapsulation default">
-      <PARAM name="t" help="vxlan | mpls" ptype="STRING"/>
+      <PARAM name="t" help="vxlan | mpls" ptype="TERTOOS_EVPN_ENCAP"/>
       <ACTION>tertoos-cli candidate set evpn/globals/${bgpvrf}/default_encapsulation ${t}</ACTION>
     </COMMAND>
     <COMMAND name="advertise mpls-labels" help="Advertise MPLS labels in EVPN routes">
@@ -328,11 +328,11 @@
     </COMMAND>
 
     <COMMAND name="maximum-paths ebgp" help="Maximum eBGP multipath">
-      <PARAM name="n" help="1..256" ptype="UINT"/>
+      <PARAM name="n" help="1..256" ptype="TERTOOS_RANGE_1_256"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/max_ebgp_paths ${n}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-paths ibgp" help="Maximum iBGP multipath">
-      <PARAM name="n" help="1..256" ptype="UINT"/>
+      <PARAM name="n" help="1..256" ptype="TERTOOS_RANGE_1_256"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/max_ibgp_paths ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance bgp" help="BGP administrative distance">
@@ -420,7 +420,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export_auto false</ACTION>
     </COMMAND>
     <COMMAND name="label vpn export" help="Pin a specific VPN service label">
-      <PARAM name="lbl" help="MPLS label (16..1048575)" ptype="UINT"/>
+      <PARAM name="lbl" help="MPLS label (16..1048575)" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export ${lbl}</ACTION>
     </COMMAND>
     <COMMAND name="import vpn" help="Import routes from the global VPN table">
@@ -458,7 +458,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/name "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="password" help="Set MD5 password">
-      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="STRING"/>
+      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="TERTOOS_PASSWORD_ENC"/>
       <PARAM name="secret" help="Password" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/auth_password "${secret}"</ACTION>
     </COMMAND>
@@ -480,7 +480,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="ttl-security hops" help="GTSM hop count">
-      <PARAM name="hops" help="1..254" ptype="UINT"/>
+      <PARAM name="hops" help="1..254" ptype="TERTOOS_RANGE_1_254"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ttl_security_hops ${hops}</ACTION>
     </COMMAND>
     <COMMAND name="bfd" help="Enable BFD for this peer">
@@ -537,7 +537,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/nhself true</ACTION>
     </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
-      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>
+      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="TERTOOS_SEND_COMMUNITY"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/send_community ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="soft-reconfiguration inbound" help="Soft-reconfig inbound">
@@ -694,7 +694,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient false</ACTION>
     </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
-      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>
+      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="TERTOOS_SEND_COMMUNITY"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/send_community ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="soft-reconfiguration inbound" help="Soft-reconfig inbound">

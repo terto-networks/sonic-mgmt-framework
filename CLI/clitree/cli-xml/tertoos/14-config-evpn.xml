@@ -40,7 +40,7 @@
     <COMMAND name="vlan evi"
              help="Map a VLAN to an EVPN/VXLAN VNI">
       <PARAM name="vlan" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <PARAM name="vni" help="VNI 1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
       <ACTION>tertoos-cli candidate set vxlan/tunnel-map ${vlan} ${vni}</ACTION>
     </COMMAND>
     <COMMAND name="no vlan evi"
@@ -72,7 +72,7 @@
              help="Configure an EVPN Instance"
              view="config-evpn-evi-view"
              viewid="evivni=${vni}">
-      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <PARAM name="vni" help="VNI 1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
       <ACTION>tertoos-cli candidate set evpn/evi/${vni}&#xA;
               tertoos-cli candidate context evpn-evi ${vni}</ACTION>
     </COMMAND>
@@ -81,7 +81,7 @@
              help="Configure ethernet-segment ESI on an interface (multi-homing)">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
       <PARAM name="ifname" help="Interface (Ethernet/PortChannel)" ptype="TERTOOS_IFNAME"/>
-      <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="STRING"/>
+      <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="TERTOOS_ES_ID_TYPE"/>
       <PARAM name="esi" help="ESI value (XX:XX:XX:XX:XX:XX:XX:XX:XX for type-0)"
              ptype="STRING"/>
       <ACTION>
@@ -93,19 +93,19 @@
     <COMMAND name="ethernet-segment redundancy"
              help="Set ES redundancy mode">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="mode" help="all-active | single-active" ptype="STRING"/>
+      <PARAM name="mode" help="all-active | single-active" ptype="TERTOOS_ES_RED_MODE"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/redundancy_mode ${mode}</ACTION>
     </COMMAND>
     <COMMAND name="ethernet-segment df-election"
              help="DF election method">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="method" help="service-carving | preference" ptype="STRING"/>
+      <PARAM name="method" help="service-carving | preference" ptype="TERTOOS_DF_ELECTION"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_election_method ${method}</ACTION>
     </COMMAND>
     <COMMAND name="ethernet-segment df-preference"
              help="DF preference (with method=preference)">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="pref" help="0..65535" ptype="UINT"/>
+      <PARAM name="pref" help="0..65535" ptype="TERTOOS_RANGE_0_65535"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_preference ${pref}</ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-segment" help="Remove an ethernet-segment">
@@ -142,7 +142,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no route-target" help="Remove route-target">
-      <PARAM name="dir" help="import | export | both" ptype="STRING"/>
+      <PARAM name="dir" help="import | export | both" ptype="TERTOOS_IMPORT_EXPORT_BOTH"/>
       <PARAM name="rt" help="RT" ptype="TERTOOS_RT"/>
       <ACTION>
         if [ "${dir}" = "both" ]; then&#xA;

@@ -44,11 +44,11 @@
     </COMMAND>
 
     <COMMAND name="horizon interval-heartbeat" help="Heartbeat interval (s)">
-      <PARAM name="s" help="5..3600" ptype="UINT"/>
+      <PARAM name="s" help="5..3600" ptype="TERTOOS_RANGE_5_3600"/>
       <ACTION>tertoos-cli candidate set horizon/interval_heartbeat ${s}</ACTION>
     </COMMAND>
     <COMMAND name="horizon interval-counters" help="Counters interval (s)">
-      <PARAM name="s" help="5..3600" ptype="UINT"/>
+      <PARAM name="s" help="5..3600" ptype="TERTOOS_RANGE_5_3600"/>
       <ACTION>tertoos-cli candidate set horizon/interval_counters ${s}</ACTION>
     </COMMAND>
 

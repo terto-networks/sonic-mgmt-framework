@@ -111,7 +111,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="ecn" help="ECN marking mode">
-      <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="STRING"/>
+      <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="TERTOOS_WRED_ECN"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/ecn ${m}</ACTION>
     </COMMAND>
 
@@ -124,7 +124,7 @@
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="green drop-probability" help="Green drop probability %">
-      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <PARAM name="p" help="0..100" ptype="TERTOOS_RANGE_0_100"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_drop_probability ${p}</ACTION>
     </COMMAND>
 
@@ -137,7 +137,7 @@
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="yellow drop-probability" help="Yellow drop probability %">
-      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <PARAM name="p" help="0..100" ptype="TERTOOS_RANGE_0_100"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_drop_probability ${p}</ACTION>
     </COMMAND>
 
@@ -150,16 +150,16 @@
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="red drop-probability" help="Red drop probability %">
-      <PARAM name="p" help="0..100" ptype="UINT"/>
+      <PARAM name="p" help="0..100" ptype="TERTOOS_RANGE_0_100"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_drop_probability ${p}</ACTION>
     </COMMAND>
 
     <COMMAND name="wred enable" help="Enable WRED for a color">
-      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <PARAM name="c" help="green | yellow | red" ptype="TERTOOS_WRED_COLOR"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable true</ACTION>
     </COMMAND>
     <COMMAND name="wred disable" help="Disable WRED for a color">
-      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <PARAM name="c" help="green | yellow | red" ptype="TERTOOS_WRED_COLOR"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable false</ACTION>
     </COMMAND>
   </VIEW>
@@ -173,11 +173,11 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Pool direction">
-      <PARAM name="t" help="ingress | egress" ptype="STRING"/>
+      <PARAM name="t" help="ingress | egress" ptype="TERTOOS_INGRESS_EGRESS"/>
       <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="mode" help="Pool admission mode">
-      <PARAM name="m" help="static | dynamic" ptype="STRING"/>
+      <PARAM name="m" help="static | dynamic" ptype="TERTOOS_STATIC_DYNAMIC"/>
       <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/mode ${m}</ACTION>
     </COMMAND>
     <COMMAND name="size" help="Pool size in bytes">
@@ -227,11 +227,11 @@
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/xoff ${b}</ACTION>
     </COMMAND>
     <COMMAND name="headroom-type" help="Headroom calc strategy">
-      <PARAM name="t" help="static | dynamic" ptype="STRING"/>
+      <PARAM name="t" help="static | dynamic" ptype="TERTOOS_STATIC_DYNAMIC"/>
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/headroom_type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="packet-discard-action" help="Discard action">
-      <PARAM name="a" help="drop | trim" ptype="STRING"/>
+      <PARAM name="a" help="drop | trim" ptype="TERTOOS_DISCARD_ACTION"/>
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/packet_discard_action ${a}</ACTION>
     </COMMAND>
   </VIEW>
@@ -245,13 +245,13 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="dscp" help="DSCP code-point → traffic-class">
-      <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
+      <PARAM name="dscp" help="DSCP value 0..63" ptype="TERTOOS_RANGE_0_63"/>
       <PARAM name="tc_kw" help="traffic-class" ptype="SUBCOMMAND" mode="subcommand" value="traffic-class"/>
-      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set qos/dscp-to-tc/${qosmap}/${dscp} ${tc}</ACTION>
     </COMMAND>
     <COMMAND name="no dscp" help="Remove DSCP entry">
-      <PARAM name="dscp" help="DSCP value 0..63" ptype="UINT"/>
+      <PARAM name="dscp" help="DSCP value 0..63" ptype="TERTOOS_RANGE_0_63"/>
       <ACTION>tertoos-cli candidate delete qos/dscp-to-tc/${qosmap}/${dscp}</ACTION>
     </COMMAND>
   </VIEW>
@@ -265,13 +265,13 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="tc" help="Traffic-class → queue">
-      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="q_kw" help="queue" ptype="SUBCOMMAND" mode="subcommand" value="queue"/>
-      <PARAM name="q" help="Queue index 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue index 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set qos/tc-to-queue/${qosmap}/${tc} ${q}</ACTION>
     </COMMAND>
     <COMMAND name="no tc" help="Remove TC entry">
-      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate delete qos/tc-to-queue/${qosmap}/${tc}</ACTION>
     </COMMAND>
   </VIEW>
@@ -285,13 +285,13 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="tc" help="Traffic-class → priority-group">
-      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="pg_kw" help="pg" ptype="SUBCOMMAND" mode="subcommand" value="pg"/>
-      <PARAM name="pg" help="Priority-group 0..7" ptype="UINT"/>
+      <PARAM name="pg" help="Priority-group 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set qos/tc-to-pg/${qosmap}/${tc} ${pg}</ACTION>
     </COMMAND>
     <COMMAND name="no tc" help="Remove TC entry">
-      <PARAM name="tc" help="Traffic class 0..7" ptype="UINT"/>
+      <PARAM name="tc" help="Traffic class 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate delete qos/tc-to-pg/${qosmap}/${tc}</ACTION>
     </COMMAND>
   </VIEW>
@@ -305,15 +305,15 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Scheduling discipline">
-      <PARAM name="t" help="DWRR | STRICT | WRR" ptype="STRING"/>
+      <PARAM name="t" help="DWRR | STRICT | WRR" ptype="TERTOOS_SCHEDULER_TYPE"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="weight" help="DWRR/WRR weight (1..100)">
-      <PARAM name="w" help="1..100" ptype="UINT"/>
+      <PARAM name="w" help="1..100" ptype="TERTOOS_RANGE_1_100"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/weight ${w}</ACTION>
     </COMMAND>
     <COMMAND name="meter-type" help="Rate meter unit">
-      <PARAM name="u" help="bytes | packets" ptype="STRING"/>
+      <PARAM name="u" help="bytes | packets" ptype="TERTOOS_BYTES_PACKETS"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/meter_type ${u}</ACTION>
     </COMMAND>
     <COMMAND name="cir" help="Committed rate / min-bandwidth garantida (kbps)">

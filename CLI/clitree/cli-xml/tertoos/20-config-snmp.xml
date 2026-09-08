@@ -24,7 +24,7 @@
     </COMMAND>
     <COMMAND name="snmp-server community" help="SNMPv2c community">
       <PARAM name="name" help="Community name" ptype="STRING"/>
-      <PARAM name="access" help="ro | rw" ptype="STRING"/>
+      <PARAM name="access" help="ro | rw" ptype="TERTOOS_RO_RW"/>
       <ACTION>
         tertoos-cli candidate set snmp/community/${name}&#xA;
         tertoos-cli candidate set snmp/community/${name}/type ${access}&#xA;
@@ -36,7 +36,7 @@
     </COMMAND>
     <COMMAND name="snmp-server user" help="SNMPv3 user">
       <PARAM name="name" help="Username" ptype="STRING"/>
-      <PARAM name="auth" help="auth-mode (noauth|auth-md5|auth-sha)" ptype="STRING"/>
+      <PARAM name="auth" help="auth-mode (noauth|auth-md5|auth-sha)" ptype="TERTOOS_SNMP_AUTH_MODE"/>
       <ACTION>
         tertoos-cli candidate set snmp/user/${name}&#xA;
         tertoos-cli candidate set snmp/user/${name}/auth ${auth}&#xA;

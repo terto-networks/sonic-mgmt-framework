@@ -79,7 +79,7 @@
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/default-metric ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance" help="Administrative distance">
-      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/distance-all ${d}</ACTION>
     </COMMAND>
     <COMMAND name="passive-interface default" help="Mark all interfaces passive">
@@ -121,7 +121,7 @@
     </COMMAND>
 
     <COMMAND name="redistribute" help="Redistribute from another protocol">
-      <PARAM name="proto" help="connected | static | bgp" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
       <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
       <ACTION>
@@ -132,7 +132,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">
-      <PARAM name="proto" help="connected | static | bgp" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT</ACTION>
     </COMMAND>
 

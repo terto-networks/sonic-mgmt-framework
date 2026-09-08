@@ -39,15 +39,15 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="mode" help="Policer mode">
-      <PARAM name="m" help="sr_tcm | tr_tcm | storm" ptype="STRING"/>
+      <PARAM name="m" help="sr_tcm | tr_tcm | storm" ptype="TERTOOS_POLICER_MODE"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/mode ${m}</ACTION>
     </COMMAND>
     <COMMAND name="meter-type" help="Metering unit">
-      <PARAM name="u" help="bytes | packets" ptype="STRING"/>
+      <PARAM name="u" help="bytes | packets" ptype="TERTOOS_BYTES_PACKETS"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/meter_type ${u}</ACTION>
     </COMMAND>
     <COMMAND name="color" help="Color awareness mode">
-      <PARAM name="c" help="aware | blind" ptype="STRING"/>
+      <PARAM name="c" help="aware | blind" ptype="TERTOOS_POLICER_COLOR"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/color ${c}</ACTION>
     </COMMAND>
     <COMMAND name="cir" help="Committed information rate">
@@ -67,15 +67,15 @@
       <ACTION>tertoos-cli candidate set policer/${polname}/pbs ${v}</ACTION>
     </COMMAND>
     <COMMAND name="green-action" help="Action for green packets">
-      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <PARAM name="a" help="forward | drop" ptype="TERTOOS_FORWARD_DROP"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/green_packet_action ${a}</ACTION>
     </COMMAND>
     <COMMAND name="yellow-action" help="Action for yellow packets">
-      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <PARAM name="a" help="forward | drop" ptype="TERTOOS_FORWARD_DROP"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/yellow_packet_action ${a}</ACTION>
     </COMMAND>
     <COMMAND name="red-action" help="Action for red packets">
-      <PARAM name="a" help="forward | drop" ptype="STRING"/>
+      <PARAM name="a" help="forward | drop" ptype="TERTOOS_FORWARD_DROP"/>
       <ACTION>tertoos-cli candidate set policer/${polname}/red_packet_action ${a}</ACTION>
     </COMMAND>
   </VIEW>

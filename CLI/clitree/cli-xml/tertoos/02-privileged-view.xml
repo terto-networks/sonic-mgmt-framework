@@ -652,7 +652,7 @@
     </COMMAND>
     <COMMAND name="clear bgp neighbor soft" help="Soft-clear a BGP neighbor">
       <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
-      <PARAM name="dir" help="in | out" ptype="STRING"/>
+      <PARAM name="dir" help="in | out" ptype="TERTOOS_IN_OUT"/>
       <ACTION>vtysh -c "clear bgp ${addr} soft ${dir}"</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp vrf" help="Reset BGP sessions in a VRF">
@@ -922,7 +922,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="image activate" help="Set next-boot image">
-      <PARAM name="slot" help="next | image-name" ptype="STRING"/>
+      <PARAM name="slot" help="next | image-name" ptype="TERTOOS_IMAGE_SLOT"/>
       <ACTION>sudo /usr/bin/tertoos-cli image activate ${slot}</ACTION>
     </COMMAND>
     <COMMAND name="image commit" help="Commit current image as default">

@@ -19,7 +19,7 @@
     </COMMAND>
     <COMMAND name="commit confirmed"
              help="Apply with auto-rollback if not confirmed">
-      <PARAM name="minutes" help="Confirm window (1..60 minutes)" ptype="UINT"/>
+      <PARAM name="minutes" help="Confirm window (1..60 minutes)" ptype="TERTOOS_RANGE_1_60"/>
       <ACTION>tertoos-cli candidate commit --confirmed ${minutes}</ACTION>
     </COMMAND>
     <COMMAND name="commit replace"
@@ -129,7 +129,7 @@
          Show/clear correspondentes em 02-privileged-view.xml. -->
     <COMMAND name="l2 mac-address-table aging-time"
              help="Global FDB aging time (seconds; 0 = no aging)">
-      <PARAM name="s" help="Seconds (0..1000000)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (0..1000000)" ptype="TERTOOS_RANGE_0_1000000"/>
       <ACTION>tertoos-cli candidate set switch/fdb_aging_time ${s}</ACTION>
     </COMMAND>
     <COMMAND name="no l2 mac-address-table aging-time"
