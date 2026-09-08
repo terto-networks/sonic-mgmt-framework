@@ -240,10 +240,18 @@
 > 						clish_param__get_ptype(param);
 > 					if ((CLISH_PTYPE_METHOD_REGEXP_SELECT != clish_ptype__get_method(ptype)) && 
 > 					(!arg || (arg && (pname == lub_string_nocasestr(pname, arg)))))
-148a322,356
+148a322,364
 > 					else if (CLISH_PTYPE_METHOD_REGEXP_SELECT ==
 > 						clish_ptype__get_method(ptype)) {
-> 						const char *name;
+> 						/* TertoOS — name DEVE iniciar NULL: com cnt==0
+> 						 * (PTYPE regexp_select dinamico de lista vazia,
+> 						 * ex. pw-class sem itens estaticos) o for abaixo
+> 						 * NUNCA roda, e o "handle resource leak" mais
+> 						 * abaixo faz lub_string_free(name) de LIXO nao-
+> 						 * inicializado -> free() invalido -> SIGSEGV no
+> 						 * parse do pargv (Tab e Enter). Bug latente da Dell
+> 						 * exposto pela completion dinamica. */
+> 						const char *name = NULL;
 > 						int j = 0, cnt =0;
 > 						cnt = clish_ptype_regexp_select__get_argv_count(ptype);
 > 						for (;j < cnt; j++) {
@@ -276,11 +284,11 @@
 >                             				name = NULL;
 >                         			}
 > 					}
-173c381
+173c389
 < 			if (clish_pargv_find_arg(pargv, clish_param__get_name(param))) {
 ---
 > 			if (clish_pargv_find_arg(pargv, clish_param__get_name(param))) { 
-187a396,484
+187a404,492
 > 					} else {
 > 						/*  For CLISH_PTYPE_REGEXP_SELECT method, we try to match the
 > 						 *  input arg against a PARAM. If it is not matching we try
@@ -324,7 +332,7 @@
 > 								}
 > 
 > 								if(!validated) {
-> 									const char *name;
+> 									const char *name = NULL;
 > 									int j = 0, cnt =0;
 > 									cnt = clish_ptype_regexp_select__get_argv_count(clish_param__get_ptype(cparam));
 > 									for (;j < cnt; j++) {
@@ -370,7 +378,7 @@
 > 									*strmatchLen = strmatch;
 >                                                         }
 > 						}
-192a490,560
+192a498,568
 > 				/*  For CLISH_PTYPE_REGEXP_SELECT method, we try to match the
 > 				 *  input arg against a PARAM. If it is not matching we try
 > 				 *  concatenating the next arg to this arg and try matching
@@ -401,7 +409,7 @@
 > 							}
 > 						}
 > 						if(!validated) {
-> 							const char *name;
+> 							const char *name = NULL;
 > 							int j = 0, cnt =0; 
 > 							cnt = clish_ptype_regexp_select__get_argv_count(clish_param__get_ptype(param));
 > 							for (;j < cnt; j++) {
@@ -442,7 +450,7 @@
 > 							*strmatchLen = strmatch;
 >                                         }
 > 				}
-203,204c571,575
+203,204c579,583
 < 					clish_pargv_insert(pargv, param,
 < 						validated);
 ---
@@ -451,25 +459,25 @@
 > 						lub_string_free(validated);
 > 						return CLISH_BAD_PARAM;
 > 					}
-220c591
+220c599
 < 							argv, idx, last, need_index);
 ---
 > 							argv, idx, last, need_index, errP, strmatchLen);
-250c621,623
+250c629,631
 < 					else
 ---
 > 					else {
 > 						clish_pargv_insert(pargv, param,
 > 								   clish_param__get_name(param));
-251a625
+251a633
 > 					}
-275c649
+275c657
 < 			(*idx <= argc) && (index >= paramc)) {
 ---
 > 			(*idx <= argc) && (index >= paramc) && (need_index != 0)) {
-296d669
+296d677
 < 			char *enc = NULL;
-301,304c674
+301,304c682
 < 			/* Escape quote and backslash */
 < 			enc = lub_string_encode(arg, lub_string_esc_quoted);
 < 			lub_string_cat(&args, enc);
