@@ -43,7 +43,7 @@
 
     <!-- Global mode -->
     <COMMAND name="spanning-tree mode" help="Set STP mode">
-      <PARAM name="m" help="pvst | rapid-pvst | mst" ptype="STRING"/>
+      <PARAM name="m" help="pvst | rapid-pvst | mst" ptype="TERTOOS_STP_MODE"/>
       <ACTION>tertoos-cli candidate set stp/global/mode ${m}</ACTION>
     </COMMAND>
     <COMMAND name="no spanning-tree" help="Disable STP globally">

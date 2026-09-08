@@ -81,7 +81,7 @@
              help="Configure ethernet-segment ESI on an interface (multi-homing)">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
       <PARAM name="ifname" help="Interface (Ethernet/PortChannel)" ptype="TERTOOS_IFNAME"/>
-      <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="STRING"/>
+      <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="TERTOOS_ES_ID_TYPE"/>
       <PARAM name="esi" help="ESI value (XX:XX:XX:XX:XX:XX:XX:XX:XX for type-0)"
              ptype="STRING"/>
       <ACTION>
@@ -93,13 +93,13 @@
     <COMMAND name="ethernet-segment redundancy"
              help="Set ES redundancy mode">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="mode" help="all-active | single-active" ptype="STRING"/>
+      <PARAM name="mode" help="all-active | single-active" ptype="TERTOOS_ES_RED_MODE"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/redundancy_mode ${mode}</ACTION>
     </COMMAND>
     <COMMAND name="ethernet-segment df-election"
              help="DF election method">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="method" help="service-carving | preference" ptype="STRING"/>
+      <PARAM name="method" help="service-carving | preference" ptype="TERTOOS_DF_ELECTION"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_election_method ${method}</ACTION>
     </COMMAND>
     <COMMAND name="ethernet-segment df-preference"
@@ -142,7 +142,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no route-target" help="Remove route-target">
-      <PARAM name="dir" help="import | export | both" ptype="STRING"/>
+      <PARAM name="dir" help="import | export | both" ptype="TERTOOS_IMPORT_EXPORT_BOTH"/>
       <PARAM name="rt" help="RT" ptype="TERTOOS_RT"/>
       <ACTION>
         if [ "${dir}" = "both" ]; then&#xA;

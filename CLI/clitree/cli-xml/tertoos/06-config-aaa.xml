@@ -39,7 +39,7 @@
 
     <COMMAND name="aaa authentication failthrough"
              help="Try next method on auth failure (true/false)">
-      <PARAM name="state" help="true | false" ptype="STRING"/>
+      <PARAM name="state" help="true | false" ptype="TERTOOS_TRUE_FALSE"/>
       <ACTION>tertoos-cli candidate set aaa/authentication/failthrough ${state}</ACTION>
     </COMMAND>
 
@@ -61,7 +61,7 @@
       <ACTION>tertoos-cli candidate set tacacs/global/timeout ${seconds}</ACTION>
     </COMMAND>
     <COMMAND name="tacacs-server auth-type" help="Global auth type">
-      <PARAM name="type" help="pap | chap | login | mschap" ptype="STRING"/>
+      <PARAM name="type" help="pap | chap | login | mschap" ptype="TERTOOS_TACACS_AUTH_TYPE"/>
       <ACTION>tertoos-cli candidate set tacacs/global/auth-type ${type}</ACTION>
     </COMMAND>
     <COMMAND name="tacacs-server key" help="Global shared secret">
@@ -110,7 +110,7 @@
              help="Configure a local user (group/role + password)">
       <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
       <PARAM name="group-kw" help="group" ptype="STRING"/>
-      <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="STRING"/>
+      <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="TERTOOS_USER_ROLE"/>
       <PARAM name="password-kw" help="password" ptype="STRING"/>
       <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>

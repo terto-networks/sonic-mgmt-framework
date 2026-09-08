@@ -36,7 +36,7 @@
       <ACTION>tertoos-cli candidate set lldp/system_description "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="lldp tlv-select" help="Enable a specific TLV">
-      <PARAM name="tlv" help="mgmt-address | system-capabilities" ptype="STRING"/>
+      <PARAM name="tlv" help="mgmt-address | system-capabilities" ptype="TERTOOS_LLDP_TLV"/>
       <ACTION>
         if [ "${tlv}" = "mgmt-address" ]; then&#xA;
             tertoos-cli candidate set lldp/supp_mgmt_address_tlv true&#xA;

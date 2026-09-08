@@ -242,7 +242,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">
-      <PARAM name="proto" help="connected | static | bgp" ptype="STRING"/>
+      <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/redistribute/${proto}</ACTION>
     </COMMAND>
     <COMMAND name="default-information originate" help="Originate default route">
@@ -324,7 +324,7 @@
 
     <COMMAND name="authentication" help="Enable area authentication">
       <PARAM name="kind" help="message-digest | text (optional, default text)"
-             ptype="STRING" optional="true"/>
+             ptype="TERTOOS_OSPF_AREA_AUTH" optional="true"/>
       <ACTION>
         if [ "${kind}" = "message-digest" ]; then&#xA;
             tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/authentication message-digest&#xA;

@@ -274,7 +274,7 @@
 
     <!-- ===== S11.x — EVPN-MPLS encap (#37) ============================== -->
     <COMMAND name="encapsulation" help="EVPN encapsulation default">
-      <PARAM name="t" help="vxlan | mpls" ptype="STRING"/>
+      <PARAM name="t" help="vxlan | mpls" ptype="TERTOOS_EVPN_ENCAP"/>
       <ACTION>tertoos-cli candidate set evpn/globals/${bgpvrf}/default_encapsulation ${t}</ACTION>
     </COMMAND>
     <COMMAND name="advertise mpls-labels" help="Advertise MPLS labels in EVPN routes">
@@ -458,7 +458,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/name "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="password" help="Set MD5 password">
-      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="STRING"/>
+      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="TERTOOS_PASSWORD_ENC"/>
       <PARAM name="secret" help="Password" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/auth_password "${secret}"</ACTION>
     </COMMAND>
@@ -537,7 +537,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/nhself true</ACTION>
     </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
-      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>
+      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="TERTOOS_SEND_COMMUNITY"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/send_community ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="soft-reconfiguration inbound" help="Soft-reconfig inbound">
@@ -694,7 +694,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/rrclient false</ACTION>
     </COMMAND>
     <COMMAND name="send-community" help="Send community attribute">
-      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="STRING"/>
+      <PARAM name="kind" help="standard|extended|both|large|all|none" ptype="TERTOOS_SEND_COMMUNITY"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/send_community ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="soft-reconfiguration inbound" help="Soft-reconfig inbound">

@@ -23,12 +23,12 @@
     </COMMAND>
     <COMMAND name="logging protocol" help="Transport protocol">
       <PARAM name="addr" help="Server" ptype="STRING"/>
-      <PARAM name="proto" help="udp | tcp" ptype="STRING"/>
+      <PARAM name="proto" help="udp | tcp" ptype="TERTOOS_UDP_TCP"/>
       <ACTION>tertoos-cli candidate set logging/server/${addr}/protocol ${proto}</ACTION>
     </COMMAND>
     <COMMAND name="logging severity" help="Per-server severity threshold">
       <PARAM name="addr" help="Server" ptype="STRING"/>
-      <PARAM name="sev" help="emerg|alert|crit|error|warning|notice|info|debug" ptype="STRING"/>
+      <PARAM name="sev" help="emerg|alert|crit|error|warning|notice|info|debug" ptype="TERTOOS_LOG_SEVERITY"/>
       <ACTION>tertoos-cli candidate set logging/server/${addr}/severity ${sev}</ACTION>
     </COMMAND>
     <COMMAND name="logging vrf" help="Server VRF context">
@@ -42,7 +42,7 @@
     </COMMAND>
 
     <COMMAND name="logging trap" help="Global severity threshold">
-      <PARAM name="sev" help="Severity" ptype="STRING"/>
+      <PARAM name="sev" help="Severity" ptype="TERTOOS_LOG_SEVERITY"/>
       <ACTION>tertoos-cli candidate set logging/global/severity ${sev}</ACTION>
     </COMMAND>
     <COMMAND name="logging source-interface" help="Source interface">

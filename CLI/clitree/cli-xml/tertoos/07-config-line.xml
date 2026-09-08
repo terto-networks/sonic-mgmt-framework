@@ -74,7 +74,7 @@
 
     <COMMAND name="transport input"
              help="Permitted inbound transports">
-      <PARAM name="transport" help="ssh | telnet | all | none" ptype="STRING"/>
+      <PARAM name="transport" help="ssh | telnet | all | none" ptype="TERTOOS_LINE_TRANSPORT"/>
       <ACTION>tertoos-cli candidate set line/${linekey}/transport/input ${transport}</ACTION>
     </COMMAND>
 

@@ -111,7 +111,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="ecn" help="ECN marking mode">
-      <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="STRING"/>
+      <PARAM name="m" help="ecn_none|ecn_green|ecn_yellow|ecn_red|ecn_green_yellow|ecn_green_red|ecn_yellow_red|ecn_all" ptype="TERTOOS_WRED_ECN"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/ecn ${m}</ACTION>
     </COMMAND>
 
@@ -155,11 +155,11 @@
     </COMMAND>
 
     <COMMAND name="wred enable" help="Enable WRED for a color">
-      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <PARAM name="c" help="green | yellow | red" ptype="TERTOOS_WRED_COLOR"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable true</ACTION>
     </COMMAND>
     <COMMAND name="wred disable" help="Disable WRED for a color">
-      <PARAM name="c" help="green | yellow | red" ptype="STRING"/>
+      <PARAM name="c" help="green | yellow | red" ptype="TERTOOS_WRED_COLOR"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/wred_${c}_enable false</ACTION>
     </COMMAND>
   </VIEW>
@@ -173,11 +173,11 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Pool direction">
-      <PARAM name="t" help="ingress | egress" ptype="STRING"/>
+      <PARAM name="t" help="ingress | egress" ptype="TERTOOS_INGRESS_EGRESS"/>
       <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="mode" help="Pool admission mode">
-      <PARAM name="m" help="static | dynamic" ptype="STRING"/>
+      <PARAM name="m" help="static | dynamic" ptype="TERTOOS_STATIC_DYNAMIC"/>
       <ACTION>tertoos-cli candidate set qos/buffer-pool/${poolname}/mode ${m}</ACTION>
     </COMMAND>
     <COMMAND name="size" help="Pool size in bytes">
@@ -227,11 +227,11 @@
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/xoff ${b}</ACTION>
     </COMMAND>
     <COMMAND name="headroom-type" help="Headroom calc strategy">
-      <PARAM name="t" help="static | dynamic" ptype="STRING"/>
+      <PARAM name="t" help="static | dynamic" ptype="TERTOOS_STATIC_DYNAMIC"/>
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/headroom_type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="packet-discard-action" help="Discard action">
-      <PARAM name="a" help="drop | trim" ptype="STRING"/>
+      <PARAM name="a" help="drop | trim" ptype="TERTOOS_DISCARD_ACTION"/>
       <ACTION>tertoos-cli candidate set qos/buffer-profile/${profname}/packet_discard_action ${a}</ACTION>
     </COMMAND>
   </VIEW>
@@ -305,7 +305,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="type" help="Scheduling discipline">
-      <PARAM name="t" help="DWRR | STRICT | WRR" ptype="STRING"/>
+      <PARAM name="t" help="DWRR | STRICT | WRR" ptype="TERTOOS_SCHEDULER_TYPE"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="weight" help="DWRR/WRR weight (1..100)">
@@ -313,7 +313,7 @@
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/weight ${w}</ACTION>
     </COMMAND>
     <COMMAND name="meter-type" help="Rate meter unit">
-      <PARAM name="u" help="bytes | packets" ptype="STRING"/>
+      <PARAM name="u" help="bytes | packets" ptype="TERTOOS_BYTES_PACKETS"/>
       <ACTION>tertoos-cli candidate set qos/scheduler/${schedname}/meter_type ${u}</ACTION>
     </COMMAND>
     <COMMAND name="cir" help="Committed rate / min-bandwidth garantida (kbps)">

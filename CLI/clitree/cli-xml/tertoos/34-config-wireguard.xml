@@ -128,7 +128,7 @@
       <ACTION>tertoos-cli candidate delete interface/${wgname}/ip-ospf/metric</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf network" help="OSPF network type (point-to-point is typical for tunnels)">
-      <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint" ptype="STRING"/>
+      <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint" ptype="TERTOOS_OSPF_NETWORK_TYPE"/>
       <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/network-type ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf bfd" help="Enable BFD on this OSPF interface">

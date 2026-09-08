@@ -234,7 +234,7 @@
              help="Make this interface a member of a Bundle-Ether">
       <PARAM name="id" help="Bundle id" ptype="TERTOOS_BUNDLE_ID"/>
       <PARAM name="mode-kw" help="mode" ptype="STRING"/>
-      <PARAM name="mode" help="active | passive | on" ptype="STRING"/>
+      <PARAM name="mode" help="active | passive | on" ptype="TERTOOS_LACP_MODE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
     </COMMAND>
     <COMMAND name="no bundle id" help="Remove from any bundle">
@@ -250,7 +250,7 @@
     <COMMAND name="ipv4 access-group"
              help="Apply IPv4 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
-      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <PARAM name="dir" help="ingress | egress" ptype="TERTOOS_INGRESS_EGRESS"/>
       <ACTION>
         if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
         tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
@@ -265,7 +265,7 @@
     <COMMAND name="ipv6 access-group"
              help="Apply IPv6 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
-      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <PARAM name="dir" help="ingress | egress" ptype="TERTOOS_INGRESS_EGRESS"/>
       <ACTION>
         if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
         tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
@@ -280,7 +280,7 @@
     <COMMAND name="ethernet-services access-group"
              help="Apply L2 ACL to this interface">
       <PARAM name="acl" help="ACL name (must already exist)" ptype="TERTOOS_NAME"/>
-      <PARAM name="dir" help="ingress | egress" ptype="STRING"/>
+      <PARAM name="dir" help="ingress | egress" ptype="TERTOOS_INGRESS_EGRESS"/>
       <ACTION>
         if [ "${dir}" = "egress" ]; then S=EGRESS; else S=INGRESS; fi&#xA;
         tertoos-cli candidate set acl/${acl}/stage ${S}&#xA;
@@ -369,7 +369,7 @@
     </COMMAND>
     <COMMAND name="ip ospf network" help="OSPF network type">
       <PARAM name="kind" help="point-to-point | broadcast | non-broadcast | point-to-multipoint"
-             ptype="STRING"/>
+             ptype="TERTOOS_OSPF_NETWORK_TYPE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/network-type ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf priority" help="DR election priority">
@@ -377,7 +377,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/priority ${p}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf authentication" help="Per-interface authentication">
-      <PARAM name="kind" help="text | message-digest | null" ptype="STRING"/>
+      <PARAM name="kind" help="text | message-digest | null" ptype="TERTOOS_OSPF_IF_AUTH"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-type ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf authentication-key" help="Plain authentication key">
@@ -430,7 +430,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-direction" help="Per-port sample direction override">
-      <PARAM name="dir" help="rx | tx | both" ptype="STRING"/>
+      <PARAM name="dir" help="rx | tx | both" ptype="TERTOOS_RX_TX_BOTH"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_direction ${dir}</ACTION>
     </COMMAND>
 
@@ -459,7 +459,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/priority ${p}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf network" help="OSPFv3 network type">
-      <PARAM name="t" help="broadcast | point-to-point" ptype="STRING"/>
+      <PARAM name="t" help="broadcast | point-to-point" ptype="TERTOOS_P2P_BROADCAST"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/network-type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf bfd" help="Enable BFD for OSPFv3">
@@ -488,11 +488,11 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/isis/instance</ACTION>
     </COMMAND>
     <COMMAND name="isis circuit-type" help="Per-port adjacency level">
-      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="STRING"/>
+      <PARAM name="t" help="level-1 | level-2-only | level-1-2" ptype="TERTOOS_ISIS_LEVEL_TYPE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/circuit-type ${t}</ACTION>
     </COMMAND>
     <COMMAND name="isis network" help="Per-port network type">
-      <PARAM name="n" help="point-to-point | broadcast" ptype="STRING"/>
+      <PARAM name="n" help="point-to-point | broadcast" ptype="TERTOOS_P2P_BROADCAST"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/network-type ${n}</ACTION>
     </COMMAND>
     <COMMAND name="isis hello-interval" help="Hello interval in seconds">
@@ -508,7 +508,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/metric ${n}</ACTION>
     </COMMAND>
     <COMMAND name="isis password" help="Per-port authentication">
-      <PARAM name="t" help="clear | md5" ptype="STRING"/>
+      <PARAM name="t" help="clear | md5" ptype="TERTOOS_ISIS_AUTH_TYPE"/>
       <PARAM name="key" help="Password" ptype="STRING"/>
       <ACTION>
         tertoos-cli candidate set interface/${ifname}/isis/password-type ${t}&#xA;
@@ -725,7 +725,7 @@
     <COMMAND name="storm-control" help="Storm-control rate-limit per port">
       <PARAM name="type" help="broadcast | multicast | unknown-unicast"
              ptype="TERTOOS_STORM_TYPE"/>
-      <PARAM name="unit" help="kbps | pps" ptype="STRING"/>
+      <PARAM name="unit" help="kbps | pps" ptype="TERTOOS_STORM_UNIT"/>
       <PARAM name="value" help="Rate limit value" ptype="UINT"/>
       <ACTION>
         tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}&#xA;
@@ -758,7 +758,7 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/mac_limit</ACTION>
     </COMMAND>
     <COMMAND name="mac-limit action" help="Action on MAC limit exceeded">
-      <PARAM name="action" help="drop | shutdown | log" ptype="STRING"/>
+      <PARAM name="action" help="drop | shutdown | log" ptype="TERTOOS_MAC_LIMIT_ACTION"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit_action ${action}</ACTION>
     </COMMAND>
 

@@ -28,7 +28,7 @@
       <ACTION>tertoos-cli candidate set sflow/polling_interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-direction" help="Sample direction">
-      <PARAM name="dir" help="rx | tx | both" ptype="STRING"/>
+      <PARAM name="dir" help="rx | tx | both" ptype="TERTOOS_RX_TX_BOTH"/>
       <ACTION>tertoos-cli candidate set sflow/sample_direction ${dir}</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-rate" help="Global sample rate (1 in N packets, ASIC)">

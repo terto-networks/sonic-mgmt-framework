@@ -199,7 +199,7 @@
     </COMMAND>
 
     <COMMAND name="password" help="MD5 password for this neighbor">
-      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="STRING"/>
+      <PARAM name="enc" help="0=plain | 7=encrypted" ptype="TERTOOS_PASSWORD_ENC"/>
       <PARAM name="secret" help="Password" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password "${secret}"</ACTION>
     </COMMAND>
