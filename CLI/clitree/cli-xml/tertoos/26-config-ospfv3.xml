@@ -112,11 +112,11 @@
     </COMMAND>
 
     <COMMAND name="passive-interface" help="Mark interface passive">
-      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no passive-interface" help="Re-enable interface adjacency">
-      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
     </COMMAND>
 

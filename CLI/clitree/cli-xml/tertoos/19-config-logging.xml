@@ -46,7 +46,7 @@
       <ACTION>tertoos-cli candidate set logging/global/severity ${sev}</ACTION>
     </COMMAND>
     <COMMAND name="logging source-interface" help="Source interface">
-      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set logging/global/source_intf ${ifname}</ACTION>
     </COMMAND>
   </VIEW>
