@@ -153,7 +153,7 @@
 >         clish_ptype_t *ptype = NULL;
 >         clish_ptype_method_e method = CLISH_PTYPE_METHOD_REGEXP;
 > 
-346,359c454,548
+346,359c454,553
 < 	/* Find out the function API */
 < 	/* CLISH_SYM_API_SIMPLE */
 < 	if (clish_sym__get_api(sym) == CLISH_SYM_API_SIMPLE) {
@@ -175,9 +175,14 @@
 > 		result = clish_shell_exec_sym_api(sym, func, context, script, out);
 > 	} else {
 >                 method = clish_ptype__get_method(ptype);
->                 if (method == CLISH_PTYPE_METHOD_REGEXP_SELECT)
+>                 if (method == CLISH_PTYPE_METHOD_REGEXP_SELECT &&
+>                     !clish_ptype__get_ext_pattern_cmd(ptype))
 >                 {
->                         /* interface CLISH_PTYPE_REGEXP_SELECT type handling */
+>                         /* interface CLISH_PTYPE_REGEXP_SELECT type handling.
+>                          * TertoOS: dynamic PTYPEs (ext_pattern_cmd) are excluded
+>                          * — their value is a free object name used verbatim, so
+>                          * the name-canonicalization here (which needs a closed
+>                          * item list) would null ${value} and crash the ACTION. */
 >                         char *res = NULL;
 >                         char *ptr = NULL;
 >                         int index = -1, j;
@@ -264,7 +269,7 @@
 > 			result = clish_shell_exec_sym_api(sym, func, context, script, out);
 >                 }
 >         }
-377c566
+377c571
 < 	lub_string_free(script);
 ---
 > 	if (script) lub_string_free(script);
