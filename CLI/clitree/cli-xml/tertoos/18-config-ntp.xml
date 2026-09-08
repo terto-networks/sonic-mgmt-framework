@@ -33,7 +33,7 @@
       <ACTION>tertoos-cli candidate set ntp/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="ntp source" help="Source interface">
-      <PARAM name="ifname" help="Interface" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set ntp/src_intf ${ifname}</ACTION>
     </COMMAND>
 

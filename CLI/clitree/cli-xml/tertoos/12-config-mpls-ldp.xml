@@ -174,11 +174,11 @@
     </COMMAND>
 
     <COMMAND name="interface" help="Enable LDP on interface">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Disable LDP on interface">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
     </COMMAND>
 

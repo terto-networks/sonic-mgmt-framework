@@ -24,7 +24,7 @@
   <VIEW name="config-view">
 
     <COMMAND name="vxlan source-interface" help="VXLAN VTEP source interface">
-      <PARAM name="ifname" help="Interface name (Loopback0 typical)" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name (Loopback0 typical)" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set vxlan/source-interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no vxlan source-interface" help="Remove VXLAN VTEP">
@@ -64,7 +64,7 @@
     </COMMAND>
 
     <COMMAND name="nvo source-interface" help="Bind NVO to a source interface">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set evpn/nvo/source-interface ${ifname}</ACTION>
     </COMMAND>
 
@@ -80,7 +80,7 @@
     <COMMAND name="ethernet-segment identifier"
              help="Configure ethernet-segment ESI on an interface (multi-homing)">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="ifname" help="Interface (Ethernet/PortChannel)" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface (Ethernet/PortChannel)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="type" help="type-0 | type-1 | type-3 | type-5" ptype="STRING"/>
       <PARAM name="esi" help="ESI value (XX:XX:XX:XX:XX:XX:XX:XX:XX for type-0)"
              ptype="STRING"/>
@@ -159,11 +159,11 @@
          atras da porta de acesso nao entra no VXLAN — so' o SVI do br<vni>
          alcancava o dominio EVPN. O cfgd enslava a porta em br<vni>. -->
     <COMMAND name="interface" help="Attach a local access interface (AC) to this EVI/VNI bridge">
-      <PARAM name="ifname" help="Interface name (Ethernet/PortChannel)" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name (Ethernet/PortChannel)" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/interface/${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Detach an access interface from this EVI/VNI bridge">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate delete evpn/evi/${evivni}/interface/${ifname}</ACTION>
     </COMMAND>
 
