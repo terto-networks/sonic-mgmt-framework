@@ -2,7 +2,7 @@ diff --git a/clish/shell/shell_xml.c b/clish/shell/shell_xml.c
 index 8467ec1..6a4b49e 100644
 --- a/clish/shell/shell_xml.c
 +++ b/clish/shell/shell_xml.c
-@@ -179,6 +179,7 @@ int clish_shell_load_scheme(clish_shell_t *this, const char *xml_path, const cha
+@@ -179,6 +179,7 @@
  			root = clish_xmldoc_get_root(doc);
  			r = process_node(this, root, NULL);
  			clish_xmldoc_release(doc);
@@ -10,7 +10,7 @@ index 8467ec1..6a4b49e 100644
  
  			/* Error message */
  			if (r) {
-@@ -382,6 +383,10 @@ static int process_ptype(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -382,6 +383,11 @@
  	char *pattern = clish_xmlnode_fetch_attr(element, "pattern");
  	char *method_name = clish_xmlnode_fetch_attr(element, "method");
  	char *preprocess_name =	clish_xmlnode_fetch_attr(element, "preprocess");
@@ -18,10 +18,11 @@ index 8467ec1..6a4b49e 100644
 +        char *ext_help = clish_xmlnode_fetch_attr(element, "ext_help");
 +	char *alt_ext_pattern = clish_xmlnode_fetch_attr(element, "alt_ext_pattern");
 +	char *alt_pattern = clish_xmlnode_fetch_attr(element, "alt_pattern");
++	char *ext_pattern_cmd = clish_xmlnode_fetch_attr(element, "ext_pattern_cmd");
  
  	/* Check syntax */
  	if (!name) {
-@@ -400,8 +405,13 @@ static int process_ptype(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -400,8 +406,17 @@
  	}
  
  	preprocess = clish_ptype_preprocess_resolve(preprocess_name);
@@ -33,10 +34,14 @@ index 8467ec1..6a4b49e 100644
 -		name, help, pattern, method, preprocess);
 +		name, help, pattern, method, preprocess, ext_pattern, ext_help,
 +		alt_ext_pattern, alt_pattern);
++
++	/* TertoOS — dynamic completion helper command (regexp_select only) */
++	if (ext_pattern_cmd)
++		clish_ptype__set_ext_pattern_cmd(ptype, ext_pattern_cmd);
  
  	res = process_children(shell, element, ptype);
  error:
-@@ -410,6 +420,10 @@ error:
+@@ -410,6 +425,11 @@
  	clish_xml_release(pattern);
  	clish_xml_release(method_name);
  	clish_xml_release(preprocess_name);
@@ -44,10 +49,11 @@ index 8467ec1..6a4b49e 100644
 +        clish_xml_release(ext_help);
 +        clish_xml_release(alt_ext_pattern);
 +	clish_xml_release(alt_pattern);
++	clish_xml_release(ext_pattern_cmd);
  
  	parent = parent; /* Happy compiler */
  
-@@ -476,6 +490,7 @@ static int process_command(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -476,6 +496,7 @@
  	char *args_name = clish_xmlnode_fetch_attr(element, "args");
  	char *args_help = clish_xmlnode_fetch_attr(element, "args_help");
  	char *ref = clish_xmlnode_fetch_attr(element, "ref");
@@ -55,7 +61,7 @@ index 8467ec1..6a4b49e 100644
  #ifdef LEGACY
  	char *lock = clish_xmlnode_fetch_attr(element, "lock");
  	char *interrupt = clish_xmlnode_fetch_attr(element, "interrupt");
-@@ -573,6 +588,11 @@ static int process_command(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -573,6 +594,11 @@
  	if (access)
  		clish_command__set_access(cmd, access);
  
@@ -67,7 +73,7 @@ index 8467ec1..6a4b49e 100644
  //process_command_end:
  	res = process_children(shell, element, cmd);
  error:
-@@ -585,6 +605,7 @@ error:
+@@ -585,6 +611,7 @@
  	clish_xml_release(args_name);
  	clish_xml_release(args_help);
  	clish_xml_release(ref);
@@ -75,7 +81,7 @@ index 8467ec1..6a4b49e 100644
  #ifdef LEGACY
  	clish_xml_release(lock);
  	clish_xml_release(interrupt);
-@@ -642,7 +663,7 @@ static int process_startup(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -642,7 +669,7 @@
  	if (timeout) {
  		unsigned int to = 0;
  		lub_conv_atoui(timeout, &to, 0);
@@ -84,7 +90,7 @@ index 8467ec1..6a4b49e 100644
  	}
  
  #ifdef LEGACY
-@@ -710,6 +731,9 @@ static int process_param(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -710,6 +737,9 @@
  	char *test = clish_xmlnode_fetch_attr(element, "test");
  	char *completion = clish_xmlnode_fetch_attr(element, "completion");
  	char *access = clish_xmlnode_fetch_attr(element, "access");
@@ -94,7 +100,7 @@ index 8467ec1..6a4b49e 100644
  
  	/* The PARAM can be child of COMMAND or another PARAM */
  	pelement = clish_xmlnode_parent(element);
-@@ -760,7 +784,8 @@ static int process_param(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -760,7 +790,8 @@
  		 */
  		tmp = clish_shell_find_create_ptype(shell,
  			ptype_name, "Option", "[^\\\\]+",
@@ -104,7 +110,7 @@ index 8467ec1..6a4b49e 100644
  		assert(tmp);
  		lub_string_cat(&str, "_prefix_");
  		lub_string_cat(&str, name);
-@@ -780,13 +805,14 @@ static int process_param(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -780,13 +811,14 @@
  		/* Add the parameter to the param */
  		if (p_param)
  			clish_param_insert_param(p_param, opt_param);
@@ -120,7 +126,7 @@ index 8467ec1..6a4b49e 100644
  
  	if (hidden && lub_string_nocasecmp(hidden, "true") == 0)
  		clish_param__set_hidden(param, BOOL_TRUE);
-@@ -841,6 +867,12 @@ static int process_param(clish_shell_t *shell, clish_xmlnode_t *element,
+@@ -841,6 +873,12 @@
  	if (p_param)
  		clish_param_insert_param(p_param, param);
  
@@ -133,7 +139,7 @@ index 8467ec1..6a4b49e 100644
  	res = process_children(shell, element, param);
  
  error:
-@@ -857,6 +889,8 @@ error:
+@@ -857,6 +895,8 @@
  	clish_xml_release(test);
  	clish_xml_release(completion);
  	clish_xml_release(access);

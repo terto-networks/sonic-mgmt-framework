@@ -142,6 +142,9 @@ limitations under the License.
   <xs:attribute name="ext_pattern" type="stringType" use="optional"/>
   <xs:attribute name="preprocess" type="stringType" use="optional"/>
   <xs:attribute name="ext_help" type="xs:string" use="optional"/>
+  <!-- TertoOS: shell command whose stdout provides dynamic Tab/? candidates
+       for method="regexp_select" (same item format as ext_pattern). -->
+  <xs:attribute name="ext_pattern_cmd" type="stringType" use="optional"/>
 </xs:attributeGroup>
 
 
