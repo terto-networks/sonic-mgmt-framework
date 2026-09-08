@@ -162,7 +162,7 @@
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9._/-]*"
          ext_pattern="Ethernet0(Ethernet0) Ethernet1(Ethernet1) Ethernet2(Ethernet2) Ethernet3(Ethernet3) Ethernet4(Ethernet4) Ethernet5(Ethernet5) Ethernet6(Ethernet6) Ethernet7(Ethernet7) Ethernet8(Ethernet8) Ethernet9(Ethernet9) Ethernet10(Ethernet10) Ethernet11(Ethernet11) Ethernet12(Ethernet12) Ethernet13(Ethernet13) Ethernet14(Ethernet14) Ethernet15(Ethernet15) Ethernet16(Ethernet16) Ethernet17(Ethernet17) Ethernet18(Ethernet18) Ethernet19(Ethernet19) Ethernet20(Ethernet20) Ethernet21(Ethernet21) Ethernet22(Ethernet22) Ethernet23(Ethernet23) Ethernet24(Ethernet24) Ethernet25(Ethernet25) Ethernet26(Ethernet26) Bundle-Ether(Bundle-Ether) Loopback(Loopback) Mgmt(Mgmt)"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete interface"
+         ext_pattern_cmd="tertoos-cli complete interface"
          help="Interface name (e.g. Ethernet1, Ethernet1.100, Bundle-Ether2, Loopback0)"/>
 
   <!-- Dynamic completion PTYPEs (TertoOS ext_pattern_cmd): the Tab/?
@@ -173,37 +173,37 @@
   <PTYPE name="TERTOOS_PW_CLASS_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete pw-class"
+         ext_pattern_cmd="tertoos-cli complete pw-class"
          help="Pw-class name (Tab lists the configured ones)"/>
 
   <PTYPE name="TERTOOS_XCONNECT_GROUP_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete xconnect-group"
+         ext_pattern_cmd="tertoos-cli complete xconnect-group"
          help="Xconnect group name (Tab lists the configured ones)"/>
 
   <PTYPE name="TERTOOS_BD_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete bridge-domain"
+         ext_pattern_cmd="tertoos-cli complete bridge-domain"
          help="Bridge-domain name (Tab lists the configured ones)"/>
 
   <PTYPE name="TERTOOS_VFI_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete vfi"
+         ext_pattern_cmd="tertoos-cli complete vfi"
          help="VFI name (Tab lists the configured ones)"/>
 
   <PTYPE name="TERTOOS_STATIC_PW_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete static-pw"
+         ext_pattern_cmd="tertoos-cli complete static-pw"
          help="Static PW name (Tab lists the configured ones)"/>
 
   <PTYPE name="TERTOOS_VRF_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
-         ext_pattern_cmd="timeout 3 tertoos-cli complete vrf"
+         ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
 
 </CLISH_MODULE>
