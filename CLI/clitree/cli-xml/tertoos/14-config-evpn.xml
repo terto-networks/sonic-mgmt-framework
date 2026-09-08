@@ -40,7 +40,7 @@
     <COMMAND name="vlan evi"
              help="Map a VLAN to an EVPN/VXLAN VNI">
       <PARAM name="vlan" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <PARAM name="vni" help="VNI 1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
       <ACTION>tertoos-cli candidate set vxlan/tunnel-map ${vlan} ${vni}</ACTION>
     </COMMAND>
     <COMMAND name="no vlan evi"
@@ -72,7 +72,7 @@
              help="Configure an EVPN Instance"
              view="config-evpn-evi-view"
              viewid="evivni=${vni}">
-      <PARAM name="vni" help="VNI 1..16777215" ptype="UINT"/>
+      <PARAM name="vni" help="VNI 1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
       <ACTION>tertoos-cli candidate set evpn/evi/${vni}&#xA;
               tertoos-cli candidate context evpn-evi ${vni}</ACTION>
     </COMMAND>
@@ -105,7 +105,7 @@
     <COMMAND name="ethernet-segment df-preference"
              help="DF preference (with method=preference)">
       <PARAM name="esname" help="ES local name" ptype="TERTOOS_NAME"/>
-      <PARAM name="pref" help="0..65535" ptype="UINT"/>
+      <PARAM name="pref" help="0..65535" ptype="TERTOOS_RANGE_0_65535"/>
       <ACTION>tertoos-cli candidate set evpn/ethernet-segment/${esname}/df_preference ${pref}</ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-segment" help="Remove an ethernet-segment">

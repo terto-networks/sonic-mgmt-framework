@@ -32,7 +32,7 @@
       <ACTION>tertoos-cli candidate set telemetry/gnmi/port ${port}</ACTION>
     </COMMAND>
     <COMMAND name="grpc server log-level" help="gNMI server log level">
-      <PARAM name="level" help="0..9" ptype="UINT"/>
+      <PARAM name="level" help="0..9" ptype="TERTOOS_RANGE_0_9"/>
       <ACTION>tertoos-cli candidate set telemetry/gnmi/log_level ${level}</ACTION>
     </COMMAND>
     <COMMAND name="grpc server client-auth" help="Client cert auth (cert|password|none)">

@@ -160,7 +160,7 @@
          no PR mgmt-fw#18 + tertoos#78. -->
     <COMMAND name="segment-routing node-msd"
              help="Maximum SID Depth (max label stack depth for this node)">
-      <PARAM name="msd" help="1..16 (8 is typical for FRR)" ptype="UINT"/>
+      <PARAM name="msd" help="1..16 (8 is typical for FRR)" ptype="TERTOOS_RANGE_1_16"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/sr-node-msd ${msd}</ACTION>
     </COMMAND>
     <COMMAND name="no segment-routing node-msd" help="Remove MSD (revert to ospfd default)">
@@ -185,15 +185,15 @@
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/router-info-scope</ACTION>
     </COMMAND>
     <COMMAND name="distance ospf external" help="Distance for external routes">
-      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/distance-external ${d}</ACTION>
     </COMMAND>
     <COMMAND name="distance ospf inter-area" help="Distance for inter-area routes">
-      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/distance-inter-area ${d}</ACTION>
     </COMMAND>
     <COMMAND name="distance ospf intra-area" help="Distance for intra-area routes">
-      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/distance-intra-area ${d}</ACTION>
     </COMMAND>
 

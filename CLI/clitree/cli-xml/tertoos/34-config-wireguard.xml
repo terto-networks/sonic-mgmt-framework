@@ -73,7 +73,7 @@
     </COMMAND>
 
     <COMMAND name="listen-port" help="UDP listen port">
-      <PARAM name="port" help="1..65535" ptype="UINT"/>
+      <PARAM name="port" help="1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/listen_port ${port}</ACTION>
     </COMMAND>
     <COMMAND name="no listen-port" help="Clear listen port">
@@ -106,7 +106,7 @@
     </COMMAND>
     <COMMAND name="peer persistent-keepalive" help="Set a peer's keepalive (seconds)">
       <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
-      <PARAM name="seconds" help="1..65535 (25 typical to punch CGNAT)" ptype="UINT"/>
+      <PARAM name="seconds" help="1..65535 (25 typical to punch CGNAT)" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/persistent_keepalive ${seconds}</ACTION>
     </COMMAND>
     <COMMAND name="no peer" help="Remove a peer">
@@ -121,7 +121,7 @@
          metrado. Mesmos leaves das portas Ethernet (interface/<if>/ip-ospf/*),
          keyed pelo nome do tunnel. Bind na area vem do `network` sob router ospf. -->
     <COMMAND name="ip ospf cost" help="OSPF link cost (use alto p/ backup ocioso, ex 1000)">
-      <PARAM name="cost" help="1..65535" ptype="UINT"/>
+      <PARAM name="cost" help="1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${wgname}/ip-ospf/metric ${cost}</ACTION>
     </COMMAND>
     <COMMAND name="no ip ospf cost" help="Reset OSPF cost">

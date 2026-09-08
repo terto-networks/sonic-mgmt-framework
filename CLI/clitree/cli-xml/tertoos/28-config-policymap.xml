@@ -72,15 +72,15 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="set traffic-class" help="Set traffic class">
-      <PARAM name="n" help="0..7" ptype="UINT"/>
+      <PARAM name="n" help="0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_traffic_class ${n}</ACTION>
     </COMMAND>
     <COMMAND name="set dscp" help="Set DSCP">
-      <PARAM name="n" help="0..63" ptype="UINT"/>
+      <PARAM name="n" help="0..63" ptype="TERTOOS_RANGE_0_63"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_dscp ${n}</ACTION>
     </COMMAND>
     <COMMAND name="set precedence" help="Set IP precedence">
-      <PARAM name="n" help="0..7" ptype="UINT"/>
+      <PARAM name="n" help="0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_precedence ${n}</ACTION>
     </COMMAND>
     <COMMAND name="police" help="Apply policer">
@@ -88,7 +88,7 @@
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/police_name ${pol}</ACTION>
     </COMMAND>
     <COMMAND name="queue" help="Steer to queue">
-      <PARAM name="q" help="0..7" ptype="UINT"/>
+      <PARAM name="q" help="0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/queue_index ${q}</ACTION>
     </COMMAND>
     <COMMAND name="wred-profile" help="Bind WRED profile">

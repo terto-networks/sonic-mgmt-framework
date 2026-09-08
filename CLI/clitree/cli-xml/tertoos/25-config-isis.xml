@@ -89,11 +89,11 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/metric_style ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lsp-lifetime" help="LSP lifetime in seconds">
-      <PARAM name="s" help="350..65535" ptype="UINT"/>
+      <PARAM name="s" help="350..65535" ptype="TERTOOS_RANGE_350_65535"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/lsp_lifetime ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lsp-refresh-interval" help="LSP refresh interval in seconds">
-      <PARAM name="s" help="1..65235" ptype="UINT"/>
+      <PARAM name="s" help="1..65235" ptype="TERTOOS_RANGE_1_65235"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/lsp_refresh_interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="area-password" help="Area authentication password">
@@ -171,14 +171,14 @@
              help="Enter IS-IS Flexible Algorithm definition"
              view="config-router-isis-flexalgo-view"
              viewid="isisvrf=${isisvrf};isistag=${isistag};isisalgo=${id}">
-      <PARAM name="id" help="Flex-Algo ID (128..255)" ptype="UINT"/>
+      <PARAM name="id" help="Flex-Algo ID (128..255)" ptype="TERTOOS_RANGE_128_255"/>
       <ACTION>
         tertoos-cli candidate context router-isis-flexalgo ${id}&#xA;
         tertoos-cli candidate set isis/flex-algo/${isisvrf}/${isistag}/${id}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no flex-algo" help="Remove a Flex-Algo definition">
-      <PARAM name="id" help="Flex-Algo ID" ptype="UINT"/>
+      <PARAM name="id" help="Flex-Algo ID" ptype="TERTOOS_RANGE_128_255"/>
       <ACTION>tertoos-cli candidate delete isis/flex-algo/${isisvrf}/${isistag}/${id}</ACTION>
     </COMMAND>
   </VIEW>

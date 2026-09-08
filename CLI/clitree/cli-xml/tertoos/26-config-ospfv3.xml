@@ -79,7 +79,7 @@
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/default-metric ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance" help="Administrative distance">
-      <PARAM name="d" help="1..255" ptype="UINT"/>
+      <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/distance-all ${d}</ACTION>
     </COMMAND>
     <COMMAND name="passive-interface default" help="Mark all interfaces passive">

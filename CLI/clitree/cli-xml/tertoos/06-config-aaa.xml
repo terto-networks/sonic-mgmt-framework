@@ -57,7 +57,7 @@
 
     <!-- =============================== TACACS+ ============================== -->
     <COMMAND name="tacacs-server timeout" help="Global TACACS+ timeout (sec)">
-      <PARAM name="seconds" help="1..60" ptype="UINT"/>
+      <PARAM name="seconds" help="1..60" ptype="TERTOOS_RANGE_1_60"/>
       <ACTION>tertoos-cli candidate set tacacs/global/timeout ${seconds}</ACTION>
     </COMMAND>
     <COMMAND name="tacacs-server auth-type" help="Global auth type">
@@ -82,11 +82,11 @@
 
     <!-- ================================ RADIUS ============================== -->
     <COMMAND name="radius-server timeout" help="Global RADIUS timeout (sec)">
-      <PARAM name="seconds" help="1..60" ptype="UINT"/>
+      <PARAM name="seconds" help="1..60" ptype="TERTOOS_RANGE_1_60"/>
       <ACTION>tertoos-cli candidate set radius/global/timeout ${seconds}</ACTION>
     </COMMAND>
     <COMMAND name="radius-server retransmit" help="Global retransmit count">
-      <PARAM name="count" help="0..10" ptype="UINT"/>
+      <PARAM name="count" help="0..10" ptype="TERTOOS_RANGE_0_10"/>
       <ACTION>tertoos-cli candidate set radius/global/retransmit ${count}</ACTION>
     </COMMAND>
     <COMMAND name="radius-server key" help="Global shared secret">

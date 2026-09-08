@@ -139,7 +139,7 @@
     <!-- Forma simples: <seq> <prefix> [le|ge|eq <len>] -->
     <COMMAND name="permit"
              help="Add a prefix entry (permit)">
-      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
@@ -276,7 +276,7 @@
     -->
     <COMMAND name="permit"
              help="Open a permit statement">
-      <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="UINT"/>
+      <PARAM name="seq" help="Statement sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>
         tertoos-cli candidate context rpl-stmt ${seq}&#xA;
         tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/op permit&#xA;

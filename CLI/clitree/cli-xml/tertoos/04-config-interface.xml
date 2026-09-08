@@ -126,7 +126,7 @@
     </COMMAND>
 
     <COMMAND name="load-interval" help="Counter polling interval seconds">
-      <PARAM name="seconds" help="1..600 seconds" ptype="UINT"/>
+      <PARAM name="seconds" help="1..600 seconds" ptype="TERTOOS_RANGE_1_600"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/load_interval ${seconds}</ACTION>
     </COMMAND>
 
@@ -308,7 +308,7 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/area-id</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf cost" help="OSPF link cost">
-      <PARAM name="cost" help="1..65535" ptype="UINT"/>
+      <PARAM name="cost" help="1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/metric ${cost}</ACTION>
     </COMMAND>
     <!-- Frente 1a — Adj-SID persistente por interface (PR FRR #69).
@@ -324,7 +324,7 @@
          Caminho típico (SR-TE estrito): `ip ospf adjacency-sid 15013 absolute unprotected`. -->
     <COMMAND name="ip ospf adjacency-sid"
              help="Pin persistent Adj-SID (survives flap and ospfd restart)">
-      <PARAM name="value" help="16..1048575 (label if absolute; offset if index)" ptype="UINT"/>
+      <PARAM name="value" help="16..1048575 (label if absolute; offset if index)" ptype="TERTOOS_MPLS_LABEL"/>
       <!-- absolute|index é opcional; default = absolute. -->
       <PARAM name="kind_kw" help="absolute|index" ptype="SUBCOMMAND" mode="switch" optional="true">
         <PARAM name="absolute" help="Treat value as absolute MPLS label (default)"
@@ -373,7 +373,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/network-type ${kind}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf priority" help="DR election priority">
-      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <PARAM name="p" help="0..255" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/priority ${p}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf authentication" help="Per-interface authentication">
@@ -385,7 +385,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key "${key}"</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf message-digest-key" help="MD5 key">
-      <PARAM name="id" help="Key id 1..255" ptype="UINT"/>
+      <PARAM name="id" help="Key id 1..255" ptype="TERTOOS_RANGE_1_255"/>
       <PARAM name="md5" help="md5" ptype="STRING"/>
       <PARAM name="key" help="Key string" ptype="STRING"/>
       <ACTION>
@@ -426,7 +426,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/admin_state down</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-rate" help="Per-port sample rate override">
-      <PARAM name="n" help="1-in-N" ptype="UINT"/>
+      <PARAM name="n" help="1-in-N" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/sflow/sample_rate ${n}</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-direction" help="Per-port sample direction override">
@@ -443,19 +443,19 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/ipv6-ospf/area-id</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf cost" help="OSPFv3 cost">
-      <PARAM name="n" help="1..65535" ptype="UINT"/>
+      <PARAM name="n" help="1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/cost ${n}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf hello-interval" help="OSPFv3 hello interval">
-      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <PARAM name="s" help="1..65535 seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/hello-interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf dead-interval" help="OSPFv3 dead interval">
-      <PARAM name="s" help="1..65535 seconds" ptype="UINT"/>
+      <PARAM name="s" help="1..65535 seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/dead-interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf priority" help="OSPFv3 router priority">
-      <PARAM name="p" help="0..255" ptype="UINT"/>
+      <PARAM name="p" help="0..255" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/priority ${p}</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf network" help="OSPFv3 network type">
@@ -475,7 +475,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/passive false</ACTION>
     </COMMAND>
     <COMMAND name="ipv6 ospf instance-id" help="OSPFv3 instance id">
-      <PARAM name="n" help="0..255" ptype="UINT"/>
+      <PARAM name="n" help="0..255" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/instance-id ${n}</ACTION>
     </COMMAND>
 
@@ -496,15 +496,15 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/network-type ${n}</ACTION>
     </COMMAND>
     <COMMAND name="isis hello-interval" help="Hello interval in seconds">
-      <PARAM name="s" help="1..600" ptype="UINT"/>
+      <PARAM name="s" help="1..600" ptype="TERTOOS_RANGE_1_600"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="isis hello-multiplier" help="Hello multiplier">
-      <PARAM name="n" help="2..100" ptype="UINT"/>
+      <PARAM name="n" help="2..100" ptype="TERTOOS_RANGE_2_100"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/hello-multiplier ${n}</ACTION>
     </COMMAND>
     <COMMAND name="isis metric" help="Per-port metric">
-      <PARAM name="n" help="1..16777215" ptype="UINT"/>
+      <PARAM name="n" help="1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/metric ${n}</ACTION>
     </COMMAND>
     <COMMAND name="isis password" help="Per-port authentication">
@@ -600,39 +600,39 @@
 
     <!-- S12.B.2 — per-queue / per-PG bindings -->
     <COMMAND name="qos queue wred-profile" help="Bind WRED profile to a queue">
-      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="prof_kw" help="wred-profile" ptype="SUBCOMMAND" mode="subcommand" value="wred-profile"/>
       <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/wred_profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos queue wred-profile" help="Unbind WRED from queue">
-      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/queue/${q}/wred_profile</ACTION>
     </COMMAND>
     <COMMAND name="qos queue scheduler" help="Bind scheduler to a queue">
-      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="sch_kw" help="scheduler" ptype="SUBCOMMAND" mode="subcommand" value="scheduler"/>
       <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/scheduler ${name}</ACTION>
     </COMMAND>
     <COMMAND name="qos buffer-profile-pg" help="Bind buffer profile to a PG">
-      <PARAM name="pg" help="PG 0..7" ptype="UINT"/>
+      <PARAM name="pg" help="PG 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand" value="profile"/>
       <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-pg/${pg}/profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos buffer-profile-pg" help="Unbind buffer profile from PG">
-      <PARAM name="pg" help="PG 0..7" ptype="UINT"/>
+      <PARAM name="pg" help="PG 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-pg/${pg}/profile</ACTION>
     </COMMAND>
     <COMMAND name="qos buffer-profile-queue" help="Bind buffer profile to a queue">
-      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand" value="profile"/>
       <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-queue/${q}/profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos buffer-profile-queue" help="Unbind buffer profile from queue">
-      <PARAM name="q" help="Queue 0..7" ptype="UINT"/>
+      <PARAM name="q" help="Queue 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/buffer-queue/${q}/profile</ACTION>
     </COMMAND>
 

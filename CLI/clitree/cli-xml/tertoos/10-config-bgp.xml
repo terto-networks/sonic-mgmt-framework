@@ -328,11 +328,11 @@
     </COMMAND>
 
     <COMMAND name="maximum-paths ebgp" help="Maximum eBGP multipath">
-      <PARAM name="n" help="1..256" ptype="UINT"/>
+      <PARAM name="n" help="1..256" ptype="TERTOOS_RANGE_1_256"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/max_ebgp_paths ${n}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-paths ibgp" help="Maximum iBGP multipath">
-      <PARAM name="n" help="1..256" ptype="UINT"/>
+      <PARAM name="n" help="1..256" ptype="TERTOOS_RANGE_1_256"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/max_ibgp_paths ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance bgp" help="BGP administrative distance">
@@ -420,7 +420,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export_auto false</ACTION>
     </COMMAND>
     <COMMAND name="label vpn export" help="Pin a specific VPN service label">
-      <PARAM name="lbl" help="MPLS label (16..1048575)" ptype="UINT"/>
+      <PARAM name="lbl" help="MPLS label (16..1048575)" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/label_vpn_export ${lbl}</ACTION>
     </COMMAND>
     <COMMAND name="import vpn" help="Import routes from the global VPN table">
@@ -480,7 +480,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="ttl-security hops" help="GTSM hop count">
-      <PARAM name="hops" help="1..254" ptype="UINT"/>
+      <PARAM name="hops" help="1..254" ptype="TERTOOS_RANGE_1_254"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/ttl_security_hops ${hops}</ACTION>
     </COMMAND>
     <COMMAND name="bfd" help="Enable BFD for this peer">

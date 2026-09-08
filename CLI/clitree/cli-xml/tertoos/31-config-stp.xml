@@ -52,15 +52,15 @@
 
     <!-- Global timers -->
     <COMMAND name="spanning-tree forward-time" help="STP forward delay (4..30s)">
-      <PARAM name="s" help="Seconds (4..30)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (4..30)" ptype="TERTOOS_RANGE_4_30"/>
       <ACTION>tertoos-cli candidate set stp/global/forward_delay ${s}</ACTION>
     </COMMAND>
     <COMMAND name="spanning-tree hello-time" help="STP hello time (1..10s)">
-      <PARAM name="s" help="Seconds (1..10)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (1..10)" ptype="TERTOOS_RANGE_1_10"/>
       <ACTION>tertoos-cli candidate set stp/global/hello_time ${s}</ACTION>
     </COMMAND>
     <COMMAND name="spanning-tree max-age" help="STP max age (6..40s)">
-      <PARAM name="s" help="Seconds (6..40)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (6..40)" ptype="TERTOOS_RANGE_6_40"/>
       <ACTION>tertoos-cli candidate set stp/global/max_age ${s}</ACTION>
     </COMMAND>
 
@@ -99,19 +99,19 @@
     <COMMAND name="spanning-tree vlan forward-time"
              help="Per-VLAN forward delay">
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="s" help="Seconds (4..30)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (4..30)" ptype="TERTOOS_RANGE_4_30"/>
       <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/forward_delay ${s}</ACTION>
     </COMMAND>
     <COMMAND name="spanning-tree vlan hello-time"
              help="Per-VLAN hello time">
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="s" help="Seconds (1..10)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (1..10)" ptype="TERTOOS_RANGE_1_10"/>
       <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/hello_time ${s}</ACTION>
     </COMMAND>
     <COMMAND name="spanning-tree vlan max-age"
              help="Per-VLAN max age">
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="s" help="Seconds (6..40)" ptype="UINT"/>
+      <PARAM name="s" help="Seconds (6..40)" ptype="TERTOOS_RANGE_6_40"/>
       <ACTION>tertoos-cli candidate set stp/vlan/${vlan}/max_age ${s}</ACTION>
     </COMMAND>
 
@@ -139,7 +139,7 @@
     <!-- MST per-instance global -->
     <COMMAND name="spanning-tree mst priority"
              help="MST instance bridge priority">
-      <PARAM name="inst" help="MST instance (0..15)" ptype="UINT"/>
+      <PARAM name="inst" help="MST instance (0..15)" ptype="TERTOOS_RANGE_0_15"/>
       <PARAM name="p" help="Priority (0..61440 step 4096)" ptype="TERTOOS_STP_PRIORITY"/>
       <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority ${p}</ACTION>
     </COMMAND>
@@ -172,7 +172,7 @@
       <ACTION>tertoos-cli candidate set stp/mst/global/name ${n}</ACTION>
     </COMMAND>
     <COMMAND name="revision" help="MST revision number">
-      <PARAM name="r" help="Revision (0..65535)" ptype="UINT"/>
+      <PARAM name="r" help="Revision (0..65535)" ptype="TERTOOS_RANGE_0_65535"/>
       <ACTION>tertoos-cli candidate set stp/mst/global/revision ${r}</ACTION>
     </COMMAND>
     <COMMAND name="max-hops" help="MST max hops (1..40; default 20)">
@@ -180,7 +180,7 @@
       <ACTION>tertoos-cli candidate set stp/mst/global/max_hops ${h}</ACTION>
     </COMMAND>
     <COMMAND name="instance" help="Map VLANs to MST instance">
-      <PARAM name="n" help="MST instance (0..15)" ptype="UINT"/>
+      <PARAM name="n" help="MST instance (0..15)" ptype="TERTOOS_RANGE_0_15"/>
       <PARAM name="vlan-kw" help="vlan" ptype="STRING"/>
       <PARAM name="vlist" help="VLAN list (ex: 100,200,300 or 400-500)"
              ptype="TERTOOS_VLAN_LIST"/>
