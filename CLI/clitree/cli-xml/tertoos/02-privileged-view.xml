@@ -640,8 +640,15 @@
     </COMMAND>
 
     <COMMAND name="clear" help="Reset operational counters/state"/>
-    <COMMAND name="clear counters" help="Clear interface counters">
+    <!-- Zera os contadores do SILICIO (SAI_PORT_STAT_*), nao uma baseline em
+         software: em debug de campo o que importa e o DELTA desde "agora", e com
+         contadores na casa dos bilhoes subtrair de cabeca e fonte de erro. -->
+    <COMMAND name="clear counters" help="Clear hardware counters of all ports">
       <ACTION>tertoos-cli clear counters</ACTION>
+    </COMMAND>
+    <COMMAND name="clear counters interface" help="Clear hardware counters of one port">
+      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli clear counters interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp" help="Reset all BGP sessions">
       <ACTION>vtysh -c "clear bgp *"</ACTION>
