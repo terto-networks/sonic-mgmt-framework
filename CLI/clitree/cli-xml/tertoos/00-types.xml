@@ -28,9 +28,15 @@
          help="MPLS label 16..1048575"/>
 
   <!-- Bundle-Ether id -->
+  <!-- Bundle id: com completion DINAMICA (lista os bundles ja existentes).
+       Era `method="regexp"` puro, entao o Tab nao oferecia NADA no id enquanto o
+       `mode` (active/passive/on) completava — o operador tinha que lembrar de
+       cabeca quais bundles existem. `regexp_select` + ext_pattern_cmd resolve, e
+       o pattern segue aceitando um id NOVO (criar bundle continua livre). -->
   <PTYPE name="TERTOOS_BUNDLE_ID"
-         method="regexp"
+         method="regexp_select"
          pattern="[1-9][0-9]{0,3}"
+         ext_pattern_cmd="tertoos-cli complete bundle-id"
          help="Bundle-Ether id 1..9999"/>
 
   <!-- Route Distinguisher: ASN:nn or A.B.C.D:nn -->
