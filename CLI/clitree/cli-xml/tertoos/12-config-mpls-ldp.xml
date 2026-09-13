@@ -173,13 +173,21 @@
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/label-local-allocate-host-only true</ACTION>
     </COMMAND>
 
+    <!--
+      Aceita as DUAS grafias: "interface Ethernet1.10" e "interface Ethernet 1.10".
+      A segunda é a que o show running-config imprime (o Pasteable espaça o nome em
+      qualquer linha "interface X"); sem o ifsub opcional, colar o running-config
+      de volta falhava com "Invalid input" nesta view (HW 2026-09-12).
+    -->
     <COMMAND name="interface" help="Enable LDP on interface">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, Bundle-Ether1.10)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1.10)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Disable LDP on interface">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, Bundle-Ether1.10)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1.10)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
 
   </VIEW>
