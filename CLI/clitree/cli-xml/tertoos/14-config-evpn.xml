@@ -158,13 +158,16 @@
          EVI/VNI's L2 bridge. Sem isto o trafego de um host L2 (CPE/BRAS)
          atras da porta de acesso nao entra no VXLAN — so' o SVI do br<vni>
          alcancava o dominio EVPN. O cfgd enslava a porta em br<vni>. -->
+    <!-- Duas grafias ("Ethernet7" e "Ethernet 7", esta vinda do running-config). -->
     <COMMAND name="interface" help="Attach a local access interface (AC) to this EVI/VNI bridge">
-      <PARAM name="ifname" help="Interface name (Ethernet/PortChannel)" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/interface/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet7, Bundle-Ether2)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 7)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set evpn/evi/${evivni}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Detach an access interface from this EVI/VNI bridge">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate delete evpn/evi/${evivni}/interface/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet7, Bundle-Ether2)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 7)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate delete evpn/evi/${evivni}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
 
   </VIEW>

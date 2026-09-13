@@ -135,13 +135,22 @@
       <PARAM name="name" help="VFI name" ptype="TERTOOS_VFI_NAME"/>
       <ACTION>tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/vfi_name ${name}</ACTION>
     </COMMAND>
+    <!--
+      Aceita as DUAS grafias: "interface Bundle-Ether1" e "interface Bundle-Ether 1".
+      A segunda é a que o show running-config imprime (o Pasteable espaça o nome em
+      qualquer linha "interface X", inclusive no corpo do bridge-domain); sem o ifsub
+      opcional, colar o running-config de volta falhava com "Invalid input".
+      Mesma correção da view do LDP (12-config-mpls-ldp.xml).
+    -->
     <COMMAND name="interface" help="Add attachment circuit (interface)">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set l2vpn/bd-ac/${bdname}/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1, Bundle-Ether1)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set l2vpn/bd-ac/${bdname}/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Remove attachment circuit">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate delete l2vpn/bd-ac/${bdname}/${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1, Bundle-Ether1)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate delete l2vpn/bd-ac/${bdname}/${ifname}${ifsub}</ACTION>
     </COMMAND>
   </VIEW>
 
@@ -269,9 +278,11 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
+    <!-- Duas grafias ("Ethernet1.200" e "Ethernet 1.200", esta vinda do running-config). -->
     <COMMAND name="interface" help="Attachment circuit interface">
-      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/interface ${ifname}</ACTION>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.200, Bundle-Ether1.200)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1.200)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${l2vpnp2p}/interface ${ifname}${ifsub}</ACTION>
     </COMMAND>
     <!--
       Sintaxe: neighbor ipv4 <addr> pw-id <pwid>
