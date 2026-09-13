@@ -180,12 +180,12 @@
       de volta falhava com "Invalid input" nesta view (HW 2026-09-12).
     -->
     <COMMAND name="interface" help="Enable LDP on interface">
-      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, Bundle-Ether1.10)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, PortChannel1.10)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1.10)" ptype="TERTOOS_IFNUM" optional="true"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no interface" help="Disable LDP on interface">
-      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, Bundle-Ether1.10)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="ifname" help="Interface name (e.g. Ethernet1.10, PortChannel1.10)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="ifsub" help="Interface number when typed apart (e.g. 1.10)" ptype="TERTOOS_IFNUM" optional="true"/>
       <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/interface/${ifname}${ifsub}</ACTION>
     </COMMAND>

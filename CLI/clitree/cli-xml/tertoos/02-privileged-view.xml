@@ -77,7 +77,7 @@
       <ACTION>tertoos-cli show interfaces</ACTION>
     </COMMAND>
     <COMMAND name="show interface" help="Show a single interface in detail (add 'summary' for one line, 'rate' for live bps/pps)">
-      <PARAM name="name" help="Interface name (e.g. Ethernet1, Bundle-Ether2)" ptype="TERTOOS_IFNAME"/>
+      <PARAM name="name" help="Interface name (e.g. Ethernet1, PortChannel2)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="summary" help="one-line summary instead of the full detail"
              ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
       <PARAM name="rate" help="live RX/TX rate (bps + pps) from the ASIC HW counters"
