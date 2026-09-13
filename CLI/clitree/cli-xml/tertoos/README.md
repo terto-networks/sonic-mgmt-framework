@@ -10,11 +10,11 @@ o build flag `TERTOOS_CLI=y` está ativo.
 
 | Arquivo | Conteúdo | Sprint |
 |---|---|---|
-| `00-types.xml`           | PTYPEs (regex) IOS-XR (NET, Bundle-Ether, asn etc.) | S1 |
+| `00-types.xml`           | PTYPEs (regex) IOS-XR (NET, PortChannel id, asn etc.) | S1 |
 | `01-exec-view.xml`       | View `exec-view` (`tertoos>`), enable, ping, show básico | S1 |
 | `02-privileged-view.xml` | `privileged-view` (`tertoos#`), show *, clear *, configure | S1 |
 | `03-config-view.xml`     | Candidate `config-view` + commit/abort/rollback/show config | S1 |
-| `04-config-interface.xml`| `config-if-view` (interface, Bundle-Ether, subif) | S2 |
+| `04-config-interface.xml`| `config-if-view` (interface, PortChannel, subif) | S2 |
 | `05-config-vrf.xml`      | `config-vrf-view` + RD/RT | S2 |
 | `06-config-bgp.xml`      | `config-bgp-view` + AF + neighbor groups | S4 |
 | `07-config-isis.xml`     | `config-isis-view` (incl. SR) | S5 |
@@ -38,9 +38,11 @@ o build flag `TERTOOS_CLI=y` está ativo.
    renderiza a árvore inteira, não a sequência de comandos digitados.
 3. **RPL é a única forma de policy**. Não expor `route-map`. Internamente
    um tradutor compila RPL → estrutura FRR.
-4. **Bundle-Ether substitui PortChannel** na superfície externa. YANG
-   internamente reusa `sonic-portchannel`, mas o nome operacional é
-   `Bundle-EtherN` (parser deve aceitar `Bundle-Ether 1` ou `BE1`).
+4. **PortChannel é o nome externo E interno** (decisão CEO 2026-09-13). O YANG
+   reusa `sonic-portchannel` e o CLI fala `interface PortChannel N` +
+   `portchannel id N mode X` — sem camada de tradução (era `Bundle-Ether` /
+   `bundle id`, fonte de bugs de nome literal/truncado). `Bundle-Ether N`, `BE1`
+   e `bundle id` continuam aceitos como alias de ENTRADA deprecado.
 5. **PTYPEs centralizados** em `00-types.xml` — qualquer regex de validação
    (asn, ipv4, ipv6, NET, label, vlan, prefix-set name, RD, RT, ESI) vive
    ali, nunca duplicado.

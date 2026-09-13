@@ -5,7 +5,9 @@
 
   Suporta:
     - Ethernet portas físicas (ex.: Ethernet0, GigabitEthernet0/0/0/1 traduzido)
-    - Bundle-EtherN (LACP virtual)
+    - PortChannelN (LACP virtual; "Bundle-Ether N" continua aceito como alias
+      de entrada por compatibilidade com backups antigos — decisao CEO 2026-09-13:
+      o nome externo passa a ser o MESMO do interno/kernel, sem camada de traducao)
     - <if>.<vlan> sub-interfaces com encapsulation dot1q
 
   Mapeamento candidate → CONFIG_DB:
@@ -27,7 +29,7 @@
 
   <!-- Entrada na view a partir de config-view.
        Forma `interface <type> <num>` em dois tokens: o tipo (Ethernet,
-       Loopback, Bundle-Ether, Mgmt) e' um switch de subcomandos — KLISH
+       Loopback, PortChannel, Mgmt) e' um switch de subcomandos — KLISH
        o lista no Tab. O ${ifnum} segue (indice da porta ou sub-if .vlan).
        O viewid recompoe o nome canonico sem espaco (ex.: Ethernet0,
        Ethernet0.100) para o resto da config-if-view e para o prompt. -->
@@ -39,7 +41,8 @@
       <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
         <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
-        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="PortChannel"  help="LACP port-channel (bundle) interface" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="Alias of PortChannel (deprecated)" mode="subcommand" ptype="SUBCOMMAND"/>
         <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
       <PARAM name="ifnum" help="Index (e.g. 0) or sub-interface (e.g. 0.100)"
@@ -61,7 +64,8 @@
       <PARAM name="iftype" help="Interface type" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="Ethernet"     help="Physical Ethernet port" mode="subcommand" ptype="SUBCOMMAND"/>
         <PARAM name="Loopback"     help="Loopback interface"     mode="subcommand" ptype="SUBCOMMAND"/>
-        <PARAM name="Bundle-Ether" help="LACP bundle interface"  mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="PortChannel"  help="LACP port-channel (bundle) interface" mode="subcommand" ptype="SUBCOMMAND"/>
+        <PARAM name="Bundle-Ether" help="Alias of PortChannel (deprecated)" mode="subcommand" ptype="SUBCOMMAND"/>
         <PARAM name="Mgmt"         help="Management interface"   mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
       <PARAM name="ifnum" help="Index or sub-interface" ptype="TERTOOS_IFNUM"/>
@@ -229,15 +233,27 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/encapsulation/untagged</ACTION>
     </COMMAND>
 
-    <!-- LACP / Bundle membership (em interface física apontando para Bundle-EtherN) -->
-    <COMMAND name="bundle id"
-             help="Make this interface a member of a Bundle-Ether">
-      <PARAM name="id" help="Bundle id" ptype="TERTOOS_BUNDLE_ID"/>
+    <!-- LACP / port-channel membership (em interface fisica apontando para PortChannelN).
+         O path simbolico interno (interface/<if>/bundle) NAO muda — so o texto que o
+         operador digita. `bundle id` fica como alias de entrada (backups antigos). -->
+    <COMMAND name="portchannel id"
+             help="Make this interface a member of a PortChannel">
+      <PARAM name="id" help="PortChannel id" ptype="TERTOOS_BUNDLE_ID"/>
       <PARAM name="mode-kw" help="mode" ptype="STRING"/>
       <PARAM name="mode" help="active | passive | on" ptype="TERTOOS_LACP_MODE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
     </COMMAND>
-    <COMMAND name="no bundle id" help="Remove from any bundle">
+    <COMMAND name="no portchannel id" help="Remove from any port-channel">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/bundle</ACTION>
+    </COMMAND>
+    <COMMAND name="bundle id"
+             help="Alias of 'portchannel id' (deprecated)">
+      <PARAM name="id" help="PortChannel id" ptype="TERTOOS_BUNDLE_ID"/>
+      <PARAM name="mode-kw" help="mode" ptype="STRING"/>
+      <PARAM name="mode" help="active | passive | on" ptype="TERTOOS_LACP_MODE"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
+    </COMMAND>
+    <COMMAND name="no bundle id" help="Alias of 'no portchannel id' (deprecated)">
       <ACTION>tertoos-cli candidate delete interface/${ifname}/bundle</ACTION>
     </COMMAND>
 
