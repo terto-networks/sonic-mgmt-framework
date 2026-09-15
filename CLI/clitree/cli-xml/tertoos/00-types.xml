@@ -105,12 +105,13 @@
          pattern="[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*"
          help="VLAN id, range, or list (ex: 100, 100-200, 100,200,300)"/>
 
-  <!-- S15 — Storm-control type (regexp_select -> Tab lists the values) -->
+  <!-- S15 — Storm-control type = enum storm_type do sonic-storm-control.yang.
+       YANG-first: o token do CLI é o próprio valor do schema (sem tradução). -->
   <PTYPE name="TERTOOS_STORM_TYPE"
          method="regexp_select"
-         pattern="broadcast|multicast|unknown-unicast"
-         ext_pattern="broadcast(broadcast) multicast(multicast) unknown-unicast(unknown-unicast)"
-         help="broadcast | multicast | unknown-unicast"/>
+         pattern="broadcast|unknown-unicast|unknown-multicast"
+         ext_pattern="broadcast(broadcast) unknown-unicast(unknown-unicast) unknown-multicast(unknown-multicast)"
+         help="broadcast | unknown-unicast | unknown-multicast"/>
 
   <!-- Interface index — the numeric part after the type keyword in the
        two-token `interface <type> <num>` form. Accepts a plain index

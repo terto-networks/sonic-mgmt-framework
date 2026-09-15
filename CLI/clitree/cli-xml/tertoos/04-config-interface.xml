@@ -736,21 +736,20 @@
     </COMMAND>
 
     <!-- ====== S15.D — Storm-control =========================================
-         Mapeia para PORT_STORM_CONTROL|<if>|<storm_type> com kbps.
-         storm_type ∈ {broadcast, multicast, unknown-unicast}. -->
+         YANG: sonic-storm-control.yang (leaf kbps) + tertoos-storm-control-
+         extensions.yang (leaf pps). PORT_STORM_CONTROL|<if>|<storm_type> com
+         {kbps: N} OU {pps: N} — nunca os dois (must do YANG); o translate apaga
+         o leaf da outra unidade. storm_type = enum do YANG. -->
     <COMMAND name="storm-control" help="Storm-control rate-limit per port">
-      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+      <PARAM name="type" help="broadcast | unknown-unicast | unknown-multicast"
              ptype="TERTOOS_STORM_TYPE"/>
       <PARAM name="unit" help="kbps | pps" ptype="TERTOOS_STORM_UNIT"/>
       <PARAM name="value" help="Rate limit value" ptype="UINT"/>
-      <ACTION>
-        tertoos-cli candidate set storm-control/${ifname}/${type}/unit ${unit}&#xA;
-        tertoos-cli candidate set storm-control/${ifname}/${type}/value ${value}&#xA;
-      </ACTION>
+      <ACTION>tertoos-cli candidate set storm-control/${ifname}/${type}/${unit} ${value}</ACTION>
     </COMMAND>
     <COMMAND name="no storm-control"
              help="Remove storm-control for a type">
-      <PARAM name="type" help="broadcast | multicast | unknown-unicast"
+      <PARAM name="type" help="broadcast | unknown-unicast | unknown-multicast"
              ptype="TERTOOS_STORM_TYPE"/>
       <ACTION>tertoos-cli candidate delete storm-control/${ifname}/${type}</ACTION>
     </COMMAND>
