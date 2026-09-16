@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — management ACL (firewall de host das portas de GERENCIA).
+    YANG: tertoos-mgmt-firewall.yang (tabela MGMT_FIREWALL|global).
+
+    management-acl enable            → MGMT_FIREWALL|global admin_state=enabled
+    no management-acl enable         → admin_state=disabled
+    management-acl interface <if>    → mgmt_interface (override do default da plataforma)
+    no management-acl interface      → volta a usar o default da plataforma
+
+  Restringe SSH, a UI local, gNMI e SNMP a' interface de GERENCIA. NAO toca em
+  BGP/OSPF/LDP/BFD nem nos PDUs de controle L2 — esses chegam legitimamente pelas
+  interfaces de transito. Tambem NAO filtra transito: o encaminhamento acontece no
+  ASIC e nunca passa pelo kernel; isso aqui so' protege o que e' puntado pra CPU.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="management-acl enable"
+             help="Restrict management services (SSH, UI, gNMI, SNMP) to the management interface">
+      <ACTION>tertoos-cli candidate set mgmt-acl/admin_state enabled</ACTION>
+    </COMMAND>
+    <COMMAND name="no management-acl enable"
+             help="Let management services answer on every interface (previous behaviour)">
+      <ACTION>tertoos-cli candidate set mgmt-acl/admin_state disabled</ACTION>
+    </COMMAND>
+    <COMMAND name="management-acl interface"
+             help="Override which interface the management services are allowed on">
+      <PARAM name="ifname" help="Management interface name (e.g. end0)" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set mgmt-acl/mgmt_interface ${ifname}</ACTION>
+    </COMMAND>
+    <COMMAND name="no management-acl interface"
+             help="Use the platform's management interface again">
+      <ACTION>tertoos-cli candidate delete mgmt-acl/mgmt_interface</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>
