@@ -326,6 +326,26 @@
          ext_pattern="drop(drop) shutdown(shutdown) log(log)"
          help="drop | shutdown | log"/>
 
+  <!-- CoPP — enums do tertoos-copp-extensions.yang (COPP_GLOBAL). YANG-first:
+       o token do CLI é o próprio valor do schema. -->
+  <PTYPE name="TERTOOS_COPP_AC_TRANSPARENCY"
+         method="regexp_select"
+         pattern="copp-exempt|bypass|off"
+         ext_pattern="copp-exempt(copp-exempt) bypass(bypass) off(off)"
+         help="copp-exempt | bypass | off"/>
+
+  <PTYPE name="TERTOOS_COPP_TRAP_ACTION"
+         method="regexp_select"
+         pattern="trap|copy"
+         ext_pattern="trap(trap) copy(copy)"
+         help="trap | copy"/>
+
+  <PTYPE name="TERTOOS_COPP_TRAP_GROUPS"
+         method="regexp_select"
+         pattern="enabled|disabled"
+         ext_pattern="enabled(enabled) disabled(disabled)"
+         help="enabled | disabled"/>
+
   <!-- OSPF / OSPFv3 -->
   <PTYPE name="TERTOOS_OSPF_NETWORK_TYPE"
          method="regexp_select"

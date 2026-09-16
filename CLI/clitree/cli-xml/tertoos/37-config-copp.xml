@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — CoPP (Control Plane Policing), opções globais.
+    YANG: sonic-copp.yang (COPP_GROUP/COPP_TRAP — grupos, filas e policers) +
+          tertoos-copp-extensions.yang (COPP_GLOBAL — o que é nosso).
+
+    copp ac-transparency <mode>  → COPP_GLOBAL|global ac_transparency
+
+  Os objetos de CoPP são programados quando o dataplane sobe, então mudar
+  isto vale a partir do próximo restart do tos-lite-saibridge (o comando
+  avisa, e o `show copp` mostra o que está programado AGORA).
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="copp ac-transparency"
+             help="How a VPWS attachment circuit escapes control plane policing">
+      <PARAM name="mode" help="copp-exempt | bypass | off"
+             ptype="TERTOOS_COPP_AC_TRANSPARENCY"/>
+      <ACTION>tertoos-cli candidate set copp/ac_transparency ${mode}</ACTION>
+    </COMMAND>
+    <COMMAND name="no copp ac-transparency"
+             help="Restore the default AC transparency mode (copp-exempt)">
+      <ACTION>tertoos-cli candidate delete copp/ac_transparency</ACTION>
+    </COMMAND>
+    <COMMAND name="copp trap-groups"
+             help="Give each class of trap its own CPU queue and policer">
+      <PARAM name="state" help="enabled | disabled"
+             ptype="TERTOOS_COPP_TRAP_GROUPS"/>
+      <ACTION>tertoos-cli candidate set copp/trap_groups ${state}</ACTION>
+    </COMMAND>
+    <COMMAND name="no copp trap-groups"
+             help="Restore the default (enabled)">
+      <ACTION>tertoos-cli candidate delete copp/trap_groups</ACTION>
+    </COMMAND>
+    <COMMAND name="copp control-trap-action"
+             help="Packet action of the protocol traps (ARP, DHCP, OSPF, LDP, BGP, BFD)">
+      <PARAM name="action" help="trap | copy"
+             ptype="TERTOOS_COPP_TRAP_ACTION"/>
+      <ACTION>tertoos-cli candidate set copp/control_trap_action ${action}</ACTION>
+    </COMMAND>
+    <COMMAND name="no copp control-trap-action"
+             help="Restore the default (trap)">
+      <ACTION>tertoos-cli candidate delete copp/control_trap_action</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>
