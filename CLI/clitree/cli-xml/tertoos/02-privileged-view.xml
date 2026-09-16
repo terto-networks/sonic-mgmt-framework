@@ -929,7 +929,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="image activate" help="Set next-boot image">
-      <PARAM name="slot" help="next | image-name" ptype="TERTOOS_IMAGE_SLOT"/>
+      <PARAM name="slot" help="next (o slot que nao esta rodando) | a | b" ptype="TERTOOS_IMAGE_SLOT"/>
       <ACTION>sudo /usr/bin/tertoos-cli image activate ${slot}</ACTION>
     </COMMAND>
     <COMMAND name="image commit" help="Commit current image as default">
