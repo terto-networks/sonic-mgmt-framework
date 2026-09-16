@@ -578,11 +578,24 @@
          help="pvst | rapid-pvst | mst"/>
 
   <!-- image activate: aceita nome de imagem livre; Tab oferece 'next' -->
+  <!-- Slot de boot do A/B. ⚠️ MEDIDO NO HW 2026-09-16: num regexp_select com
+       ext_pattern ESTATICO, quem VALIDA e' a lista de itens, NAO o `pattern`
+       (clish_ptype_regexp_select_check_match itera os nomes da lista). Prova:
+       `image activate next` e `NEXT` passavam; `a`, `b` e `slotb` davam
+       "% Error: Invalid input detected". Com so' `next` na lista, o operador NAO
+       conseguia reapontar um slot nomeado e precisava cair no bash — o que numa
+       imagem de RELEASE nao existe (sudo sem /bin/sh). Por isso a lista traz os
+       tres valores que o `image activate` de fato aceita (ver ActivateAB:
+       a|b|next). O "image-name" do help antigo NUNCA funcionou: nenhum nome
+       arbitrario passava pela lista.
+       (Ptypes de nome livre — pw-class, vrf, bundle — usam ext_pattern_cmd, que
+       deixa items=NULL e cai de volta na regex; por isso criar nome NOVO segue
+       funcionando neles.) -->
   <PTYPE name="TERTOOS_IMAGE_SLOT"
          method="regexp_select"
          pattern="[A-Za-z0-9][A-Za-z0-9._\-]*"
-         ext_pattern="next(next)"
-         help="next | image-name"/>
+         ext_pattern="next(next) a(a) b(b)"
+         help="next | a | b"/>
 
   <!-- ================================================================
        Ranges numericos (backlog secao 4 da matriz klish-ptype):
