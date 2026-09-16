@@ -21,5 +21,18 @@
     <COMMAND name="no web-server enable" help="Disable the local web/API server">
       <ACTION>tertoos-cli candidate set webserver/admin_state down</ACTION>
     </COMMAND>
+    <!-- Endereco de escuta. Default 127.0.0.1 (so' a propria caixa): a UI NAO nasce
+         exposta na rede. Para alcancar de fora, aponte o IP de GERENCIA — evite
+         0.0.0.0, que abre a UI tambem nas interfaces de cliente/transito. -->
+    <COMMAND name="web-server bind-address"
+             help="IP the local web/API server listens on (default 127.0.0.1)">
+      <PARAM name="ip" help="A.B.C.D (management IP; 0.0.0.0 exposes every interface)"
+             ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set webserver/bind_address ${ip}</ACTION>
+    </COMMAND>
+    <COMMAND name="no web-server bind-address"
+             help="Restore the default listen address (127.0.0.1)">
+      <ACTION>tertoos-cli candidate delete webserver/bind_address</ACTION>
+    </COMMAND>
   </VIEW>
 </CLISH_MODULE>
