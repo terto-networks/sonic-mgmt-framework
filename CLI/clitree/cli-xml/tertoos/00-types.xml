@@ -346,6 +346,15 @@
          ext_pattern="enabled(enabled) disabled(disabled)"
          help="enabled | disabled"/>
 
+  <!-- uRPF — enum do tertoos-port-extensions.yang (PORT rpf_check). YANG-first:
+       o token do CLI é o próprio valor do schema (por isso loose|strict, e não
+       o any|rx do IOS-XR, que obrigaria a uma tradução a mais). -->
+  <PTYPE name="TERTOOS_URPF_MODE"
+         method="regexp_select"
+         pattern="loose|strict"
+         ext_pattern="loose(loose) strict(strict)"
+         help="loose | strict"/>
+
   <!-- OSPF / OSPFv3 -->
   <PTYPE name="TERTOOS_OSPF_NETWORK_TYPE"
          method="regexp_select"

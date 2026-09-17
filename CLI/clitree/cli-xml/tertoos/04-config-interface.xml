@@ -162,6 +162,22 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/mpls_enable</ACTION>
     </COMMAND>
 
+    <!-- uRPF (anti-spoofing) — PORT|<if> rpf_check, tertoos-port-extensions.yang.
+         Forma do comando segue o IOS-XR; o VALOR é o do schema (loose|strict),
+         conforme a regra YANG-first anotada no 00-types.xml.
+         Numa porta que hospeda sub-interfaces tageadas, configure no SUB-IF: o
+         L3 vive lá, e escrever atributo na RIF da porta base mata punt/inject
+         na SAI 1.17. -->
+    <COMMAND name="ipv4 verify unicast source reachable-via"
+             help="Unicast RPF anti-spoofing check on this interface">
+      <PARAM name="mode" help="loose | strict" ptype="TERTOOS_URPF_MODE"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/rpf_check ${mode}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv4 verify unicast source reachable-via"
+             help="Disable the unicast RPF check on this interface">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/rpf_check</ACTION>
+    </COMMAND>
+
     <COMMAND name="negotiation auto" help="Enable auto-negotiation on this port">
       <ACTION>tertoos-cli candidate set interface/${ifname}/autoneg on</ACTION>
     </COMMAND>
