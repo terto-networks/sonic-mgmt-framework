@@ -46,6 +46,15 @@
     <COMMAND name="show clock" help="Show current system time (time, timezone, NTP sync)">
       <ACTION>/usr/bin/tertoos-cli clock show</ACTION>
     </COMMAND>
+    <!-- Estado OPERACIONAL do dataplane (le o saibridge em 127.0.0.1:7651), nao a
+         configuracao: os objetos de CoPP e o modo de punt sao escolhidos quando o
+         dataplane sobe, entao config e realidade podem divergir ate o proximo restart. -->
+    <COMMAND name="show copp" help="Show control plane policing programmed in the ASIC">
+      <ACTION>tertoos-cli show copp</ACTION>
+    </COMMAND>
+    <COMMAND name="show dataplane" help="Show dataplane punt mode and hitless-restart state">
+      <ACTION>tertoos-cli show dataplane</ACTION>
+    </COMMAND>
 
     <COMMAND name="ping" help="Ping IPv4/IPv6 host">
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>

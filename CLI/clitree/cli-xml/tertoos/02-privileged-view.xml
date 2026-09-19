@@ -60,6 +60,15 @@
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
     </COMMAND>
+    <!-- Estado OPERACIONAL do dataplane (le o saibridge em 127.0.0.1:7651), nao a
+         configuracao: os objetos de CoPP e o modo de punt sao escolhidos quando o
+         dataplane sobe, entao config e realidade podem divergir ate o proximo restart. -->
+    <COMMAND name="show copp" help="Show control plane policing programmed in the ASIC">
+      <ACTION>tertoos-cli show copp</ACTION>
+    </COMMAND>
+    <COMMAND name="show dataplane" help="Show dataplane punt mode and hitless-restart state">
+      <ACTION>tertoos-cli show dataplane</ACTION>
+    </COMMAND>
     <COMMAND name="show acl" help="Show configured ACLs (tables and rules)">
       <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
