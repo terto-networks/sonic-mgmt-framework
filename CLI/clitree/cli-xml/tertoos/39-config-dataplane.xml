@@ -7,8 +7,9 @@
 
   O modo de punt é escolhido quando o dataplane sobe, então mudar isto vale a
   partir do próximo restart do tos-lite-saibridge. O modo REALMENTE em uso
-  agora está nos campos punt_mode/punt_degraded do /healthz do saibridge
-  (127.0.0.1:7651) e na linha de resumo que ele loga no start.
+  agora se vê com `show dataplane` (que lê punt_mode/punt_degraded do /healthz
+  do saibridge em 127.0.0.1:7651); a mesma informação está na linha de resumo
+  que o dataplane loga no start.
 
   ATENÇÃO ao que isto NÃO é: hitless restart vale para o restart do PROCESSO,
   não para upgrade de imagem — o reload troca o kernel e é boot frio em
