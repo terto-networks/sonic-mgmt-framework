@@ -346,6 +346,14 @@
          ext_pattern="enabled(enabled) disabled(disabled)"
          help="enabled | disabled"/>
 
+  <!-- Dataplane — enum do tertoos-dataplane-extensions.yang (DATAPLANE_GLOBAL).
+       YANG-first: o token do CLI é o próprio valor do schema. -->
+  <PTYPE name="TERTOOS_HITLESS_RESTART"
+         method="regexp_select"
+         pattern="disabled|preferred|required"
+         ext_pattern="disabled(disabled) preferred(preferred) required(required)"
+         help="disabled | preferred | required"/>
+
   <!-- uRPF — enum do tertoos-port-extensions.yang (PORT rpf_check). YANG-first:
        o token do CLI é o próprio valor do schema (por isso loose|strict, e não
        o any|rx do IOS-XR, que obrigaria a uma tradução a mais). -->

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — opções globais do dataplane.
+    YANG: tertoos-dataplane-extensions.yang (DATAPLANE_GLOBAL).
+
+    dataplane hitless-restart <mode>  → DATAPLANE_GLOBAL|global hitless_restart
+
+  O modo de punt é escolhido quando o dataplane sobe, então mudar isto vale a
+  partir do próximo restart do tos-lite-saibridge. O modo REALMENTE em uso
+  agora está nos campos punt_mode/punt_degraded do /healthz do saibridge
+  (127.0.0.1:7651) e na linha de resumo que ele loga no start.
+
+  ATENÇÃO ao que isto NÃO é: hitless restart vale para o restart do PROCESSO,
+  não para upgrade de imagem — o reload troca o kernel e é boot frio em
+  qualquer modo. Freio de emergência independente da config: o arquivo
+  /data/no-knet força o modo tap.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+    <COMMAND name="dataplane hitless-restart"
+             help="Keep traffic forwarding across a restart of the dataplane bridge">
+      <PARAM name="mode" help="disabled | preferred | required"
+             ptype="TERTOOS_HITLESS_RESTART"/>
+      <ACTION>tertoos-cli candidate set dataplane/hitless_restart ${mode}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane hitless-restart"
+             help="Restore the default (disabled: userspace tap netdevs)">
+      <ACTION>tertoos-cli candidate delete dataplane/hitless_restart</ACTION>
+    </COMMAND>
+  </VIEW>
+</CLISH_MODULE>
