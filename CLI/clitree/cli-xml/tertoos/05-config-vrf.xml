@@ -82,6 +82,30 @@
       <ACTION>tertoos-cli candidate delete vrf/${vrfname}/vni</ACTION>
     </COMMAND>
 
+    <!-- Rotas estaticas DESTA VRF (IOS-XR: dentro do bloco vrf). Mesma tabela
+         STATIC_ROUTE|<vrf>|<prefix> do `ip route` da config-view (que grava em
+         `default|`); o cfgd renderiza `ip route <pfx> <nh> vrf <NOME>` no FRR.
+         set-raw + key entre aspas pelos mesmos motivos de 33-config-static-route.xml
+         (o prefixo tem "/" e o "|" da key e' pipe de shell se nao for protegido). -->
+    <COMMAND name="ip route" help="Add an IPv4 static route in this VRF">
+      <PARAM name="prefix"  help="Destination prefix A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <PARAM name="nexthop" help="Next-hop A.B.C.D or egress interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop ${nexthop}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ip route" help="Remove an IPv4 static route from this VRF">
+      <PARAM name="prefix" help="Destination prefix A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <ACTION>tertoos-cli candidate delete-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop</ACTION>
+    </COMMAND>
+    <COMMAND name="ipv6 route" help="Add an IPv6 static route in this VRF">
+      <PARAM name="prefix"  help="Destination prefix X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <PARAM name="nexthop" help="Next-hop X:X::X or egress interface name" ptype="STRING"/>
+      <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop ${nexthop}</ACTION>
+    </COMMAND>
+    <COMMAND name="no ipv6 route" help="Remove an IPv6 static route from this VRF">
+      <PARAM name="prefix" help="Destination prefix X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
+      <ACTION>tertoos-cli candidate delete-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop</ACTION>
+    </COMMAND>
+
     <COMMAND name="address-family ipv4 unicast"
              help="IPv4 unicast address-family"
              view="config-vrf-af-view"
