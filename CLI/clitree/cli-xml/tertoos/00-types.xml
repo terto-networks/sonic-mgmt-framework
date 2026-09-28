@@ -376,6 +376,31 @@
          ext_pattern="text(text) message-digest(message-digest) null(null)"
          help="text | message-digest | null"/>
 
+  <!-- Chaves de autenticacao OSPF. O charset e' RESTRITIVO de proposito, por
+       tres motivos que se somam:
+       1) TAMANHO REAL do protocolo: RFC 2328 Apendice D da 64 bits (8 bytes) ao
+          campo de autenticacao simples, e o FRR usa no maximo 8 caracteres em
+          `ip ospf authentication-key` e 16 em `message-digest-key`. Chave maior
+          era silenciosamente truncada — duas pontas com senhas "diferentes"
+          que so' diferem do 9o caractere em diante autenticavam entre si.
+       2) INJECAO DE SHELL: a ACTION do klish passa a chave como "${key}" para o
+          tertoos-cli. Aspas, crase, $ e ; escapariam do quoting.
+       3) TRAVA DA MASCARA: `<` e `>` estao FORA do charset, entao o sentinel
+          `<removed>` que o `show running-config` imprime NAO e' aceito de volta
+          como chave. Sem isso, colar um running-config mascarado poria a senha
+          literal "<removed>" no enlace — parecendo configurado, com uma senha
+          publica. Seria o mesmo defeito que este PR conserta, pela porta dos
+          fundos. -->
+  <PTYPE name="TERTOOS_OSPF_AUTH_KEY"
+         method="regexp"
+         pattern="[A-Za-z0-9._+:@#%~=^-]{1,8}"
+         help="Authentication key (up to 8 chars; no spaces, quotes or &lt;&gt;)"/>
+
+  <PTYPE name="TERTOOS_OSPF_MD5_KEY"
+         method="regexp"
+         pattern="[A-Za-z0-9._+:@#%~=^-]{1,16}"
+         help="MD5 key (up to 16 chars; no spaces, quotes or &lt;&gt;)"/>
+
   <PTYPE name="TERTOOS_OSPF_AREA_AUTH"
          method="regexp_select"
          pattern="message-digest|text"
