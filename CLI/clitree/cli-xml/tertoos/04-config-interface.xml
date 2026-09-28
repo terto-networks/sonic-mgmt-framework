@@ -408,21 +408,45 @@
       <PARAM name="p" help="0..255" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/priority ${p}</ACTION>
     </COMMAND>
-    <COMMAND name="ip ospf authentication" help="Per-interface authentication">
+    <COMMAND name="no ip ospf priority" help="Revert DR election priority to the default (1)">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/priority</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication" help="Per-interface authentication (overrides the area's)">
       <PARAM name="kind" help="text | message-digest | null" ptype="TERTOOS_OSPF_IF_AUTH"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-type ${kind}</ACTION>
     </COMMAND>
-    <COMMAND name="ip ospf authentication-key" help="Plain authentication key">
-      <PARAM name="key" help="Key string" ptype="STRING"/>
+    <!-- `no ip ospf authentication` GRAVA o valor `none` em vez de apagar o
+         leaf, espelhando o `no authentication` da AREA (11-config-ospf.xml).
+         Duas razoes: o render suprime `none` (idempotencia do round-trip), e
+         `none` = "herda a autenticacao da area", que e' semanticamente
+         diferente de `null` = "isenta esta interface da autenticacao da area". -->
+    <COMMAND name="no ip ospf authentication" help="Remove per-interface authentication (inherit the area's)">
+      <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-type none</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf authentication-key" help="Plain authentication key (AuType 1)">
+      <PARAM name="key" help="Key string (up to 8 chars)" ptype="TERTOOS_OSPF_AUTH_KEY"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key "${key}"</ACTION>
     </COMMAND>
-    <COMMAND name="ip ospf message-digest-key" help="MD5 key">
+    <COMMAND name="no ip ospf authentication-key" help="Remove the plain authentication key">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/authentication-key</ACTION>
+    </COMMAND>
+    <COMMAND name="ip ospf message-digest-key" help="MD5 key (AuType 2)">
       <PARAM name="id" help="Key id 1..255" ptype="TERTOOS_RANGE_1_255"/>
       <PARAM name="md5" help="md5" ptype="STRING"/>
-      <PARAM name="key" help="Key string" ptype="STRING"/>
+      <PARAM name="key" help="Key string (up to 16 chars)" ptype="TERTOOS_OSPF_MD5_KEY"/>
       <ACTION>
         tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}&#xA;
         tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-md5-key "${key}"&#xA;
+      </ACTION>
+    </COMMAND>
+    <!-- Apaga o PAR. key-id e md5-key formam um unico comando no FRR
+         (`ip ospf message-digest-key <id> md5 <key>`); deixar metade para tras
+         produziria uma linha que o ospfd recusa. Mesmo padrao do
+         `no ip ospf adjacency-sid`, que tambem apaga os 3 leafs do grupo. -->
+    <COMMAND name="no ip ospf message-digest-key" help="Remove the MD5 key">
+      <ACTION>
+        tertoos-cli candidate delete interface/${ifname}/ip-ospf/authentication-key-id&#xA;
+        tertoos-cli candidate delete interface/${ifname}/ip-ospf/authentication-md5-key&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="ip ospf mtu-ignore" help="Ignore MTU mismatch">
