@@ -61,3 +61,8 @@ clean:
 	rm -rf ${TGT_DIR}
 	@echo "Clitree Cleaned"
 
+# TertoOS: valida os patterns dos PTYPE regexp como o clish os ancora
+# ("^" + pattern + "$", POSIX ERE). Sem dependencia externa (so python3).
+.PHONY: test-ptypes
+test-ptypes:
+	python3 scripts/test_ptype_patterns.py
