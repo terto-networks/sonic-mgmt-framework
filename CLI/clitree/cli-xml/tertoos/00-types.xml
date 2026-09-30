@@ -9,6 +9,21 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
 
+  <!--
+    SYSTEM_NAME (prompt de TODAS as views): VAR DINAMICA, recalculada a cada prompt.
+    Antes vinha so do `export SYSTEM_NAME` do clish_start (uma vez, no login):
+    `hostname X` + commit mudava o kernel (cfgd -> hostnamectl) mas a sessao
+    viva continuava com o nome antigo ate relogar. No klish 2.1.4 a VAR do XML
+    vence a variavel de ambiente (find_var: VAR primeiro, getenv so no fim) e
+    `dynamic="true"` roda a ACTION a cada expansao. Sem quebra de linha (tr) e
+    sem dominio (sed), a mesma regra do clish_start. Sem `$` de proposito: o
+    klish expande `${...}` dentro da ACTION antes de rodar.
+  -->
+  <VAR name="SYSTEM_NAME" help="Hostname shown in the prompt (live)" dynamic="true">
+    <ACTION>sed 's/\..*//' /proc/sys/kernel/hostname | tr -d '\n'</ACTION>
+  </VAR>
+
+
   <!-- AS number 1..4294967295 (4-byte ASN) -->
   <PTYPE name="TERTOOS_ASN"
          method="regexp"
