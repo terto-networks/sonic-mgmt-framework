@@ -142,15 +142,41 @@
         tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_upper ${upper}&#xA;
       </ACTION>
     </COMMAND>
+    <!-- prefix-SID + flags (RFC 8665). FRR ospfd:
+           segment-routing prefix A.B.C.D/M index (0-65535) [no-php-flag|explicit-null]
+         Leaves OSPFV2_PREFIX_SID.index / .explicit_null / .no_php (tertoos-ospf.yang).
+         Sem flag, o vizinho direto faz PHP (implicit-null) e nenhum label passa
+         no fio: num teste de SR com 2 nos ligados direto use no-php-flag ou
+         explicit-null. As flags sao exclusivas (switch opcional com 2 filhos);
+         a ACTION sempre grava as DUAS (a escolhida true, a outra false) para
+         reemitir o comando sem flag limpar a flag anterior, como no FRR.
+         SUBCOMMAND com value= (o keyword digitado; ver
+         project_klish_subcommand_value_fix) e name sem hifen (vira ${var}). -->
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
-      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
-      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <PARAM name="prefix" help="IPv4 prefix A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
+      <PARAM name="index" help="SID index inside the SRGB (0..65535)" ptype="TERTOOS_RANGE_0_65535"/>
+      <PARAM name="sid_flag" help="Prefix-SID flag (optional)" ptype="SUBCOMMAND" mode="switch" optional="true">
+        <PARAM name="expnull_kw" help="Penultimate hop swaps to explicit-null label 0 (NP+E flags)"
+               value="explicit-null" ptype="SUBCOMMAND" mode="subcommand"/>
+        <PARAM name="nophp_kw" help="Disable penultimate-hop popping; this node pops the label (NP flag)"
+               value="no-php-flag" ptype="SUBCOMMAND" mode="subcommand"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/index ${index}&#xA;
+        if test "${expnull_kw}" = "explicit-null"; then&#xA;
+          tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/explicit_null true&#xA;
+        else&#xA;
+          tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/explicit_null false&#xA;
+        fi&#xA;
+        if test "${nophp_kw}" = "no-php-flag"; then&#xA;
+          tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/no_php true&#xA;
+        else&#xA;
+          tertoos-cli candidate set ospf/${ospfvrf}/prefix-sid/${prefix}/no_php false&#xA;
+        fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no segment-routing prefix-sid-map" help="Remove prefix-sid">
-      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
+      <PARAM name="prefix" help="IPv4 prefix A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/prefix-sid/${prefix}</ACTION>
     </COMMAND>
     <!-- 2026-06-14 — comandos OSPF-SR remanescentes usados no smoke 5-PE
