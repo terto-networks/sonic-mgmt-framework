@@ -2,7 +2,7 @@ diff --git a/plugins/clish/sym_script.c b/plugins/clish/sym_script.c
 index 93cc88f..7dee09b 100644
 --- a/plugins/clish/sym_script.c
 +++ b/plugins/clish/sym_script.c
-@@ -37,6 +37,21 @@ CLISH_PLUGIN_OSYM(clish_script)
+@@ -37,6 +37,19 @@ CLISH_PLUGIN_OSYM(clish_script)
  	if (!script) /* Nothing to do */
  		return 0;
  
@@ -22,7 +22,7 @@ index 93cc88f..7dee09b 100644
  	/* Find out shebang */
  	if (action)
  		shebang = clish_action__get_shebang(action);
-@@ -80,6 +95,12 @@ CLISH_PLUGIN_OSYM(clish_script)
+@@ -80,6 +93,12 @@ CLISH_PLUGIN_OSYM(clish_script)
  	lub_string_cat(&command, shebang);
  	lub_string_cat(&command, " ");
  	lub_string_cat(&command, fifo_name);
