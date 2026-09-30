@@ -2,18 +2,27 @@ diff --git a/plugins/clish/sym_script.c b/plugins/clish/sym_script.c
 index 93cc88f..7dee09b 100644
 --- a/plugins/clish/sym_script.c
 +++ b/plugins/clish/sym_script.c
-@@ -37,6 +37,10 @@ CLISH_PLUGIN_OSYM(clish_script)
+@@ -37,6 +37,21 @@ CLISH_PLUGIN_OSYM(clish_script)
  	if (!script) /* Nothing to do */
  		return 0;
  
-+	char *cmd = clish_shell__get_full_line(clish_context);
-+	setenv("USER_COMMAND", cmd, 1);
-+	lub_string_free(cmd);
++	/* USER_COMMAND = a linha do comando que disparou a ACTION. Uma ACTION de
++	 * VAR dinamica (ex.: SYSTEM_NAME no prompt) roda SEM comando no contexto:
++	 * clish_shell__get_full_line() chamaria clish_command__get_name(NULL) e o
++	 * assert derrubaria o klish no arranque (TertoOS v0.12.104, 2026-09-30).
++	 * Sem comando, exporta vazio. */
++	if (clish_context__get_cmd(clish_context)) {
++		char *cmd = clish_shell__get_full_line(clish_context);
++		setenv("USER_COMMAND", cmd ? cmd : "", 1);
++		lub_string_free(cmd);
++	} else {
++		setenv("USER_COMMAND", "", 1);
++	}
 +
  	/* Find out shebang */
  	if (action)
  		shebang = clish_action__get_shebang(action);
-@@ -80,6 +84,12 @@ CLISH_PLUGIN_OSYM(clish_script)
+@@ -80,6 +95,12 @@ CLISH_PLUGIN_OSYM(clish_script)
  	lub_string_cat(&command, shebang);
  	lub_string_cat(&command, " ");
  	lub_string_cat(&command, fifo_name);

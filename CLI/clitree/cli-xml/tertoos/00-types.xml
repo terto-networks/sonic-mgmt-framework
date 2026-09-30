@@ -814,4 +814,17 @@
          ext_pattern="9600(9600) 19200(19200) 38400(38400) 57600(57600) 115200(115200)"
          help="9600 | 19200 | 38400 | 57600 | 115200"/>
 
+
+  <!--
+    SYSTEM_NAME (prompt de TODAS as views): VAR DINAMICA, recalculada a cada prompt,
+    para `hostname X` + commit trocar o prompt na linha seguinte (antes so ao relogar:
+    era um export unico do clish_start). A VAR do XML vence a variavel de ambiente
+    (find_var: VAR primeiro, getenv so no fim). Precisa do fix no sym_script.c.diff
+    (USER_COMMAND sem comando no contexto) — sem ele o klish aborta no prompt
+    (incidente v0.12.104). ACTION sem `$` (o klish expande ${...} antes de rodar);
+    no fim do modulo e sem `help` porque o sonic-clish.xsd exige.
+  -->
+  <VAR name="SYSTEM_NAME" dynamic="true">
+    <ACTION>sed 's/\..*//' /proc/sys/kernel/hostname | tr -d '\n'</ACTION>
+  </VAR>
 </CLISH_MODULE>
