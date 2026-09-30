@@ -814,20 +814,4 @@
          ext_pattern="9600(9600) 19200(19200) 38400(38400) 57600(57600) 115200(115200)"
          help="9600 | 19200 | 38400 | 57600 | 115200"/>
 
-
-  <!--
-    SYSTEM_NAME (prompt de TODAS as views): VAR DINAMICA, recalculada a cada prompt.
-    Antes vinha so do `export SYSTEM_NAME` do clish_start (uma vez, no login):
-    `hostname X` + commit mudava o kernel (cfgd -> hostnamectl) mas a sessao
-    viva continuava com o nome antigo ate relogar. No klish 2.1.4 a VAR do XML
-    vence a variavel de ambiente (find_var: VAR primeiro, getenv so no fim) e
-    `dynamic="true"` roda a ACTION a cada expansao. Sem quebra de linha (tr) e
-    sem dominio (sed), a mesma regra do clish_start. Sem `$` de proposito: o
-    klish expande `${...}` dentro da ACTION antes de rodar. Fica no FIM do
-    arquivo porque o XSD da Dell (sonic-clish.xsd) exige VAR depois dos PTYPE,
-    e so aceita os atributos name/value/dynamic (sem help).
-  -->
-  <VAR name="SYSTEM_NAME" dynamic="true">
-    <ACTION>sed 's/\..*//' /proc/sys/kernel/hostname | tr -d '\n'</ACTION>
-  </VAR>
 </CLISH_MODULE>
