@@ -19,7 +19,8 @@ O que o teste faz (sem dependencia externa, so python3 da stdlib):
      min, max, min-1, max+1, um valor grande, zero a esquerda e lixo colado.
   3. ENUMS: todo regexp_select com ext_pattern estatico aceita cada item e
      rejeita o item com lixo colado antes/depois.
-  4. OUTROS: casos manuais (ASN, RD/RT, IFNUM).
+  4. OUTROS: casos manuais e gerados (ASN asplain+asdot, RD/RT, IFNUM,
+     IPv4 addr/prefix com octeto 0..300 em cada posicao, WireGuard key).
 
 Motor de regex: por padrao usa o regcomp/regexec da libc via ctypes (POSIX
 ERE de verdade, o MESMO que o clish usa) quando disponivel (Linux/glibc);
@@ -36,6 +37,7 @@ Sai com 0 se tudo passa, 1 se algo falha.
 """
 
 import argparse
+import base64
 import ctypes
 import ctypes.util
 import glob
@@ -63,6 +65,10 @@ NAMED_RANGES = {
     "TERTOOS_VLAN_ID": [(1, 4094)],
     "TERTOOS_MTU": [(64, 9216)],
     "TERTOOS_VRF_TABLE_ID": [(1, 252), (256, 4294967295)],
+    # forma asplain do ASN (a asdot X.Y vai nos casos MANUAL e no check_asdot)
+    "TERTOOS_ASN": [(1, 4294967295)],
+    "TERTOOS_PW_ID": [(1, 4294967295)],
+    "TERTOOS_STP_COST": [(1, 200000000)],
 }
 
 # Conjuntos discretos: nome -> valores validos.
@@ -74,8 +80,23 @@ NAMED_SETS = {
 # Casos manuais: nome -> (validos, invalidos).
 MANUAL = {
     "TERTOOS_ASN": (
-        ["1", "65000", "4200000000", "4294967295", "1.0", "65535.65535"],
-        ["0", "abc", "1abc", "65000x", "1.2.3", "x1.0", "01"],
+        # asdot (RFC 5396) como o FRR aceita: X e Y 0..65535, exceto 0.0
+        ["1", "65000", "4200000000", "4294967295", "1.0", "0.1", "0.65535",
+         "65535.0", "65535.65535"],
+        ["0", "abc", "1abc", "65000x", "1.2.3", "x1.0", "01", "0.0",
+         "65536.0", "1.65536", "01.1", "1.01", "1.", ".1", "4294967296",
+         "99999999999"],
+    ),
+    "TERTOOS_IPV4_ADDR": (
+        ["0.0.0.0", "10.0.0.1", "192.168.1.255", "255.255.255.255", "1.2.3.4"],
+        ["256.0.0.1", "1.2.3.256", "999.999.999.999", "01.2.3.4", "1.2.3.04",
+         "1.2.3", "1.2.3.4.5", "1.2.3.4x", "1.2.3.4/24", "a.b.c.d", ""],
+    ),
+    "TERTOOS_IPV4_PREFIX": (
+        ["0.0.0.0/0", "10.0.0.0/8", "192.168.1.0/24", "10.255.30.2/32",
+         "255.255.255.255/32"],
+        ["10.0.0.0/33", "10.0.0.0/08", "256.0.0.0/8", "10.0.0.00/8",
+         "999.1.1.1/24", "10.0.0.0", "10.0.0.0/", "10.0.0.0/24x", "10.0.0.0/-1"],
     ),
     "TERTOOS_RD": (
         ["65000:100", "0:0", "10.0.0.1:5"],
@@ -90,6 +111,44 @@ MANUAL = {
         ["0abc", "1.2.3", "x1", ".", "1."],
     ),
 }
+
+# WireGuard: 32 bytes em base64 = 44 chars (43 + "="); o 43o char so carrega
+# 4 bits (os 2 de enchimento sao zero), logo e um de [AEIMQUYcgkosw048].
+_WG_VALID = [base64.b64encode(bytes((i * k) % 256 for i in range(32))).decode()
+             for k in (0, 1, 7, 13, 255)]
+MANUAL["TERTOOS_WGKEY"] = (
+    _WG_VALID + ["YAnz0sGpUeLlsh3PJ6TEobyzn6TQP8VFXXa0+V+Zs3k="],
+    [_WG_VALID[1][:43],              # 43 chars, sem "="
+     _WG_VALID[1] + "=",             # 45 chars
+     _WG_VALID[1][:42] + "==",       # padding de 2 bytes (nao sao 32 bytes)
+     _WG_VALID[1][:42] + "B=",       # 43o char com bits de enchimento != 0
+     _WG_VALID[1][:43] + "A",        # 44 chars sem "="
+     "x" + _WG_VALID[1],
+     _WG_VALID[1][:41] + "-A=",      # char fora do alfabeto base64
+     ""],
+)
+
+
+def octet_cases():
+    """IPv4 com octeto 0..300 em cada posicao + zero a esquerda."""
+    cases = []
+    for o in range(0, 301):
+        for tpl in ("%d.0.0.1", "10.%d.0.1", "10.0.%d.1", "10.0.0.%d"):
+            cases.append((tpl % o, o <= 255))
+    for o in ("00", "01", "001", "010", "0255"):
+        cases.append(("10.0.0.%s" % o, False))
+        cases.append(("%s.0.0.1" % o, False))
+    return cases
+
+
+def asdot_cases():
+    """asdot X.Y nas fronteiras de X e Y (0, 1, 65535, 65536)."""
+    cases = []
+    for x in (0, 1, 2, 9, 10, 65534, 65535, 65536, 99999):
+        for y in (0, 1, 2, 9, 10, 65534, 65535, 65536, 99999):
+            ok = x <= 65535 and y <= 65535 and not (x == 0 and y == 0)
+            cases.append(("%d.%d" % (x, y), ok))
+    return cases
 
 
 # ---------------------------------------------------------------- motores
@@ -284,6 +343,22 @@ def main():
                 for junk in (it + "x", "x" + it, it + "-" + it):
                     if junk not in items and match(junk):
                         fail(name, "%r should be REJECTED" % junk)
+
+        extra = []
+        if name == "TERTOOS_IPV4_ADDR":
+            extra = octet_cases()
+        elif name == "TERTOOS_IPV4_PREFIX":
+            extra = [(a + "/24", ok) for a, ok in octet_cases()]
+            extra += [("10.0.0.0/%d" % m, m <= 32) for m in range(0, 40)]
+        elif name == "TERTOOS_ASN":
+            extra = asdot_cases()
+        if extra:
+            checked["generated"] = checked.get("generated", 0) + 1
+            bad = [(t, exp) for t, exp in extra if match(t) != exp]
+            for t, exp in bad[:5]:
+                fail(name, "%r should be %s" % (t, "ACCEPTED" if exp else "REJECTED"))
+            if len(bad) > 5:
+                fail(name, "... and %d more wrong values" % (len(bad) - 5))
 
         if name in MANUAL:
             checked["manual"] += 1
