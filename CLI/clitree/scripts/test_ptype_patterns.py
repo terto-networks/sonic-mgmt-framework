@@ -54,10 +54,8 @@ EXHAUSTIVE_LIMIT = 70000
 
 # Falhas ESPERADAS e ja consertadas em outro PR ainda nao mergeado.
 # Nao-estrito: se o item passar (o outro PR entrou), so avisa para remover.
-#   TERTOOS_RANGE_0_65535 -> sonic-mgmt-framework PR #82 (feat/ospf-prefix-sid-flags)
-XFAIL = {
-    "TERTOOS_RANGE_0_65535": "fixed in PR #82 (feat/ospf-prefix-sid-flags)",
-}
+#   (vazio: o TERTOOS_RANGE_0_65535 entrou com o PR #82)
+XFAIL = {}
 
 # Ranges com nome proprio: nome -> conjunto valido (lista de (min, max)).
 NAMED_RANGES = {
