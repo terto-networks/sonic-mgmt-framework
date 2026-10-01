@@ -4,6 +4,13 @@
     YANG: tertoos-dataplane-extensions.yang (DATAPLANE_GLOBAL).
 
     dataplane hitless-restart <mode>  → DATAPLANE_GLOBAL|global hitless_restart
+    dataplane forwarding-profile <p>  → DATAPLANE_GLOBAL|global forwarding_profile
+
+  forwarding-profile = QUAL produto a caixa é (decisão CEO 2026-10-01):
+    aggregation  (default) MPLS/LDP/SR-MPLS, PWs, EVPN-MPLS, L3VPN — sem EVPN-VXLAN
+    datacenter   EVPN-VXLAN sobre underlay IP — sem MPLS
+    unrestricted os dois — SÓ laboratório, não suportado em produção
+  O commit recusa config do outro perfil; vale a partir do próximo reload.
 
   O modo de punt é escolhido quando o dataplane sobe, então mudar isto vale a
   partir do próximo restart do tos-lite-saibridge. O modo REALMENTE em uso
@@ -31,6 +38,16 @@
     <COMMAND name="no dataplane hitless-restart"
              help="Restore the default (disabled: userspace tap netdevs)">
       <ACTION>tertoos-cli candidate delete dataplane/hitless_restart</ACTION>
+    </COMMAND>
+    <COMMAND name="dataplane forwarding-profile"
+             help="Product profile of the box: aggregation (MPLS) or datacenter (EVPN-VXLAN); applies on next reload">
+      <PARAM name="profile" help="aggregation | datacenter | unrestricted (lab only)"
+             ptype="TERTOOS_FORWARDING_PROFILE"/>
+      <ACTION>tertoos-cli candidate set dataplane/forwarding_profile ${profile}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane forwarding-profile"
+             help="Restore the default forwarding profile (aggregation)">
+      <ACTION>tertoos-cli candidate delete dataplane/forwarding_profile</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>

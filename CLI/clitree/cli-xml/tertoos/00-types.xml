@@ -366,6 +366,11 @@
          pattern="(disabled|preferred|required)"
          ext_pattern="disabled(disabled) preferred(preferred) required(required)"
          help="disabled | preferred | required"/>
+  <PTYPE name="TERTOOS_FORWARDING_PROFILE"
+         method="regexp_select"
+         pattern="(aggregation|datacenter|unrestricted)"
+         ext_pattern="aggregation(aggregation) datacenter(datacenter) unrestricted(unrestricted)"
+         help="aggregation | datacenter | unrestricted"/>
 
   <!-- uRPF — enum do tertoos-port-extensions.yang (PORT rpf_check). YANG-first:
        o token do CLI é o próprio valor do schema (por isso loose|strict, e não
