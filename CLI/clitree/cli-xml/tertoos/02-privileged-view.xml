@@ -629,15 +629,20 @@
          DOIS TOKENS (como `reload confirm`): `reset configuration [keep-management]`
          AVISA mas NAO executa — o prompt interativo "Type 'yes'" do ACTION do klish
          le EOF (stdin/tty fechados) e auto-cancela; entao `... confirm` EXECUTA com
-         `force` (que pula a confirmacao no tertoos-cli). -->
+         `force` (que pula a confirmacao no tertoos-cli).
+         Chaves SSH de host (2026-09-30): o reset COMPLETO tambem apaga as chaves
+         persistidas em /data/etc/ssh (o proximo boot gera novas — como o zeroize
+         do Junos). O sshd em execucao e a sessao atual NAO sao afetados ate o
+         reload. O keep-management PRESERVA as chaves: manter a gerencia inclui
+         manter a identidade SSH (sem "host key changed" no acesso remoto). -->
     <COMMAND name="reset" help="Reset saved configuration to factory default" access="sysadmin"/>
     <COMMAND name="reset configuration" access="sysadmin"
              help="Erase the entire saved configuration (factory default)">
-      <ACTION>echo "WARNING: this wipes ALL configuration and restores factory default (remote access may drop)."; echo "Type 'reset configuration confirm' to proceed (or add keep-management to keep Mgmt0 + Horizon enrollment)."</ACTION>
+      <ACTION>echo "WARNING: this wipes ALL configuration and restores factory default (remote access may drop)."; echo "The SSH host keys are erased too and regenerated at the next boot."; echo "Type 'reset configuration confirm' to proceed (or add keep-management to keep Mgmt0 + Horizon enrollment + SSH host keys)."</ACTION>
     </COMMAND>
     <COMMAND name="reset configuration confirm" access="sysadmin"
              help="Confirm: erase the entire saved configuration (factory default)">
-      <ACTION>tertoos-cli reset configuration force</ACTION>
+      <ACTION>tertoos-cli reset configuration force &amp;&amp; { [ ! -x /usr/sbin/tos-ssh-hostkeys ] || sudo -n /usr/sbin/tos-ssh-hostkeys reset; }</ACTION>
     </COMMAND>
     <COMMAND name="reset configuration keep-management" access="sysadmin"
              help="Erase everything except management (Mgmt0 + Horizon enrollment)">
@@ -772,6 +777,32 @@
     </COMMAND>
     <COMMAND name="show ssh server" help="SSH server config">
       <ACTION>grep -E '^(Port|PermitRootLogin|Protocol)' /etc/ssh/sshd_config 2&gt;/dev/null</ACTION>
+    </COMMAND>
+    <!-- Chaves SSH de host POR EQUIPAMENTO (2026-09-30): geradas no 1o boot pelo
+         tos-ssh-hostkeys.service e guardadas em /data/etc/ssh (compartilhado A/B).
+         Leitura das .pub 0644 em /etc/ssh => nao precisa de sudo. -->
+    <COMMAND name="show ssh server host-keys" help="SSH host keys of this device (type, bits, SHA256 fingerprint, generation date)">
+      <ACTION>if [ -x /usr/sbin/tos-ssh-hostkeys ]; then /usr/sbin/tos-ssh-hostkeys show; else for k in /etc/ssh/ssh_host_*_key.pub; do [ -f "$k" ] &amp;&amp; ssh-keygen -lf "$k"; done; fi</ACTION>
+    </COMMAND>
+
+    <!-- Regenerar as chaves SSH de host (equivalente ao `crypto key generate rsa`
+         do Cisco / `request security pki generate-key-pair` do Junos). Fica no
+         EXEC privilegiado, e nao no config-view: e' acao imediata, nao entra no
+         candidate/commit (principio 1 da overlay). DOIS TOKENS como
+         `reload confirm` (ACTION do klish nao le yes/no: stdin/tty dao EOF).
+         access="sysadmin" + sudoers pontual (tertoos-ssh-hostkeys: so'
+         `regenerate`/`reset`, argumento fixo). O sshd recebe SIGHUP (reload):
+         a sessao atual e as demais abertas NAO caem. -->
+    <COMMAND name="crypto" help="Cryptographic key management" access="sysadmin"/>
+    <COMMAND name="crypto key" help="Manage device keys" access="sysadmin"/>
+    <COMMAND name="crypto key generate" help="Generate new device keys" access="sysadmin"/>
+    <COMMAND name="crypto key generate ssh-host" access="sysadmin"
+             help="Regenerate the SSH host keys (type 'crypto key generate ssh-host confirm' to proceed)">
+      <ACTION>echo "WARNING: this replaces ALL SSH host keys of this device (ed25519, ecdsa 256, rsa 3072)."; echo "Open sessions are kept, but every SSH client will report 'REMOTE HOST IDENTIFICATION HAS CHANGED'."; echo "To confirm, run: crypto key generate ssh-host confirm"</ACTION>
+    </COMMAND>
+    <COMMAND name="crypto key generate ssh-host confirm" access="sysadmin"
+             help="Confirm: regenerate the SSH host keys now">
+      <ACTION>if [ -x /usr/sbin/tos-ssh-hostkeys ]; then sudo -n /usr/sbin/tos-ssh-hostkeys regenerate; else echo "SSH host key management is not available on this image."; fi</ACTION>
     </COMMAND>
     <!-- ===== S6.1 — OSPFv3 show/clear ====================================== -->
     <COMMAND name="show ipv6 ospf" help="OSPFv3 summary">
