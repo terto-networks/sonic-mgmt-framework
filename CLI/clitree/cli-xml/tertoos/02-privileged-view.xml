@@ -892,11 +892,11 @@
     </COMMAND>
     <COMMAND name="show qos interface" help="Per-port QoS bindings">
       <PARAM name="port" help="Port (e.g. Ethernet0)" ptype="TERTOOS_IFNAME"/>
-      <ACTION>show qos port ${port} 2&gt;/dev/null || sonic-db-cli CONFIG_DB hgetall "PORT_QOS_MAP|${port}"</ACTION>
+      <ACTION>tertoos-cli show qos interface ${port}</ACTION>
     </COMMAND>
     <COMMAND name="show queue counters" help="Per-port per-queue counters">
       <PARAM name="port" help="Port (optional)" ptype="STRING_WITH_PIPE" optional="true"/>
-      <ACTION>tc -s qdisc show dev ${port} 2&gt;/dev/null || show queue counters ${port}</ACTION>
+      <ACTION>if [ -n "${port}" ]; then tertoos-cli show qos interface ${port}; else tc -s qdisc show 2&gt;/dev/null || show queue counters; fi</ACTION>
     </COMMAND>
     <COMMAND name="show class-map" help="Class-maps">
       <PARAM name="name" help="Class-map name (optional)" ptype="STRING" optional="true"/>

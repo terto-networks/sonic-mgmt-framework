@@ -537,8 +537,8 @@
 >                          * name-canonicalization below (eth1->Ethernet1, which
 >                          * needs a closed item list) must NOT run — with an empty
 >                          * item list it would null a perfectly valid new name and
->                          * the command would be rejected. */
->                         if (result && this->ext_pattern_cmd) {
+>                          * the command would be rejected. Same for a value that starts with a digit (ACL protocol "1": prefix len 0 matched item[0] -> "ip1"). */
+>                         if (result && (this->ext_pattern_cmd || isdigit((unsigned char)result[0]))) {
 >                                 /* regex already matched — accept as typed */
 >                         } else if (result) {
 >                         	int index = -1, j;

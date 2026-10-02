@@ -38,7 +38,6 @@
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L3&#xA;
-        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv4 access-list" help="Delete an IPv4 access-list">
@@ -54,7 +53,6 @@
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L3V6&#xA;
-        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 access-list" help="Delete an IPv6 access-list">
@@ -70,7 +68,6 @@
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L2&#xA;
-        tertoos-cli candidate set acl/${name}/stage INGRESS&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-services access-list" help="Delete an L2 access-list">
