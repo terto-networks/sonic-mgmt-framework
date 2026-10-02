@@ -76,6 +76,13 @@
       <ACTION>tertoos-cli candidate set evpn/evi/${vni}&#xA;
               tertoos-cli candidate context evpn-evi ${vni}</ACTION>
     </COMMAND>
+    <!-- `no evi` remove o EVI com tudo que pendura nele (ACs, RTs, mapa VLAN→VNI):
+         a cascata é do candidate (expandNoEvi, terto-horizon). Sem este comando não
+         havia como apagar um EVI pela CLI, e o VNI seguia vivo no kernel e no ASIC. -->
+    <COMMAND name="no evi" help="Remove an EVPN Instance">
+      <PARAM name="vni" help="VNI 1..16777215" ptype="TERTOOS_RANGE_1_16777215"/>
+      <ACTION>tertoos-cli candidate delete evpn/evi/${vni}</ACTION>
+    </COMMAND>
 
     <COMMAND name="ethernet-segment identifier"
              help="Configure ethernet-segment ESI on an interface (multi-homing)">
