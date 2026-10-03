@@ -601,6 +601,16 @@
     <COMMAND name="no shutdown" help="Re-enable peer">
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/admin_status up</ACTION>
     </COMMAND>
+    <!-- BFD na sessão BGP: o parceiro morto atrás de um switch (PTT, transporte
+         L2) deixa a porta up e o BGP só cai pelo hold-time — medido na bancada
+         em 03/10: 165,7 s sem BFD × 0,87 s com BFD 300 ms × 3. Antes o comando
+         só existia no session-group. -->
+    <COMMAND name="bfd" help="Enable BFD for this neighbor (fast failure detection)">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/bfd true</ACTION>
+    </COMMAND>
+    <COMMAND name="no bfd" help="Disable BFD for this neighbor">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${bgpnbr}/bfd</ACTION>
+    </COMMAND>
     <COMMAND name="use session-group" help="Inherit session-group">
       <PARAM name="name" help="Session-group name" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/peer_group_name ${name}</ACTION>
