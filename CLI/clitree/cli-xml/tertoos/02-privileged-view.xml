@@ -988,13 +988,20 @@
          de entrada pelo CLI: o tertoos-cli VALIDA o arquivo e so' grava em
          /data/features/functions se for valido; rejeitado mostra o motivo (linha
          e mensagem) e nao instala nada. Mesma regra do POST /api/functions/install.
-         RBAC real no binario (`gate`), como no `bash`: o access= e' decorativo. -->
+         Arquivo sem assinatura e' aceito, com WARNING.
+         Papel: netadmin, igual a WebUI. RBAC real no binario (`gate`), como no
+         `bash`: o access= e' decorativo. O sudo sem senha vem de
+         /etc/sudoers.d/tertoos-functions (so' estes dois subcomandos, %netadmin). -->
     <COMMAND name="function list" help="List installed functions and rejected function files">
       <ACTION>tertoos-cli function list</ACTION>
     </COMMAND>
-    <COMMAND name="function install" help="Validate and install a function (.tosfn) from a URL or file" access="sysadmin">
+    <COMMAND name="function install" help="Validate and install a function (.tosfn) from a URL or file" access="netadmin">
       <PARAM name="src" help="URL or file of the function (.tosfn)" ptype="STRING"/>
-      <ACTION>tertoos-cli gate sysadmin &amp;&amp; sudo /usr/bin/tertoos-cli function install ${src}</ACTION>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; sudo /usr/bin/tertoos-cli function install ${src}</ACTION>
+    </COMMAND>
+    <COMMAND name="function uninstall" help="Remove an installed function (applied configuration is kept)" access="netadmin">
+      <PARAM name="id" help="Function id, as shown by 'function list'" ptype="STRING"/>
+      <ACTION>tertoos-cli gate netadmin &amp;&amp; sudo /usr/bin/tertoos-cli function uninstall ${id}</ACTION>
     </COMMAND>
 
     <COMMAND name="show horizon status" help="Horizon agent status">
