@@ -12,6 +12,19 @@
   BGP/OSPF/LDP/BFD nem nos PDUs de controle L2 — esses chegam legitimamente pelas
   interfaces de transito. Tambem NAO filtra transito: o encaminhamento acontece no
   ASIC e nunca passa pelo kernel; isso aqui so' protege o que e' puntado pra CPU.
+
+  ACL de CONTROL-PLANE (gerencia INBAND) — modelo SONiC (ACL_TABLE type=CTRLPLANE):
+    control-plane access-list <nome>          → ACL_TABLE|<nome> type=CTRLPLANE e entra
+                                                no modo de regras (permit/deny <seq> ...)
+    no control-plane access-list <nome>       → apaga a ACL
+    management-acl access-group <nome> service <ssh|http|gnmi|snmp|all>
+                                              → ACL_TABLE|<nome> services@ += <svc>
+    no management-acl access-group <nome> service <svc>
+                                              → services@ -= <svc>
+  Numa ACL de control-plane valem so' a ORIGEM e o DESTINO de cada regra; o
+  protocolo/porta vem do servico ligado. A porta OOB continua livre (uma ACL errada
+  nao tranca ninguem fora). Use SEMPRE `control-plane access-list` para editar: o
+  `ipv4 access-list` regrava type=L3 e a transformaria em ACL de dados.
 -->
 <CLISH_MODULE
     xmlns="http://www.dellemc.com/sonic/XMLSchema"
@@ -35,6 +48,39 @@
     <COMMAND name="no management-acl interface"
              help="Use the platform's management interface again">
       <ACTION>tertoos-cli candidate delete mgmt-acl/mgmt_interface</ACTION>
+    </COMMAND>
+
+    <!-- ACL de control-plane: mesmo modo de regras da ipv4 access-list, tipo CTRLPLANE -->
+    <COMMAND name="control-plane access-list"
+             help="Configure a control-plane ACL (sources allowed to reach management services in-band)"
+             view="config-ipv4-acl-view"
+             viewid="aclname=${name}">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>
+        tertoos-cli candidate context acl ${name}&#xA;
+        tertoos-cli candidate set acl/${name}/type CTRLPLANE&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no control-plane access-list" help="Delete a control-plane ACL">
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
+    </COMMAND>
+    <COMMAND name="management-acl access-group"
+             help="Allow a control-plane ACL's sources to reach a management service in-band">
+      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
+      <ACTION>
+        tertoos-cli candidate set acl/${acl}/type CTRLPLANE&#xA;
+        tertoos-cli candidate add acl/${acl}/services ${svc}&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no management-acl access-group"
+             help="Stop allowing a control-plane ACL on a management service">
+      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
+      <ACTION>tertoos-cli candidate del-list acl/${acl}/services ${svc}</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>

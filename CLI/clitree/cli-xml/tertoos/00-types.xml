@@ -490,6 +490,14 @@
          ext_pattern="ssh(ssh) telnet(telnet) all(all) none(none)"
          help="ssh | telnet | all | none"/>
 
+  <!-- Servico de gerencia liberado por uma ACL de control-plane (38-config-mgmt-firewall.xml).
+       Vai como esta ao CONFIG_DB (ACL_TABLE services@); o cfgd normaliza a caixa. -->
+  <PTYPE name="TERTOOS_CTRLPLANE_SERVICE"
+         method="regexp_select"
+         pattern="(ssh|http|gnmi|snmp|all)"
+         ext_pattern="ssh(ssh) http(http) gnmi(gnmi) snmp(snmp) all(all)"
+         help="ssh | http (UI/API 8090) | gnmi | snmp | all"/>
+
   <!-- ACL: pattern aceita numero de protocolo tambem; Tab so lista os nomes -->
   <PTYPE name="TERTOOS_ACL_PROTO_V4"
          method="regexp_select"
