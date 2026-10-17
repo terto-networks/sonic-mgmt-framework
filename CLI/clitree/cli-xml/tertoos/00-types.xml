@@ -227,6 +227,20 @@
          ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
 
+  <!-- ACL: as de dados e as de control-plane dividem a ACL_TABLE; o Tab da
+       control-plane lista so' as type=CTRLPLANE (gerencia inband). -->
+  <PTYPE name="TERTOOS_ACL_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete acl"
+         help="ACL name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_CTRLPLANE_ACL_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete ctrlplane-acl"
+         help="Control-plane ACL name (Tab lists the configured ones)"/>
+
   <!-- ================================================================
        Enums estaticos (backlog secao 2 da matriz klish-ptype):
        regexp_select SEM ext_pattern_cmd = candidatos fixos no Tab/?,

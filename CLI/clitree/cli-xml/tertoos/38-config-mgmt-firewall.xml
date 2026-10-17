@@ -55,19 +55,19 @@
              help="Configure a control-plane ACL (sources allowed to reach management services in-band)"
              view="config-ipv4-acl-view"
              viewid="aclname=${name}">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type CTRLPLANE&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no control-plane access-list" help="Delete a control-plane ACL">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
     </COMMAND>
     <COMMAND name="management-acl access-group"
              help="Allow a control-plane ACL's sources to reach a management service in-band">
-      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
       <ACTION>
@@ -77,7 +77,7 @@
     </COMMAND>
     <COMMAND name="no management-acl access-group"
              help="Stop allowing a control-plane ACL on a management service">
-      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
       <ACTION>tertoos-cli candidate del-list acl/${acl}/services ${svc}</ACTION>
