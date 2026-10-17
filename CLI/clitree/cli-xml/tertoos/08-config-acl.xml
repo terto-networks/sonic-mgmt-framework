@@ -34,14 +34,14 @@
              help="Configure an IPv4 access-list"
              view="config-ipv4-acl-view"
              viewid="aclname=${name}">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L3&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv4 access-list" help="Delete an IPv4 access-list">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
     </COMMAND>
 
@@ -49,14 +49,14 @@
              help="Configure an IPv6 access-list"
              view="config-ipv6-acl-view"
              viewid="aclname=${name}">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L3V6&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 access-list" help="Delete an IPv6 access-list">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
     </COMMAND>
 
@@ -64,14 +64,14 @@
              help="Configure an L2 (MAC/802.1Q) access-list"
              view="config-l2-acl-view"
              viewid="aclname=${name}">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>
         tertoos-cli candidate context acl ${name}&#xA;
         tertoos-cli candidate set acl/${name}/type L2&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no ethernet-services access-list" help="Delete an L2 access-list">
-      <PARAM name="name" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate delete acl/${name}</ACTION>
     </COMMAND>
 
