@@ -55,6 +55,12 @@
     <COMMAND name="show dataplane" help="Show dataplane punt mode and hitless-restart state">
       <ACTION>tertoos-cli show dataplane</ACTION>
     </COMMAND>
+    <!-- Gerencia: firewall da OOB + ACL de control-plane (gerencia inband), configurado e
+         aplicado (nftables, precisa de root: sudo -n, que o grupo sysadmin tem; sem sudo
+         mostra so' o configurado). -->
+    <COMMAND name="show management-acl" help="Show who may reach the management services (OOB firewall and control-plane ACLs)">
+      <ACTION>sudo -n /usr/bin/tertoos-cli show management-acl 2>/dev/null || tertoos-cli show management-acl</ACTION>
+    </COMMAND>
 
     <COMMAND name="ping" help="Ping IPv4/IPv6 host">
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>
