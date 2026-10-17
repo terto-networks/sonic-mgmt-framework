@@ -199,6 +199,18 @@
     <COMMAND name="no capability opaque" help="Disable Opaque LSAs">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/capability-opaque false</ACTION>
     </COMMAND>
+
+    <!-- LDP-IGP sync (RFC 5443): enquanto a sessao LDP de um enlace p2p nao sobe, o
+         OSPF anuncia o enlace com custo maximo (65535). YANG: tertoos-ospf.yang
+         OSPFV2_ROUTER ldp-sync (default false). O cfgd so' o gera quando TODA
+         interface OSPF ponto-a-ponto tambem e' LDP (senao loga o motivo). -->
+    <COMMAND name="mpls ldp-sync"
+             help="Enable LDP-IGP synchronization (max cost on a p2p link until its LDP session is up)">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/ldp-sync true</ACTION>
+    </COMMAND>
+    <COMMAND name="no mpls ldp-sync" help="Disable LDP-IGP synchronization">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/ldp-sync</ACTION>
+    </COMMAND>
     <COMMAND name="router-info area"
              help="Originate Router Information LSA with Area-Local scope (SR/PCE)">
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/router-info-scope area</ACTION>
