@@ -356,6 +356,20 @@
       <PARAM name="tag" help="Tag value" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/tag ${tag}</ACTION>
     </COMMAND>
+    <!-- SR-TE steering (ROUTE_MAP.set_srte_color, sonic-route-map.yang): a rota
+         passa a usar a policy SR-TE desta cor cujo endpoint e' o next-hop BGP
+         dela (FRR `set sr-te color`). Nao e' a extcommunity Color (essa anuncia
+         a cor aos pares). Sem este comando a policy so recebia trafego por
+         route-map escrito no vtysh (T5 do lab em anel, 18/10/2026). -->
+    <COMMAND name="set sr-te color" help="Steer matching routes into the SR-TE policy with this color">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <PARAM name="color" help="SR-TE policy color (1..4294967295)" ptype="TERTOOS_RANGE_1_4294967295"/>
+      <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/sr-te-color ${color}</ACTION>
+    </COMMAND>
+    <COMMAND name="no set sr-te color" help="Stop steering into an SR-TE policy">
+      <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete route-policy/${rplname}/stmt/${seq}/set/sr-te-color</ACTION>
+    </COMMAND>
     <COMMAND name="set community" help="Append a community value">
       <PARAM name="seq" help="Statement sequence" ptype="UINT"/>
       <PARAM name="value" help="Community AS:NN or well-known" ptype="STRING"/>
