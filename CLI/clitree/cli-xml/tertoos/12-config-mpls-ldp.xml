@@ -67,6 +67,17 @@
       <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/router-id ${addr}</ACTION>
     </COMMAND>
+    <!-- MPLS_LDP_ROUTER.allow-broken-lsp (tertoos-mpls.yang, default enable):
+         FEC sem label a jusante vira implicit-null (pop + encaminha em IP), como o
+         "untagged" do Cisco. Sem isto o transito descarta trafego para prefixos
+         cuja origem nao aloca label (anel do lab, 19/10/2026). O `no` grava
+         `disable` explicito: apagar o leaf voltaria ao padrao (ligado). -->
+    <COMMAND name="allow-broken-lsp" help="Install FECs without a downstream label as pop + IP forward (default)">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/allow-broken-lsp enable</ACTION>
+    </COMMAND>
+    <COMMAND name="no allow-broken-lsp" help="Do not install FECs without a downstream label (transit drops them)">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/allow-broken-lsp disable</ACTION>
+    </COMMAND>
     <COMMAND name="holdtime" help="Session holdtime">
       <PARAM name="s" help="Seconds" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/holdtime ${s}</ACTION>
