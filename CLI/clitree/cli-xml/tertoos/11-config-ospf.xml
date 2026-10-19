@@ -283,11 +283,16 @@
       <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/redistribute/${proto}</ACTION>
     </COMMAND>
+    <!-- protocol default-route (tertoos-ospf.yang): the old kernel + always
+         pair rendered as 'redistribute kernel' and never originated a default. -->
     <COMMAND name="default-information originate" help="Originate default route">
       <ACTION>
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel&#xA;
-        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/kernel/always true&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/default-route&#xA;
+        tertoos-cli candidate set ospf/${ospfvrf}/redistribute/default-route/always true&#xA;
       </ACTION>
+    </COMMAND>
+    <COMMAND name="no default-information originate" help="Stop originating the default route">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/redistribute/default-route</ACTION>
     </COMMAND>
 
     <!-- Sub-view: area -->
