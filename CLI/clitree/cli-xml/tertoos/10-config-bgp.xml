@@ -365,22 +365,36 @@
       <PARAM name="rmap" help="Route-policy name (optional)"
              ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
+        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected true&#xA;
         if [ -n "${rmap}" ]; then&#xA;
             tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected_rmap ${rmap}&#xA;
         else&#xA;
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected true&#xA;
+            tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected_rmap&#xA;
         fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no redistribute connected" help="Stop redistributing connected">
+      <ACTION>
+        tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected&#xA;
+        tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected_rmap&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute static" help="Redistribute static">
       <PARAM name="rmap" help="Route-policy name (optional)"
              ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>
+        tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static true&#xA;
         if [ -n "${rmap}" ]; then&#xA;
             tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static_rmap ${rmap}&#xA;
         else&#xA;
-            tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static true&#xA;
+            tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_static_rmap&#xA;
         fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no redistribute static" help="Stop redistributing static">
+      <ACTION>
+        tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_static&#xA;
+        tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/redistribute_static_rmap&#xA;
       </ACTION>
     </COMMAND>
 

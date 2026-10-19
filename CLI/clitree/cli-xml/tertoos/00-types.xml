@@ -485,6 +485,13 @@
          ext_pattern="connected(connected) static(static) bgp(bgp) ospf(ospf)"
          help="connected | static | bgp | ospf"/>
 
+  <!-- metric-type do redistribute OSPF (E1/E2) -->
+  <PTYPE name="TERTOOS_OSPF_METRIC_TYPE"
+         method="regexp_select"
+         pattern="(1|2)"
+         ext_pattern="1(1) 2(2)"
+         help="1 (E1) | 2 (E2)"/>
+
   <!-- AAA / seguranca / linha -->
   <PTYPE name="TERTOOS_TACACS_AUTH_TYPE"
          method="regexp_select"
