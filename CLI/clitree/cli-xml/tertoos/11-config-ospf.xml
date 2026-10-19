@@ -279,6 +279,34 @@
         fi&#xA;
       </ACTION>
     </COMMAND>
+    <!-- metric / metric-type do redistribute: comandos pelo nome mais longo
+         (nao como parametro opcional) para nao colidir com o route-policy
+         posicional de `redistribute <proto> [rmap]`. Leaves metric e
+         metric-type do OSPFV2_ROUTER_DISTRIBUTE_ROUTE (tertoos-ospf.yang). -->
+    <COMMAND name="redistribute connected metric" help="Metric of redistributed connected routes">
+      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/metric ${metric}</ACTION>
+    </COMMAND>
+    <COMMAND name="redistribute connected metric-type" help="External type of redistributed connected routes">
+      <PARAM name="mtype" help="1 (E1) | 2 (E2)" ptype="TERTOOS_OSPF_METRIC_TYPE"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/metric-type ${mtype}</ACTION>
+    </COMMAND>
+    <COMMAND name="redistribute static metric" help="Metric of redistributed static routes">
+      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/metric ${metric}</ACTION>
+    </COMMAND>
+    <COMMAND name="redistribute static metric-type" help="External type of redistributed static routes">
+      <PARAM name="mtype" help="1 (E1) | 2 (E2)" ptype="TERTOOS_OSPF_METRIC_TYPE"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/metric-type ${mtype}</ACTION>
+    </COMMAND>
+    <COMMAND name="redistribute bgp metric" help="Metric of redistributed bgp routes">
+      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp/metric ${metric}</ACTION>
+    </COMMAND>
+    <COMMAND name="redistribute bgp metric-type" help="External type of redistributed bgp routes">
+      <PARAM name="mtype" help="1 (E1) | 2 (E2)" ptype="TERTOOS_OSPF_METRIC_TYPE"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp/metric-type ${mtype}</ACTION>
+    </COMMAND>
     <COMMAND name="no redistribute" help="Stop redistributing">
       <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/redistribute/${proto}</ACTION>
