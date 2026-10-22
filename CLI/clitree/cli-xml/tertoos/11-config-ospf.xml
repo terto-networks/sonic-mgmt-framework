@@ -127,16 +127,16 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/segment_routing false</ACTION>
     </COMMAND>
     <COMMAND name="segment-routing global-block" help="SRGB lower upper">
-      <PARAM name="lower" help="Lower label" ptype="UINT"/>
-      <PARAM name="upper" help="Upper label" ptype="UINT"/>
+      <PARAM name="lower" help="Lower label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
+      <PARAM name="upper" help="Upper label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_lower ${lower}&#xA;
         tertoos-cli candidate set ospf/${ospfvrf}/sr_global_block_upper ${upper}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="segment-routing local-block" help="SRLB lower upper">
-      <PARAM name="lower" help="Lower" ptype="UINT"/>
-      <PARAM name="upper" help="Upper" ptype="UINT"/>
+      <PARAM name="lower" help="Lower label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
+      <PARAM name="upper" help="Upper label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_lower ${lower}&#xA;
         tertoos-cli candidate set ospf/${ospfvrf}/sr_local_block_upper ${upper}&#xA;

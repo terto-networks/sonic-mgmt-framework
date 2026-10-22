@@ -227,6 +227,51 @@
          ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
 
+  <!-- SR-TE e routing-policy (22/10/2026): Tab lista os objetos existentes
+       (running + candidate) pelo mesmo backend do pw-class; criar novo segue livre. -->
+  <PTYPE name="TERTOOS_SRTE_SEGLIST_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete segment-list"
+         help="SR-TE segment-list name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_ROUTE_POLICY_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete route-policy"
+         help="Route-policy name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_PREFIX_SET_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete prefix-set"
+         help="Prefix-set name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_COMMUNITY_SET_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete community-set"
+         help="Community-set name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_EXTCOMMUNITY_SET_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete ext-community-set"
+         help="Extcommunity-set name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_ASPATH_SET_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete as-path-set"
+         help="AS-path-set name (Tab lists the configured ones)"/>
+
+  <!-- inet:ip-address do YANG (tertoos-srte.yang SR_TE_POLICY.endpoint):
+       IPv4 completo ou IPv6 (forma livre com ":"; o YANG/backend valida o resto). -->
+  <PTYPE name="TERTOOS_IP_ADDR"
+         method="regexp"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7}))"
+         help="IPv4 or IPv6 address"/>
+
   <!-- ACL: as de dados e as de control-plane dividem a ACL_TABLE; o Tab da
        control-plane lista so' as type=CTRLPLANE (gerencia inband). -->
   <PTYPE name="TERTOOS_ACL_NAME"
