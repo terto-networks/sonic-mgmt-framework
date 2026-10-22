@@ -40,7 +40,7 @@
              help="Configure SR-TE policy"
              view="config-srte-policy-view"
              viewid="srtepol_ep=${endpoint};srtepol_color=${color_val}">
-      <PARAM name="endpoint" help="Policy endpoint (A.B.C.D)" ptype="STRING"/>
+      <PARAM name="endpoint" help="Policy endpoint (IPv4/IPv6 address)" ptype="TERTOOS_IP_ADDR"/>
       <!-- WRAP em switch parent: SUBCOMMAND mode=subcommand sozinho eh rejeitado pelo
            parser klish. Wrap num PARAM switch (vide exemplo "interface" em
            04-config-interface.xml/iftype) faz o parser aceitar o token literal.
@@ -55,11 +55,11 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no policy" help="Remove SR-TE policy">
-      <PARAM name="endpoint" help="Endpoint" ptype="STRING"/>
+      <PARAM name="endpoint" help="Policy endpoint (IPv4/IPv6 address)" ptype="TERTOOS_IP_ADDR"/>
       <PARAM name="color_sw" help="color" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="color" help="color" mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
-      <PARAM name="color_val" help="Color" ptype="UINT"/>
+      <PARAM name="color_val" help="Color (1..4294967295)" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate delete sr-te/policy/${endpoint}/${color_val}</ACTION>
     </COMMAND>
 
@@ -67,11 +67,11 @@
              help="Define a segment-list"
              view="config-srte-seglist-view"
              viewid="srteseglist=${name}">
-      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
-      <ACTION>tertoos-cli candidate context srte-seglist ${name}</ACTION>
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_SRTE_SEGLIST_NAME"/>
+      <ACTION>tertoos-cli candidate context srte-seglist ${name}&#xA;tertoos-cli candidate set sr-te/segment-list/${name}&#xA;</ACTION>
     </COMMAND>
     <COMMAND name="no segment-list" help="Remove segment-list">
-      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_SRTE_SEGLIST_NAME"/>
       <ACTION>tertoos-cli candidate delete sr-te/segment-list/${name}</ACTION>
     </COMMAND>
 
@@ -104,7 +104,7 @@
       <ACTION>tertoos-cli candidate context srte-cpath ${pref}</ACTION>
     </COMMAND>
     <COMMAND name="no candidate-path preference" help="Remove candidate path">
-      <PARAM name="pref" help="Preference" ptype="UINT"/>
+      <PARAM name="pref" help="Preference 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate delete sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${pref}</ACTION>
     </COMMAND>
   </VIEW>
@@ -142,7 +142,7 @@
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/affinity_include_any ${b}</ACTION>
     </COMMAND>
     <COMMAND name="segment-list" help="Bind segment-list">
-      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_SRTE_SEGLIST_NAME"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}</ACTION>
     </COMMAND>
     <!-- Alias UX IOS-XR canonical: `explicit segment-list <name>`. Em FRR
@@ -163,7 +163,7 @@
             exit
            exit -->
     <COMMAND name="explicit segment-list" help="Bind explicit (configured) segment-list">
-      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Segment-list name" ptype="TERTOOS_SRTE_SEGLIST_NAME"/>
       <ACTION>
         tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/segment_list_name ${name}&#xA;
         tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/protocol_origin configured&#xA;
@@ -191,11 +191,11 @@
       <PARAM name="label_sw" help="label" mode="switch" ptype="SUBCOMMAND">
         <PARAM name="label" help="label" mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
-      <PARAM name="lbl" help="MPLS label" ptype="UINT"/>
+      <PARAM name="lbl" help="MPLS label 16..1048575" ptype="TERTOOS_MPLS_LABEL"/>
       <ACTION>tertoos-cli candidate set sr-te/segment-list-hop/${srteseglist}/${i}/mpls_label ${lbl}</ACTION>
     </COMMAND>
     <COMMAND name="no index" help="Remove hop">
-      <PARAM name="i" help="Index" ptype="UINT"/>
+      <PARAM name="i" help="Index 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate delete sr-te/segment-list-hop/${srteseglist}/${i}</ACTION>
     </COMMAND>
   </VIEW>

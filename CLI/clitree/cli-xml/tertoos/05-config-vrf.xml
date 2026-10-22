@@ -168,12 +168,12 @@
 
     <COMMAND name="import route-policy"
              help="Apply RPL on import">
-      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set vrf/${vrfname}/af/${af}/import_policy ${rpl}</ACTION>
     </COMMAND>
     <COMMAND name="export route-policy"
              help="Apply RPL on export">
-      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rpl" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set vrf/${vrfname}/af/${af}/export_policy ${rpl}</ACTION>
     </COMMAND>
   </VIEW>

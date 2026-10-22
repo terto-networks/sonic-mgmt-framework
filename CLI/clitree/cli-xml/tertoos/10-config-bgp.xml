@@ -536,11 +536,11 @@
     </COMMAND>
 
     <COMMAND name="route-policy in" help="Inbound route-policy">
-      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_in ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="route-policy out" help="Outbound route-policy">
-      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
@@ -697,11 +697,11 @@
     </COMMAND>
 
     <COMMAND name="route-policy in" help="Inbound route-policy">
-      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_in ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="route-policy out" help="Outbound route-policy">
-      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_NAME"/>
+      <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
