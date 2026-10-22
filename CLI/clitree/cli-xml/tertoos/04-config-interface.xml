@@ -205,7 +205,7 @@
 
     <!-- VRF binding -->
     <COMMAND name="vrf" help="Bind interface to a VRF">
-      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/vrf ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no vrf" help="Remove VRF binding">

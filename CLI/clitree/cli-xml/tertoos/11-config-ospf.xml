@@ -47,7 +47,7 @@
              view="config-router-ospf-view"
              viewid="ospfvrf=${vrf};ospfid=${id}">
       <PARAM name="id" help="OSPF process id (informational)" ptype="UINT"/>
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-ospf ${vrf}&#xA;
         tertoos-cli candidate set ospf/${vrf}/enable true&#xA;
@@ -74,7 +74,7 @@
 
     <!-- Globais -->
     <COMMAND name="router-id" help="Set OSPF router-id">
-      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <PARAM name="addr" help="Router-ID A.B.C.D" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/router-id ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">

@@ -154,7 +154,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="deny" help="Add a prefix entry (deny)">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <PARAM name="prefix" help="A.B.C.D/M or X:X::X/M" ptype="STRING"/>
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
@@ -169,7 +169,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no" help="Remove a prefix entry">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number 1..4294967295" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate delete prefix-set/${psname}/entry/${seq}</ACTION>
     </COMMAND>
 
@@ -343,7 +343,7 @@
     </COMMAND>
     <COMMAND name="set next-hop" help="Set next-hop">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="addr" help="Next-hop address" ptype="STRING"/>
+      <PARAM name="addr" help="Next-hop address (IPv4/IPv6)" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/next-hop ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="set origin" help="Set origin code">
