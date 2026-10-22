@@ -24,11 +24,11 @@
              help="Configure VRF (L3 Virtual Routing and Forwarding)"
              view="config-vrf-view"
              viewid="vrfname=${name}">
-      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate context vrf ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no vrf" help="Remove VRF">
-      <PARAM name="name" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate delete vrf/${name}</ACTION>
     </COMMAND>
   </VIEW>

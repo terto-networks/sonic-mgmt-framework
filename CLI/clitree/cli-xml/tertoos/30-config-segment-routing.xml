@@ -93,7 +93,7 @@
       <ACTION>tertoos-cli candidate set sr-te/policy/${srtepol_ep}/${srtepol_color}/bsid ${label}</ACTION>
     </COMMAND>
     <COMMAND name="name" help="Policy name">
-      <PARAM name="n" help="Name" ptype="STRING"/>
+      <PARAM name="n" help="Name (1..64)" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set sr-te/policy/${srtepol_ep}/${srtepol_color}/name ${n}</ACTION>
     </COMMAND>
     <COMMAND name="candidate-path preference"
@@ -115,7 +115,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="name" help="Candidate-path name">
-      <PARAM name="n" help="Name" ptype="STRING"/>
+      <PARAM name="n" help="Name (1..64)" ptype="TERTOOS_NAME"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/name ${n}</ACTION>
     </COMMAND>
     <COMMAND name="discriminator" help="Path discriminator">
@@ -207,33 +207,33 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="pcc" help="Configure PCC">
-      <PARAM name="name" help="PCC name (or 'global')" ptype="STRING"/>
+      <PARAM name="name" help="PCC name (or 'global')" ptype="TERTOOS_SRTE_PCC_NAME"/>
       <ACTION>
         tertoos-cli candidate set sr-te/pcc/${name}/enable true&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="pcc source-address" help="PCC source IP">
-      <PARAM name="name" help="PCC name" ptype="STRING"/>
-      <PARAM name="ip" help="Source IP" ptype="STRING"/>
+      <PARAM name="name" help="PCC name" ptype="TERTOOS_SRTE_PCC_NAME"/>
+      <PARAM name="ip" help="Source IP (IPv4/IPv6)" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/source_address ${ip}</ACTION>
     </COMMAND>
     <COMMAND name="pcc peer" help="PCE peer address">
-      <PARAM name="name" help="PCC name" ptype="STRING"/>
-      <PARAM name="ip" help="Peer IP" ptype="STRING"/>
+      <PARAM name="name" help="PCC name" ptype="TERTOOS_SRTE_PCC_NAME"/>
+      <PARAM name="ip" help="PCE IP (IPv4/IPv6)" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/pce_address ${ip}</ACTION>
     </COMMAND>
     <COMMAND name="pcc peer port" help="PCE peer port">
-      <PARAM name="name" help="PCC name" ptype="STRING"/>
-      <PARAM name="port" help="port" ptype="UINT"/>
+      <PARAM name="name" help="PCC name" ptype="TERTOOS_SRTE_PCC_NAME"/>
+      <PARAM name="port" help="PCE port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/pce_port ${port}</ACTION>
     </COMMAND>
     <COMMAND name="pcc msd" help="Maximum SID Depth">
-      <PARAM name="name" help="PCC name" ptype="STRING"/>
-      <PARAM name="n" help="Depth" ptype="UINT"/>
+      <PARAM name="name" help="PCC name" ptype="TERTOOS_SRTE_PCC_NAME"/>
+      <PARAM name="n" help="Max SID depth 1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set sr-te/pcc/${name}/msd ${n}</ACTION>
     </COMMAND>
     <COMMAND name="no pcc" help="Remove PCC">
-      <PARAM name="name" help="PCC name" ptype="STRING"/>
+      <PARAM name="name" help="PCC name" ptype="TERTOOS_SRTE_PCC_NAME"/>
       <ACTION>tertoos-cli candidate delete sr-te/pcc/${name}</ACTION>
     </COMMAND>
   </VIEW>

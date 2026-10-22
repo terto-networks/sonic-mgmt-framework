@@ -265,6 +265,44 @@
          ext_pattern_cmd="tertoos-cli complete as-path-set"
          help="AS-path-set name (Tab lists the configured ones)"/>
 
+  <!-- BGP / EVPN / SR-TE PCC (22/10/2026, 2a rodada): Tab lista os existentes
+       (running + candidate). Padrao = o tipo do YANG (IP, VNI 1..16777215, nome). -->
+  <PTYPE name="TERTOOS_BGP_NEIGHBOR_ADDR"
+         method="regexp_select"
+         pattern="(((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})))|(Ethernet[0-9]+)|(PortChannel[0-9]+)|(Vlan([0-9]{1,3}|[1-3][0-9]{3}|40[0-8][0-9]|409[0-4]))"
+         ext_pattern_cmd="tertoos-cli complete bgp-neighbor"
+         help="BGP neighbor: IPv4/IPv6 address or interface (unnumbered) - Tab lists the configured ones"/>
+
+  <PTYPE name="TERTOOS_BGP_SESSION_GROUP_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete session-group"
+         help="BGP session-group name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_BGP_AF_GROUP_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete af-group"
+         help="BGP af-group name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_EVPN_VNI"
+         method="regexp_select"
+         pattern="(([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|(1[0-5][0-9]{6})|(16[0-6][0-9]{5})|(167[0-6][0-9]{4})|(1677[0-6][0-9]{3})|(16777[0-1][0-9]{2})|(1677720[0-9])|(1677721[0-5]))"
+         ext_pattern_cmd="tertoos-cli complete evpn-evi"
+         help="EVI VNI 1..16777215 (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_ES_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete ethernet-segment"
+         help="Ethernet-segment name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_SRTE_PCC_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete srte-pcc"
+         help="PCC name ('global' or a named PCC) (Tab lists the configured ones)"/>
+
   <!-- inet:ip-address do YANG (tertoos-srte.yang SR_TE_POLICY.endpoint):
        IPv4 completo ou IPv6 (forma livre com ":"; o YANG/backend valida o resto). -->
   <PTYPE name="TERTOOS_IP_ADDR"
