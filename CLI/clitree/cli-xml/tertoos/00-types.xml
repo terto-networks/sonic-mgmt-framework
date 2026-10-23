@@ -405,11 +405,15 @@
          help="bytes | packets"/>
 
   <!-- 0=plain | 7=encrypted (estilo IOS) -->
+  <!-- Senha: 0 = texto (o tertoos-cli cifra com a chave da caixa antes de
+       gravar) | cipher = bloco do `show running` desta caixa. O 7 (Cisco,
+       reversivel) continua no tipo so para a ACTION recusar com mensagem
+       clara, em vez do "Invalid input" do klish. -->
   <PTYPE name="TERTOOS_PASSWORD_ENC"
          method="regexp_select"
-         pattern="(0|7)"
-         ext_pattern="0(0) 7(7)"
-         help="0 (plain) | 7 (encrypted)"/>
+         pattern="(0|cipher|7)"
+         ext_pattern="0(0) cipher(cipher) 7(7)"
+         help="0 (plain text, stored encrypted) | cipher (encrypted block from show running)"/>
 
   <PTYPE name="TERTOOS_IMPORT_EXPORT_BOTH"
          method="regexp_select"
