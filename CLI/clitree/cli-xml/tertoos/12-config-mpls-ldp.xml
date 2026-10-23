@@ -217,15 +217,19 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="password" help="MD5 password for this neighbor">
-      <PARAM name="enc" help="0=plain text" ptype="TERTOOS_PASSWORD_ENC"/>
-      <PARAM name="secret" help="Password" ptype="STRING"/>
-      <!-- LDP ainda nao passa pelo cofre (so BGP): so o tipo 0. -->
+    <COMMAND name="password" help="MD5 password for this neighbor (stored encrypted)">
+      <PARAM name="enc" help="0=plain text | cipher=encrypted block from show running" ptype="TERTOOS_PASSWORD_ENC"/>
+      <PARAM name="secret" help="Password or encrypted block" ptype="STRING"/>
       <ACTION>
-        if [ "${enc}" != "0" ]; then echo "% Only password 0 &lt;text&gt; is supported for LDP neighbors"; false; else&#xA;
-          tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password "${secret}"&#xA;
-        fi&#xA;
+        case "${enc}" in&#xA;
+          7) echo "% Type 7 passwords are not supported; use password 0 &lt;text&gt; or password cipher &lt;block&gt;"; false ;;&#xA;
+          cipher) tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password "cipher:${secret}" ;;&#xA;
+          *) tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password "${secret}" ;;&#xA;
+        esac&#xA;
       </ACTION>
+    </COMMAND>
+    <COMMAND name="no password" help="Remove MD5 password">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/password</ACTION>
     </COMMAND>
     <COMMAND name="targeted" help="Mark as targeted neighbor">
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/targeted true</ACTION>
