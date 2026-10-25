@@ -22,6 +22,10 @@
       <PARAM name="minutes" help="Confirm window (1..60 minutes)" ptype="TERTOOS_RANGE_1_60"/>
       <ACTION>tertoos-cli candidate commit --confirmed ${minutes}</ACTION>
     </COMMAND>
+    <COMMAND name="commit force"
+             help="Apply even if another session changed the configuration since you entered config mode">
+      <ACTION>tertoos-cli candidate commit --force</ACTION>
+    </COMMAND>
     <COMMAND name="commit replace"
              help="Replace running configuration entirely">
       <ACTION>tertoos-cli candidate commit --replace</ACTION>

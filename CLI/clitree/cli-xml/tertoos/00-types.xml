@@ -961,7 +961,11 @@
     (incidente v0.12.104). ACTION sem `$` (o klish expande ${...} antes de rodar);
     no fim do modulo e sem `help` porque o sonic-clish.xsd exige.
   -->
+  <!-- Desde 25/10/2026 o nome vem do tertoos-cli: hostname curto + indicador de
+       lock/onda ([LOCKED], [LOCKED:user], [CONFIRM Nm], [HORIZON-WAVE Nm]) —
+       o operador ve no prompt quando a caixa esta travada ou aguardando
+       confirmacao. O prompt-name nunca falha (imprime ao menos o hostname). -->
   <VAR name="SYSTEM_NAME" dynamic="true">
-    <ACTION>sed 's/\..*//' /proc/sys/kernel/hostname | tr -d '\n'</ACTION>
+    <ACTION>tertoos-cli candidate prompt-name</ACTION>
   </VAR>
 </CLISH_MODULE>
