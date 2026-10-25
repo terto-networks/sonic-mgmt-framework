@@ -79,6 +79,27 @@
       <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_NAME" optional="true"/>
       <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
     </COMMAND>
+    <!-- Lock de configuracao e commit pendente de confirmacao (25/10/2026). -->
+    <COMMAND name="show configuration lock"
+             help="Who holds the configuration lock and any commit pending confirmation">
+      <ACTION>tertoos-cli candidate lock-status</ACTION>
+    </COMMAND>
+    <COMMAND name="show commit pending"
+             help="Commit pending confirmation (local or Horizon wave) and its deadline">
+      <ACTION>tertoos-cli candidate lock-status</ACTION>
+    </COMMAND>
+    <COMMAND name="clear configuration lock" access="sysadmin"
+             help="Release the configuration lock held by another session (sysadmin)">
+      <ACTION>tertoos-cli candidate clear-lock</ACTION>
+    </COMMAND>
+    <COMMAND name="commit confirm" access="netadmin"
+             help="Keep the commit pending confirmation (yours or a Horizon wave)">
+      <ACTION>tertoos-cli candidate commit-confirm</ACTION>
+    </COMMAND>
+    <COMMAND name="rollback configuration pending" access="netadmin"
+             help="Roll back NOW the commit pending confirmation (yours or a Horizon wave)">
+      <ACTION>tertoos-cli candidate confirm-abort</ACTION>
+    </COMMAND>
     <COMMAND name="show configuration commit list"
              help="List recent commits">
       <ACTION>tertoos-cli commit list</ACTION>
