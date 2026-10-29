@@ -475,10 +475,21 @@
     <COMMAND name="show sr-te pcep" help="SR-TE PCEP / PCC status">
       <ACTION>vtysh -c "show sr-te pcep counters" 2&gt;/dev/null; vtysh -c "show sr-te pcep pcc"</ACTION>
     </COMMAND>
+    <!-- Antes chamava "show ip ospf segment-routing prefix-sid", que NAO existe no
+         FRR ("% Unknown command", bancada 2026-10-28). O SR do OSPF esta na LSDB
+         opaca: "show ip ospf database segment-routing" (SRGB/SRLB por no, prefix-SID
+         e adj-SID com operacao de label, interface e nexthop). O IS-IS so roda se o
+         isisd estiver ativo, senao o vtysh imprime outro "Unknown command". -->
+    <COMMAND name="show segment-routing" help="Segment Routing (OSPF/IS-IS): SRGB, prefix-SIDs and adjacency-SIDs">
+      <ACTION>
+        vtysh -c "show ip ospf database segment-routing"&#xA;
+        if pgrep -x isisd &gt;/dev/null 2&gt;&amp;1; then vtysh -c "show isis segment-routing node"; fi&#xA;
+      </ACTION>
+    </COMMAND>
     <COMMAND name="show segment-routing prefix-sid" help="OSPF/IS-IS prefix-SIDs">
       <ACTION>
-        vtysh -c "show ip ospf segment-routing prefix-sid"&#xA;
-        vtysh -c "show isis segment-routing prefix-sids" 2&gt;/dev/null&#xA;
+        vtysh -c "show ip ospf database segment-routing"&#xA;
+        if pgrep -x isisd &gt;/dev/null 2&gt;&amp;1; then vtysh -c "show isis segment-routing node"; fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show mpls table" help="zebra MPLS LFIB">
