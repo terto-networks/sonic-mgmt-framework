@@ -1066,6 +1066,11 @@
       <PARAM name="token_value" help="hze_... (Horizon org console: Edges, Adopt)" ptype="STRING"/>
       <ACTION>sudo /usr/bin/tertoos-cli horizon-edge adopt core ${core_url} token ${token_value}</ACTION>
     </COMMAND>
+    <!-- Agent desta caixa -> o proprio Edge (primario). O adopt ja faz isto;
+         aqui para caixa adotada antes (ou com no-home-agent). -->
+    <COMMAND name="horizon-edge home-agent" help="Make this box use its own Edge as primary (the agent enrolls again)" access="netadmin">
+      <ACTION>sudo /usr/bin/tertoos-cli horizon-edge home-agent</ACTION>
+    </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">
       <PARAM name="feature" help="Feature name" ptype="STRING"/>
