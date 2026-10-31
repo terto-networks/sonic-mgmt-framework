@@ -61,6 +61,9 @@
     <COMMAND name="show management-acl" help="Show who may reach the management services (OOB firewall and control-plane ACLs)">
       <ACTION>sudo -n /usr/bin/tertoos-cli show management-acl 2>/dev/null || tertoos-cli show management-acl</ACTION>
     </COMMAND>
+    <COMMAND name="show horizon-edge" help="Horizon Edge on this box: state, adoption, Core link, connected switches">
+      <ACTION>sudo -n /usr/bin/tertoos-cli show horizon-edge 2>/dev/null || tertoos-cli show horizon-edge</ACTION>
+    </COMMAND>
 
     <COMMAND name="ping" help="Ping IPv4/IPv6 host">
       <PARAM name="target" help="Hostname or IP" ptype="STRING"/>

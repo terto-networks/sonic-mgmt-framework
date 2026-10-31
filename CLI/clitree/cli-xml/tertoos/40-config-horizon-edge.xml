@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TertoOS — Horizon Edge embutido (TOS-ARCH-EDGE-001, decisao do CEO 31/10/2026:
+  qualquer caixa TertoOS pode ser Edge). HORIZON_EDGE|global no CONFIG_DB,
+  consumido pelo cfgd, que liga/desliga tos-edge-nats + tos-edge.
+
+  Ligar exige advertise-ip (o commit recusa sem ele): e' o endereco que os
+  switches do site usam para falar com este Edge e vai no certificado do NATS.
+  A adocao numa org do Horizon e' acao, nao config: `horizon-edge adopt` na
+  view privilegiada (02-privileged-view.xml). Pelas portas de dados o Edge so'
+  responde com `management-acl access-group <acl> service horizon-edge`.
+-->
+<CLISH_MODULE
+    xmlns="http://www.dellemc.com/sonic/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
+                        http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
+  <VIEW name="config-view">
+
+    <COMMAND name="horizon-edge" help="Horizon Edge on this box (switches of the site connect to it)"/>
+
+    <COMMAND name="horizon-edge enable" help="Run the Horizon Edge on this box (needs advertise-ip)">
+      <ACTION>tertoos-cli candidate set horizon-edge/enabled true</ACTION>
+    </COMMAND>
+    <COMMAND name="no horizon-edge enable" help="Stop the Horizon Edge (adoption and CA are kept)">
+      <ACTION>tertoos-cli candidate set horizon-edge/enabled false</ACTION>
+    </COMMAND>
+
+    <COMMAND name="horizon-edge advertise-ip" help="Address the switches use to reach this Edge (goes into its certificate)">
+      <PARAM name="ip" help="IPv4 or IPv6 address of this box" ptype="TERTOOS_IP_ADDR"/>
+      <ACTION>tertoos-cli candidate set horizon-edge/advertise-ip ${ip}</ACTION>
+    </COMMAND>
+    <COMMAND name="no horizon-edge advertise-ip" help="Clear the Edge advertise address">
+      <ACTION>tertoos-cli candidate delete horizon-edge/advertise-ip</ACTION>
+    </COMMAND>
+
+  </VIEW>
+</CLISH_MODULE>

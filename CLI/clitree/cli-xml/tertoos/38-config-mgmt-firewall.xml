@@ -17,7 +17,7 @@
     control-plane access-list <nome>          → ACL_TABLE|<nome> type=CTRLPLANE e entra
                                                 no modo de regras (permit/deny <seq> ...)
     no control-plane access-list <nome>       → apaga a ACL
-    management-acl access-group <nome> service <ssh|http|gnmi|snmp|all>
+    management-acl access-group <nome> service <ssh|http|gnmi|snmp|horizon-edge|all>
                                               → ACL_TABLE|<nome> services@ += <svc>
     no management-acl access-group <nome> service <svc>
                                               → services@ -= <svc>
@@ -69,7 +69,7 @@
              help="Allow a control-plane ACL's sources to reach a management service in-band">
       <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
-      <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
+      <PARAM name="svc" help="ssh | http | gnmi | snmp | horizon-edge | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
       <ACTION>
         tertoos-cli candidate set acl/${acl}/type CTRLPLANE&#xA;
         tertoos-cli candidate add acl/${acl}/services ${svc}&#xA;
@@ -79,7 +79,7 @@
              help="Stop allowing a control-plane ACL on a management service">
       <PARAM name="acl" help="Control-plane ACL name" ptype="TERTOOS_CTRLPLANE_ACL_NAME"/>
       <PARAM name="service" help="Management service" ptype="SUBCOMMAND" mode="subcommand"/>
-      <PARAM name="svc" help="ssh | http | gnmi | snmp | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
+      <PARAM name="svc" help="ssh | http | gnmi | snmp | horizon-edge | all" ptype="TERTOOS_CTRLPLANE_SERVICE"/>
       <ACTION>tertoos-cli candidate del-list acl/${acl}/services ${svc}</ACTION>
     </COMMAND>
   </VIEW>

@@ -1052,6 +1052,21 @@
       <ACTION>tertoos-cli horizon queue</ACTION>
     </COMMAND>
 
+    <!-- Horizon Edge embutido (TOS-ARCH-EDGE-001): estado e adocao. Ligar/IP sao
+         config (40-config-horizon-edge.xml). sudo: a adocao le a chave de setup
+         (0600) em /data/horizon-edge. -->
+    <COMMAND name="show horizon-edge" help="Horizon Edge on this box: state, adoption, Core link, connected switches">
+      <ACTION>sudo -n /usr/bin/tertoos-cli show horizon-edge 2>/dev/null || tertoos-cli show horizon-edge</ACTION>
+    </COMMAND>
+    <COMMAND name="horizon-edge" help="Horizon Edge on this box"/>
+    <COMMAND name="horizon-edge adopt" help="Adopt this Edge into a Horizon organization" access="netadmin">
+      <PARAM name="core" help="Horizon Core address" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="core_url" help="https://horizon.example.com" ptype="STRING"/>
+      <PARAM name="token" help="Adoption token" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="token_value" help="hze_... (Horizon org console: Edges, Adopt)" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli horizon-edge adopt core ${core_url} token ${token_value}</ACTION>
+    </COMMAND>
+
     <COMMAND name="debug" help="Enable debug for a feature">
       <PARAM name="feature" help="Feature name" ptype="STRING"/>
       <ACTION>tertoos-cli debug enable ${feature}</ACTION>

@@ -602,9 +602,9 @@
        Vai como esta ao CONFIG_DB (ACL_TABLE services@); o cfgd normaliza a caixa. -->
   <PTYPE name="TERTOOS_CTRLPLANE_SERVICE"
          method="regexp_select"
-         pattern="(ssh|http|gnmi|snmp|all)"
-         ext_pattern="ssh(ssh) http(http) gnmi(gnmi) snmp(snmp) all(all)"
-         help="ssh | http (UI/API 8090) | gnmi | snmp | all"/>
+         pattern="(ssh|http|gnmi|snmp|horizon-edge|all)"
+         ext_pattern="ssh(ssh) http(http) gnmi(gnmi) snmp(snmp) horizon-edge(horizon-edge) all(all)"
+         help="ssh | http (UI/API 8090) | gnmi | snmp | horizon-edge (NATS 4222/8222, HTTPS 8443) | all (the 4 monitoring services)"/>
 
   <!-- ACL: pattern aceita numero de protocolo tambem; Tab so lista os nomes -->
   <PTYPE name="TERTOOS_ACL_PROTO_V4"
