@@ -1071,6 +1071,20 @@
     <COMMAND name="horizon-edge home-agent" help="Make this box use its own Edge as primary (the agent enrolls again)" access="netadmin">
       <ACTION>sudo /usr/bin/tertoos-cli horizon-edge home-agent</ACTION>
     </COMMAND>
+    <!-- HA do Edge (TOS-ARCH-EDGE-001 H2): 2o no no mesmo site, com a mesma CA.
+         No no 1: pair-code. No no novo: join com o que o pair-code mostrou. -->
+    <COMMAND name="horizon-edge pair-code" help="Generate a single-use code to pair a second Edge with this one (HA)" access="netadmin">
+      <ACTION>sudo /usr/bin/tertoos-cli horizon-edge pair-code</ACTION>
+    </COMMAND>
+    <COMMAND name="horizon-edge join" help="Join this Edge to the site of another Edge (HA, same CA)" access="netadmin">
+      <PARAM name="peer" help="First node of the site" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="peer_url" help="https://FIRST-NODE:8443 (shown by horizon-edge pair-code)" ptype="STRING"/>
+      <PARAM name="code" help="Pairing code" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="code_value" help="Code shown by horizon-edge pair-code on the first node" ptype="STRING"/>
+      <PARAM name="fingerprint" help="HTTPS fingerprint of the first node" ptype="SUBCOMMAND" mode="subcommand"/>
+      <PARAM name="fingerprint_value" help="SHA-256 shown by horizon-edge pair-code" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli horizon-edge join peer ${peer_url} code ${code_value} fingerprint ${fingerprint_value}</ACTION>
+    </COMMAND>
 
     <COMMAND name="debug" help="Enable debug for a feature">
       <PARAM name="feature" help="Feature name" ptype="STRING"/>
