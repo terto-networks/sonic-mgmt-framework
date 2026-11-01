@@ -202,14 +202,30 @@
 
     <!-- LDP-IGP sync (RFC 5443): enquanto a sessao LDP de um enlace p2p nao sobe, o
          OSPF anuncia o enlace com custo maximo (65535). YANG: tertoos-ospf.yang
-         OSPFV2_ROUTER ldp-sync (default false). O cfgd so' o gera quando TODA
-         interface OSPF ponto-a-ponto tambem e' LDP (senao loga o motivo). -->
+         OSPFV2_ROUTER ldp-sync (default TRUE desde 01/11/2026, tertoos ldp-sync
+         default-on). O cfgd so' o gera quando TODA interface OSPF ponto-a-ponto
+         tambem e' LDP (senao loga o motivo). A forma positiva apaga a leaf (volta ao
+         padrao); so' o "no" grava false. -->
     <COMMAND name="mpls ldp-sync"
-             help="Enable LDP-IGP synchronization (max cost on a p2p link until its LDP session is up)">
-      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/ldp-sync true</ACTION>
+             help="Enable LDP-IGP synchronization (default; max cost on a p2p link until its LDP session is up)">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/ldp-sync</ACTION>
     </COMMAND>
     <COMMAND name="no mpls ldp-sync" help="Disable LDP-IGP synchronization">
-      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/ldp-sync</ACTION>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/ldp-sync false</ACTION>
+    </COMMAND>
+
+    <!-- Protecao de partida (tertoos#350): no boot o OSPF anuncia max-metric ate o
+         datapath (ASIC) alcancar o plano de controle — liberada por evento pelo cfgd.
+         YANG: tertoos-ospf.yang OSPFV2_ROUTER startup-max-metric-wait-datapath
+         (default true). A forma positiva apaga a leaf (volta ao default); so' o "no"
+         grava false. -->
+    <COMMAND name="max-metric router-lsa on-startup wait-for-datapath"
+             help="Advertise max-metric at boot until the datapath has converged (default)">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/startup-max-metric-wait-datapath</ACTION>
+    </COMMAND>
+    <COMMAND name="no max-metric router-lsa on-startup wait-for-datapath"
+             help="Disable the boot max-metric protection">
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/startup-max-metric-wait-datapath false</ACTION>
     </COMMAND>
     <COMMAND name="router-info area"
              help="Originate Router Information LSA with Area-Local scope (SR/PCE)">
