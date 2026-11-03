@@ -185,6 +185,19 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/autoneg off</ACTION>
     </COMMAND>
 
+    <!-- QinQ 802.1ad: TPID da S-tag da porta (entrada E saida), idioma IOS-XR.
+         Vale para a porta fisica ou o PortChannel (o saibridge aplica nos membros).
+         Todas as S-VLANs da porta usam este TPID. Default 0x8100. -->
+    <COMMAND name="dot1q tunneling ethertype"
+             help="S-tag (QinQ outer) ethertype of this port">
+      <PARAM name="tpid" help="0x8100 | 0x88a8 | 0x9100 | 0x9200" ptype="TERTOOS_STAG_TPID"/>
+      <ACTION>tertoos-cli candidate set interface/${ifname}/stag_tpid ${tpid}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dot1q tunneling ethertype"
+             help="Back to the default S-tag ethertype (0x8100)">
+      <ACTION>tertoos-cli candidate delete interface/${ifname}/stag_tpid</ACTION>
+    </COMMAND>
+
     <!-- IPv4 / IPv6 addressing -->
     <COMMAND name="ipv4 address"
              help="Assign primary IPv4 address (A.B.C.D/M)">

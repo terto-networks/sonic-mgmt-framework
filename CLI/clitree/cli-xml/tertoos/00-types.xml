@@ -481,6 +481,13 @@
          pattern="(loose|strict)"
          ext_pattern="loose(loose) strict(strict)"
          help="loose | strict"/>
+  <!-- TPID da S-tag (QinQ 802.1ad) por porta: `dot1q tunneling ethertype`. Os 4 que o
+       CTC7132 comporta juntos no chip (saibridge/porttpid.go). -->
+  <PTYPE name="TERTOOS_STAG_TPID"
+         method="regexp_select"
+         pattern="(0x8100|0x88a8|0x9100|0x9200)"
+         ext_pattern="0x8100(0x8100) 0x88a8(0x88a8) 0x9100(0x9100) 0x9200(0x9200)"
+         help="0x8100 | 0x88a8 | 0x9100 | 0x9200"/>
 
   <!-- OSPF / OSPFv3 -->
   <PTYPE name="TERTOOS_OSPF_NETWORK_TYPE"
