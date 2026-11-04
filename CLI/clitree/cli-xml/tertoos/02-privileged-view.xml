@@ -56,6 +56,9 @@
     <COMMAND name="show image list" help="Show installed A/B firmware slots">
       <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
     </COMMAND>
+    <COMMAND name="show image patch" help="Show cumulative patches of the running image (TOS-PATCH-001)">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
+    </COMMAND>
     <COMMAND name="show running-config"
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
@@ -1004,6 +1007,38 @@
     <COMMAND name="image verify" help="Verify a bundle's detached signature">
       <PARAM name="path" help="Local bundle path" ptype="STRING"/>
       <ACTION>tertoos-cli image verify ${path}</ACTION>
+    </COMMAND>
+
+    <!-- Patches cumulativos sobre a imagem rodando (TOS-PATCH-001, F1: install/list/
+         verify; activate/commit/rollback chegam na F2). O patch e' amarrado a base
+         exata e mora em /data/patches/<slot>/<versao>/. -->
+    <COMMAND name="image patch" help="Show cumulative patches of the running image">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
+    </COMMAND>
+    <COMMAND name="image patch install" help="Install a cumulative patch (.tosp) for the running image (usb: | local path | URL)">
+      <PARAM name="url" help="usb:[name] | /path/patch.tosp | https://... URL" ptype="STRING"/>
+      <PARAM name="opt" help="no-verify (skip signature, lab only) — optional" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ "${opt}" = "no-verify" ]; then&#xA;
+            sudo /usr/bin/tertoos-cli image patch install ${url} no-verify&#xA;
+        else&#xA;
+            sudo /usr/bin/tertoos-cli image patch install ${url}&#xA;
+        fi&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="image patch list" help="Show cumulative patches of the running image">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
+    </COMMAND>
+    <COMMAND name="image patch verify" help="Verify a patch (.tosp): manifest, layer and signature">
+      <PARAM name="url" help="/path/patch.tosp | https://... URL" ptype="STRING"/>
+      <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
+      <ACTION>
+        if [ "${opt}" = "no-verify" ]; then&#xA;
+            sudo /usr/bin/tertoos-cli image patch verify ${url} no-verify&#xA;
+        else&#xA;
+            sudo /usr/bin/tertoos-cli image patch verify ${url}&#xA;
+        fi&#xA;
+      </ACTION>
     </COMMAND>
 
     <!-- Feature modules (patches à-la-carte: WebUI, ...) — camada Patch&Feature.
