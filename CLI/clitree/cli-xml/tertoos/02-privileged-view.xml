@@ -1029,6 +1029,19 @@
     <COMMAND name="image patch list" help="Show cumulative patches of the running image">
       <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
     </COMMAND>
+    <!-- F2: aplicacao a quente. O activate reinicia os servicos do manifesto (ex.:
+         saibridge = ~15 s de datapath), espera 30 s de saude e confirma sozinho; se
+         a saude falhar, volta sozinho. -->
+    <COMMAND name="image patch activate" help="Apply the newest installed patch now (restarts its services; auto-commit or auto-rollback after 30 s)">
+      <PARAM name="patch" help="pN (optional; default = newest installed)" ptype="STRING" optional="true"/>
+      <ACTION>sudo /usr/bin/tertoos-cli image patch activate ${patch}</ACTION>
+    </COMMAND>
+    <COMMAND name="image patch commit" help="Commit a patch left in the trying state">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch commit</ACTION>
+    </COMMAND>
+    <COMMAND name="image patch rollback" help="Go back to the previous patch (or to the pure image)">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch rollback</ACTION>
+    </COMMAND>
     <COMMAND name="image patch verify" help="Verify a patch (.tosp): manifest, layer and signature">
       <PARAM name="url" help="/path/patch.tosp | https://... URL" ptype="STRING"/>
       <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
