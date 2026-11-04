@@ -481,13 +481,18 @@
          pattern="(loose|strict)"
          ext_pattern="loose(loose) strict(strict)"
          help="loose | strict"/>
-  <!-- TPID da S-tag (QinQ 802.1ad) por porta: `dot1q tunneling ethertype`. Os 4 que o
-       CTC7132 comporta juntos no chip (saibridge/porttpid.go). -->
+  <!-- TPID da S-tag por porta: `qinq mode <nome>`. O operador digita o NOME do padrao
+       (802.1ad...) e o tertoos-cli grava o hexa no CONFIG_DB (terto-horizon
+       translate/stagtpid.go); o show running-config mostra o nome de volta. O hexa
+       (0x88a8) e os sinonimos IOS-XR (dot1q/dot1ad) seguem aceitos pelo pattern, fora
+       da lista do `?`. Os 4 TPIDs cabem juntos no CTC7132 (saibridge/porttpid.go). -->
   <PTYPE name="TERTOOS_STAG_TPID"
          method="regexp_select"
-         pattern="(0x8100|0x88a8|0x9100|0x9200)"
-         ext_pattern="0x8100(0x8100) 0x88a8(0x88a8) 0x9100(0x9100) 0x9200(0x9200)"
-         help="0x8100 | 0x88a8 | 0x9100 | 0x9200"/>
+         pattern="(802\.1q|802\.1ad|legacy-9100|legacy-9200|dot1q|dot1ad|0x8100|0x88a8|0x9100|0x9200)"
+         ext_pattern="802.1q(802.1q) 802.1ad(802.1ad) legacy-9100(legacy-9100) legacy-9200(legacy-9200)"
+         ext_help="(IEEE 802.1Q, ethertype 0x8100 - default, same as a common VLAN) (IEEE 802.1ad provider bridging, ethertype 0x88a8 - recommended QinQ) (Pre-standard QinQ, ethertype 0x9100 - older Cisco/Juniper) (Pre-standard QinQ, ethertype 0x9200 - legacy equipment)"
+         help="802.1q | 802.1ad | legacy-9100 | legacy-9200"/>
+
 
   <!-- OSPF / OSPFv3 -->
   <PTYPE name="TERTOOS_OSPF_NETWORK_TYPE"

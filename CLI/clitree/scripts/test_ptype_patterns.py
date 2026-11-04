@@ -108,6 +108,14 @@ MANUAL = {
         ["0", "1", "0.100", ".100", "26"],
         ["0abc", "1.2.3", "x1", ".", "1."],
     ),
+    # `qinq mode`: nomes do `?` + hexa e sinonimos IOS-XR (fora da lista); o "." do
+    # 802.1ad e escapado, entao "802x1ad" nao pode passar.
+    "TERTOOS_STAG_TPID": (
+        ["802.1q", "802.1ad", "legacy-9100", "legacy-9200", "dot1q", "dot1ad",
+         "0x8100", "0x88a8", "0x9100", "0x9200"],
+        ["802x1ad", "802.1adx", "8021ad", "802.1x", "legacy-9300", "0x0800",
+         "88a8", "dot1", "802.1", ""],
+    ),
 }
 
 # WireGuard: 32 bytes em base64 = 44 chars (43 + "="); o 43o char so carrega
