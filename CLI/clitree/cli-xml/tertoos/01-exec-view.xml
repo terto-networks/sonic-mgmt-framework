@@ -43,6 +43,9 @@
     <COMMAND name="show image list" help="Show installed A/B firmware slots">
       <ACTION>sudo /usr/bin/tertoos-cli image list</ACTION>
     </COMMAND>
+    <COMMAND name="show image patch" help="Show cumulative patches of the running image (TOS-PATCH-001)">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
+    </COMMAND>
     <COMMAND name="show clock" help="Show current system time (time, timezone, NTP sync)">
       <ACTION>/usr/bin/tertoos-cli clock show</ACTION>
     </COMMAND>
