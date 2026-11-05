@@ -1171,13 +1171,15 @@
     <!-- RBAC: o clish 2.1.4 NAO enforca access= (decorativo). A enforcement real
          e' no binario: `tertoos-cli gate sysadmin` sai !=0 (com mensagem) se o
          operador nao for admin, e o `&&` curto-circuita o shell escape. Sem isto,
-         operator/view escapavam pro bash (smoke RBAC 2026-06-21). -->
+         operator/view escapavam pro bash (smoke RBAC 2026-06-21).
+         `gate shell` (05/11/2026, CEO): mesmo nivel sysadmin, e com o modo seguro
+         ligado (imagem de release) o shell e' recusado para qualquer usuario. -->
     <COMMAND name="bash" help="Drop into the system shell (outside the CLI)" access="sysadmin">
-      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -l</ACTION>
+      <ACTION>tertoos-cli gate shell &amp;&amp; bash -l</ACTION>
     </COMMAND>
     <COMMAND name="run" help="Run a single system-shell command" access="sysadmin">
       <PARAM name="cmd" help="Command line to execute" ptype="STRING_WITH_PIPE"/>
-      <ACTION>tertoos-cli gate sysadmin &amp;&amp; bash -lc "${cmd}"</ACTION>
+      <ACTION>tertoos-cli gate shell &amp;&amp; bash -lc "${cmd}"</ACTION>
     </COMMAND>
 
     <!--
