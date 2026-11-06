@@ -482,7 +482,10 @@
          FRR ("% Unknown command", bancada 2026-10-28). O SR do OSPF esta na LSDB
          opaca: "show ip ospf database segment-routing" (SRGB/SRLB por no, prefix-SID
          e adj-SID com operacao de label, interface e nexthop). O IS-IS so roda se o
-         isisd estiver ativo, senao o vtysh imprime outro "Unknown command". -->
+         isisd estiver ativo, senao o vtysh imprime outro "Unknown command".
+         IS-IS no FRR 10.3: o no (SRGB/SRLB) e "show isis segment-routing node"; os
+         prefix-SIDs ficam na tabela de rotas, "show isis route prefix-sid" (o antigo
+         "show isis segment-routing prefix-sids" nao existe mais, bancada 2026-11-06). -->
     <COMMAND name="show segment-routing" help="Segment Routing (OSPF/IS-IS): SRGB, prefix-SIDs and adjacency-SIDs">
       <ACTION>
         vtysh -c "show ip ospf database segment-routing"&#xA;
@@ -492,7 +495,7 @@
     <COMMAND name="show segment-routing prefix-sid" help="OSPF/IS-IS prefix-SIDs">
       <ACTION>
         vtysh -c "show ip ospf database segment-routing"&#xA;
-        if pgrep -x isisd &gt;/dev/null 2&gt;&amp;1; then vtysh -c "show isis segment-routing node"; fi&#xA;
+        if pgrep -x isisd &gt;/dev/null 2&gt;&amp;1; then vtysh -c "show isis route prefix-sid"; fi&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="show mpls table" help="zebra MPLS LFIB">
@@ -886,8 +889,11 @@
     <COMMAND name="show isis route" help="IS-IS computed routes">
       <ACTION>vtysh -c "show isis route"</ACTION>
     </COMMAND>
+    <!-- O FRR 10.3 nao tem mais "show isis segment-routing prefix-sids" ("% Unknown
+         command", bancada 2026-11-06): os prefix-SIDs estao em "show isis route prefix-sid".
+         O nome do comando no klish fica, para quem ja o usa. -->
     <COMMAND name="show isis segment-routing prefix-sids" help="SR prefix-SID map">
-      <ACTION>vtysh -c "show isis segment-routing prefix-sids"</ACTION>
+      <ACTION>vtysh -c "show isis route prefix-sid"</ACTION>
     </COMMAND>
     <COMMAND name="show isis hostname" help="IS-IS dynamic-hostname mappings">
       <ACTION>vtysh -c "show isis hostname"</ACTION>
