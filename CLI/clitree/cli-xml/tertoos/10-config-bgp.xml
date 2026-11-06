@@ -58,6 +58,16 @@
       <ACTION>tertoos-cli candidate delete bgp/default</ACTION>
     </COMMAND>
 
+    <!-- BGP de VRF: par do `router bgp instance <asn> <vrf>`. Antes nao havia como
+         remover o BGP de uma VRF pela CLI (so o da default). O candidate expande
+         o delete em cascata (expandNoBGP: AFs, vizinhos e AFs deles). 06/11/2026. -->
+    <COMMAND name="no router bgp instance"
+             help="Remove BGP configuration of a non-default VRF">
+      <PARAM name="asn" help="Local AS number" ptype="TERTOOS_ASN"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
+      <ACTION>tertoos-cli candidate delete bgp/${vrf}</ACTION>
+    </COMMAND>
+
   </VIEW>
 
   <!-- =================== config-router-bgp-view ============================= -->
