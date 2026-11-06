@@ -721,6 +721,26 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
+    <!-- Desativar SO' este AF do vizinho, mantendo a config dele (route-policy,
+         RR, etc.): admin_status=down -> o cfgd gera `no neighbor X activate`; a
+         sessao segue de pe nos outros AFs. Entrar no address-family grava
+         admin_status=up, entao o show running emite `no activate` logo depois do
+         address-family para o round-trip nao REATIVAR o AF (06/11/2026).
+         `shutdown`/`no shutdown` sao sinonimos (decisao do CEO 06/11/2026); a
+         forma canonica, a que o show running mostra, e' `no activate`. -->
+    <COMMAND name="activate" help="Activate this address-family for the neighbor">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/admin_status up</ACTION>
+    </COMMAND>
+    <COMMAND name="no activate" help="Deactivate only this address-family (session stays up, config kept)">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/admin_status down</ACTION>
+    </COMMAND>
+    <COMMAND name="shutdown" help="Same as 'no activate': deactivate only this address-family">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/admin_status down</ACTION>
+    </COMMAND>
+    <COMMAND name="no shutdown" help="Same as 'activate': re-activate this address-family">
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/admin_status up</ACTION>
+    </COMMAND>
+
     <COMMAND name="route-policy in" help="Inbound route-policy">
       <PARAM name="rmap" help="Route-policy name" ptype="TERTOOS_ROUTE_POLICY_NAME"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_in ${rmap}</ACTION>
