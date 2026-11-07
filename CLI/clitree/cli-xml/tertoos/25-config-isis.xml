@@ -84,6 +84,16 @@
     <COMMAND name="no dynamic-hostname" help="Disable dynamic hostname">
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/dynamic_hostname false</ACTION>
     </COMMAND>
+    <!-- LDP-IGP sync (RFC 5443), par do `mpls ldp-sync` do OSPF (06/11/2026). Padrao
+         LIGADO: o cfgd emite `mpls ldp-sync` no router isis quando toda interface
+         IS-IS ponto-a-ponto e' de LDP (mesma regra de seguranca do OSPF).
+         `no mpls ldp-sync` grava ldp_sync=false. -->
+    <COMMAND name="mpls ldp-sync" help="LDP-IGP synchronization (default on)">
+      <ACTION>tertoos-cli candidate delete isis/instance/${isisvrf}/${isistag}/ldp_sync</ACTION>
+    </COMMAND>
+    <COMMAND name="no mpls ldp-sync" help="Disable LDP-IGP synchronization">
+      <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/ldp_sync false</ACTION>
+    </COMMAND>
     <COMMAND name="metric-style" help="Metric style">
       <PARAM name="s" help="narrow | wide | transition" ptype="TERTOOS_ISIS_METRIC_STYLE"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/metric_style ${s}</ACTION>
