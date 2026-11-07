@@ -93,6 +93,27 @@
     <COMMAND name="bgp graceful-restart" help="Enable BGP graceful restart">
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/graceful_restart_enable true</ACTION>
     </COMMAND>
+    <!-- Tempos do GR (06/11/2026): restart-time e' o que ESTA caixa anuncia ao
+         reiniciar — o par guarda as rotas por esse tempo. O padrao do FRR (120 s)
+         nao cobre o boot da ZX530S: o RR reiniciando derrubava a L3VPN por 80 s.
+         Mudar o modo GR reseta as sessoes; os tempos nao. -->
+    <COMMAND name="no bgp graceful-restart" help="Disable BGP graceful restart (resets the sessions)">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/graceful_restart_enable</ACTION>
+    </COMMAND>
+    <COMMAND name="bgp graceful-restart restart-time" help="Time the peers keep our routes while we restart">
+      <PARAM name="s" help="Seconds 1..4095 (FRR default 120)" ptype="TERTOOS_RANGE_1_4095"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/gr_restart_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="no bgp graceful-restart restart-time" help="Back to the FRR default restart-time">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/gr_restart_time</ACTION>
+    </COMMAND>
+    <COMMAND name="bgp graceful-restart stalepath-time" help="Time we keep a restarting peer's stale routes">
+      <PARAM name="s" help="Seconds 1..4095 (FRR default 360)" ptype="TERTOOS_RANGE_1_4095"/>
+      <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/gr_stale_routes_time ${s}</ACTION>
+    </COMMAND>
+    <COMMAND name="no bgp graceful-restart stalepath-time" help="Back to the FRR default stalepath-time">
+      <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/gr_stale_routes_time</ACTION>
+    </COMMAND>
     <COMMAND name="bgp log-neighbor-changes" help="Log BGP neighbor state changes">
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/log_nbr_state_changes true</ACTION>
     </COMMAND>
