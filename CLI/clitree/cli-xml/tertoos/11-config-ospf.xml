@@ -250,6 +250,25 @@
       <PARAM name="d" help="1..255" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/distance-intra-area ${d}</ACTION>
     </COMMAND>
+    <!-- Volta ao padrao (110). Antes dava para configurar a distancia e NAO para
+       tirar (07/11/2026). `no distance ospf` tira as tres. Com o patch 0006 do FRR
+       a mudanca vale na hora (reinstala as rotas, sem clear). -->
+    <COMMAND name="no distance ospf" help="Back to the default OSPF distances (110)">
+      <ACTION>
+        tertoos-cli candidate delete ospf/${ospfvrf}/distance-intra-area&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/distance-inter-area&#xA;
+        tertoos-cli candidate delete ospf/${ospfvrf}/distance-external&#xA;
+      </ACTION>
+    </COMMAND>
+    <COMMAND name="no distance ospf external" help="Back to the default distance for external routes">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/distance-external</ACTION>
+    </COMMAND>
+    <COMMAND name="no distance ospf inter-area" help="Back to the default distance for inter-area routes">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/distance-inter-area</ACTION>
+    </COMMAND>
+    <COMMAND name="no distance ospf intra-area" help="Back to the default distance for intra-area routes">
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/distance-intra-area</ACTION>
+    </COMMAND>
 
     <!-- Passive -->
     <COMMAND name="passive-interface default" help="All interfaces passive by default">
