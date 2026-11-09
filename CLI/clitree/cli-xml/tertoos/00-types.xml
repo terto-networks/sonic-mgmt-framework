@@ -472,6 +472,11 @@
          pattern="(aggregation|datacenter|unrestricted)"
          ext_pattern="aggregation(aggregation) datacenter(datacenter) unrestricted(unrestricted)"
          help="aggregation | datacenter | unrestricted"/>
+  <PTYPE name="TERTOOS_BFD_OFFLOAD"
+         method="regexp_select"
+         pattern="(enabled|disabled)"
+         ext_pattern="enabled(enabled) disabled(disabled)"
+         help="enabled | disabled"/>
 
   <!-- uRPF — enum do tertoos-port-extensions.yang (PORT rpf_check). YANG-first:
        o token do CLI é o próprio valor do schema (por isso loose|strict, e não
