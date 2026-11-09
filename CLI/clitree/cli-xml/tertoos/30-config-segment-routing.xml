@@ -111,7 +111,7 @@
 
   <VIEW name="config-srte-cpath-view"
         prompt="${SYSTEM_NAME}(config-srte-cpath-${srtecpath})# ">
-    <COMMAND name="exit" help="exit" view="config-srte-policy-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-srte-policy-view" viewid="srtepol_ep=${srtepol_ep};srtepol_color=${srtepol_color}"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="name" help="Candidate-path name">

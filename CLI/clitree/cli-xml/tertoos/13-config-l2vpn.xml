@@ -271,7 +271,8 @@
     <COMMAND name="commit" help="Apply candidate configuration to running">
       <ACTION>tertoos-cli candidate commit</ACTION>
     </COMMAND>
-    <COMMAND name="exit" help="Exit p2p" view="config-l2vpn-group-view">
+    <COMMAND name="exit" help="Exit p2p" view="config-l2vpn-group-view"
+             viewid="l2vpngrp=${l2vpngrp}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">

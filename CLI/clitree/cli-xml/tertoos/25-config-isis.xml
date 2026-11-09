@@ -197,7 +197,8 @@
   <VIEW name="config-router-isis-af-view"
         prompt="${SYSTEM_NAME}(config-router-isis-af-${isisaf})# ">
 
-    <COMMAND name="exit" help="Exit address-family" view="config-router-isis-view">
+    <COMMAND name="exit" help="Exit address-family" view="config-router-isis-view"
+             viewid="isisvrf=${isisvrf};isistag=${isistag}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -239,7 +240,8 @@
   <VIEW name="config-router-isis-flexalgo-view"
         prompt="${SYSTEM_NAME}(config-router-isis-flexalgo-${isisalgo})# ">
 
-    <COMMAND name="exit" help="Exit flex-algo" view="config-router-isis-view">
+    <COMMAND name="exit" help="Exit flex-algo" view="config-router-isis-view"
+             viewid="isisvrf=${isisvrf};isistag=${isistag}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">

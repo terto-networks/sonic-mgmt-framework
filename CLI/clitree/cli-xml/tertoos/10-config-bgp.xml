@@ -133,7 +133,7 @@
     <COMMAND name="address-family ipv4 unicast"
              help="Enter IPv4 unicast address-family"
              view="config-router-bgp-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpaf=ipv4_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpaf=ipv4_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-af ipv4_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/ipv4_unicast&#xA;
@@ -142,7 +142,7 @@
     <COMMAND name="address-family ipv6 unicast"
              help="Enter IPv6 unicast address-family"
              view="config-router-bgp-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpaf=ipv6_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpaf=ipv6_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-af ipv6_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/ipv6_unicast&#xA;
@@ -163,7 +163,7 @@
     <COMMAND name="address-family vpnv4 unicast"
              help="Enter VPNv4 unicast address-family (L3VPN)"
              view="config-router-bgp-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpaf=vpnv4_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpaf=vpnv4_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-af vpnv4_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv4_unicast&#xA;
@@ -172,7 +172,7 @@
     <COMMAND name="address-family vpnv6 unicast"
              help="Enter VPNv6 unicast address-family (L3VPN)"
              view="config-router-bgp-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpaf=vpnv6_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpaf=vpnv6_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-af vpnv6_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/vpnv6_unicast&#xA;
@@ -181,7 +181,7 @@
     <COMMAND name="address-family l2vpn evpn"
              help="Enter L2VPN EVPN address-family"
              view="config-router-bgp-evpn-view"
-             viewid="bgpvrf=${bgpvrf}">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>
         tertoos-cli candidate context router-bgp-af l2vpn_evpn&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/l2vpn_evpn&#xA;
@@ -200,7 +200,7 @@
     <COMMAND name="session-group"
              help="Configure a named session-group (peer-group session leaves)"
              view="config-router-bgp-sg-view"
-             viewid="bgpvrf=${bgpvrf};bgpsg=${name}">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpsg=${name}">
       <PARAM name="name" help="Session-group name" ptype="TERTOOS_BGP_SESSION_GROUP_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-bgp-sg ${name}&#xA;
@@ -215,7 +215,7 @@
     <COMMAND name="af-group ipv4 unicast"
              help="Configure af-group for IPv4 unicast"
              view="config-router-bgp-afg-view"
-             viewid="bgpvrf=${bgpvrf};bgpafg=${name};bgpaf=ipv4_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpafg=${name};bgpaf=ipv4_unicast">
       <PARAM name="name" help="AF-group name" ptype="TERTOOS_BGP_AF_GROUP_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-bgp-afg ${name}/ipv4_unicast&#xA;
@@ -225,7 +225,7 @@
     <COMMAND name="af-group ipv6 unicast"
              help="Configure af-group for IPv6 unicast"
              view="config-router-bgp-afg-view"
-             viewid="bgpvrf=${bgpvrf};bgpafg=${name};bgpaf=ipv6_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpafg=${name};bgpaf=ipv6_unicast">
       <PARAM name="name" help="AF-group name" ptype="TERTOOS_BGP_AF_GROUP_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-bgp-afg ${name}/ipv6_unicast&#xA;
@@ -244,7 +244,7 @@
     <COMMAND name="neighbor"
              help="Configure a BGP neighbor"
              view="config-router-bgp-nbr-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${addr}">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${addr}">
       <PARAM name="addr" help="Neighbor IPv4/IPv6 address" ptype="TERTOOS_BGP_NEIGHBOR_ADDR"/>
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr ${addr}&#xA;
@@ -281,7 +281,8 @@
   <VIEW name="config-router-bgp-evpn-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-af-l2vpn-evpn)# ">
 
-    <COMMAND name="exit" help="Exit EVPN address-family" view="config-router-bgp-view">
+    <COMMAND name="exit" help="Exit EVPN address-family" view="config-router-bgp-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -351,7 +352,8 @@
   <VIEW name="config-router-bgp-af-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-af-${bgpaf})# ">
 
-    <COMMAND name="exit" help="Exit address-family" view="config-router-bgp-view">
+    <COMMAND name="exit" help="Exit address-family" view="config-router-bgp-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -487,7 +489,8 @@
   <VIEW name="config-router-bgp-sg-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-sg-${bgpsg})# ">
 
-    <COMMAND name="exit" help="Exit session-group" view="config-router-bgp-view">
+    <COMMAND name="exit" help="Exit session-group" view="config-router-bgp-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -568,7 +571,8 @@
   <VIEW name="config-router-bgp-afg-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-afg-${bgpafg}-${bgpaf})# ">
 
-    <COMMAND name="exit" help="Exit af-group" view="config-router-bgp-view">
+    <COMMAND name="exit" help="Exit af-group" view="config-router-bgp-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -627,7 +631,8 @@
   <VIEW name="config-router-bgp-nbr-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-nbr-${bgpnbr})# ">
 
-    <COMMAND name="exit" help="Exit neighbor" view="config-router-bgp-view">
+    <COMMAND name="exit" help="Exit neighbor" view="config-router-bgp-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -696,7 +701,7 @@
     <COMMAND name="address-family ipv4 unicast"
              help="Per-neighbor IPv4 unicast"
              view="config-router-bgp-nbr-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=ipv4_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr};bgpaf=ipv4_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af ipv4_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv4_unicast&#xA;
@@ -705,7 +710,7 @@
     <COMMAND name="address-family ipv6 unicast"
              help="Per-neighbor IPv6 unicast"
              view="config-router-bgp-nbr-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=ipv6_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr};bgpaf=ipv6_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af ipv6_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/ipv6_unicast&#xA;
@@ -714,7 +719,7 @@
     <COMMAND name="address-family vpnv4 unicast"
              help="Per-neighbor VPNv4 unicast (L3VPN)"
              view="config-router-bgp-nbr-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv4_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr};bgpaf=vpnv4_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af vpnv4_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv4_unicast&#xA;
@@ -723,7 +728,7 @@
     <COMMAND name="address-family vpnv6 unicast"
              help="Per-neighbor VPNv6 unicast (L3VPN)"
              view="config-router-bgp-nbr-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=vpnv6_unicast">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr};bgpaf=vpnv6_unicast">
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af vpnv6_unicast&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/vpnv6_unicast&#xA;
@@ -732,7 +737,7 @@
     <COMMAND name="address-family l2vpn evpn"
              help="Per-neighbor L2VPN EVPN"
              view="config-router-bgp-nbr-af-view"
-             viewid="bgpvrf=${bgpvrf};bgpnbr=${bgpnbr};bgpaf=l2vpn_evpn">
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr};bgpaf=l2vpn_evpn">
       <ACTION>
         tertoos-cli candidate context router-bgp-nbr-af l2vpn_evpn&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/l2vpn_evpn&#xA;
@@ -745,7 +750,8 @@
   <VIEW name="config-router-bgp-nbr-af-view"
         prompt="${SYSTEM_NAME}(config-router-bgp-nbr-${bgpnbr}-af-${bgpaf})# ">
 
-    <COMMAND name="exit" help="Exit neighbor address-family" view="config-router-bgp-nbr-view">
+    <COMMAND name="exit" help="Exit neighbor address-family" view="config-router-bgp-nbr-view"
+             viewid="bgpvrf=${bgpvrf};bgpasn=${bgpasn};bgpnbr=${bgpnbr}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">

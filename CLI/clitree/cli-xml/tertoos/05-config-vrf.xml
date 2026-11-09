@@ -127,7 +127,8 @@
   <VIEW name="config-vrf-af-view"
         prompt="${SYSTEM_NAME}(config-vrf-${vrfname}-af-${af})# ">
 
-    <COMMAND name="exit" help="Exit address-family" view="config-vrf-view">
+    <COMMAND name="exit" help="Exit address-family" view="config-vrf-view"
+             viewid="vrfname=${vrfname}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
