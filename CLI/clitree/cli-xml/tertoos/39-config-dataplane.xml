@@ -5,6 +5,13 @@
 
     dataplane hitless-restart <mode>  → DATAPLANE_GLOBAL|global hitless_restart
     dataplane forwarding-profile <p>  → DATAPLANE_GLOBAL|global forwarding_profile
+    dataplane bfd-offload <state>     → DATAPLANE_GLOBAL|global bfd_offload
+
+  bfd-offload (tertoos#409) = BFD no ASIC (CTC7132) onde o chip consegue:
+  single-hop IPv4 com intervalo negociavel (1-10, 20-100 de 10 em 10, 200-1000
+  de 100 em 100 ms — 150 ms NAO); o resto segue no bfdd em software. Vale no
+  commit: o cfgd reinicia o bfdd (as sessoes BFD da caixa caem uma vez). Exige
+  o FRR +terto14 (patch 0012); com FRR antigo o pedido e' recusado no log.
 
   forwarding-profile = QUAL produto a caixa é (decisão CEO 2026-10-01):
     aggregation  (default) MPLS/LDP/SR-MPLS, PWs, EVPN-MPLS, L3VPN — sem EVPN-VXLAN
@@ -48,6 +55,16 @@
     <COMMAND name="no dataplane forwarding-profile"
              help="Restore the default forwarding profile (aggregation)">
       <ACTION>tertoos-cli candidate delete dataplane/forwarding_profile</ACTION>
+    </COMMAND>
+    <COMMAND name="dataplane bfd-offload"
+             help="Run BFD sessions in the ASIC where the hardware can (the rest stays in software); restarts the BFD daemon">
+      <PARAM name="state" help="enabled | disabled"
+             ptype="TERTOOS_BFD_OFFLOAD"/>
+      <ACTION>tertoos-cli candidate set dataplane/bfd_offload ${state}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane bfd-offload"
+             help="Restore the default (disabled: every BFD session in software)">
+      <ACTION>tertoos-cli candidate delete dataplane/bfd_offload</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>
