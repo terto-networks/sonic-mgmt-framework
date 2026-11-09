@@ -362,7 +362,7 @@
     <COMMAND name="area"
              help="Configure an OSPF area"
              view="config-router-ospf-area-view"
-             viewid="ospfvrf=${ospfvrf};ospfarea=${id}">
+             viewid="ospfvrf=${ospfvrf};ospfid=${ospfid};ospfarea=${id}">
       <PARAM name="id" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
       <ACTION>
         tertoos-cli candidate context router-ospf-area ${id}&#xA;
@@ -380,7 +380,8 @@
   <VIEW name="config-router-ospf-area-view"
         prompt="${SYSTEM_NAME}(config-router-ospf-area-${ospfarea})# ">
 
-    <COMMAND name="exit" help="Exit area" view="config-router-ospf-view">
+    <COMMAND name="exit" help="Exit area" view="config-router-ospf-view"
+             viewid="ospfvrf=${ospfvrf};ospfid=${ospfid}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">

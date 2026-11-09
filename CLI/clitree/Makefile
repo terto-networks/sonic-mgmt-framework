@@ -66,3 +66,13 @@ clean:
 .PHONY: test-ptypes
 test-ptypes:
 	python3 scripts/test_ptype_patterns.py
+
+# TertoOS: auditoria das variaveis de view — todo `exit`/troca de view para uma
+# view com ${vars} precisa repassar essas vars no viewid (senao o klish zera e
+# o proximo comando grava caminho com segmento vazio, ex.: l2vpn/xconnect//pw).
+.PHONY: test-viewvars
+test-viewvars:
+	python3 scripts/test_view_vars.py
+
+.PHONY: test
+test: test-ptypes test-viewvars

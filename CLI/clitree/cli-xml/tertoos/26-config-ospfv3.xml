@@ -139,7 +139,7 @@
     <COMMAND name="area"
              help="Configure an OSPFv3 area"
              view="config-router-ospfv3-area-view"
-             viewid="ospf6vrf=${ospf6vrf};ospf6area=${id}">
+             viewid="ospf6vrf=${ospf6vrf};ospf6id=${ospf6id};ospf6area=${id}">
       <PARAM name="id" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
       <ACTION>tertoos-cli candidate context router-ospfv3-area ${id}</ACTION>
     </COMMAND>
@@ -147,7 +147,7 @@
 
   <VIEW name="config-router-ospfv3-area-view"
         prompt="${SYSTEM_NAME}(config-router-ospfv3-area-${ospf6area})# ">
-    <COMMAND name="exit" help="exit" view="config-router-ospfv3-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
+    <COMMAND name="exit" help="exit" view="config-router-ospfv3-view" viewid="ospf6vrf=${ospf6vrf};ospf6id=${ospf6id}"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="stub" help="Mark area as stub">

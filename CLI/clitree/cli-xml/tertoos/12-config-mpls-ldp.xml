@@ -166,7 +166,8 @@
     <COMMAND name="commit" help="Apply candidate configuration to running">
       <ACTION>tertoos-cli candidate commit</ACTION>
     </COMMAND>
-    <COMMAND name="exit" help="Exit LDP address-family" view="config-mpls-ldp-view">
+    <COMMAND name="exit" help="Exit LDP address-family" view="config-mpls-ldp-view"
+             viewid="ldpvrf=${ldpvrf}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
@@ -210,7 +211,8 @@
     <COMMAND name="commit" help="Apply candidate configuration to running">
       <ACTION>tertoos-cli candidate commit</ACTION>
     </COMMAND>
-    <COMMAND name="exit" help="Exit LDP neighbor" view="config-mpls-ldp-view">
+    <COMMAND name="exit" help="Exit LDP neighbor" view="config-mpls-ldp-view"
+             viewid="ldpvrf=${ldpvrf}">
       <ACTION>tertoos-cli candidate context pop</ACTION>
     </COMMAND>
     <COMMAND name="end" help="Return to privileged EXEC" view="privileged-view">
