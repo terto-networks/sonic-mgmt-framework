@@ -74,5 +74,11 @@ test-ptypes:
 test-viewvars:
 	python3 scripts/test_view_vars.py
 
+# Comandos liga/desliga cujo leaf tem padrao LIGADO no YANG: o `no` tem de
+# gravar o valor explicito (apagar o leaf voltaria ao padrao).
+.PHONY: test-default-on
+test-default-on:
+	python3 scripts/test_default_on_toggles.py
+
 .PHONY: test
-test: test-ptypes test-viewvars
+test: test-ptypes test-viewvars test-default-on

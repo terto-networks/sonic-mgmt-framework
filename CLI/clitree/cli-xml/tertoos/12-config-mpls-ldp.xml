@@ -181,8 +181,18 @@
     <COMMAND name="discovery targeted-hello accept" help="Accept targeted hellos">
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/discovery-targeted-hello-accept true</ACTION>
     </COMMAND>
-    <COMMAND name="label local allocate host-routes" help="Allocate labels for /32 only">
+    <!-- MPLS_LDP_AF.label-local-allocate-host-only (tertoos-mpls.yang, default
+         true): o ldpd so' aloca label para rotas de host (/32), como o
+         `lsp-trigger host` do Huawei. PW, L3VPN e LDP remoto so' usam o label do
+         loopback dos PEs; com label para todo prefixo do IGP cada corte do anel
+         custava ~2,4 s dos 2 nucleos entre zebra e ldpd (anel do lab,
+         10/11/2026). O `no` grava `false` explicito: apagar o leaf voltaria ao
+         padrao (so' /32). -->
+    <COMMAND name="label local allocate host-routes" help="Allocate labels for host routes (/32) only (default)">
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/label-local-allocate-host-only true</ACTION>
+    </COMMAND>
+    <COMMAND name="no label local allocate host-routes" help="Allocate labels for every prefix of the routing table">
+      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/label-local-allocate-host-only false</ACTION>
     </COMMAND>
 
     <!--
