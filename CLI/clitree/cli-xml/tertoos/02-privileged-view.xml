@@ -521,6 +521,12 @@
     <COMMAND name="show l2vpn binding" help="L2VPN pseudowire label bindings (local+remote)">
       <ACTION>vtysh -c "show l2vpn atom binding"</ACTION>
     </COMMAND>
+    <!-- Protecao de PW (dataplane pw-protection): le o /pw-protect do saibridge —
+         modo em uso, backup (ou motivo de nao ter) por par, grupos com membro ativo
+         e trocas. E' o estado do ASIC, nao a config. -->
+    <COMMAND name="show l2vpn protection" help="Pseudowire protection: backup path per peer, active member and switchovers">
+      <ACTION>tertoos-cli show l2vpn protection</ACTION>
+    </COMMAND>
     <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
       <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
     </COMMAND>

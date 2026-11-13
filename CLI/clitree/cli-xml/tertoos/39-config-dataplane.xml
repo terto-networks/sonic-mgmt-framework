@@ -6,6 +6,16 @@
     dataplane hitless-restart <mode>  → DATAPLANE_GLOBAL|global hitless_restart
     dataplane forwarding-profile <p>  → DATAPLANE_GLOBAL|global forwarding_profile
     dataplane bfd-offload <state>     → DATAPLANE_GLOBAL|global bfd_offload
+    dataplane pw-protection <source>  → DATAPLANE_GLOBAL|global pw_protection
+
+  pw-protection = PW (VPWS) encadeado num LSP de transporte protegido: o ASIC
+  guarda um segundo caminho ate' o par e troca na queda do link local, antes do
+  FRR reagir (corte de ~3 s cai para ~100-150 ms, medido na ZX2 em 12/11/2026).
+    off  (default) sem protecao
+    ldp  backup = rotulo que outro vizinho LDP ja' anunciou p/ o par, usado so'
+         quando o banco do OSPF prova que ele nao devolve o trafego (LFA, RFC 5286)
+  Vale no commit, sem restart; cada PW afetado e' remontado UMA vez (janela curta
+  por PW). Estado e motivo por par: `show l2vpn protection`.
 
   bfd-offload (tertoos#409) = BFD no ASIC (CTC7132) onde o chip consegue:
   single-hop IPv4 com intervalo negociavel (1-10, 20-100 de 10 em 10, 200-1000
@@ -65,6 +75,16 @@
     <COMMAND name="no dataplane bfd-offload"
              help="Restore the default (disabled: every BFD session in software)">
       <ACTION>tertoos-cli candidate delete dataplane/bfd_offload</ACTION>
+    </COMMAND>
+    <COMMAND name="dataplane pw-protection"
+             help="Protect pseudowires with a pre-programmed backup path in the ASIC; applies at commit (each pseudowire is re-programmed once)">
+      <PARAM name="source" help="off | ldp (backup = loop-free LDP neighbor)"
+             ptype="TERTOOS_PW_PROTECTION"/>
+      <ACTION>tertoos-cli candidate set dataplane/pw_protection ${source}</ACTION>
+    </COMMAND>
+    <COMMAND name="no dataplane pw-protection"
+             help="Restore the default (off: pseudowires recover after routing converges)">
+      <ACTION>tertoos-cli candidate delete dataplane/pw_protection</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>
