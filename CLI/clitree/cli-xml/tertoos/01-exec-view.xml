@@ -58,6 +58,14 @@
     <COMMAND name="show dataplane" help="Show dataplane punt mode and hitless-restart state">
       <ACTION>tertoos-cli show dataplane</ACTION>
     </COMMAND>
+    <!-- Modo seguro da config (tertoos #446/#447): este boot (tos_safe=1 = config NAO
+         aplicada, datapath/FRR/cfgd desligados), o proximo e o contador automatico
+         (2 boots com a config nao confirmada = o 3o seguro). O contador vem da NOR
+         do U-Boot e exige root (sudo -n, que o grupo sysadmin tem); sem sudo mostra
+         so' o estado deste boot. -->
+    <COMMAND name="show safe-mode" help="Show configuration safe mode: this boot, next boot and the automatic counter">
+      <ACTION>sudo -n /usr/bin/tertoos-cli show safe-mode 2>/dev/null || tertoos-cli show safe-mode</ACTION>
+    </COMMAND>
     <!-- Gerencia: firewall da OOB + ACL de control-plane (gerencia inband), configurado e
          aplicado (nftables, precisa de root: sudo -n, que o grupo sysadmin tem; sem sudo
          mostra so' o configurado). -->
