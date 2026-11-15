@@ -477,6 +477,13 @@
          pattern="(enabled|disabled)"
          ext_pattern="enabled(enabled) disabled(disabled)"
          help="enabled | disabled"/>
+  <!-- Protecao de PW — enum do tertoos-dataplane-extensions.yang (DATAPLANE_GLOBAL
+       pw_protection). YANG-first: o token e' o proprio valor do schema. -->
+  <PTYPE name="TERTOOS_PW_PROTECTION"
+         method="regexp_select"
+         pattern="(off|ldp)"
+         ext_pattern="off(off) ldp(ldp)"
+         help="off | ldp"/>
 
   <!-- uRPF — enum do tertoos-port-extensions.yang (PORT rpf_check). YANG-first:
        o token do CLI é o próprio valor do schema (por isso loose|strict, e não
