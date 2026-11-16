@@ -834,8 +834,8 @@
     <COMMAND name="show logging" help="Recent log messages">
       <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
     </COMMAND>
-    <COMMAND name="show snmp" help="SNMP runtime config">
-      <ACTION>show runningconfiguration snmp 2&gt;/dev/null</ACTION>
+    <COMMAND name="show snmp" help="SNMP agent: listening addresses, in-band access, communities and the ASIC/sensor subagent">
+      <ACTION>tertoos-cli show snmp</ACTION>
     </COMMAND>
     <COMMAND name="show telemetry" help="Telemetry/gNMI status">
       <ACTION>systemctl is-active telemetry &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "Telemetry/gNMI: running" || echo "Telemetry/gNMI: not running"</ACTION>
