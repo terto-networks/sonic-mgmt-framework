@@ -16,7 +16,7 @@
       <ACTION>tertoos-cli candidate set ssh/protocol_version 2</ACTION>
     </COMMAND>
     <COMMAND name="ssh server port" help="SSH listen port">
-      <PARAM name="port" help="TCP port" ptype="UINT"/>
+      <PARAM name="port" help="TCP port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set ssh/port ${port}</ACTION>
     </COMMAND>
     <COMMAND name="ssh server vrf" help="VRF for SSH server">

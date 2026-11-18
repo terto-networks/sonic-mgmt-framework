@@ -25,7 +25,7 @@
              help="Configure single-hop BFD peer"
              view="config-bfd-peer-view"
              viewid="bfdscope=single-hop;bfdpeer=${addr}">
-      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
+      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>
         tertoos-cli candidate context bfd-peer single-hop/${addr}&#xA;
         tertoos-cli candidate set bfd/single-hop/peer/${addr}&#xA;
@@ -35,18 +35,18 @@
              help="Configure multi-hop BFD peer"
              view="config-bfd-peer-view"
              viewid="bfdscope=multi-hop;bfdpeer=${addr}">
-      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="STRING"/>
+      <PARAM name="addr" help="Peer IPv4/IPv6" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>
         tertoos-cli candidate context bfd-peer multi-hop/${addr}&#xA;
         tertoos-cli candidate set bfd/multi-hop/peer/${addr}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no singlehop peer" help="Remove single-hop BFD peer">
-      <PARAM name="addr" help="Peer addr" ptype="STRING"/>
+      <PARAM name="addr" help="Peer addr" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate delete bfd/single-hop/peer/${addr}</ACTION>
     </COMMAND>
     <COMMAND name="no multihop peer" help="Remove multi-hop BFD peer">
-      <PARAM name="addr" help="Peer addr" ptype="STRING"/>
+      <PARAM name="addr" help="Peer addr" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate delete bfd/multi-hop/peer/${addr}</ACTION>
     </COMMAND>
   </VIEW>
@@ -88,7 +88,7 @@
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="local-address" help="Local source IP">
-      <PARAM name="addr" help="Local IP" ptype="STRING"/>
+      <PARAM name="addr" help="Local IP" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/local_address ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="interval min-tx" help="Tx interval (ms)">

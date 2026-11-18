@@ -113,8 +113,8 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
              ptype="TERTOOS_ACL_PROTO_V4"/>
-      <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="src" help="Source: any, A.B.C.D or A.B.C.D/M" ptype="TERTOOS_IPV4_ACL_ADDR"/>
+      <PARAM name="dst" help="Destination: any, A.B.C.D or A.B.C.D/M" ptype="TERTOOS_IPV4_ACL_ADDR"/>
       <PARAM name="eq" help="Match one destination port"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="dst_port" help="Destination port 1..65535"
@@ -135,8 +135,8 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ip | tcp | udp | icmp | &lt;number&gt;"
              ptype="TERTOOS_ACL_PROTO_V4"/>
-      <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="src" help="Source: any, A.B.C.D or A.B.C.D/M" ptype="TERTOOS_IPV4_ACL_ADDR"/>
+      <PARAM name="dst" help="Destination: any, A.B.C.D or A.B.C.D/M" ptype="TERTOOS_IPV4_ACL_ADDR"/>
       <PARAM name="eq" help="Match one destination port"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="dst_port" help="Destination port 1..65535"
@@ -161,7 +161,7 @@
 
     <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
       <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
-      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 
@@ -205,8 +205,8 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
              ptype="TERTOOS_ACL_PROTO_V6"/>
-      <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="src" help="Source: any, X:X::X or X:X::X/M" ptype="TERTOOS_IPV6_ACL_ADDR"/>
+      <PARAM name="dst" help="Destination: any, X:X::X or X:X::X/M" ptype="TERTOOS_IPV6_ACL_ADDR"/>
       <PARAM name="eq" help="Match one destination port"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="dst_port" help="Destination port 1..65535"
@@ -227,8 +227,8 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="protocol" help="ipv6 | tcp | udp | icmpv6 | &lt;number&gt;"
              ptype="TERTOOS_ACL_PROTO_V6"/>
-      <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
+      <PARAM name="src" help="Source: any, X:X::X or X:X::X/M" ptype="TERTOOS_IPV6_ACL_ADDR"/>
+      <PARAM name="dst" help="Destination: any, X:X::X or X:X::X/M" ptype="TERTOOS_IPV6_ACL_ADDR"/>
       <PARAM name="eq" help="Match one destination port"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="dst_port" help="Destination port 1..65535"
@@ -247,7 +247,7 @@
 
     <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
       <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
-      <PARAM name="port" help="Source L4 port" ptype="UINT"/>
+      <PARAM name="port" help="Source L4 port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 

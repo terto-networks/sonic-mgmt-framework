@@ -20,7 +20,7 @@
       <ACTION>tertoos-cli candidate set sflow/admin_state down</ACTION>
     </COMMAND>
     <COMMAND name="sflow agent-id" help="Agent identification (interface or IP)">
-      <PARAM name="agent" help="Interface name or IP" ptype="STRING"/>
+      <PARAM name="agent" help="Interface name or IP" ptype="TERTOOS_IFNAME_OR_IP"/>
       <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}</ACTION>
     </COMMAND>
     <COMMAND name="sflow polling-interval" help="Counter poll interval">
@@ -37,9 +37,9 @@
     </COMMAND>
     <COMMAND name="sflow collector" help="Add a collector">
       <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
-      <PARAM name="ip" help="Collector IP" ptype="STRING"/>
+      <PARAM name="ip" help="Collector IP" ptype="TERTOOS_IP_ADDR"/>
       <PARAM name="port" help="UDP port (optional, default 6343)"
-             ptype="UINT" optional="true"/>
+             ptype="TERTOOS_RANGE_1_65535" optional="true"/>
       <ACTION>
         tertoos-cli candidate set sflow/collector/${name}/collector_ip ${ip}&#xA;
         if [ -n "${port}" ]; then&#xA;

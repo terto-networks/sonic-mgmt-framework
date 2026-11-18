@@ -27,7 +27,7 @@
     <COMMAND name="web-server bind-address"
              help="IP the local web/API server listens on (default 127.0.0.1)">
       <PARAM name="ip" help="A.B.C.D (management IP; 0.0.0.0 exposes every interface)"
-             ptype="STRING"/>
+             ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>tertoos-cli candidate set webserver/bind_address ${ip}</ACTION>
     </COMMAND>
     <COMMAND name="no web-server bind-address"

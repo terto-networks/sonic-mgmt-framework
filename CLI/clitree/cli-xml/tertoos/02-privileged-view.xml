@@ -726,7 +726,7 @@
       <ACTION>tertoos-cli clear counters</ACTION>
     </COMMAND>
     <COMMAND name="clear counters interface" help="Clear hardware counters of one port">
-      <PARAM name="ifname" help="Interface name" ptype="STRING"/>
+      <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli clear counters interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp" help="Reset all BGP sessions">
@@ -752,7 +752,7 @@
       <ACTION>vtysh -c "clear mpls ldp neighbor *"</ACTION>
     </COMMAND>
     <COMMAND name="clear mpls ldp neighbor peer" help="Reset specific LDP neighbor">
-      <PARAM name="addr" help="Peer LSR-id" ptype="STRING"/>
+      <PARAM name="addr" help="Peer LSR-id" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>vtysh -c "clear mpls ldp neighbor ${addr}"</ACTION>
     </COMMAND>
     <COMMAND name="clear evpn dup-addr" help="Clear EVPN duplicate-address detection state">

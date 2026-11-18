@@ -89,7 +89,7 @@
          (o prefixo tem "/" e o "|" da key e' pipe de shell se nao for protegido). -->
     <COMMAND name="ip route" help="Add an IPv4 static route in this VRF">
       <PARAM name="prefix"  help="Destination prefix A.B.C.D/M" ptype="TERTOOS_IPV4_PREFIX"/>
-      <PARAM name="nexthop" help="Next-hop A.B.C.D or egress interface name" ptype="STRING"/>
+      <PARAM name="nexthop" help="Next-hop A.B.C.D or egress interface name" ptype="TERTOOS_IPV4_OR_IFNAME"/>
       <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop ${nexthop}</ACTION>
     </COMMAND>
     <COMMAND name="no ip route" help="Remove an IPv4 static route from this VRF">
@@ -98,7 +98,7 @@
     </COMMAND>
     <COMMAND name="ipv6 route" help="Add an IPv6 static route in this VRF">
       <PARAM name="prefix"  help="Destination prefix X:X::X/M" ptype="TERTOOS_IPV6_PREFIX"/>
-      <PARAM name="nexthop" help="Next-hop X:X::X or egress interface name" ptype="STRING"/>
+      <PARAM name="nexthop" help="Next-hop X:X::X or egress interface name" ptype="TERTOOS_IPV6_OR_IFNAME"/>
       <ACTION>tertoos-cli candidate set-raw STATIC_ROUTE "${vrfname}|${prefix}" nexthop ${nexthop}</ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 route" help="Remove an IPv6 static route from this VRF">

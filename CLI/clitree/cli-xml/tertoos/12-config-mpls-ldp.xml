@@ -64,7 +64,7 @@
     </COMMAND>
 
     <COMMAND name="router-id" help="LDP router-id">
-      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <PARAM name="addr" help="A.B.C.D" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/router-id ${addr}</ACTION>
     </COMMAND>
     <!-- MPLS_LDP_ROUTER.allow-broken-lsp (tertoos-mpls.yang, default enable):
@@ -146,14 +146,14 @@
              help="Configure an LDP neighbor"
              view="config-mpls-ldp-nbr-view"
              viewid="ldpvrf=${ldpvrf};ldpafi=ipv4;ldpnbr=${peer}">
-      <PARAM name="peer" help="Peer LSR-id (A.B.C.D)" ptype="STRING"/>
+      <PARAM name="peer" help="Peer LSR-id (A.B.C.D)" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>
         tertoos-cli candidate context mpls-ldp-nbr ${peer}&#xA;
         tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no neighbor" help="Remove an LDP neighbor">
-      <PARAM name="peer" help="Peer LSR-id" ptype="STRING"/>
+      <PARAM name="peer" help="Peer LSR-id" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/ipv4/neighbor/${peer}</ACTION>
     </COMMAND>
 
@@ -175,7 +175,7 @@
     </COMMAND>
 
     <COMMAND name="discovery transport-address" help="Transport address for discovery">
-      <PARAM name="addr" help="A.B.C.D or X:X::X" ptype="STRING"/>
+      <PARAM name="addr" help="A.B.C.D or X:X::X" ptype="TERTOOS_IP_ADDR"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/discovery-transport-address ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="discovery targeted-hello accept" help="Accept targeted hellos">

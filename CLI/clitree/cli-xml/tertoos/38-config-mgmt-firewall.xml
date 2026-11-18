@@ -42,7 +42,7 @@
     </COMMAND>
     <COMMAND name="management-acl interface"
              help="Override which interface the management services are allowed on">
-      <PARAM name="ifname" help="Management interface name (e.g. end0)" ptype="STRING"/>
+      <PARAM name="ifname" help="Management interface name (e.g. end0)" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set mgmt-acl/mgmt_interface ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no management-acl interface"

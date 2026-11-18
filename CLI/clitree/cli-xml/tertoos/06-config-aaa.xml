@@ -70,13 +70,13 @@
     </COMMAND>
 
     <COMMAND name="tacacs-server host" help="Configure a TACACS+ server">
-      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set tacacs/server/${host}/key "${key}"</ACTION>
     </COMMAND>
     <COMMAND name="no tacacs-server host" help="Remove TACACS+ server">
-      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <ACTION>tertoos-cli candidate delete tacacs/server/${host}</ACTION>
     </COMMAND>
 
@@ -95,13 +95,13 @@
     </COMMAND>
 
     <COMMAND name="radius-server host" help="Configure a RADIUS server">
-      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set radius/server/${host}/key "${key}"</ACTION>
     </COMMAND>
     <COMMAND name="no radius-server host" help="Remove RADIUS server">
-      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
+      <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <ACTION>tertoos-cli candidate delete radius/server/${host}</ACTION>
     </COMMAND>
 
