@@ -227,6 +227,23 @@
          ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
 
+  <!-- YANG (sonic-ntp NTP.vrf, sonic-sflow SFLOW_COLLECTOR.collector_vrf):
+       pattern "mgmt|default" - nao aceita VRF de dados. -->
+  <PTYPE name="TERTOOS_VRF_MGMT_DEFAULT"
+         method="regexp_select"
+         pattern="(mgmt|default)"
+         ext_pattern="mgmt(mgmt) default(default)"
+         help="mgmt or default"/>
+
+  <!-- YANG (sonic-snmp SNMP_AGENT_ADDRESS_CONFIG.vrf_name): '' | mgmt |
+       Vrf[a-zA-Z0-9_-]+. O vazio e' o param omitido; o Tab lista mgmt + VRFs. -->
+  <PTYPE name="TERTOOS_SNMP_AGENT_VRF"
+         method="regexp_select"
+         pattern="(mgmt|Vrf[A-Za-z0-9_\-]+)"
+         ext_pattern="mgmt(mgmt)"
+         ext_pattern_cmd="echo mgmt; tertoos-cli complete vrf"
+         help="mgmt or VrfNAME (omit for the default VRF; Tab lists the configured ones)"/>
+
   <!-- SR-TE e routing-policy (22/10/2026): Tab lista os objetos existentes
        (running + candidate) pelo mesmo backend do pw-class; criar novo segue livre. -->
   <PTYPE name="TERTOOS_SRTE_SEGLIST_NAME"

@@ -66,13 +66,13 @@
     <COMMAND name="snmp-server agent-address" help="Listen only on this address (default: all addresses)">
       <PARAM name="ip" help="Agent IPv4/IPv6 address (must exist on this switch, e.g. the loopback)" ptype="TERTOOS_IP_ADDR"/>
       <PARAM name="port" help="UDP port 1..65535 (standard 161)" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="vrf" help="VRF (default = '')" ptype="TERTOOS_VRF_NAME" optional="true"/>
+      <PARAM name="vrf" help="mgmt or VrfNAME (omit = default VRF)" ptype="TERTOOS_SNMP_AGENT_VRF" optional="true"/>
       <ACTION>tertoos-cli candidate set snmp/agent-address ${ip} ${port} ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="no snmp-server agent-address" help="Remove a listen address">
       <PARAM name="ip" help="Agent IPv4/IPv6 address (must exist on this switch)" ptype="TERTOOS_IP_ADDR"/>
       <PARAM name="port" help="UDP port 1..65535 (standard 161)" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="vrf" help="VRF (default = '')" ptype="TERTOOS_VRF_NAME" optional="true"/>
+      <PARAM name="vrf" help="mgmt or VrfNAME (omit = default VRF)" ptype="TERTOOS_SNMP_AGENT_VRF" optional="true"/>
       <ACTION>tertoos-cli candidate delete snmp/agent-address ${ip} ${port} ${vrf}</ACTION>
     </COMMAND>
   </VIEW>

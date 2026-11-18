@@ -2,7 +2,7 @@
 <!--
   TertoOS — sFlow (S12). sonic-sflow.yang upstream.
     sflow enable                         → SFLOW|global admin_state=up
-    sflow agent-id <if|ip>               → SFLOW|global agent_id
+    sflow agent-id <if>                  → SFLOW|global agent_id
     sflow polling-interval <s>           → SFLOW|global polling_interval
     sflow sample-direction <dir>         → SFLOW|global sample_direction
     sflow collector <name> <ip> [port P] → SFLOW_COLLECTOR|<name>
@@ -19,8 +19,8 @@
     <COMMAND name="no sflow enable" help="Disable sFlow">
       <ACTION>tertoos-cli candidate set sflow/admin_state down</ACTION>
     </COMMAND>
-    <COMMAND name="sflow agent-id" help="Agent identification (interface or IP)">
-      <PARAM name="agent" help="Interface name or IP" ptype="TERTOOS_IFNAME_OR_IP"/>
+    <COMMAND name="sflow agent-id" help="Agent identification (interface)">
+      <PARAM name="agent" help="Interface name (e.g. Loopback0)" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}</ACTION>
     </COMMAND>
     <COMMAND name="sflow polling-interval" help="Counter poll interval">
@@ -49,7 +49,7 @@
     </COMMAND>
     <COMMAND name="sflow collector vrf" help="Bind a collector to a VRF">
       <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
+      <PARAM name="vrf" help="mgmt or default" ptype="TERTOOS_VRF_MGMT_DEFAULT"/>
       <ACTION>tertoos-cli candidate set sflow/collector/${name}/collector_vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="no sflow collector" help="Remove a collector">
