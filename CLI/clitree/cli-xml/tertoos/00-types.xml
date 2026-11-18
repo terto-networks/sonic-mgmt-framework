@@ -221,6 +221,10 @@
          ext_pattern_cmd="tertoos-cli complete static-pw"
          help="Static PW name (Tab lists the configured ones)"/>
 
+  <!-- Divergencia DOCUMENTADA com o YANG (decisao do CEO 18/11): o YANG do SONiC
+       exige "Vrf[a-zA-Z0-9_-]+" (prefixo do vrfmgrd), mas o TertoOS Lite nao usa o
+       vrfmgrd e a frota ja tem VRFs de nome livre (CUST-A, CUST-B). Mantido o nome
+       livre; ver docs-privados architecture/klish-ptype-audit-lote-c.md secao 6. -->
   <PTYPE name="TERTOOS_VRF_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
