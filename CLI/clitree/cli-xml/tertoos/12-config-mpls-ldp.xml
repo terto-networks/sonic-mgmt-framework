@@ -36,7 +36,7 @@
              help="Configure MPLS LDP for a VRF"
              view="config-mpls-ldp-view"
              viewid="ldpvrf=${vrf}">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context mpls-ldp ${vrf}&#xA;
         tertoos-cli candidate set mpls/ldp/${vrf}/enable true&#xA;

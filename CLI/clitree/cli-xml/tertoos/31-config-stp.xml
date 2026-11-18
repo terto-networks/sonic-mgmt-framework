@@ -181,7 +181,7 @@
     </COMMAND>
     <COMMAND name="instance" help="Map VLANs to MST instance">
       <PARAM name="n" help="MST instance (0..15)" ptype="TERTOOS_RANGE_0_15"/>
-      <PARAM name="vlan-kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlan-kw" help="VLANs of this instance" ptype="SUBCOMMAND" mode="subcommand" value="vlan"/>
       <PARAM name="vlist" help="VLAN list (ex: 100,200,300 or 400-500)"
              ptype="TERTOOS_VLAN_LIST"/>
       <ACTION>tertoos-cli candidate set stp/mst_inst/${n}/vlan ${vlist}</ACTION>

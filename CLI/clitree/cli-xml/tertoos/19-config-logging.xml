@@ -33,7 +33,7 @@
     </COMMAND>
     <COMMAND name="logging vrf" help="Server VRF context">
       <PARAM name="addr" help="Server" ptype="STRING"/>
-      <PARAM name="vrf" help="VRF" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set logging/server/${addr}/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="no logging" help="Remove a server">

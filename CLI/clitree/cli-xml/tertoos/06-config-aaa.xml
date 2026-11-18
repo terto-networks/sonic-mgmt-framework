@@ -71,7 +71,7 @@
 
     <COMMAND name="tacacs-server host" help="Configure a TACACS+ server">
       <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
-      <PARAM name="key-kw" help="key" ptype="STRING"/>
+      <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set tacacs/server/${host}/key "${key}"</ACTION>
     </COMMAND>
@@ -96,7 +96,7 @@
 
     <COMMAND name="radius-server host" help="Configure a RADIUS server">
       <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="STRING"/>
-      <PARAM name="key-kw" help="key" ptype="STRING"/>
+      <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set radius/server/${host}/key "${key}"</ACTION>
     </COMMAND>
@@ -109,9 +109,9 @@
     <COMMAND name="username"
              help="Configure a local user (group/role + password)">
       <PARAM name="name" help="Username" ptype="TERTOOS_NAME"/>
-      <PARAM name="group-kw" help="group" ptype="STRING"/>
+      <PARAM name="group-kw" help="Role of the user" ptype="SUBCOMMAND" mode="subcommand" value="group"/>
       <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="TERTOOS_USER_ROLE"/>
-      <PARAM name="password-kw" help="password" ptype="STRING"/>
+      <PARAM name="password-kw" help="Password of the user" ptype="SUBCOMMAND" mode="subcommand" value="password"/>
       <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
     </COMMAND>

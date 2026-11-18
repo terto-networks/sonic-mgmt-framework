@@ -316,7 +316,7 @@
       <ACTION>vtysh -c "show bgp summary"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp summary vrf" help="BGP summary for a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "show bgp vrf ${vrf} summary"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp neighbors" help="BGP neighbors detail">
@@ -344,7 +344,7 @@
       <ACTION>vtysh -c "show ip ospf"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf vrf" help="OSPF info for a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "show ip ospf vrf ${vrf}"</ACTION>
     </COMMAND>
     <COMMAND name="show ospf neighbor" help="OSPF neighbors">
@@ -440,7 +440,7 @@
       <ACTION>vtysh -c "show bgp l2vpn evpn summary"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp vrf" help="BGP routes for a specific VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "show bgp vrf ${vrf}"</ACTION>
     </COMMAND>
 
@@ -469,14 +469,14 @@
       <ACTION>vtysh -c "show bgp vpnv4 unicast"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp vpnv4 unicast vrf" help="BGP VPNv4 unicast for a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "show bgp vpnv4 unicast vrf ${vrf}"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp vpnv6 unicast" help="BGP VPNv6 unicast RIB">
       <ACTION>vtysh -c "show bgp vpnv6 unicast"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp vpnv6 unicast vrf" help="BGP VPNv6 unicast for a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "show bgp vpnv6 unicast vrf ${vrf}"</ACTION>
     </COMMAND>
     <!-- ===== S8/S9 — SR-MPLS + SR-TE + PCEP =============================== -->
@@ -742,7 +742,7 @@
       <ACTION>vtysh -c "clear bgp ${addr} soft ${dir}"</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp vrf" help="Reset BGP sessions in a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>vtysh -c "clear bgp vrf ${vrf} *"</ACTION>
     </COMMAND>
     <COMMAND name="clear ip ospf process" help="Reset the OSPF process">
@@ -897,7 +897,7 @@
       <ACTION>vtysh -c "show isis topology"</ACTION>
     </COMMAND>
     <COMMAND name="show isis database" help="IS-IS LSP database">
-      <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="detail" help="Full LSP contents" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
       <ACTION>vtysh -c "show isis database ${detail}"</ACTION>
     </COMMAND>
     <COMMAND name="show isis neighbor" help="IS-IS neighbors">
@@ -935,11 +935,12 @@
       <ACTION>vtysh -c "show isis spf-delay-ietf"</ACTION>
     </COMMAND>
     <COMMAND name="clear isis" help="Reset IS-IS adjacencies">
-      <PARAM name="vrf_kw" help="vrf (optional)" ptype="STRING" optional="true"/>
-      <PARAM name="vrf" help="VRF name" ptype="STRING" optional="true"/>
+      <PARAM name="vrf" help="Reset only the adjacencies of one VRF" ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="vrfname" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
+      </PARAM>
       <ACTION>
-        if [ -n "${vrf}" ]; then&#xA;
-            vtysh -c "clear isis vrf ${vrf}"&#xA;
+        if [ -n "${vrfname}" ]; then&#xA;
+            vtysh -c "clear isis vrf ${vrfname}"&#xA;
         else&#xA;
             vtysh -c "clear isis *"&#xA;
         fi&#xA;
@@ -1009,7 +1010,7 @@
     <!-- ===== S13.D — OTA image management ================================ -->
     <COMMAND name="image install" help="Install firmware bundle to the standby slot (usb: | local path | URL)">
       <PARAM name="url" help="usb:[name] | /path/bundle.tos | https://... URL" ptype="STRING"/>
-      <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
+      <PARAM name="opt" help="Skip the signature check" ptype="SUBCOMMAND" mode="subcommand" value="no-verify" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
             sudo /usr/bin/tertoos-cli image install ${url} no-verify&#xA;
@@ -1044,7 +1045,7 @@
     </COMMAND>
     <COMMAND name="image patch install" help="Install a cumulative patch (.tosp) for the running image (usb: | local path | URL)">
       <PARAM name="url" help="usb:[name] | /path/patch.tosp | https://... URL" ptype="STRING"/>
-      <PARAM name="opt" help="no-verify (skip signature, lab only) — optional" ptype="STRING" optional="true"/>
+      <PARAM name="opt" help="Skip the signature check (lab only)" ptype="SUBCOMMAND" mode="subcommand" value="no-verify" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
             sudo /usr/bin/tertoos-cli image patch install ${url} no-verify&#xA;
@@ -1071,7 +1072,7 @@
     </COMMAND>
     <COMMAND name="image patch verify" help="Verify a patch (.tosp): manifest, layer and signature">
       <PARAM name="url" help="/path/patch.tosp | https://... URL" ptype="STRING"/>
-      <PARAM name="opt" help="no-verify (skip signature) — optional" ptype="STRING" optional="true"/>
+      <PARAM name="opt" help="Skip the signature check" ptype="SUBCOMMAND" mode="subcommand" value="no-verify" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
             sudo /usr/bin/tertoos-cli image patch verify ${url} no-verify&#xA;
