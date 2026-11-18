@@ -331,6 +331,24 @@
          pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7}))"
          help="IPv4 or IPv6 address"/>
 
+  <!-- Lote C3 (CEO 18/11): IP que deveria ser DA PROPRIA CAIXA (agent-address,
+       transport-address, local-address, bind-address, router-address, router-id).
+       O Tab lista os IPs das interfaces (ip -o addr) + os enderecos pendentes no
+       candidate; fe80:: fica de fora. A validacao continua so' de FORMATO: o IP
+       pode estar sendo criado no mesmo commit. O aviso "not configured on any
+       interface" fica na ACTION de cada comando (aviso, nao bloqueio). -->
+  <PTYPE name="TERTOOS_LOCAL_IP_ADDR"
+         method="regexp_select"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7}))"
+         ext_pattern_cmd="{ ip -o addr show | awk '{split($4,p,/\//); print p[1]}'; tertoos-cli candidate show 2&gt;/dev/null | awk '$0 ~ /^set interface\/[^\/]+\/ipv[46]\/address / {split($3,p,/\//); print p[1]}'; } | grep -vi '^fe80' | sort -u"
+         help="IPv4 or IPv6 address of this box (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_LOCAL_IPV4_ADDR"
+         method="regexp_select"
+         pattern="(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))"
+         ext_pattern_cmd="{ ip -o -4 addr show | awk '{split($4,p,/\//); print p[1]}'; tertoos-cli candidate show 2&gt;/dev/null | awk '$0 ~ /^set interface\/[^\/]+\/ipv4\/address / {split($3,p,/\//); print p[1]}'; } | sort -u"
+         help="IPv4 address A.B.C.D (Tab lists the ones configured on this box)"/>
+
   <!-- ACL: as de dados e as de control-plane dividem a ACL_TABLE; o Tab da
        control-plane lista so' as type=CTRLPLANE (gerencia inband). -->
   <PTYPE name="TERTOOS_ACL_NAME"

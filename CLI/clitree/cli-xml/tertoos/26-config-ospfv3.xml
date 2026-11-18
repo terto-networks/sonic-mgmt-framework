@@ -61,7 +61,7 @@
     </COMMAND>
 
     <COMMAND name="router-id" help="Set OSPFv3 router-id">
-      <PARAM name="addr" help="A.B.C.D" ptype="TERTOOS_IPV4_ADDR"/>
+      <PARAM name="addr" help="A.B.C.D" ptype="TERTOOS_LOCAL_IPV4_ADDR"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/router-id ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">
