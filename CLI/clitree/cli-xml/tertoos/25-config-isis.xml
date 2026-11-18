@@ -45,7 +45,7 @@
              view="config-router-isis-view"
              viewid="isisvrf=${vrf};isistag=${tag}">
       <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-isis ${vrf}/${tag}&#xA;
         tertoos-cli candidate set isis/instance/${vrf}/${tag}&#xA;
@@ -71,7 +71,7 @@
 
     <!-- Globais -->
     <COMMAND name="net" help="Network Entity Title">
-      <PARAM name="net" help="NSAP (e.g. 49.0001.0192.0168.0001.00)" ptype="STRING"/>
+      <PARAM name="net" help="NSAP (e.g. 49.0001.0192.0168.0001.00)" ptype="TERTOOS_ISIS_NET"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/net ${net}</ACTION>
     </COMMAND>
     <COMMAND name="is-type" help="IS level">
@@ -146,12 +146,13 @@
     <COMMAND name="redistribute" help="Redistribute routes from another protocol">
       <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
       <PARAM name="lvl_kw" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
-      <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
-      <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
+      <PARAM name="metric" help="Metric of the redistributed routes" ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="metric_value" help="Metric value" ptype="UINT"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/ipv4_unicast/${proto}/${lvl_kw}&#xA;
-        if [ -n "${metric}" ]; then&#xA;
-            tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/ipv4_unicast/${proto}/${lvl_kw}/metric ${metric}&#xA;
+        if [ -n "${metric_value}" ]; then&#xA;
+            tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/ipv4_unicast/${proto}/${lvl_kw}/metric ${metric_value}&#xA;
         fi&#xA;
       </ACTION>
     </COMMAND>
@@ -218,12 +219,13 @@
     <COMMAND name="redistribute" help="AF-scoped redistribute">
       <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
       <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
-      <PARAM name="metric_kw" help="metric (optional)" ptype="STRING" optional="true"/>
-      <PARAM name="metric" help="Metric value" ptype="UINT" optional="true"/>
+      <PARAM name="metric" help="Metric of the redistributed routes" ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="metric_value" help="Metric value" ptype="UINT"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}&#xA;
-        if [ -n "${metric}" ]; then&#xA;
-            tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}/metric ${metric}&#xA;
+        if [ -n "${metric_value}" ]; then&#xA;
+            tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}/metric ${metric_value}&#xA;
         fi&#xA;
       </ACTION>
     </COMMAND>

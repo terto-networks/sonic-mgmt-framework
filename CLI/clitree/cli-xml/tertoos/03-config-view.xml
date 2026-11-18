@@ -144,16 +144,16 @@
     <COMMAND name="l2 mac-address-table static"
              help="Add a static MAC entry">
       <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
-      <PARAM name="vlan_kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlan_kw" help="VLAN of the entry" ptype="SUBCOMMAND" mode="subcommand" value="vlan"/>
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="if_kw" help="interface" ptype="STRING"/>
+      <PARAM name="if_kw" help="Egress interface" ptype="SUBCOMMAND" mode="subcommand" value="interface"/>
       <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
       <ACTION>tertoos-cli candidate set fdb/static/${vlan}/${mac} ${ifname}</ACTION>
     </COMMAND>
     <COMMAND name="no l2 mac-address-table static"
              help="Remove a static MAC entry">
       <PARAM name="mac" help="MAC aa:bb:cc:dd:ee:ff" ptype="TERTOOS_MAC"/>
-      <PARAM name="vlan_kw" help="vlan" ptype="STRING"/>
+      <PARAM name="vlan_kw" help="VLAN of the entry" ptype="SUBCOMMAND" mode="subcommand" value="vlan"/>
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
       <ACTION>tertoos-cli candidate delete fdb/static/${vlan}/${mac}</ACTION>
     </COMMAND>

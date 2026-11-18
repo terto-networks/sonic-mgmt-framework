@@ -49,7 +49,7 @@
     </COMMAND>
     <COMMAND name="sflow collector vrf" help="Bind a collector to a VRF">
       <PARAM name="name" help="Collector name" ptype="TERTOOS_NAME"/>
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set sflow/collector/${name}/collector_vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="no sflow collector" help="Remove a collector">

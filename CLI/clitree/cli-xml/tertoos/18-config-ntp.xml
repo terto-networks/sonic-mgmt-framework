@@ -29,7 +29,7 @@
       <ACTION>tertoos-cli candidate set ntp/authentication disable</ACTION>
     </COMMAND>
     <COMMAND name="ntp vrf" help="Bind NTP to a VRF">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set ntp/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="ntp source" help="Source interface">

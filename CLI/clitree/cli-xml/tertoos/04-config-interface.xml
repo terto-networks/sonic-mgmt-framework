@@ -269,7 +269,7 @@
     <COMMAND name="portchannel id"
              help="Make this interface a member of a PortChannel">
       <PARAM name="id" help="PortChannel id" ptype="TERTOOS_BUNDLE_ID"/>
-      <PARAM name="mode-kw" help="mode" ptype="STRING"/>
+      <PARAM name="mode-kw" help="LACP mode" ptype="SUBCOMMAND" mode="subcommand" value="mode"/>
       <PARAM name="mode" help="active | passive | on" ptype="TERTOOS_LACP_MODE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
     </COMMAND>
@@ -279,7 +279,7 @@
     <COMMAND name="bundle id"
              help="Alias of 'portchannel id' (deprecated)">
       <PARAM name="id" help="PortChannel id" ptype="TERTOOS_BUNDLE_ID"/>
-      <PARAM name="mode-kw" help="mode" ptype="STRING"/>
+      <PARAM name="mode-kw" help="LACP mode" ptype="SUBCOMMAND" mode="subcommand" value="mode"/>
       <PARAM name="mode" help="active | passive | on" ptype="TERTOOS_LACP_MODE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/bundle "${id} ${mode}"</ACTION>
     </COMMAND>
@@ -443,7 +443,7 @@
     </COMMAND>
     <COMMAND name="ip ospf message-digest-key" help="MD5 key (AuType 2)">
       <PARAM name="id" help="Key id 1..255" ptype="TERTOOS_RANGE_1_255"/>
-      <PARAM name="md5" help="md5" ptype="STRING"/>
+      <PARAM name="md5" help="MD5 key" ptype="SUBCOMMAND" mode="subcommand"/>
       <PARAM name="key" help="Key string (up to 16 chars)" ptype="TERTOOS_OSPF_MD5_KEY"/>
       <ACTION>
         tertoos-cli candidate set interface/${ifname}/ip-ospf/authentication-key-id ${id}&#xA;

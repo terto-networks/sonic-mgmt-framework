@@ -555,8 +555,8 @@
     </COMMAND>
     <COMMAND name="local-as" help="Override local AS">
       <PARAM name="asn" help="Local AS" ptype="TERTOOS_ASN"/>
-      <PARAM name="noprepend" help="no-prepend (optional)"
-             ptype="STRING" optional="true"/>
+      <PARAM name="noprepend" help="Do not prepend the local-as to received updates"
+             ptype="SUBCOMMAND" mode="subcommand" value="no-prepend" optional="true"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_asn ${asn}&#xA;
         if [ "${noprepend}" = "no-prepend" ]; then&#xA;

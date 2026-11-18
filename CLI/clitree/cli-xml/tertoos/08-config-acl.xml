@@ -115,14 +115,11 @@
              ptype="TERTOOS_ACL_PROTO_V4"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst_port_kw"
-             help="Optional 'eq &lt;port&gt;'"
-             ptype="STRING"
-             optional="true"/>
-      <PARAM name="dst_port"
-             help="Destination port"
-             ptype="UINT"
-             optional="true"/>
+      <PARAM name="eq" help="Match one destination port"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="dst_port" help="Destination port 1..65535"
+               ptype="TERTOOS_RANGE_1_65535"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
@@ -140,14 +137,11 @@
              ptype="TERTOOS_ACL_PROTO_V4"/>
       <PARAM name="src" help="Source CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst_port_kw"
-             help="Optional 'eq &lt;port&gt;'"
-             ptype="STRING"
-             optional="true"/>
-      <PARAM name="dst_port"
-             help="Destination port"
-             ptype="UINT"
-             optional="true"/>
+      <PARAM name="eq" help="Match one destination port"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="dst_port" help="Destination port 1..65535"
+               ptype="TERTOOS_RANGE_1_65535"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
@@ -213,14 +207,11 @@
              ptype="TERTOOS_ACL_PROTO_V6"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst_port_kw"
-             help="Optional 'eq &lt;port&gt;'"
-             ptype="STRING"
-             optional="true"/>
-      <PARAM name="dst_port"
-             help="Destination port"
-             ptype="UINT"
-             optional="true"/>
+      <PARAM name="eq" help="Match one destination port"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="dst_port" help="Destination port 1..65535"
+               ptype="TERTOOS_RANGE_1_65535"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
@@ -238,14 +229,11 @@
              ptype="TERTOOS_ACL_PROTO_V6"/>
       <PARAM name="src" help="Source IPv6 CIDR or 'any'" ptype="STRING"/>
       <PARAM name="dst" help="Destination IPv6 CIDR or 'any'" ptype="STRING"/>
-      <PARAM name="dst_port_kw"
-             help="Optional 'eq &lt;port&gt;'"
-             ptype="STRING"
-             optional="true"/>
-      <PARAM name="dst_port"
-             help="Destination port"
-             ptype="UINT"
-             optional="true"/>
+      <PARAM name="eq" help="Match one destination port"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="dst_port" help="Destination port 1..65535"
+               ptype="TERTOOS_RANGE_1_65535"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/protocol ${protocol}&#xA;
@@ -303,10 +291,10 @@
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)"
              ptype="STRING"/>
-      <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
-             ptype="STRING" optional="true"/>
-      <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
-             optional="true"/>
+      <PARAM name="vlan" help="Match one VLAN"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="vlan_id" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action FORWARD&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}&#xA;
@@ -319,10 +307,10 @@
     <COMMAND name="deny" help="Deny by ether-type and/or VLAN">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="ether_type" help="EtherType" ptype="STRING"/>
-      <PARAM name="vlan_kw" help="Optional 'vlan &lt;id&gt;'"
-             ptype="STRING" optional="true"/>
-      <PARAM name="vlan_id" help="VLAN id" ptype="TERTOOS_VLAN_ID"
-             optional="true"/>
+      <PARAM name="vlan" help="Match one VLAN"
+             ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="vlan_id" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
+      </PARAM>
       <ACTION>
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/action DROP&#xA;
         tertoos-cli candidate set acl/${aclname}/rule/${seq}/ether_type ${ether_type}&#xA;

@@ -84,7 +84,7 @@
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/interface ${iftype}${ifnum}</ACTION>
     </COMMAND>
     <COMMAND name="vrf" help="VRF context">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="local-address" help="Local source IP">

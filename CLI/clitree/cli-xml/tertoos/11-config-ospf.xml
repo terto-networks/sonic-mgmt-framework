@@ -78,7 +78,7 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/router-id ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="log-adjacency-changes" help="Log neighbor state changes">
-      <PARAM name="detail" help="detail (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="detail" help="Log every state change (not only Full/Down)" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
       <ACTION>
         if [ "${detail}" = "detail" ]; then&#xA;
             tertoos-cli candidate set ospf/${ospfvrf}/log-adjacency-changes detail&#xA;
@@ -102,7 +102,7 @@
          (segment-routing + capability opaque já acima). Dataplane: backup
          next-hop pré-instalado (SAI Centec: confirmar protection NHG, F2). -->
     <COMMAND name="fast-reroute ti-lfa" help="Enable TI-LFA fast-reroute (IP-FRR)">
-      <PARAM name="np" help="node-protection (optional)" ptype="STRING" optional="true"/>
+      <PARAM name="np" help="Protect against node failure (not only link)" ptype="SUBCOMMAND" mode="subcommand" value="node-protection" optional="true"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/fast_reroute_tilfa true&#xA;
         if [ "${np}" = "node-protection" ]; then&#xA;
@@ -413,8 +413,8 @@
     </COMMAND>
 
     <COMMAND name="stub" help="Mark area as stub">
-      <PARAM name="nosummary" help="no-summary (optional)"
-             ptype="STRING" optional="true"/>
+      <PARAM name="nosummary" help="Totally stubby area (no type-3 summaries)"
+             ptype="SUBCOMMAND" mode="subcommand" value="no-summary" optional="true"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub true&#xA;
         if [ "${nosummary}" = "no-summary" ]; then&#xA;

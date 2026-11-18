@@ -20,7 +20,7 @@
       <ACTION>tertoos-cli candidate set ssh/port ${port}</ACTION>
     </COMMAND>
     <COMMAND name="ssh server vrf" help="VRF for SSH server">
-      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_NAME"/>
+      <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>tertoos-cli candidate set ssh/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="no ssh server vrf" help="Remove VRF binding">
