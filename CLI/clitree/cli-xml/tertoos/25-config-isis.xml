@@ -136,7 +136,7 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te ${state}</ACTION>
     </COMMAND>
     <COMMAND name="mpls-te router-address" help="MPLS-TE router address">
-      <PARAM name="addr" help="A.B.C.D" ptype="STRING"/>
+      <PARAM name="addr" help="A.B.C.D" ptype="TERTOOS_IPV4_ADDR"/>
       <ACTION>
         tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te_router_address ${addr}&#xA;
       </ACTION>

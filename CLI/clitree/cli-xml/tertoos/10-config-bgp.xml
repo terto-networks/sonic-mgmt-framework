@@ -87,7 +87,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/router_id ${addr}</ACTION>
     </COMMAND>
     <COMMAND name="bgp cluster-id" help="Route reflector cluster-id">
-      <PARAM name="cid" help="A.B.C.D or 32-bit value" ptype="STRING"/>
+      <PARAM name="cid" help="A.B.C.D or 32-bit value" ptype="TERTOOS_BGP_CLUSTER_ID"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/cluster_id ${cid}</ACTION>
     </COMMAND>
     <COMMAND name="bgp graceful-restart" help="Enable BGP graceful restart">
@@ -379,19 +379,19 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="network" help="Originate a network">
-      <PARAM name="prefix" help="Prefix to advertise" ptype="STRING"/>
+      <PARAM name="prefix" help="Prefix to advertise" ptype="TERTOOS_IP_PREFIX"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/network/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="no network" help="Remove network">
-      <PARAM name="prefix" help="Prefix" ptype="STRING"/>
+      <PARAM name="prefix" help="Prefix" ptype="TERTOOS_IP_PREFIX"/>
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/network/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="aggregate-address" help="Aggregate-address">
-      <PARAM name="prefix" help="Aggregate prefix" ptype="STRING"/>
+      <PARAM name="prefix" help="Aggregate prefix" ptype="TERTOOS_IP_PREFIX"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/aggregate/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="no aggregate-address" help="Remove aggregate">
-      <PARAM name="prefix" help="Aggregate prefix" ptype="STRING"/>
+      <PARAM name="prefix" help="Aggregate prefix" ptype="TERTOOS_IP_PREFIX"/>
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/af/${bgpaf}/aggregate/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute connected" help="Redistribute connected">
@@ -547,7 +547,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/bfd false</ACTION>
     </COMMAND>
     <COMMAND name="update-source" help="Source interface or address">
-      <PARAM name="src" help="Interface name or IP" ptype="STRING"/>
+      <PARAM name="src" help="Interface name or IP" ptype="TERTOOS_IFNAME_OR_IP"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/local_addr ${src}</ACTION>
     </COMMAND>
     <COMMAND name="transport connection-mode passive" help="Wait for peer to initiate">
@@ -644,7 +644,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/asn ${asn}</ACTION>
     </COMMAND>
     <COMMAND name="update-source" help="Source address/interface for the BGP session (iBGP loopback)">
-      <PARAM name="src" help="Loopback0 | interface | A.B.C.D" ptype="STRING"/>
+      <PARAM name="src" help="Loopback0 | interface | A.B.C.D" ptype="TERTOOS_IFNAME_OR_IP"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr ${src}</ACTION>
     </COMMAND>
     <COMMAND name="no update-source" help="Remove update-source">

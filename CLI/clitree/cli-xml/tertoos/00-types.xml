@@ -221,11 +221,32 @@
          ext_pattern_cmd="tertoos-cli complete static-pw"
          help="Static PW name (Tab lists the configured ones)"/>
 
+  <!-- Divergencia DOCUMENTADA com o YANG (decisao do CEO 18/11): o YANG do SONiC
+       exige "Vrf[a-zA-Z0-9_-]+" (prefixo do vrfmgrd), mas o TertoOS Lite nao usa o
+       vrfmgrd e a frota ja tem VRFs de nome livre (CUST-A, CUST-B). Mantido o nome
+       livre; ver docs-privados architecture/klish-ptype-audit-lote-c.md secao 6. -->
   <PTYPE name="TERTOOS_VRF_NAME"
          method="regexp_select"
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
          ext_pattern_cmd="tertoos-cli complete vrf"
          help="VRF name (Tab lists the configured ones)"/>
+
+  <!-- YANG (sonic-ntp NTP.vrf, sonic-sflow SFLOW_COLLECTOR.collector_vrf):
+       pattern "mgmt|default" - nao aceita VRF de dados. -->
+  <PTYPE name="TERTOOS_VRF_MGMT_DEFAULT"
+         method="regexp_select"
+         pattern="(mgmt|default)"
+         ext_pattern="mgmt(mgmt) default(default)"
+         help="mgmt or default"/>
+
+  <!-- YANG (sonic-snmp SNMP_AGENT_ADDRESS_CONFIG.vrf_name): '' | mgmt |
+       Vrf[a-zA-Z0-9_-]+. O vazio e' o param omitido; o Tab lista mgmt + VRFs. -->
+  <PTYPE name="TERTOOS_SNMP_AGENT_VRF"
+         method="regexp_select"
+         pattern="(mgmt|Vrf[A-Za-z0-9_\-]+)"
+         ext_pattern="mgmt(mgmt)"
+         ext_pattern_cmd="echo mgmt; tertoos-cli complete vrf"
+         help="mgmt or VrfNAME (omit for the default VRF; Tab lists the configured ones)"/>
 
   <!-- SR-TE e routing-policy (22/10/2026): Tab lista os objetos existentes
        (running + candidate) pelo mesmo backend do pw-class; criar novo segue livre. -->
@@ -979,6 +1000,83 @@
          pattern="(9600|19200|38400|57600|115200)"
          ext_pattern="9600(9600) 19200(19200) 38400(38400) 57600(57600) 115200(115200)"
          help="9600 | 19200 | 38400 | 57600 | 115200"/>
+
+  <!-- ================================================================
+       Lote C2 (18/11/2026): formatos de endereco/area/MTU/speed.
+       Regex gerado e auto-testado por script (fronteiras + varredura).
+       ================================================================ -->
+  <PTYPE name="TERTOOS_IPV6_ADDR"
+         method="regexp"
+         pattern="([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})"
+         help="IPv6 address X:X::X"/>
+
+  <PTYPE name="TERTOOS_IP_OR_HOST"
+         method="regexp"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})|(([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)*[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*))"
+         help="IPv4/IPv6 address or hostname"/>
+
+  <PTYPE name="TERTOOS_IP_PREFIX"
+         method="regexp"
+         pattern="(((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))/([0-9]|[1-2][0-9]|3[0-2]))|(([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])))"
+         help="IPv4 or IPv6 prefix (A.B.C.D/M or X:X::X/M)"/>
+
+  <PTYPE name="TERTOOS_IPV4_ACL_ADDR"
+         method="regexp_select"
+         pattern="(any|(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))(/([0-9]|[1-2][0-9]|3[0-2]))?)"
+         ext_pattern="any(any)"
+         help="any, IPv4 address or prefix (A.B.C.D or A.B.C.D/M)"/>
+
+  <PTYPE name="TERTOOS_IPV6_ACL_ADDR"
+         method="regexp_select"
+         pattern="(any|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})(/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?)"
+         ext_pattern="any(any)"
+         help="any, IPv6 address or prefix (X:X::X or X:X::X/M)"/>
+
+  <PTYPE name="TERTOOS_OSPF_AREA_ID"
+         method="regexp"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|(0|[1-9][0-9]{0,8}|[1-3][0-9]{9}|4[0-1][0-9]{8}|42[0-8][0-9]{7}|429[0-3][0-9]{6}|4294[0-8][0-9]{5}|42949[0-5][0-9]{4}|429496[0-6][0-9]{3}|4294967[0-1][0-9]{2}|42949672[0-8][0-9]|429496729[0-5]))"
+         help="Area id: decimal (0..4294967295) or A.B.C.D"/>
+
+  <PTYPE name="TERTOOS_BGP_CLUSTER_ID"
+         method="regexp"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([1-9][0-9]{0,8}|[1-3][0-9]{9}|4[0-1][0-9]{8}|42[0-8][0-9]{7}|429[0-3][0-9]{6}|4294[0-8][0-9]{5}|42949[0-5][0-9]{4}|429496[0-6][0-9]{3}|4294967[0-1][0-9]{2}|42949672[0-8][0-9]|429496729[0-5]))"
+         help="Cluster id: A.B.C.D or 1..4294967295"/>
+
+  <PTYPE name="TERTOOS_IPV4_OR_IFNAME"
+         method="regexp_select"
+         pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([A-Za-z][A-Za-z0-9._/-]*))"
+         ext_pattern_cmd="tertoos-cli complete interface"
+         help="Next-hop A.B.C.D, egress interface, blackhole or Null0 (Tab lists the interfaces)"/>
+
+  <PTYPE name="TERTOOS_IPV6_OR_IFNAME"
+         method="regexp_select"
+         pattern="(([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7})|([A-Za-z][A-Za-z0-9._/-]*))"
+         ext_pattern_cmd="tertoos-cli complete interface"
+         help="Next-hop X:X::X, egress interface, blackhole or Null0 (Tab lists the interfaces)"/>
+
+  <PTYPE name="TERTOOS_IFNAME_OR_IP"
+         method="regexp_select"
+         pattern="(([A-Za-z][A-Za-z0-9._/-]*)|(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7}))"
+         ext_pattern_cmd="tertoos-cli complete interface"
+         help="Interface name or IPv4/IPv6 address (Tab lists the interfaces)"/>
+
+  <PTYPE name="TERTOOS_VLAN_ID_OR_ANY"
+         method="regexp_select"
+         pattern="(any|(([1-9])|([1-9][0-9]{1,2})|([1-3][0-9]{3})|(40[0-8][0-9])|(409[0-4])))"
+         ext_pattern="any(any)"
+         help="VLAN id 1..4094 or any"/>
+
+  <PTYPE name="TERTOOS_RANGE_68_9216"
+         method="regexp"
+         pattern="(6[89]|[7-9][0-9]|[1-9][0-9]{2}|[1-8][0-9]{3}|9[01][0-9]{2}|920[0-9]|921[0-6])"
+         help="68..9216"/>
+
+  <PTYPE name="TERTOOS_PORT_SPEED"
+         method="regexp_select"
+         pattern="(1000|10000|25000|40000|100000)"
+         ext_pattern="1000(1000) 10000(10000) 25000(25000) 40000(40000) 100000(100000)"
+         ext_help="(1G)(10G)(25G)(40G)(100G)"
+         help="Port speed in Mbps (1000 | 10000 | 25000 | 40000 | 100000)"/>
 
 
   <!--

@@ -114,8 +114,8 @@
       <ACTION>tertoos-cli candidate delete interface/${ifname}/description</ACTION>
     </COMMAND>
 
-    <COMMAND name="mtu" help="Interface MTU (576..9216)">
-      <PARAM name="bytes" help="MTU in bytes" ptype="UINT"/>
+    <COMMAND name="mtu" help="Interface MTU (68..9216)">
+      <PARAM name="bytes" help="MTU in bytes 68..9216" ptype="TERTOOS_RANGE_68_9216"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/mtu ${bytes}</ACTION>
     </COMMAND>
     <COMMAND name="no mtu" help="Reset MTU to default">
@@ -136,7 +136,7 @@
 
     <!-- Physical layer (Centec datapath: cfgd -> saibridge SAI_PORT_ATTR_*) -->
     <COMMAND name="speed" help="Set port speed in Mbps (1000|10000|25000|40000|100000)">
-      <PARAM name="mbps" help="Port speed in Mbps" ptype="UINT"/>
+      <PARAM name="mbps" help="Port speed in Mbps" ptype="TERTOOS_PORT_SPEED"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/speed ${mbps}</ACTION>
     </COMMAND>
     <COMMAND name="no speed" help="Reset port speed to platform default">
@@ -244,7 +244,7 @@
     <COMMAND name="encapsulation dot1q second-dot1q"
              help="802.1Q-in-Q double-tag (sub-interface)">
       <PARAM name="outer" help="S-VLAN (outer tag)" ptype="TERTOOS_VLAN_ID"/>
-      <PARAM name="inner" help="C-VLAN (inner tag) or 'any'" ptype="STRING"/>
+      <PARAM name="inner" help="C-VLAN (inner tag) or 'any'" ptype="TERTOOS_VLAN_ID_OR_ANY"/>
       <ACTION>
         tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/outer ${outer}&#xA;
         tertoos-cli candidate set interface/${ifname}/encapsulation/dot1q-tunnel/inner ${inner}&#xA;
@@ -343,7 +343,7 @@
     -->
     <COMMAND name="ip ospf area" help="Bind interface to an OSPF area">
       <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
-      <PARAM name="area" help="Area id (decimal or A.B.C.D)" ptype="STRING"/>
+      <PARAM name="area" help="Area id (decimal or A.B.C.D)" ptype="TERTOOS_OSPF_AREA_ID"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/area-id ${area}</ACTION>
     </COMMAND>
     <COMMAND name="no ip ospf area" help="Unbind interface from OSPF">
@@ -503,7 +503,7 @@
 
     <!-- ===== S6.1 — OSPFv3 per-interface (OSPFV3_INTERFACE) =============== -->
     <COMMAND name="ipv6 ospf area" help="Attach interface to an OSPFv3 area">
-      <PARAM name="id" help="Area id" ptype="STRING"/>
+      <PARAM name="id" help="Area id" ptype="TERTOOS_OSPF_AREA_ID"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ipv6-ospf/area-id ${id}</ACTION>
     </COMMAND>
     <COMMAND name="no ipv6 ospf area" help="Detach interface from OSPFv3">
