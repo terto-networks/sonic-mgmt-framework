@@ -88,8 +88,8 @@
       <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/vrf ${vrf}</ACTION>
     </COMMAND>
     <COMMAND name="local-address" help="Local source IP">
-      <PARAM name="addr" help="Local IP" ptype="TERTOOS_IP_ADDR"/>
-      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/local_address ${addr}</ACTION>
+      <PARAM name="addr" help="Local IP (an address of this box)" ptype="TERTOOS_LOCAL_IP_ADDR"/>
+      <ACTION>tertoos-cli candidate set bfd/${bfdscope}/peer/${bfdpeer}/local_address ${addr} &amp;&amp; { { ip -o addr show | awk '{split($4,p,/\//); print p[1]}'; tertoos-cli candidate show 2&gt;/dev/null | awk '$0 ~ /^set interface\/[^\/]+\/ipv[46]\/address / {split($3,p,/\//); print p[1]}'; } | grep -qixF -- "${addr}" || echo "% Warning: ${addr} is not configured on any interface of this box (nor pending in this candidate). Accepted, but it is not used until the address exists."; }</ACTION>
     </COMMAND>
     <COMMAND name="interval min-tx" help="Tx interval (ms)">
       <PARAM name="ms" help="10..60000" ptype="TERTOOS_RANGE_10_60000"/>

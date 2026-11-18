@@ -136,9 +136,9 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te ${state}</ACTION>
     </COMMAND>
     <COMMAND name="mpls-te router-address" help="MPLS-TE router address">
-      <PARAM name="addr" help="A.B.C.D" ptype="TERTOOS_IPV4_ADDR"/>
+      <PARAM name="addr" help="A.B.C.D (an address of this box, usually the loopback)" ptype="TERTOOS_LOCAL_IPV4_ADDR"/>
       <ACTION>
-        tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te_router_address ${addr}&#xA;
+        tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/mpls_te_router_address ${addr} &amp;&amp; { { ip -o addr show | awk '{split($4,p,/\//); print p[1]}'; tertoos-cli candidate show 2&gt;/dev/null | awk '$0 ~ /^set interface\/[^\/]+\/ipv[46]\/address / {split($3,p,/\//); print p[1]}'; } | grep -qixF -- "${addr}" || echo "% Warning: ${addr} is not configured on any interface of this box (nor pending in this candidate). Accepted, but it is not used until the address exists."; }&#xA;
       </ACTION>
     </COMMAND>
 
