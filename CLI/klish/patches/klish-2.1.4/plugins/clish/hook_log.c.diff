@@ -2,7 +2,7 @@ diff --git a/plugins/clish/hook_log.c b/plugins/clish/hook_log.c
 index cafd29e..da59419 100644
 --- a/plugins/clish/hook_log.c
 +++ b/plugins/clish/hook_log.c
-@@ -37,8 +37,9 @@ CLISH_HOOK_LOG(clish_hook_log)
+@@ -37,8 +37,18 @@ CLISH_HOOK_LOG(clish_hook_log)
  		if (!(uname = getenv("LOGNAME")))
  			uname = user ? user->pw_name : "unknown";
  	}
@@ -10,7 +10,16 @@ index cafd29e..da59419 100644
 -		user ? user->pw_uid : getuid(), uname, line, retcode);
 +
 +        int facility = LOG_LOCAL4;
-+        syslog(LOG_INFO|facility, "User \"%s\" command \"%s\" status - %s", uname, line, retcode ? "failure" : "success");
- 
++        /* TertoOS (18/11/2026): a linha ia CRUA para o syslog/journal (persistente
++         * no /data) — senha do username, community SNMP, chaves NTP/OSPF, token do
++         * Horizon. Mascara com a mesma funcao do historico (mgmt_clish_utils.c). */
++        extern void mask_password(const char *line, char **masked_line);
++        char *masked = NULL;
++        if (line && *line)
++            mask_password(line, &masked);
++        syslog(LOG_INFO|facility, "User \"%s\" command \"%s\" status - %s", uname,
++            masked ? masked : ((line && *line) ? "(command not logged)" : ""), retcode ? "failure" : "success");
++        free(masked);
+
  	return 0;
  }

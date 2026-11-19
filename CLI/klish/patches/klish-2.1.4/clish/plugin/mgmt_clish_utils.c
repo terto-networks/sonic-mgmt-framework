@@ -90,15 +90,42 @@ static const char * keywords[2*MAX_KEYWORDS] = {
 #define COLON_DELIM 0x3A
 #define ATSIGN_DELIM 0x40
 #define MAX_URL_PATTERN 6
-static char *url_pattern[MAX_URL_PATTERN] = {"scp://", 
+static char *url_pattern[MAX_URL_PATTERN] = {"scp://",
     "ftp://", "sftp://", "http://", "https://", "tftp://"};
+
+/* TertoOS (18/11/2026): segredos que NAO vem logo depois de password/key e
+ * escapavam da mascara — e o hook de log gravava a linha crua no syslog/journal
+ * (persistente no /data). Regra por FRASE: a palavra-chave so' conta com o
+ * contexto certo, para nao mascarar o que nao e' segredo (ex.: o `set community`
+ * do BGP fica visivel; so' o `snmp-server community <segredo>` e' mascarado).
+ *   first: 1a palavra da linha (ignorando um "no" inicial), ou NULL = qualquer
+ *   prev : palavra imediatamente anterior, ou NULL = qualquer
+ *   keep : quantas palavras depois da chave ficam visiveis antes do segredo */
+typedef struct {
+    const char *first;
+    const char *prev;
+    const char *kw;
+    int keep;
+} phrase_rule_t;
+
+static const phrase_rule_t phrase_rules[] = {
+    { NULL,           "snmp-server", "community",          0 }, /* snmp-server community <S> ro */
+    { NULL,           "ntp",         "authentication-key", 2 }, /* ntp authentication-key <id> <alg> <S> */
+    { NULL,           "ospf",        "authentication-key", 0 }, /* ip ospf authentication-key <S> */
+    { NULL,           "ospf",        "message-digest-key", 2 }, /* ip ospf message-digest-key <id> md5 <S> */
+    { NULL,           NULL,          "enrollment-token",   0 }, /* horizon enrollment-token <S> */
+    { "horizon-edge", NULL,          "token",              0 }, /* horizon-edge adopt core <url> token <S> */
+    { "horizon-edge", NULL,          "code",               0 }, /* horizon-edge join peer <url> code <S> ... */
+};
+#define N_PHRASE_RULES (int)(sizeof(phrase_rules) / sizeof(phrase_rules[0]))
 
 
 void mask_password(const char *line, char **masked_line)
 {
-    int pos = 0, index, length;
+    int pos = 0, index, length, k;
     bool_t match;
     char *word = NULL, *ctxt = NULL, *url=NULL, *passwd= NULL, *remainder= NULL, *line_tmp = NULL;
+    const char *first = NULL, *prev = NULL, *cur = NULL;
 
     if(*masked_line){
         lub_string_free(*masked_line);
@@ -112,12 +139,22 @@ void mask_password(const char *line, char **masked_line)
             lub_string_cat(masked_line, " ");
         }
         match= BOOL_FALSE;
+        cur = word;
+        /* 1a palavra da linha, ignorando um "no" inicial (contexto das regras por frase) */
+        if (pos == 0 || (pos == 1 && first && strcmp(first, "no") == 0)) {
+            first = word;
+        }
 
         for (index=0; index<MAX_URL_PATTERN; index++) {
             if (strncmp(word, url_pattern[index], strlen(url_pattern[index])) == 0) {
                 url= word;
                 url+= strlen(url_pattern[index]);
                 passwd= strchr(url, COLON_DELIM);
+                /* So' e' credencial com "user:senha@host". Sem '@' o ':' e' a PORTA
+                 * (https://host:8443) — mascarar escondia a porta (TertoOS 18/11/2026). */
+                if (passwd != NULL && strrchr(passwd, ATSIGN_DELIM) == NULL) {
+                    passwd = NULL;
+                }
                 if (passwd != NULL) {
                     passwd++;
                     length= (unsigned int)(passwd - word);  /* URL pattern up to start of passwd */
@@ -130,6 +167,32 @@ void mask_password(const char *line, char **masked_line)
                     match= BOOL_TRUE;
                 }
                 /* Even if no password to obscure, can match only URL pattern */
+                break;
+            }
+        }
+
+        if (match == BOOL_FALSE) {
+            for (index = 0; index < N_PHRASE_RULES; index++) {
+                const phrase_rule_t *r = &phrase_rules[index];
+                if (strcmp(word, r->kw) != 0)
+                    continue;
+                if (r->prev && (!prev || strcmp(prev, r->prev) != 0))
+                    continue;
+                if (r->first && (!first || strcmp(first, r->first) != 0))
+                    continue;
+                lub_string_cat(masked_line, word);
+                word = strtok_r(NULL, " ", &ctxt);
+                for (k = 0; k < r->keep && word; k++) {
+                    lub_string_cat(masked_line, " ");
+                    lub_string_cat(masked_line, word);
+                    word = strtok_r(NULL, " ", &ctxt);
+                }
+                if (word) {
+                    lub_string_cat(masked_line, " ");
+                    lub_string_cat(masked_line, obscure_string);
+                    word = strtok_r(NULL, " ", &ctxt);
+                }
+                match = BOOL_TRUE;
                 break;
             }
         }
@@ -167,6 +230,7 @@ void mask_password(const char *line, char **masked_line)
             lub_string_cat(masked_line, word);
             word = strtok_r(NULL, " ", &ctxt);
         }
+        prev = cur;
         ++pos;
     }
 
