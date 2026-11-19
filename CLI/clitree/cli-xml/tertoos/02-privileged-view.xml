@@ -699,7 +699,15 @@
          persistidas em /data/etc/ssh (o proximo boot gera novas — como o zeroize
          do Junos). O sshd em execucao e a sessao atual NAO sao afetados ate o
          reload. O keep-management PRESERVA as chaves: manter a gerencia inclui
-         manter a identidade SSH (sem "host key changed" no acesso remoto). -->
+         manter a identidade SSH (sem "host key changed" no acesso remoto).
+         PRIVILEGIO (19/11/2026): o reset roda como root (`sudo -n`, o tertoos-cli e'
+         NOPASSWD tambem na release). Como o admin, ele so' apagava os commits do
+         PROPRIO admin: o /data/tos-commits tem sticky bit e os commits gravados pelo
+         root (API/agent do Horizon) sobreviviam ao reset (445 na ZX1, v0.12.247).
+         O `access=` do klish e' decorativo e, sob sudo, o tertoos-cli ve root (=admin):
+         por isso o `tertoos-cli gate sysadmin` ANTES, com o usuario real — sem ele
+         um operador conseguiria zerar a caixa. O sudo preserva TERTOOS_COMMITS_DIR/
+         TERTOOS_CONFIG_FILE (sudoers.d/tertoos-env), entao o reset acha o /data. -->
     <COMMAND name="reset" help="Reset saved configuration to factory default" access="sysadmin"/>
     <COMMAND name="reset configuration" access="sysadmin"
              help="Erase the entire saved configuration (factory default)">
@@ -707,7 +715,7 @@
     </COMMAND>
     <COMMAND name="reset configuration confirm" access="sysadmin"
              help="Confirm: erase the entire saved configuration (factory default)">
-      <ACTION>tertoos-cli reset configuration force &amp;&amp; { [ ! -x /usr/sbin/tos-ssh-hostkeys ] || sudo -n /usr/sbin/tos-ssh-hostkeys reset; }</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; sudo -n /usr/bin/tertoos-cli reset configuration force &amp;&amp; { [ ! -x /usr/sbin/tos-ssh-hostkeys ] || sudo -n /usr/sbin/tos-ssh-hostkeys reset; }</ACTION>
     </COMMAND>
     <COMMAND name="reset configuration keep-management" access="sysadmin"
              help="Erase everything except management (Mgmt0 + Horizon enrollment)">
@@ -715,7 +723,7 @@
     </COMMAND>
     <COMMAND name="reset configuration keep-management confirm" access="sysadmin"
              help="Confirm: erase everything except management">
-      <ACTION>tertoos-cli reset configuration keep-management force</ACTION>
+      <ACTION>tertoos-cli gate sysadmin &amp;&amp; sudo -n /usr/bin/tertoos-cli reset configuration keep-management force</ACTION>
     </COMMAND>
 
     <COMMAND name="clear" help="Reset operational counters/state"/>

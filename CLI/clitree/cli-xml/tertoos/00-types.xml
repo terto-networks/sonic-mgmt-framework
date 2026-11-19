@@ -74,6 +74,16 @@
          pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
          help="Identifier (alpha first, 1..64 chars)"/>
 
+  <!-- Usuario local (username / no username), 19/11/2026: o Tab lista as contas
+       comuns da caixa (uid 1000..59999, inclui o admin) e as pendentes na
+       candidata. Validacao so' pelo pattern (o mesmo nome Linux que o commit
+       aceita): um nome novo, fora da lista, continua aceito. -->
+  <PTYPE name="TERTOOS_LOCAL_USER_NAME"
+         method="regexp_select"
+         pattern="[a-z_][a-z0-9_\-]{0,31}"
+         ext_pattern_cmd="{ getent passwd | awk -F: '$3 &gt;= 1000 &amp;&amp; $3 &lt; 60000 {print $1}'; tertoos-cli candidate show 2&gt;/dev/null | awk '$1 == &quot;set&quot; &amp;&amp; $2 ~ /^user\// {split($2,p,&quot;/&quot;); print p[2]}'; } | sort -u"
+         help="User name (lowercase; Tab lists the local users)"/>
+
   <!-- IPv4 prefix -->
   <PTYPE name="TERTOOS_IPV4_PREFIX"
          method="regexp"
