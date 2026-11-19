@@ -112,7 +112,10 @@
       <PARAM name="group-kw" help="Role of the user" ptype="SUBCOMMAND" mode="subcommand" value="group"/>
       <PARAM name="group" help="admin | operator | netadmin | secadmin | read-only" ptype="TERTOOS_USER_ROLE"/>
       <PARAM name="password-kw" help="Password of the user" ptype="SUBCOMMAND" mode="subcommand" value="password"/>
-      <PARAM name="password" help="Plain text or hashed" ptype="STRING"/>
+      <!-- 19/11/2026: o usuario e' CONFIGURACAO (LOCAL_USER, so' o hash SHA-512) e
+           persiste ao reload; o commit gera o hash. Um hash $6$/$5$/$y$ colado do
+           `show running-config` e' gravado como esta'. -->
+      <PARAM name="password" help="Password (stored only as a SHA-512 hash), or a $6$ hash copied from show running-config" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set user/${name} "group=${group} password=${password}"</ACTION>
     </COMMAND>
     <COMMAND name="no username" help="Remove a local user">
