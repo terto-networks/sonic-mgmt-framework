@@ -24,7 +24,7 @@
       <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}</ACTION>
     </COMMAND>
     <COMMAND name="sflow polling-interval" help="Counter poll interval">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_SFLOW_POLLING_INTERVAL"/>
       <ACTION>tertoos-cli candidate set sflow/polling_interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="sflow sample-direction" help="Sample direction">

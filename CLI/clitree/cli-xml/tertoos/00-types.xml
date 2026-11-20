@@ -766,6 +766,13 @@
          ext_pattern="md5(md5) sha1(sha1)"
          help="md5 | sha1"/>
 
+  <!-- NTP server version: sonic-ntp.yang NTP_SERVER.version range "3..4". -->
+  <PTYPE name="TERTOOS_NTP_VERSION"
+         method="regexp_select"
+         pattern="(3|4)"
+         ext_pattern="3(3) 4(4)"
+         help="3 | 4"/>
+
   <PTYPE name="TERTOOS_LOG_SEVERITY"
          method="regexp_select"
          pattern="(emerg|alert|crit|error|warning|notice|info|debug)"
@@ -1012,6 +1019,24 @@
          method="regexp"
          pattern="(([5-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-2][0-9]{3})|(3[0-5][0-9]{2})|(3600))"
          help="5..3600"/>
+
+  <!-- C4a (20/11/2026): faixas tiradas do YANG. lldp hello_time = sonic-lldp.yang
+       (5..254); rootguard_timeout = sonic-spanning-tree.yang (5..600); sflow
+       polling_interval = sonic-sflow.yang ("0|5..300", 0 = desliga o polling). -->
+  <PTYPE name="TERTOOS_RANGE_5_254"
+         method="regexp"
+         pattern="(([5-9])|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-4]))"
+         help="5..254"/>
+
+  <PTYPE name="TERTOOS_RANGE_5_600"
+         method="regexp"
+         pattern="(([5-9])|([1-9][0-9])|([1-5][0-9]{2})|(600))"
+         help="5..600"/>
+
+  <PTYPE name="TERTOOS_SFLOW_POLLING_INTERVAL"
+         method="regexp"
+         pattern="((0)|([5-9])|([1-9][0-9])|([1-2][0-9]{2})|(300))"
+         help="0 (off) or 5..300 seconds"/>
 
   <PTYPE name="TERTOOS_RANGE_6_40"
          method="regexp"

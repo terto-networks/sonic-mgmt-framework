@@ -94,8 +94,10 @@
       <ACTION>sudo -n /usr/bin/tertoos-cli show management-acl 2>/dev/null || tertoos-cli show management-acl</ACTION>
     </COMMAND>
     <COMMAND name="show acl" help="Show configured ACLs (tables and rules)">
-      <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_NAME" optional="true"/>
-      <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
+      <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_ACL_NAME" optional="true"/>
+      <!-- 20/11/2026: era `acl${name:+/}${name}` - o klish expande ${...} ANTES do shell e
+           trata ':' como separador, entao o '/' sumia (filtro "aclNOME", nunca filtrava). -->
+      <ACTION>if [ -n "${name}" ]; then tertoos-cli candidate show --filter acl/${name}; else tertoos-cli candidate show --filter acl; fi</ACTION>
     </COMMAND>
     <!-- Lock de configuracao e commit pendente de confirmacao (25/10/2026). -->
     <COMMAND name="show configuration lock"
@@ -361,7 +363,7 @@
       <ACTION>vtysh -c "show bgp neighbors"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp neighbor" help="BGP neighbor detail (single peer)">
-      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="addr" help="Neighbor address" ptype="TERTOOS_BGP_NEIGHBOR_ADDR"/>
       <ACTION>vtysh -c "show bgp neighbors ${addr}"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp ipv4 unicast" help="BGP IPv4 unicast RIB">
@@ -465,7 +467,7 @@
       <ACTION>vtysh -c "show ip bgp neighbors"</ACTION>
     </COMMAND>
     <COMMAND name="show ip bgp neighbor" help="Detail for a single neighbor">
-      <PARAM name="addr" help="Neighbor IP" ptype="STRING"/>
+      <PARAM name="addr" help="Neighbor IP" ptype="TERTOOS_BGP_NEIGHBOR_ADDR"/>
       <ACTION>vtysh -c "show ip bgp neighbor ${addr}"</ACTION>
     </COMMAND>
     <COMMAND name="show bgp ipv4 vpn summary" help="VPNv4 BGP summary (L3VPN)">
@@ -587,15 +589,15 @@
       <ACTION>vtysh -c "show evpn vni"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn vni detail" help="EVPN VNI detail">
-      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <PARAM name="vni" help="VNI id" ptype="TERTOOS_EVPN_VNI"/>
       <ACTION>vtysh -c "show evpn vni ${vni}"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn mac vni" help="EVPN MACs for a VNI">
-      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <PARAM name="vni" help="VNI id" ptype="TERTOOS_EVPN_VNI"/>
       <ACTION>vtysh -c "show evpn mac vni ${vni}"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn arp-cache vni" help="EVPN ARP/ND cache for a VNI">
-      <PARAM name="vni" help="VNI id" ptype="UINT"/>
+      <PARAM name="vni" help="VNI id" ptype="TERTOOS_EVPN_VNI"/>
       <ACTION>vtysh -c "show evpn arp-cache vni ${vni}"</ACTION>
     </COMMAND>
     <COMMAND name="show evpn es" help="EVPN ethernet-segments">
@@ -779,11 +781,11 @@
       <ACTION>vtysh -c "clear bgp *"</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp neighbor" help="Reset a specific BGP neighbor">
-      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="addr" help="Neighbor address" ptype="TERTOOS_BGP_NEIGHBOR_ADDR"/>
       <ACTION>vtysh -c "clear bgp ${addr}"</ACTION>
     </COMMAND>
     <COMMAND name="clear bgp neighbor soft" help="Soft-clear a BGP neighbor">
-      <PARAM name="addr" help="Neighbor address" ptype="STRING"/>
+      <PARAM name="addr" help="Neighbor address" ptype="TERTOOS_BGP_NEIGHBOR_ADDR"/>
       <PARAM name="dir" help="in | out" ptype="TERTOOS_IN_OUT"/>
       <ACTION>vtysh -c "clear bgp ${addr} soft ${dir}"</ACTION>
     </COMMAND>

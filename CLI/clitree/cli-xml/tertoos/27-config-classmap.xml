@@ -78,11 +78,11 @@
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_traffic_class ${v}</ACTION>
     </COMMAND>
     <COMMAND name="match access-group ipv4" help="Match IPv4 ACL">
-      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_access_group_v4 ${acl}</ACTION>
     </COMMAND>
     <COMMAND name="match access-group ipv6" help="Match IPv6 ACL">
-      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_access_group_v6 ${acl}</ACTION>
     </COMMAND>
   </VIEW>

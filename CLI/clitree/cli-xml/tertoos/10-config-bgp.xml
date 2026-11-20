@@ -396,7 +396,7 @@
     </COMMAND>
     <COMMAND name="redistribute connected" help="Redistribute connected">
       <PARAM name="rmap" help="Route-policy name (optional)"
-             ptype="TERTOOS_NAME" optional="true"/>
+             ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_connected true&#xA;
         if [ -n "${rmap}" ]; then&#xA;
@@ -414,7 +414,7 @@
     </COMMAND>
     <COMMAND name="redistribute static" help="Redistribute static">
       <PARAM name="rmap" help="Route-policy name (optional)"
-             ptype="TERTOOS_NAME" optional="true"/>
+             ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/redistribute_static true&#xA;
         if [ -n "${rmap}" ]; then&#xA;
@@ -603,7 +603,7 @@
     </COMMAND>
     <COMMAND name="default-originate" help="Originate default route">
       <PARAM name="rmap" help="Route-policy name (optional)"
-             ptype="TERTOOS_NAME" optional="true"/>
+             ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/send_default_route true&#xA;
         if [ -n "${rmap}" ]; then&#xA;

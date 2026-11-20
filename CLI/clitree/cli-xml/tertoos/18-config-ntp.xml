@@ -62,7 +62,7 @@
     </COMMAND>
     <COMMAND name="ntp server version" help="Set NTP version (3|4)">
       <PARAM name="addr" help="Server IP" ptype="TERTOOS_IP_OR_HOST"/>
-      <PARAM name="ver" help="3 | 4" ptype="UINT"/>
+      <PARAM name="ver" help="3 | 4" ptype="TERTOOS_NTP_VERSION"/>
       <ACTION>tertoos-cli candidate set ntp/server/${addr}/version ${ver}</ACTION>
     </COMMAND>
     <COMMAND name="no ntp server" help="Remove a server">

@@ -80,7 +80,7 @@
 
     <COMMAND name="access-class"
              help="Apply IPv4 access-list to inbound connections">
-      <PARAM name="acl" help="ACL name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="ACL name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate set line/${linekey}/access-class ${acl}</ACTION>
     </COMMAND>
     <COMMAND name="no access-class" help="Remove access-class">
