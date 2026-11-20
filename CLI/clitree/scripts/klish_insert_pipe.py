@@ -69,16 +69,53 @@ def align_and_save(temp_file_name, output_file_name):
 '''
 def addpipe(command):
    splitstr = command.get('name').split()
-   action = command.find(ACTION_XPATH_EXPR).get('builtin')
+   action_el = command.find(ACTION_XPATH_EXPR)
+   action = action_el.get('builtin') if action_el is not None else None
    if (splitstr[0] == 'show' or splitstr[0] == 'get'):
       if action in actionlst:
           etree.SubElement(command, "{"+XI_NS_HREF+"}include", href = PIPE_WITHOUT_DISPLAY_XML)
       else:
           etree.SubElement(command, "{"+XI_NS_HREF+"}include", href = PIPE_XML)
+          wrap_action(action_el)
 
       if DBG_FLAG == True:
           print("Adding Pipe for cmd: ", splitstr)
    return command
+
+
+# TertoOS (20/11/2026): no upstream quem aplicava o `| grep` era o renderer Python
+# (rpipe_utils, so' p/ comandos REST/Jinja). As ACTIONs TertoOS sao shell e IGNORAVAM o
+# pipe (o filtro era aceito e a saida vinha inteira). Aqui a ACTION shell de todo `show`
+# vira uma funcao; com filtro, a saida passa pelo scripts/tos_pipe.py.
+# O regex vai em ASPAS SIMPLES sem escape (${^n_LINE}): chega exato, e o ptype
+# TERTOOS_PIPE_REGEX proibe a aspa simples (nao da' p/ sair das aspas).
+PIPE_STAGES      = 3
+TOS_PIPE_SCRIPT  = "/usr/sbin/cli/scripts/tos_pipe.py"
+WRAP_MARK        = "__tos_show"
+
+
+def wrap_text(text):
+   """Texto shell original -> texto embrulhado (sem filtro, executa igual ao original)."""
+   args = " ".join("'${^%d_switch_var}' '${^%d_LINE}' '${^%d_ignore-case}'" % (n, n, n)
+                   for n in range(1, PIPE_STAGES + 1))
+   return ("\n" + WRAP_MARK + "() {\n" + text.strip("\n") + "\n}\n"
+           "if [ -n '${^1_switch_var}' ]; then\n"
+           "  " + WRAP_MARK + " 2>&1 | python3 " + TOS_PIPE_SCRIPT + " " + args + "\n"
+           "else\n"
+           "  " + WRAP_MARK + "\n"
+           "fi\n")
+
+
+def wrap_action(action_el):
+   """Embrulha so' ACTION shell (sem builtin, ou clish_script) com texto; idempotente."""
+   if action_el is None:
+      return
+   if action_el.get('builtin') not in (None, 'clish_script'):
+      return
+   text = action_el.text or ""
+   if not text.strip() or WRAP_MARK in text or len(action_el) != 0:
+      return
+   action_el.text = wrap_text(text)
 
 
 '''

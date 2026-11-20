@@ -80,5 +80,11 @@ test-viewvars:
 test-default-on:
 	python3 scripts/test_default_on_toggles.py
 
+# Filtro `show ... | include/exclude/begin/count` (include/pipe.xml +
+# klish_insert_pipe.wrap_text + renderer/scripts/tos_pipe.py).
+.PHONY: test-pipe
+test-pipe:
+	python3 scripts/test_pipe_filter.py
+
 .PHONY: test
-test: test-ptypes test-viewvars test-default-on
+test: test-ptypes test-viewvars test-default-on test-pipe
