@@ -23,7 +23,7 @@
              help="Configure policy-map (QoS)"
              view="config-policy-map-view"
              viewid="pmapname=${name};pmaptype=qos">
-      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_POLICY_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context policy-map ${name}&#xA;
         tertoos-cli candidate set policy-map/${name}/policy_type qos&#xA;
@@ -33,14 +33,14 @@
              help="Configure policy-map (traffic)"
              view="config-policy-map-view"
              viewid="pmapname=${name};pmaptype=traffic">
-      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_POLICY_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context policy-map ${name}&#xA;
         tertoos-cli candidate set policy-map/${name}/policy_type traffic&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no policy-map" help="Remove policy-map">
-      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Policy-map name" ptype="TERTOOS_POLICY_MAP_NAME"/>
       <ACTION>tertoos-cli candidate delete policy-map/${name}</ACTION>
     </COMMAND>
   </VIEW>
@@ -54,14 +54,14 @@
              help="Bind a class to this policy"
              view="config-policy-map-class-view"
              viewid="pmapname=${pmapname};pmaptype=${pmaptype};pmapclass=${name}">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context policy-map-class ${name}&#xA;
         tertoos-cli candidate set policy-map/${pmapname}/class/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no class" help="Remove class binding">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>tertoos-cli candidate delete policy-map/${pmapname}/class/${name}</ACTION>
     </COMMAND>
   </VIEW>
@@ -84,7 +84,7 @@
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/set_precedence ${n}</ACTION>
     </COMMAND>
     <COMMAND name="police" help="Apply policer">
-      <PARAM name="pol" help="Policer name" ptype="TERTOOS_NAME"/>
+      <PARAM name="pol" help="Policer name" ptype="TERTOOS_POLICER_NAME"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/police_name ${pol}</ACTION>
     </COMMAND>
     <COMMAND name="queue" help="Steer to queue">
@@ -92,11 +92,11 @@
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/queue_index ${q}</ACTION>
     </COMMAND>
     <COMMAND name="wred-profile" help="Bind WRED profile">
-      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_QOS_WRED_PROFILE"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/wred_profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="parent-class" help="Hierarchical parent class">
-      <PARAM name="name" help="Parent class name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Parent class name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>tertoos-cli candidate set policy-map/${pmapname}/class/${pmapclass}/parent_class ${name}</ACTION>
     </COMMAND>
   </VIEW>
