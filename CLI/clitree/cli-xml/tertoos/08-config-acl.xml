@@ -165,6 +165,18 @@
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 
+    <!-- Tipo ICMP numa regra já criada (como o src-port). Ex.: liberar o
+         echo-reply: permit 5 icmp any any / icmp-type 5 0. -->
+    <COMMAND name="icmp-type" help="Set ICMP type match on an existing rule (needs protocol icmp)">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="type" help="ICMP type 0..255" ptype="TERTOOS_RANGE_0_255"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/icmp_type ${type}</ACTION>
+    </COMMAND>
+    <COMMAND name="no icmp-type" help="Remove the ICMP type match from a rule">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}/icmp_type</ACTION>
+    </COMMAND>
+
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
       <PARAM name="seq" help="Sequence number" ptype="TERTOOS_RANGE_1_9999"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
@@ -249,6 +261,19 @@
       <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="port" help="Source L4 port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
+    </COMMAND>
+
+    <!-- Tipo ICMPv6 numa regra já criada (como o src-port). Ex.: liberar o
+         neighbor discovery antes de um deny icmpv6:
+         permit 5 icmpv6 any any / icmp-type 5 135 (NS) e 136 (NA). -->
+    <COMMAND name="icmp-type" help="Set ICMPv6 type match on an existing rule (needs protocol icmpv6)">
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="type" help="ICMPv6 type 0..255" ptype="TERTOOS_RANGE_0_255"/>
+      <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/icmpv6_type ${type}</ACTION>
+    </COMMAND>
+    <COMMAND name="no icmp-type" help="Remove the ICMPv6 type match from a rule">
+      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}/icmpv6_type</ACTION>
     </COMMAND>
 
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
