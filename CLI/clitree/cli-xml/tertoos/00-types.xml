@@ -156,6 +156,13 @@
          pattern="(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))"
          help="IPv4 address A.B.C.D"/>
 
+  <!-- IPv4 address OR prefix (A.B.C.D or A.B.C.D/M) — `show ip route <x>`:
+       endereco = rota que casa (longest match); prefixo = a entrada exata. -->
+  <PTYPE name="TERTOOS_IPV4_ADDR_OR_PREFIX"
+         method="regexp"
+         pattern="(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])(/([0-9]|[1-2][0-9]|3[0-2]))?)"
+         help="IPv4 address A.B.C.D or prefix A.B.C.D/M"/>
+
   <!-- PW/L2VPN MTU — derived from YANG range 64..9216 (tertoos-l2vpn.yang) -->
   <PTYPE name="TERTOOS_MTU"
          method="regexp"

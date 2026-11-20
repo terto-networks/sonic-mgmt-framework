@@ -168,6 +168,44 @@
     <COMMAND name="show ip arp" help="Show IPv4 ARP cache (kernel)">
       <ACTION>ip -4 neigh show</ACTION>
     </COMMAND>
+    <!-- `show ip route` = RIB do FRR (zebra) com os codigos de protocolo, o que o
+         operador vindo de Cisco/Huawei digita primeiro. Antes caia em "Invalid input"
+         (20/11/2026): `show ip arp`/`show ip bgp` fazem do `show ip` um prefixo de
+         comando conhecido, entao o `show <rest>` generico nunca era alcancado (e o
+         passthrough chamaria o `show` do SONiC, que o Lite nao tem).
+         `show ipv4 route` continua = FIB do kernel (o que foi INSTALADO). -->
+    <COMMAND name="show ip route" help="IPv4 routing table (RIB: connected/static/OSPF/BGP/IS-IS)">
+      <PARAM name="target" help="Address (longest match) or exact prefix"
+             ptype="TERTOOS_IPV4_ADDR_OR_PREFIX" optional="true"/>
+      <ACTION>vtysh -c "show ip route ${target}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route summary" help="IPv4 route count per protocol">
+      <ACTION>vtysh -c "show ip route summary"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route vrf" help="IPv4 routing table of a VRF ('all' = every VRF)">
+      <PARAM name="vrf" help="VRF name or 'all' (Tab lists the configured ones)" ptype="TERTOOS_VRF_NAME"/>
+      <PARAM name="target" help="Address (longest match) or exact prefix"
+             ptype="TERTOOS_IPV4_ADDR_OR_PREFIX" optional="true"/>
+      <ACTION>vtysh -c "show ip route vrf ${vrf} ${target}"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route connected" help="Connected IPv4 routes only">
+      <ACTION>vtysh -c "show ip route connected"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route static" help="Static IPv4 routes only">
+      <ACTION>vtysh -c "show ip route static"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route ospf" help="OSPF IPv4 routes only">
+      <ACTION>vtysh -c "show ip route ospf"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route bgp" help="BGP IPv4 routes only">
+      <ACTION>vtysh -c "show ip route bgp"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route isis" help="IS-IS IPv4 routes only">
+      <ACTION>vtysh -c "show ip route isis"</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip route kernel" help="Kernel IPv4 routes only (not managed by FRR)">
+      <ACTION>vtysh -c "show ip route kernel"</ACTION>
+    </COMMAND>
     <COMMAND name="show ipv6 neighbors" help="Show IPv6 neighbor cache (kernel)">
       <ACTION>ip -6 neigh show</ACTION>
     </COMMAND>
