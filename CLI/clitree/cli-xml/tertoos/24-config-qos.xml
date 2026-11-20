@@ -20,11 +20,11 @@
              help="Configure DSCP→TC map"
              view="config-qos-dscp-tc-view"
              viewid="qosmap=${name}">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_DSCP_TC_MAP"/>
       <ACTION>tertoos-cli candidate context qos-dscp-tc ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos map dscp-to-tc" help="Remove DSCP→TC map">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_DSCP_TC_MAP"/>
       <ACTION>tertoos-cli candidate delete qos/dscp-to-tc/${name}</ACTION>
     </COMMAND>
 
@@ -32,11 +32,11 @@
              help="Configure TC→Queue map"
              view="config-qos-tc-queue-view"
              viewid="qosmap=${name}">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_TC_QUEUE_MAP"/>
       <ACTION>tertoos-cli candidate context qos-tc-queue ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos map tc-to-queue" help="Remove TC→Queue map">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_TC_QUEUE_MAP"/>
       <ACTION>tertoos-cli candidate delete qos/tc-to-queue/${name}</ACTION>
     </COMMAND>
 
@@ -44,11 +44,11 @@
              help="Configure TC→Priority-Group map"
              view="config-qos-tc-pg-view"
              viewid="qosmap=${name}">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_TC_PG_MAP"/>
       <ACTION>tertoos-cli candidate context qos-tc-pg ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos map tc-to-pg" help="Remove TC→PG map">
-      <PARAM name="name" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Map name" ptype="TERTOOS_QOS_TC_PG_MAP"/>
       <ACTION>tertoos-cli candidate delete qos/tc-to-pg/${name}</ACTION>
     </COMMAND>
 
@@ -56,11 +56,11 @@
              help="Configure scheduler profile"
              view="config-qos-scheduler-view"
              viewid="schedname=${name}">
-      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_QOS_SCHEDULER"/>
       <ACTION>tertoos-cli candidate context qos-scheduler ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos scheduler" help="Remove scheduler profile">
-      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_QOS_SCHEDULER"/>
       <ACTION>tertoos-cli candidate delete qos/scheduler/${name}</ACTION>
     </COMMAND>
 
@@ -69,11 +69,11 @@
              help="Configure WRED profile (congestion avoidance)"
              view="config-qos-wred-view"
              viewid="wredname=${name}">
-      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_QOS_WRED_PROFILE"/>
       <ACTION>tertoos-cli candidate context qos-wred ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no wred-profile" help="Remove WRED profile">
-      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="WRED profile name" ptype="TERTOOS_QOS_WRED_PROFILE"/>
       <ACTION>tertoos-cli candidate delete qos/wred-profile/${name}</ACTION>
     </COMMAND>
 
@@ -81,11 +81,11 @@
              help="Configure buffer pool"
              view="config-qos-buffer-pool-view"
              viewid="poolname=${name}">
-      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_QOS_BUFFER_POOL"/>
       <ACTION>tertoos-cli candidate context qos-buffer-pool ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no buffer-pool" help="Remove buffer pool">
-      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Buffer pool name" ptype="TERTOOS_QOS_BUFFER_POOL"/>
       <ACTION>tertoos-cli candidate delete qos/buffer-pool/${name}</ACTION>
     </COMMAND>
 
@@ -93,11 +93,11 @@
              help="Configure buffer profile"
              view="config-qos-buffer-profile-view"
              viewid="profname=${name}">
-      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_QOS_BUFFER_PROFILE"/>
       <ACTION>tertoos-cli candidate context qos-buffer-profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no buffer-profile" help="Remove buffer profile">
-      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_QOS_BUFFER_PROFILE"/>
       <ACTION>tertoos-cli candidate delete qos/buffer-profile/${name}</ACTION>
     </COMMAND>
   </VIEW>
@@ -116,11 +116,11 @@
     </COMMAND>
 
     <COMMAND name="green min-threshold" help="Green min threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_min_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="green max-threshold" help="Green max threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/green_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="green drop-probability" help="Green drop probability %">
@@ -129,11 +129,11 @@
     </COMMAND>
 
     <COMMAND name="yellow min-threshold" help="Yellow min threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_min_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="yellow max-threshold" help="Yellow max threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/yellow_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="yellow drop-probability" help="Yellow drop probability %">
@@ -142,11 +142,11 @@
     </COMMAND>
 
     <COMMAND name="red min-threshold" help="Red min threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_min_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="red max-threshold" help="Red max threshold (bytes)">
-      <PARAM name="b" help="bytes" ptype="UINT"/>
+      <PARAM name="b" help="bytes" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set qos/wred-profile/${wredname}/red_max_threshold ${b}</ACTION>
     </COMMAND>
     <COMMAND name="red drop-probability" help="Red drop probability %">

@@ -144,7 +144,7 @@
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
       <PARAM name="range_val" help="Length"
-             ptype="UINT" optional="true"/>
+             ptype="TERTOOS_RANGE_0_128" optional="true"/>
       <ACTION>
         if [ -n "${range_val}" ]; then&#xA;
             tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "permit ${prefix} ${range_kw} ${range_val}"&#xA;
@@ -159,7 +159,7 @@
       <PARAM name="range_kw" help="Optional 'le|ge|eq &lt;len&gt;'"
              ptype="TERTOOS_PREFIX_MATCH_KW" optional="true"/>
       <PARAM name="range_val" help="Length"
-             ptype="UINT" optional="true"/>
+             ptype="TERTOOS_RANGE_0_128" optional="true"/>
       <ACTION>
         if [ -n "${range_val}" ]; then&#xA;
             tertoos-cli candidate set prefix-set/${psname}/entry/${seq} "deny ${prefix} ${range_kw} ${range_val}"&#xA;
@@ -321,24 +321,24 @@
     </COMMAND>
     <COMMAND name="match med" help="Match MED value">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="value" help="MED value" ptype="UINT"/>
+      <PARAM name="value" help="MED value" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/med ${value}</ACTION>
     </COMMAND>
     <COMMAND name="match local-preference" help="Match local-preference">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="value" help="LP value" ptype="UINT"/>
+      <PARAM name="value" help="LP value" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/match/local-pref ${value}</ACTION>
     </COMMAND>
 
     <!-- Set actions -->
     <COMMAND name="set local-preference" help="Set local-preference">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="value" help="LP value" ptype="UINT"/>
+      <PARAM name="value" help="LP value" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/local-pref ${value}</ACTION>
     </COMMAND>
     <COMMAND name="set med" help="Set MED">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="value" help="MED value" ptype="UINT"/>
+      <PARAM name="value" help="MED value" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/med ${value}</ACTION>
     </COMMAND>
     <COMMAND name="set next-hop" help="Set next-hop">
@@ -353,7 +353,7 @@
     </COMMAND>
     <COMMAND name="set tag" help="Set route tag">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="tag" help="Tag value" ptype="UINT"/>
+      <PARAM name="tag" help="Tag value" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set route-policy/${rplname}/stmt/${seq}/set/tag ${tag}</ACTION>
     </COMMAND>
     <!-- SR-TE steering (ROUTE_MAP.set_srte_color, sonic-route-map.yang): a rota

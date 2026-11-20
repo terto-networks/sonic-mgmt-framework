@@ -154,19 +154,19 @@
     </COMMAND>
 
     <COMMAND escape_chars="`$\&quot;" name="remark" help="Add a comment to a rule (does not match)">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="text" help="Comment text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/remark "${text}"</ACTION>
     </COMMAND>
 
     <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
-      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="port" help="Source L4 port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number" ptype="TERTOOS_RANGE_1_9999"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
     </COMMAND>
 
@@ -246,13 +246,13 @@
     </COMMAND>
 
     <COMMAND name="src-port" help="Set source L4 port match on an existing rule">
-      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number of an existing permit/deny rule" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="port" help="Source L4 port 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/src_port ${port}</ACTION>
     </COMMAND>
 
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number" ptype="TERTOOS_RANGE_1_9999"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
     </COMMAND>
 
@@ -321,7 +321,7 @@
     </COMMAND>
 
     <COMMAND name="no" help="Remove an ACL rule by sequence number">
-      <PARAM name="seq" help="Sequence number" ptype="UINT"/>
+      <PARAM name="seq" help="Sequence number" ptype="TERTOOS_RANGE_1_9999"/>
       <ACTION>tertoos-cli candidate delete acl/${aclname}/rule/${seq}</ACTION>
     </COMMAND>
 

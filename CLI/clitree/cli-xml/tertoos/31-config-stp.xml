@@ -145,12 +145,12 @@
     </COMMAND>
     <COMMAND name="spanning-tree mst root primary"
              help="Force this bridge as MST instance root (priority 24576)">
-      <PARAM name="inst" help="MST instance" ptype="UINT"/>
+      <PARAM name="inst" help="MST instance" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority 24576</ACTION>
     </COMMAND>
     <COMMAND name="spanning-tree mst root secondary"
              help="Backup MST instance root (priority 28672)">
-      <PARAM name="inst" help="MST instance" ptype="UINT"/>
+      <PARAM name="inst" help="MST instance" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate set stp/mst_inst/${inst}/bridge_priority 28672</ACTION>
     </COMMAND>
 
@@ -176,7 +176,7 @@
       <ACTION>tertoos-cli candidate set stp/mst/global/revision ${r}</ACTION>
     </COMMAND>
     <COMMAND name="max-hops" help="MST max hops (1..40; default 20)">
-      <PARAM name="h" help="Max hops" ptype="UINT"/>
+      <PARAM name="h" help="Max hops" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>tertoos-cli candidate set stp/mst/global/max_hops ${h}</ACTION>
     </COMMAND>
     <COMMAND name="instance" help="Map VLANs to MST instance">
@@ -187,7 +187,7 @@
       <ACTION>tertoos-cli candidate set stp/mst_inst/${n}/vlan ${vlist}</ACTION>
     </COMMAND>
     <COMMAND name="no instance" help="Remove MST instance VLAN mapping">
-      <PARAM name="n" help="MST instance" ptype="UINT"/>
+      <PARAM name="n" help="MST instance" ptype="TERTOOS_RANGE_0_255"/>
       <ACTION>tertoos-cli candidate delete stp/mst_inst/${n}</ACTION>
     </COMMAND>
 

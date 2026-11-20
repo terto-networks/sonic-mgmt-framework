@@ -81,7 +81,7 @@
     </COMMAND>
 
     <COMMAND name="mtu" help="Tunnel MTU (typical 1420)">
-      <PARAM name="bytes" help="MTU in bytes" ptype="UINT"/>
+      <PARAM name="bytes" help="MTU in bytes" ptype="TERTOOS_MTU"/>
       <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/mtu ${bytes}</ACTION>
     </COMMAND>
     <COMMAND name="no mtu" help="Reset tunnel MTU">

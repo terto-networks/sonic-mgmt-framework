@@ -342,12 +342,12 @@
          possível mas exige saber o IP em commit-time (não temos).
     -->
     <COMMAND name="ip ospf area" help="Bind interface to an OSPF area">
-      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <PARAM name="proc" help="OSPF process id" ptype="TERTOOS_RANGE_1_65535"/>
       <PARAM name="area" help="Area id (decimal or A.B.C.D)" ptype="TERTOOS_OSPF_AREA_ID"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/area-id ${area}</ACTION>
     </COMMAND>
     <COMMAND name="no ip ospf area" help="Unbind interface from OSPF">
-      <PARAM name="proc" help="OSPF process id" ptype="UINT"/>
+      <PARAM name="proc" help="OSPF process id" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate delete interface/${ifname}/ip-ospf/area-id</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf cost" help="OSPF link cost">
@@ -603,28 +603,28 @@
 
     <!-- ===== S12.B — QoS bindings (PORT_QOS_MAP) ========================== -->
     <COMMAND name="qos service-policy dscp-to-tc-map" help="Bind DSCP→TC map">
-      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="map" help="Map name" ptype="TERTOOS_QOS_DSCP_TC_MAP"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/dscp-to-tc-map ${map}</ACTION>
     </COMMAND>
     <COMMAND name="no qos service-policy dscp-to-tc-map" help="Unbind DSCP→TC map">
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/dscp-to-tc-map</ACTION>
     </COMMAND>
     <COMMAND name="qos service-policy tc-to-queue-map" help="Bind TC→Queue map">
-      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="map" help="Map name" ptype="TERTOOS_QOS_TC_QUEUE_MAP"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-queue-map ${map}</ACTION>
     </COMMAND>
     <COMMAND name="no qos service-policy tc-to-queue-map" help="Unbind TC→Queue map">
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-queue-map</ACTION>
     </COMMAND>
     <COMMAND name="qos service-policy tc-to-pg-map" help="Bind TC→PG map">
-      <PARAM name="map" help="Map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="map" help="Map name" ptype="TERTOOS_QOS_TC_PG_MAP"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/service-policy/tc-to-pg-map ${map}</ACTION>
     </COMMAND>
     <COMMAND name="no qos service-policy tc-to-pg-map" help="Unbind TC→PG map">
       <ACTION>tertoos-cli candidate delete interface/${ifname}/qos/service-policy/tc-to-pg-map</ACTION>
     </COMMAND>
     <COMMAND name="qos scheduler-policy" help="Bind scheduler profile">
-      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Scheduler name" ptype="TERTOOS_QOS_SCHEDULER"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/scheduler-policy ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos scheduler-policy" help="Unbind scheduler profile">
@@ -635,14 +635,14 @@
          do saibridge consome PORT_QOS_MAP e aplica via tc (policer ingress /
          TBF egress). `no` zera o campo (0 = remover). -->
     <COMMAND name="qos rate-limit input" help="Rate-limit ingress traffic (policer)">
-      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <PARAM name="kbps" help="Rate in kbps" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input ${kbps}</ACTION>
     </COMMAND>
     <COMMAND name="no qos rate-limit input" help="Remove ingress rate-limit">
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/input 0</ACTION>
     </COMMAND>
     <COMMAND name="qos rate-limit output" help="Shape egress traffic (TBF)">
-      <PARAM name="kbps" help="Rate in kbps" ptype="UINT"/>
+      <PARAM name="kbps" help="Rate in kbps" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/rate-limit/output ${kbps}</ACTION>
     </COMMAND>
     <COMMAND name="no qos rate-limit output" help="Remove egress shaper">
@@ -677,7 +677,7 @@
         <PARAM name="scheduler"    help="Bind a scheduler profile" mode="subcommand" ptype="SUBCOMMAND"/>
         <PARAM name="wred-profile" help="Bind a WRED profile"      mode="subcommand" ptype="SUBCOMMAND"/>
       </PARAM>
-      <PARAM name="name" help="Profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Profile name" ptype="TERTOOS_QOS_QUEUE_PROFILE"/>
       <ACTION>if [ "${what}" = "scheduler" ]; then tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/scheduler ${name}; else tertoos-cli candidate set interface/${ifname}/qos/queue/${q}/wred_profile ${name}; fi</ACTION>
     </COMMAND>
     <COMMAND name="no qos queue" help="Unbind a scheduler or WRED profile from a queue">
@@ -695,7 +695,7 @@
     <COMMAND name="qos buffer-profile-pg" help="Bind buffer profile to a PG">
       <PARAM name="pg" help="PG 0..7" ptype="TERTOOS_RANGE_0_7"/>
       <PARAM name="prof_kw" help="profile" ptype="SUBCOMMAND" mode="subcommand" value="profile"/>
-      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Buffer profile name" ptype="TERTOOS_QOS_BUFFER_PROFILE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/qos/buffer-pg/${pg}/profile ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no qos buffer-profile-pg" help="Unbind buffer profile from PG">
@@ -805,7 +805,7 @@
       <PARAM name="type" help="broadcast | unknown-unicast | unknown-multicast"
              ptype="TERTOOS_STORM_TYPE"/>
       <PARAM name="unit" help="kbps | pps" ptype="TERTOOS_STORM_UNIT"/>
-      <PARAM name="value" help="Rate limit value" ptype="UINT"/>
+      <PARAM name="value" help="Rate limit value" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set storm-control/${ifname}/${type}/${unit} ${value}</ACTION>
     </COMMAND>
     <COMMAND name="no storm-control"
@@ -827,7 +827,7 @@
       <ACTION>tertoos-cli candidate set interface/${ifname}/learn_mode disable</ACTION>
     </COMMAND>
     <COMMAND name="mac-limit" help="Maximum MAC addresses learned on this port">
-      <PARAM name="n" help="Max MACs (0 = unlimited)" ptype="UINT"/>
+      <PARAM name="n" help="Max MACs (0 = unlimited)" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/mac_limit ${n}</ACTION>
     </COMMAND>
     <COMMAND name="no mac-limit" help="Remove MAC limit">

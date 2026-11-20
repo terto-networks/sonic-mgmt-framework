@@ -108,7 +108,7 @@
 
     <COMMAND name="terminal" help="Set terminal parameters"/>
     <COMMAND name="terminal length" help="Set terminal pager length">
-      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
+      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="TERTOOS_RANGE_0_512"/>
       <ACTION>tertoos-cli terminal length ${lines}</ACTION>
     </COMMAND>
 

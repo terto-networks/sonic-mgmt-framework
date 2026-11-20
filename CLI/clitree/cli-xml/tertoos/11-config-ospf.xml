@@ -35,7 +35,7 @@
              help="Configure OSPFv2"
              view="config-router-ospf-view"
              viewid="ospfvrf=default;ospfid=${id}">
-      <PARAM name="id" help="OSPF process id (informational)" ptype="UINT"/>
+      <PARAM name="id" help="OSPF process id (informational)" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>
         tertoos-cli candidate context router-ospf default&#xA;
         tertoos-cli candidate set ospf/default/enable true&#xA;
@@ -46,7 +46,7 @@
              help="Configure OSPFv2 in a VRF"
              view="config-router-ospf-view"
              viewid="ospfvrf=${vrf};ospfid=${id}">
-      <PARAM name="id" help="OSPF process id (informational)" ptype="UINT"/>
+      <PARAM name="id" help="OSPF process id (informational)" ptype="TERTOOS_RANGE_1_65535"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-ospf ${vrf}&#xA;
@@ -55,7 +55,7 @@
     </COMMAND>
 
     <COMMAND name="no router ospf" help="Remove OSPFv2 configuration">
-      <PARAM name="id" help="OSPF process id" ptype="UINT"/>
+      <PARAM name="id" help="OSPF process id" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate delete ospf/default</ACTION>
     </COMMAND>
 
@@ -88,11 +88,11 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="default-metric" help="Default metric for redistributed routes">
-      <PARAM name="value" help="Metric" ptype="UINT"/>
+      <PARAM name="value" help="Metric" ptype="TERTOOS_RANGE_0_16777214"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/default-metric ${value}</ACTION>
     </COMMAND>
     <COMMAND name="auto-cost reference-bandwidth" help="Reference bandwidth (Mbps)">
-      <PARAM name="bw" help="Mbps" ptype="UINT"/>
+      <PARAM name="bw" help="Mbps" ptype="TERTOOS_RANGE_1_4294967"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/auto-cost-reference-bandwidth ${bw}</ACTION>
     </COMMAND>
 
@@ -319,7 +319,7 @@
          posicional de `redistribute <proto> [rmap]`. Leaves metric e
          metric-type do OSPFV2_ROUTER_DISTRIBUTE_ROUTE (tertoos-ospf.yang). -->
     <COMMAND name="redistribute connected metric" help="Metric of redistributed connected routes">
-      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <PARAM name="metric" help="Metric value" ptype="TERTOOS_RANGE_0_16777214"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/metric ${metric}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute connected metric-type" help="External type of redistributed connected routes">
@@ -327,7 +327,7 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected/metric-type ${mtype}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute static metric" help="Metric of redistributed static routes">
-      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <PARAM name="metric" help="Metric value" ptype="TERTOOS_RANGE_0_16777214"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/metric ${metric}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute static metric-type" help="External type of redistributed static routes">
@@ -335,7 +335,7 @@
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static/metric-type ${mtype}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute bgp metric" help="Metric of redistributed bgp routes">
-      <PARAM name="metric" help="Metric value" ptype="UINT"/>
+      <PARAM name="metric" help="Metric value" ptype="TERTOOS_RANGE_0_16777214"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp/metric ${metric}</ACTION>
     </COMMAND>
     <COMMAND name="redistribute bgp metric-type" help="External type of redistributed bgp routes">
@@ -445,7 +445,7 @@
     </COMMAND>
 
     <COMMAND name="default-cost" help="Stub area default cost">
-      <PARAM name="cost" help="Cost" ptype="UINT"/>
+      <PARAM name="cost" help="Cost" ptype="TERTOOS_RANGE_0_16777215"/>
       <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/area/${ospfarea}/stub-default-cost ${cost}</ACTION>
     </COMMAND>
 
