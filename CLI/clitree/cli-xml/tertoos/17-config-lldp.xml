@@ -20,7 +20,7 @@
       <ACTION>tertoos-cli candidate set lldp/enabled false</ACTION>
     </COMMAND>
     <COMMAND name="lldp hello" help="Hello time (s)">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_5_254"/>
       <ACTION>tertoos-cli candidate set lldp/hello_time ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lldp multiplier" help="Hold-time multiplier">

@@ -104,7 +104,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
-      <PARAM name="prefix" help="prefix/len" ptype="STRING"/>
+      <PARAM name="prefix" help="prefix/len" ptype="TERTOOS_IPV6_PREFIX"/>
       <PARAM name="index" help="SID index" ptype="UINT"/>
       <ACTION>
         tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}&#xA;
@@ -165,11 +165,11 @@
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub-default-cost ${n}</ACTION>
     </COMMAND>
     <COMMAND name="import-list" help="Apply import filter">
-      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/import-list ${acl}</ACTION>
     </COMMAND>
     <COMMAND name="export-list" help="Apply export filter">
-      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_NAME"/>
+      <PARAM name="acl" help="Access-list name" ptype="TERTOOS_ACL_NAME"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/export-list ${acl}</ACTION>
     </COMMAND>
   </VIEW>

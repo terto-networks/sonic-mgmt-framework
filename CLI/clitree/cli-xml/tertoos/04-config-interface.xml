@@ -403,11 +403,11 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="ip ospf hello-interval" help="Hello interval (seconds)">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/hello-interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf dead-interval" help="Dead interval (seconds)">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/ip-ospf/dead-interval ${s}</ACTION>
     </COMMAND>
     <COMMAND name="ip ospf network" help="OSPF network type">

@@ -74,7 +74,7 @@
     <!-- Root guard timeout -->
     <COMMAND name="spanning-tree rootguard-timeout"
              help="Root guard timeout (5..600s; default 30)">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_5_600"/>
       <ACTION>tertoos-cli candidate set stp/global/rootguard_timeout ${s}</ACTION>
     </COMMAND>
 

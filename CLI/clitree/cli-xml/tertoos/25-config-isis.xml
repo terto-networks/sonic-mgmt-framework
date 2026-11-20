@@ -121,14 +121,14 @@
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/segment_routing ${state}</ACTION>
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
-      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IP_PREFIX"/>
       <PARAM name="index" help="SID index" ptype="UINT"/>
       <ACTION>
         tertoos-cli candidate set isis/prefix-sid/${isisvrf}/${isistag}/${prefix}/index ${index}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no segment-routing prefix-sid-map" help="Remove prefix-sid map entry">
-      <PARAM name="prefix" help="A.B.C.D/M" ptype="STRING"/>
+      <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IP_PREFIX"/>
       <ACTION>tertoos-cli candidate delete isis/prefix-sid/${isisvrf}/${isistag}/${prefix}</ACTION>
     </COMMAND>
     <COMMAND name="mpls-te" help="MPLS-TE toggle (control-plane)">

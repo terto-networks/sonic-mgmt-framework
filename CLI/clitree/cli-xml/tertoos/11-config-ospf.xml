@@ -288,7 +288,7 @@
 
     <!-- Redistribute -->
     <COMMAND name="redistribute connected" help="Redistribute connected routes">
-      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
+      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/redistribute/connected&#xA;
         if [ -n "${rmap}" ]; then&#xA;
@@ -297,7 +297,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute static" help="Redistribute static routes">
-      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
+      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/redistribute/static&#xA;
         if [ -n "${rmap}" ]; then&#xA;
@@ -306,7 +306,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="redistribute bgp" help="Redistribute BGP routes">
-      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_NAME" optional="true"/>
+      <PARAM name="rmap" help="route-policy name (optional)" ptype="TERTOOS_ROUTE_POLICY_NAME" optional="true"/>
       <ACTION>
         tertoos-cli candidate set ospf/${ospfvrf}/redistribute/bgp&#xA;
         if [ -n "${rmap}" ]; then&#xA;
