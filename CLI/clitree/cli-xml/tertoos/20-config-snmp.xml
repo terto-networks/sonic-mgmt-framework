@@ -26,7 +26,7 @@
       <ACTION>tertoos-cli candidate set snmp/location "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="snmp-server community" help="SNMPv2c community (rw is served as read-only)">
-      <PARAM name="name" help="Community name (4-32 chars, no spaces, quotes, @ , # or \)" ptype="STRING"/>
+      <PARAM name="name" help="Community name (4-32 chars, no spaces, quotes, @ , # or \)" ptype="TERTOOS_SNMP_COMMUNITY_NAME"/>
       <PARAM name="access" help="ro | rw" ptype="TERTOOS_RO_RW"/>
       <PARAM name="source" help="Allow only these source addresses/prefixes"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
@@ -40,7 +40,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no snmp-server community" help="Remove community (or only its source restriction)">
-      <PARAM name="name" help="Community name" ptype="STRING"/>
+      <PARAM name="name" help="Community name" ptype="TERTOOS_SNMP_COMMUNITY_NAME"/>
       <PARAM name="source" help="Remove only the source restriction (community accepts any source)"
              ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
       <ACTION>
@@ -52,7 +52,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="snmp-server user" help="SNMPv3 user">
-      <PARAM name="name" help="Username" ptype="STRING"/>
+      <PARAM name="name" help="Username" ptype="TERTOOS_SNMP_USER_NAME"/>
       <PARAM name="auth" help="auth-mode (noauth|auth-md5|auth-sha)" ptype="TERTOOS_SNMP_AUTH_MODE"/>
       <ACTION>
         tertoos-cli candidate set snmp/user/${name}&#xA;
@@ -60,7 +60,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no snmp-server user" help="Remove user">
-      <PARAM name="name" help="Username" ptype="STRING"/>
+      <PARAM name="name" help="Username" ptype="TERTOOS_SNMP_USER_NAME"/>
       <ACTION>tertoos-cli candidate delete snmp/user/${name}</ACTION>
     </COMMAND>
     <COMMAND name="snmp-server agent-address" help="Listen only on this address (default: all addresses)">

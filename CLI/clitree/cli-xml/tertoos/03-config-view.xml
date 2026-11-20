@@ -54,7 +54,7 @@
     </COMMAND>
     <COMMAND name="rollback configuration to"
              help="Roll back to a labeled commit">
-      <PARAM name="label" help="Commit label" ptype="STRING"/>
+      <PARAM name="label" help="Commit label or id" ptype="TERTOOS_COMMIT_REF"/>
       <ACTION>tertoos-cli rollback to ${label}</ACTION>
     </COMMAND>
 

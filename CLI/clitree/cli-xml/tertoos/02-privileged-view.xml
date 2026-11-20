@@ -126,7 +126,7 @@
     </COMMAND>
     <COMMAND name="show configuration commit changes"
              help="Show changes of a specific commit">
-      <PARAM name="commit-id" help="Commit id (numeric or label)" ptype="STRING"/>
+      <PARAM name="commit-id" help="Commit label or id" ptype="TERTOOS_COMMIT_REF"/>
       <ACTION>tertoos-cli commit show ${commit-id}</ACTION>
     </COMMAND>
     <COMMAND name="show interfaces" help="Show interfaces">
@@ -1282,7 +1282,7 @@
     </COMMAND>
     <COMMAND name="rollback configuration to"
              help="Roll back to a labeled commit">
-      <PARAM name="label" help="Commit label" ptype="STRING"/>
+      <PARAM name="label" help="Commit label or id" ptype="TERTOOS_COMMIT_REF"/>
       <ACTION>tertoos-cli rollback to ${label}</ACTION>
     </COMMAND>
 
