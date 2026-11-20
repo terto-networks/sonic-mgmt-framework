@@ -95,7 +95,9 @@
     </COMMAND>
     <COMMAND name="show acl" help="Show configured ACLs (tables and rules)">
       <PARAM name="name" help="ACL name (optional)" ptype="TERTOOS_ACL_NAME" optional="true"/>
-      <ACTION>tertoos-cli candidate show --filter acl${name:+/}${name}</ACTION>
+      <!-- 20/11/2026: era `acl${name:+/}${name}` - o klish expande ${...} ANTES do shell e
+           trata ':' como separador, entao o '/' sumia (filtro "aclNOME", nunca filtrava). -->
+      <ACTION>if [ -n "${name}" ]; then tertoos-cli candidate show --filter acl/${name}; else tertoos-cli candidate show --filter acl; fi</ACTION>
     </COMMAND>
     <!-- Lock de configuracao e commit pendente de confirmacao (25/10/2026). -->
     <COMMAND name="show configuration lock"
