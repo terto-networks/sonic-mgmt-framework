@@ -21,7 +21,7 @@
              help="Configure class-map (QoS, match-any)"
              view="config-class-map-view"
              viewid="cmapname=${name};cmaptype=qos;cmapop=any">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context class-map ${name}&#xA;
         tertoos-cli candidate set class-map/${name}/match_type qos&#xA;
@@ -32,7 +32,7 @@
              help="Configure class-map (QoS, match-all)"
              view="config-class-map-view"
              viewid="cmapname=${name};cmaptype=qos;cmapop=all">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context class-map ${name}&#xA;
         tertoos-cli candidate set class-map/${name}/match_type qos&#xA;
@@ -43,7 +43,7 @@
              help="Configure class-map (traffic)"
              view="config-class-map-view"
              viewid="cmapname=${name};cmaptype=traffic;cmapop=any">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>
         tertoos-cli candidate context class-map ${name}&#xA;
         tertoos-cli candidate set class-map/${name}/match_type traffic&#xA;
@@ -51,7 +51,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="no class-map" help="Remove class-map">
-      <PARAM name="name" help="Class-map name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Class-map name" ptype="TERTOOS_CLASS_MAP_NAME"/>
       <ACTION>tertoos-cli candidate delete class-map/${name}</ACTION>
     </COMMAND>
   </VIEW>
@@ -62,19 +62,19 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="match dscp" help="Match DSCP value(s) (CSV accepted)">
-      <PARAM name="v" help="0..63 (e.g. 46 or 46,47,48)" ptype="STRING"/>
+      <PARAM name="v" help="0..63 (e.g. 46 or 46,47,48)" ptype="TERTOOS_DSCP_LIST"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_dscp ${v}</ACTION>
     </COMMAND>
     <COMMAND name="match precedence" help="Match IP precedence">
-      <PARAM name="v" help="0..7 (e.g. 5 or 5,6)" ptype="STRING"/>
+      <PARAM name="v" help="0..7 (e.g. 5 or 5,6)" ptype="TERTOOS_LIST_0_7"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_precedence ${v}</ACTION>
     </COMMAND>
     <COMMAND name="match cos" help="Match dot1p CoS">
-      <PARAM name="v" help="0..7" ptype="STRING"/>
+      <PARAM name="v" help="0..7" ptype="TERTOOS_LIST_0_7"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_cos ${v}</ACTION>
     </COMMAND>
     <COMMAND name="match traffic-class" help="Match traffic class">
-      <PARAM name="v" help="0..7" ptype="STRING"/>
+      <PARAM name="v" help="0..7" ptype="TERTOOS_LIST_0_7"/>
       <ACTION>tertoos-cli candidate set class-map/${cmapname}/match_traffic_class ${v}</ACTION>
     </COMMAND>
     <COMMAND name="match access-group ipv4" help="Match IPv4 ACL">

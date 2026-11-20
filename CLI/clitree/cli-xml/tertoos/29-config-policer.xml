@@ -24,11 +24,11 @@
              help="Configure a traffic policer"
              view="config-policer-view"
              viewid="polname=${name}">
-      <PARAM name="name" help="Policer name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Policer name" ptype="TERTOOS_POLICER_NAME"/>
       <ACTION>tertoos-cli candidate context policer ${name}</ACTION>
     </COMMAND>
     <COMMAND name="no policer" help="Remove policer">
-      <PARAM name="name" help="Policer name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Policer name" ptype="TERTOOS_POLICER_NAME"/>
       <ACTION>tertoos-cli candidate delete policer/${name}</ACTION>
     </COMMAND>
   </VIEW>

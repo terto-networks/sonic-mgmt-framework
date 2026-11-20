@@ -1191,6 +1191,37 @@
          ext_pattern_cmd="tertoos-cli complete qos-buffer-profile"
          help="Buffer profile (Tab lists the configured ones)"/>
 
+  <!-- QoS MQC (20/11/2026): o saibridge passou a compilar class-map/policy-map
+       para o ASIC; Tab dos nomes (tertoos-cli complete) e listas estritas (o valor
+       fora da faixa era descartado em silêncio pelo compilador). -->
+  <PTYPE name="TERTOOS_POLICY_MAP_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete policy-map"
+         help="Policy-map name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_CLASS_MAP_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="echo class-default; tertoos-cli complete class-map"
+         help="Class-map name or class-default (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_POLICER_NAME"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete policer"
+         help="Policer name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_DSCP_LIST"
+         method="regexp"
+         pattern="(([0-9]|[1-5][0-9]|6[0-3])(,([0-9]|[1-5][0-9]|6[0-3])){0,63})"
+         help="DSCP 0..63, comma-separated (e.g. 46 or 34,36,38)"/>
+
+  <PTYPE name="TERTOOS_LIST_0_7"
+         method="regexp"
+         pattern="([0-7](,[0-7]){0,7})"
+         help="0..7, comma-separated (e.g. 5 or 3,4)"/>
+
   <PTYPE name="TERTOOS_SFLOW_POLLING_INTERVAL"
          method="regexp"
          pattern="((0)|([5-9])|([1-9][0-9])|([1-2][0-9]{2})|(300))"
