@@ -372,7 +372,7 @@
     </COMMAND>
     <COMMAND name="set community" help="Append a community value">
       <PARAM name="seq" help="Statement sequence 1..65535" ptype="TERTOOS_RANGE_1_65535"/>
-      <PARAM name="value" help="Community AS:NN or well-known" ptype="STRING"/>
+      <PARAM name="value" help="Community AA:NN or well-known" ptype="TERTOOS_COMMUNITY_VALUE"/>
       <ACTION>tertoos-cli candidate add route-policy/${rplname}/stmt/${seq}/set/community ${value}</ACTION>
     </COMMAND>
     <COMMAND name="set extcommunity-rt" help="Append an RT extended-community">

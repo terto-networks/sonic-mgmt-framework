@@ -132,6 +132,24 @@
     <COMMAND name="show interfaces" help="Show interfaces">
       <ACTION>tertoos-cli show interfaces</ACTION>
     </COMMAND>
+    <!-- C4c: os nomes que o NOC digita por habito (Cisco `show interface status`,
+         `show ip interface brief`; Huawei `display interface brief`) para a tabela de
+         status. Antes `status`/`brief` era lido como NOME de interface -> "not found". -->
+    <COMMAND name="show interface status" help="Status table of all interfaces (same as show interfaces)">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces status" help="Status table of all interfaces (same as show interfaces)">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show interface brief" help="Status table of all interfaces (same as show interfaces)">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show interfaces brief" help="Status table of all interfaces (same as show interfaces)">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
+    <COMMAND name="show ip interface brief" help="Status table of all interfaces (same as show interfaces)">
+      <ACTION>tertoos-cli show interfaces</ACTION>
+    </COMMAND>
     <COMMAND name="show interface" help="Show a single interface in detail (add 'summary' for one line, 'rate' for live bps/pps)">
       <PARAM name="name" help="Interface name (e.g. Ethernet1, PortChannel2)" ptype="TERTOOS_IFNAME"/>
       <PARAM name="summary" help="one-line summary instead of the full detail"

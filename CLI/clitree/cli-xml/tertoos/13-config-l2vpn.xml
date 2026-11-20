@@ -385,7 +385,7 @@
       <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/remote_out_label ${label}</ACTION>
     </COMMAND>
     <COMMAND name="transport-sid" help="SR transport label stack to peer (comma-separated; empty = IGP)">
-      <PARAM name="sids" help="e.g. 16002 or 16002,16005" ptype="STRING"/>
+      <PARAM name="sids" help="e.g. 16002 or 16002,16005" ptype="TERTOOS_MPLS_LABEL_LIST"/>
       <ACTION>tertoos-cli candidate set l2vpn/static-pw/${spwname}/transport_sid ${sids}</ACTION>
     </COMMAND>
     <COMMAND name="mtu" help="Pseudowire MTU">

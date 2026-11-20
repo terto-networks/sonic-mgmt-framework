@@ -102,7 +102,7 @@
     <!-- Identity / minimal global config (S1 scope) -->
     <COMMAND name="hostname"
              help="Set system hostname (candidate)">
-      <PARAM name="name" help="Hostname" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="Hostname" ptype="TERTOOS_HOSTNAME"/>
       <ACTION>tertoos-cli candidate set hostname ${name}</ACTION>
     </COMMAND>
 

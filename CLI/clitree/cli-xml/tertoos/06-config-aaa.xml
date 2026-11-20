@@ -29,8 +29,8 @@
     <COMMAND name="aaa authentication login"
              help="Set authentication method list (default)">
       <PARAM name="methods"
-             help="Comma-separated list: local,tacacs+,radius"
-             ptype="STRING"/>
+             help="Comma-separated list: local,tacacs+,radius,ldap"
+             ptype="TERTOOS_AAA_METHODS"/>
       <ACTION>tertoos-cli candidate set aaa/authentication/login ${methods}</ACTION>
     </COMMAND>
     <COMMAND name="no aaa authentication login" help="Reset authentication to default">
@@ -45,13 +45,13 @@
 
     <COMMAND name="aaa authorization exec"
              help="Set EXEC authorization method list">
-      <PARAM name="methods" help="local | tacacs+ | radius (csv)" ptype="STRING"/>
+      <PARAM name="methods" help="local | tacacs+ | radius | ldap (csv)" ptype="TERTOOS_AAA_METHODS"/>
       <ACTION>tertoos-cli candidate set aaa/authorization/exec ${methods}</ACTION>
     </COMMAND>
 
     <COMMAND name="aaa accounting exec"
              help="Set EXEC accounting method list">
-      <PARAM name="methods" help="local | tacacs+ | radius (csv)" ptype="STRING"/>
+      <PARAM name="methods" help="local | tacacs+ | radius | ldap (csv)" ptype="TERTOOS_AAA_METHODS"/>
       <ACTION>tertoos-cli candidate set aaa/accounting/exec ${methods}</ACTION>
     </COMMAND>
 
