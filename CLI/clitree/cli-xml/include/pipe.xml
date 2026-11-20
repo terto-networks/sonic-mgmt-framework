@@ -29,29 +29,29 @@ limitations under the License.
     mode="subcommand">
     <PARAM name="1_switch_var" help="Output filter" ptype="STRING" mode="switch">
         <PARAM name="include" help="Show only lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="exclude" help="Hide lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="begin" help="Show from the first line that matches a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="count" help="Count the output lines" ptype="SUBCOMMAND" mode="subcommand">
         </PARAM>
         <PARAM name="grep" help="Same as include" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="except" help="Same as exclude" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="find" help="Same as begin" ptype="SUBCOMMAND" mode="subcommand">
-            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+            <PARAM name="1_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
             <PARAM name="1_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
         </PARAM>
         <PARAM name="no-more" help="Don't paginate output" ptype="SUBCOMMAND" mode="subcommand">
@@ -69,29 +69,29 @@ limitations under the License.
         test='${1_switch_var} != count -a ${1_switch_var} != no-more'>
         <PARAM name="2_switch_var" help="Output filter" ptype="STRING" mode="switch">
             <PARAM name="include" help="Show only lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="exclude" help="Hide lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="begin" help="Show from the first line that matches a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="count" help="Count the output lines" ptype="SUBCOMMAND" mode="subcommand">
             </PARAM>
             <PARAM name="grep" help="Same as include" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="except" help="Same as exclude" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="find" help="Same as begin" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="2_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="2_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="no-more" help="Don't paginate output" ptype="SUBCOMMAND" mode="subcommand">
@@ -110,29 +110,29 @@ limitations under the License.
         test='${2_switch_var} != count -a ${2_switch_var} != no-more'>
         <PARAM name="3_switch_var" help="Output filter" ptype="STRING" mode="switch">
             <PARAM name="include" help="Show only lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="exclude" help="Hide lines that match a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="begin" help="Show from the first line that matches a regular expression" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="count" help="Count the output lines" ptype="SUBCOMMAND" mode="subcommand">
             </PARAM>
             <PARAM name="grep" help="Same as include" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="except" help="Same as exclude" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="find" help="Same as begin" ptype="SUBCOMMAND" mode="subcommand">
-                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces)" ptype="TERTOOS_PIPE_REGEX"/>
+                <PARAM name="3_LINE" help="Regular expression (quote it if it has spaces; type \\ for a backslash)" ptype="TERTOOS_PIPE_REGEX"/>
                 <PARAM name="3_ignore-case" value="ignore-case" help="Case insensitive" ptype="SUBCOMMAND" mode="subcommand" optional="true"/>
             </PARAM>
             <PARAM name="no-more" help="Don't paginate output" ptype="SUBCOMMAND" mode="subcommand">
