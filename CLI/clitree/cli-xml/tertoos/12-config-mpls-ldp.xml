@@ -78,43 +78,57 @@
     <COMMAND name="no install allow-broken-lsp" help="Do not install FECs without a downstream label (transit drops them)">
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/allow-broken-lsp disable</ACTION>
     </COMMAND>
-    <COMMAND name="holdtime" help="Session holdtime">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+    <!-- Timers (20/11/2026): antes o commit gravava e o FRR nunca recebia (o cfgd
+         ignorava). Faixas = as do ldpd do FRR. O ldpd NAO tem keepalive
+         configuravel (manda keepalive a cada holdtime/3, como o Cisco) nem
+         graceful restart de LDP: esses comandos agora recusam com explicacao, em
+         vez de aceitar e nao fazer nada. -->
+    <COMMAND name="holdtime" help="Session holdtime in seconds (default 180; keepalives every holdtime/3)">
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_15_65535"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/holdtime ${s}</ACTION>
     </COMMAND>
-    <COMMAND name="keepalive" help="Session keepalive">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/keepalive ${s}</ACTION>
+    <COMMAND name="no holdtime" help="Session holdtime back to the default (180 s)">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/holdtime</ACTION>
     </COMMAND>
-    <COMMAND name="discovery hello holdtime" help="Hello holdtime">
+    <COMMAND name="keepalive" help="Not configurable: LDP sends keepalives every holdtime/3 (use holdtime)">
       <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>echo "% LDP keepalive is not configurable: it is always holdtime/3. Use 'holdtime' (3 x the keepalive you want)."; false</ACTION>
+    </COMMAND>
+    <COMMAND name="discovery hello holdtime" help="Hello holdtime in seconds (default 15)">
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/discovery-hello-holdtime ${s}</ACTION>
     </COMMAND>
-    <COMMAND name="discovery hello interval" help="Hello interval">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+    <COMMAND name="no discovery hello holdtime" help="Hello holdtime back to the default (15 s)">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/discovery-hello-holdtime</ACTION>
+    </COMMAND>
+    <COMMAND name="discovery hello interval" help="Hello interval in seconds (default 5)">
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/discovery-hello-interval ${s}</ACTION>
     </COMMAND>
+    <COMMAND name="no discovery hello interval" help="Hello interval back to the default (5 s)">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/discovery-hello-interval</ACTION>
+    </COMMAND>
 
-    <!-- ===== S7.x — Graceful Restart (#22) ============================== -->
-    <COMMAND name="graceful-restart" help="Enable LDP graceful restart">
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart true</ACTION>
+    <!-- ===== Graceful Restart de LDP: o ldpd do FRR nao implementa ========= -->
+    <COMMAND name="graceful-restart" help="Not supported: the LDP engine has no graceful restart">
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine."; false</ACTION>
     </COMMAND>
-    <COMMAND name="no graceful-restart" help="Disable LDP graceful restart">
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart false</ACTION>
+    <COMMAND name="no graceful-restart" help="Not supported: the LDP engine has no graceful restart">
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine (nothing to disable)."; false</ACTION>
     </COMMAND>
-    <COMMAND name="graceful-restart helper" help="Helper-only mode">
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper true</ACTION>
+    <COMMAND name="graceful-restart helper" help="Not supported: the LDP engine has no graceful restart">
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine."; false</ACTION>
     </COMMAND>
-    <COMMAND name="no graceful-restart helper" help="Disable helper mode">
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_helper false</ACTION>
+    <COMMAND name="no graceful-restart helper" help="Not supported: the LDP engine has no graceful restart">
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine (nothing to disable)."; false</ACTION>
     </COMMAND>
-    <COMMAND name="graceful-restart reconnect-time" help="Reconnect timer">
-      <PARAM name="s" help="Seconds (default 120)" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_reconnect_time ${s}</ACTION>
+    <COMMAND name="graceful-restart reconnect-time" help="Not supported: the LDP engine has no graceful restart">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine."; false</ACTION>
     </COMMAND>
-    <COMMAND name="graceful-restart recovery-time" help="Recovery timer">
-      <PARAM name="s" help="Seconds (default 240)" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/graceful_restart_recovery_time ${s}</ACTION>
+    <COMMAND name="graceful-restart recovery-time" help="Not supported: the LDP engine has no graceful restart">
+      <PARAM name="s" help="Seconds" ptype="UINT"/>
+      <ACTION>echo "% LDP graceful restart is not supported by the TertoOS LDP engine."; false</ACTION>
     </COMMAND>
 
     <COMMAND name="address-family ipv4"
@@ -246,13 +260,18 @@
     <COMMAND name="targeted" help="Mark as targeted neighbor">
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/targeted true</ACTION>
     </COMMAND>
-    <COMMAND name="holdtime" help="Per-neighbor holdtime">
-      <PARAM name="s" help="Seconds" ptype="UINT"/>
+    <!-- Mudar o holdtime de um vizinho REINICIA a sessao LDP com ele (o ldpd
+         trata como mudanca de parametro do vizinho, igual a senha). -->
+    <COMMAND name="holdtime" help="Session holdtime with this neighbor in seconds (restarts the session)">
+      <PARAM name="s" help="Seconds" ptype="TERTOOS_RANGE_15_65535"/>
       <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/holdtime ${s}</ACTION>
     </COMMAND>
-    <COMMAND name="keepalive" help="Per-neighbor keepalive">
+    <COMMAND name="no holdtime" help="Use the global session holdtime with this neighbor">
+      <ACTION>tertoos-cli candidate delete mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/holdtime</ACTION>
+    </COMMAND>
+    <COMMAND name="keepalive" help="Not configurable: LDP sends keepalives every holdtime/3 (use holdtime)">
       <PARAM name="s" help="Seconds" ptype="UINT"/>
-      <ACTION>tertoos-cli candidate set mpls/ldp/${ldpvrf}/af/${ldpafi}/neighbor/${ldpnbr}/keepalive ${s}</ACTION>
+      <ACTION>echo "% LDP keepalive is not configurable: it is always holdtime/3. Use 'holdtime' (3 x the keepalive you want)."; false</ACTION>
     </COMMAND>
 
   </VIEW>
