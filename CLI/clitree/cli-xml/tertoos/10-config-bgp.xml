@@ -501,11 +501,11 @@
       <PARAM name="asn" help="Remote AS" ptype="TERTOOS_ASN"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/asn ${asn}</ACTION>
     </COMMAND>
-    <COMMAND name="description" help="Free-text description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Free-text description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/session-group/${bgpsg}/name "${text}"</ACTION>
     </COMMAND>
-    <COMMAND name="password" help="Set MD5 password (stored encrypted)">
+    <COMMAND escape_chars="`$\&quot;" name="password" help="Set MD5 password (stored encrypted)">
       <PARAM name="enc" help="0=plain text | cipher=encrypted block from show running" ptype="TERTOOS_PASSWORD_ENC"/>
       <PARAM name="secret" help="Password or encrypted block" ptype="STRING"/>
       <ACTION>
@@ -650,7 +650,7 @@
     <COMMAND name="no update-source" help="Remove update-source">
       <ACTION>tertoos-cli candidate delete bgp/${bgpvrf}/neighbor/${bgpnbr}/local_addr</ACTION>
     </COMMAND>
-    <COMMAND name="description" help="Free-text description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Free-text description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/name "${text}"</ACTION>
     </COMMAND>
@@ -672,7 +672,7 @@
     </COMMAND>
     <!-- Senha MD5 direto no vizinho (o show running ja a mostra como
          `password cipher <bloco>`; sem o comando aqui o round-trip quebrava). -->
-    <COMMAND name="password" help="Set MD5 password (stored encrypted)">
+    <COMMAND escape_chars="`$\&quot;" name="password" help="Set MD5 password (stored encrypted)">
       <PARAM name="enc" help="0=plain text | cipher=encrypted block from show running" ptype="TERTOOS_PASSWORD_ENC"/>
       <PARAM name="secret" help="Password or encrypted block" ptype="STRING"/>
       <ACTION>

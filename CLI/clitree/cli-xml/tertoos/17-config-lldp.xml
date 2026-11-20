@@ -27,11 +27,11 @@
       <PARAM name="n" help="Multiplier" ptype="UINT"/>
       <ACTION>tertoos-cli candidate set lldp/multiplier ${n}</ACTION>
     </COMMAND>
-    <COMMAND name="lldp system-name" help="LLDP system-name">
+    <COMMAND escape_chars="`$\&quot;" name="lldp system-name" help="LLDP system-name">
       <PARAM name="name" help="Name" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set lldp/system_name "${name}"</ACTION>
     </COMMAND>
-    <COMMAND name="lldp system-description" help="LLDP system-description">
+    <COMMAND escape_chars="`$\&quot;" name="lldp system-description" help="LLDP system-description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set lldp/system_description "${text}"</ACTION>
     </COMMAND>

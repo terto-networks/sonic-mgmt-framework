@@ -178,7 +178,7 @@
     <COMMAND name="exit" help="exit" view="config-srte-view"><ACTION>tertoos-cli candidate context pop</ACTION></COMMAND>
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
-    <COMMAND name="description" help="Description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Description">
       <PARAM name="text" help="Free text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set sr-te/segment-list/${srteseglist}/description "${text}"</ACTION>
     </COMMAND>

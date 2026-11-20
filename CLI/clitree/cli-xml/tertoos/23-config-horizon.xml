@@ -35,7 +35,7 @@
       <ACTION>tertoos-cli candidate set horizon/broker_url ${url}</ACTION>
     </COMMAND>
 
-    <COMMAND name="horizon enrollment-token" help="Set enrollment token (write-once)">
+    <COMMAND escape_chars="`$\&quot;" name="horizon enrollment-token" help="Set enrollment token (write-once)">
       <PARAM name="tok" help="Opaque token" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set horizon/enrollment_token "${tok}"</ACTION>
     </COMMAND>

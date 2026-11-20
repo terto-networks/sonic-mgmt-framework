@@ -17,11 +17,11 @@
     xsi:schemaLocation="http://www.dellemc.com/sonic/XMLSchema
                         http://www.dellemc.com/sonic/XMLSchema/clish.xsd">
   <VIEW name="config-view">
-    <COMMAND name="snmp-server contact" help="SNMP contact">
+    <COMMAND escape_chars="`$\&quot;" name="snmp-server contact" help="SNMP contact">
       <PARAM name="text" help="Contact text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set snmp/contact "${text}"</ACTION>
     </COMMAND>
-    <COMMAND name="snmp-server location" help="SNMP location">
+    <COMMAND escape_chars="`$\&quot;" name="snmp-server location" help="SNMP location">
       <PARAM name="text" help="Location text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set snmp/location "${text}"</ACTION>
     </COMMAND>

@@ -237,11 +237,11 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="member" help="Add an AS-path regex to the set">
+    <COMMAND escape_chars="`$\&quot;" name="member" help="Add an AS-path regex to the set">
       <PARAM name="regex" help='Posix regex (ex.: ^65000_)' ptype="STRING"/>
       <ACTION>tertoos-cli candidate add as-path-set/${apsname}/member "${regex}"</ACTION>
     </COMMAND>
-    <COMMAND name="no member" help="Remove an AS-path regex">
+    <COMMAND escape_chars="`$\&quot;" name="no member" help="Remove an AS-path regex">
       <PARAM name="regex" help="Regex" ptype="STRING"/>
       <ACTION>tertoos-cli candidate del-list as-path-set/${apsname}/member "${regex}"</ACTION>
     </COMMAND>
