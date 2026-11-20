@@ -251,14 +251,14 @@
              help="Configure a point-to-point pseudowire"
              view="config-l2vpn-p2p-view"
              viewid="l2vpngrp=${l2vpngrp};l2vpnp2p=${name}">
-      <PARAM name="name" help="P2P name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="P2P name" ptype="TERTOOS_XCONNECT_P2P_NAME"/>
       <ACTION>
         tertoos-cli candidate context l2vpn-p2p ${name}&#xA;
         tertoos-cli candidate set l2vpn/xconnect/${l2vpngrp}/${name}&#xA;
       </ACTION>
     </COMMAND>
     <COMMAND name="no p2p" help="Remove a p2p">
-      <PARAM name="name" help="P2P name" ptype="TERTOOS_NAME"/>
+      <PARAM name="name" help="P2P name" ptype="TERTOOS_XCONNECT_P2P_NAME"/>
       <ACTION>tertoos-cli candidate delete l2vpn/xconnect/${l2vpngrp}/${name}</ACTION>
     </COMMAND>
 

@@ -548,7 +548,7 @@
 
     <!-- ===== S5 — IS-IS per-interface (ISIS_INTERFACE) ==================== -->
     <COMMAND name="ip router isis" help="Attach interface to an IS-IS instance">
-      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_ISIS_INSTANCE"/>
       <ACTION>tertoos-cli candidate set interface/${ifname}/isis/instance ${tag}</ACTION>
     </COMMAND>
     <COMMAND name="no ip router isis" help="Detach interface from IS-IS">

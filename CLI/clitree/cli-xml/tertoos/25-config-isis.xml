@@ -33,7 +33,7 @@
              help="Configure IS-IS"
              view="config-router-isis-view"
              viewid="isisvrf=default;isistag=${tag}">
-      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_ISIS_INSTANCE"/>
       <ACTION>
         tertoos-cli candidate context router-isis default/${tag}&#xA;
         tertoos-cli candidate set isis/instance/default/${tag}&#xA;
@@ -44,7 +44,7 @@
              help="Configure IS-IS in a VRF"
              view="config-router-isis-view"
              viewid="isisvrf=${vrf};isistag=${tag}">
-      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_ISIS_INSTANCE"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-isis ${vrf}/${tag}&#xA;
@@ -53,7 +53,7 @@
     </COMMAND>
 
     <COMMAND name="no router isis" help="Remove IS-IS instance">
-      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_NAME"/>
+      <PARAM name="tag" help="IS-IS process tag" ptype="TERTOOS_ISIS_INSTANCE"/>
       <ACTION>tertoos-cli candidate delete isis/instance/default/${tag}</ACTION>
     </COMMAND>
   </VIEW>
