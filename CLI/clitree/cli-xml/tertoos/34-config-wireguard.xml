@@ -96,12 +96,12 @@
     </COMMAND>
     <COMMAND name="peer endpoint" help="Set a peer's UDP endpoint (host:port)">
       <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
-      <PARAM name="endpoint" help="host:port (headend/hub)" ptype="STRING"/>
+      <PARAM name="endpoint" help="host:port (headend/hub)" ptype="TERTOOS_WG_ENDPOINT"/>
       <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/endpoint "${endpoint}"</ACTION>
     </COMMAND>
     <COMMAND name="peer allowed-ips" help="Set a peer's allowed IPs (comma-separated CIDRs)">
       <PARAM name="label" help="Peer label" ptype="TERTOOS_NAME"/>
-      <PARAM name="cidrs" help="e.g. 10.99.0.0/30,172.16.0.2/32" ptype="STRING"/>
+      <PARAM name="cidrs" help="e.g. 10.99.0.0/30,172.16.0.2/32" ptype="TERTOOS_CIDR_LIST"/>
       <ACTION>tertoos-cli candidate set wireguard/interface/${wgname}/peer/${label}/allowed_ips "${cidrs}"</ACTION>
     </COMMAND>
     <COMMAND name="peer persistent-keepalive" help="Set a peer's keepalive (seconds)">

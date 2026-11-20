@@ -290,7 +290,7 @@
     <COMMAND name="permit" help="Permit by ether-type and/or VLAN">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
       <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)"
-             ptype="STRING"/>
+             ptype="TERTOOS_ETHERTYPE"/>
       <PARAM name="vlan" help="Match one VLAN"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="vlan_id" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
@@ -306,7 +306,7 @@
 
     <COMMAND name="deny" help="Deny by ether-type and/or VLAN">
       <PARAM name="seq" help="Sequence number 1..9999" ptype="TERTOOS_RANGE_1_9999"/>
-      <PARAM name="ether_type" help="EtherType" ptype="STRING"/>
+      <PARAM name="ether_type" help="EtherType (decimal or 0xHHHH)" ptype="TERTOOS_ETHERTYPE"/>
       <PARAM name="vlan" help="Match one VLAN"
              ptype="SUBCOMMAND" mode="subcommand" optional="true">
         <PARAM name="vlan_id" help="VLAN id 1..4094" ptype="TERTOOS_VLAN_ID"/>
