@@ -64,12 +64,12 @@
       <PARAM name="type" help="pap | chap | login | mschap" ptype="TERTOOS_TACACS_AUTH_TYPE"/>
       <ACTION>tertoos-cli candidate set tacacs/global/auth-type ${type}</ACTION>
     </COMMAND>
-    <COMMAND name="tacacs-server key" help="Global shared secret">
+    <COMMAND escape_chars="`$\&quot;" name="tacacs-server key" help="Global shared secret">
       <PARAM name="key" help="Shared key" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set tacacs/global/key "${key}"</ACTION>
     </COMMAND>
 
-    <COMMAND name="tacacs-server host" help="Configure a TACACS+ server">
+    <COMMAND escape_chars="`$\&quot;" name="tacacs-server host" help="Configure a TACACS+ server">
       <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
@@ -89,12 +89,12 @@
       <PARAM name="count" help="0..10" ptype="TERTOOS_RANGE_0_10"/>
       <ACTION>tertoos-cli candidate set radius/global/retransmit ${count}</ACTION>
     </COMMAND>
-    <COMMAND name="radius-server key" help="Global shared secret">
+    <COMMAND escape_chars="`$\&quot;" name="radius-server key" help="Global shared secret">
       <PARAM name="key" help="Shared key" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set radius/global/key "${key}"</ACTION>
     </COMMAND>
 
-    <COMMAND name="radius-server host" help="Configure a RADIUS server">
+    <COMMAND escape_chars="`$\&quot;" name="radius-server host" help="Configure a RADIUS server">
       <PARAM name="host" help="IPv4/IPv6 or FQDN" ptype="TERTOOS_IP_OR_HOST"/>
       <PARAM name="key-kw" help="Shared secret of this server" ptype="SUBCOMMAND" mode="subcommand" value="key"/>
       <PARAM name="key" help="Shared secret" ptype="STRING"/>
@@ -106,7 +106,7 @@
     </COMMAND>
 
     <!-- ============================ Local users ============================= -->
-    <COMMAND name="username"
+    <COMMAND escape_chars="`$\&quot;" name="username"
              help="Configure a local user (group/role + password)">
       <PARAM name="name" help="Username" ptype="TERTOOS_LOCAL_USER_NAME"/>
       <PARAM name="group-kw" help="Role of the user" ptype="SUBCOMMAND" mode="subcommand" value="group"/>

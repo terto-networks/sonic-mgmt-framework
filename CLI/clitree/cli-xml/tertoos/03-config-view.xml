@@ -35,7 +35,7 @@
       <PARAM name="label" help="Label (no spaces)" ptype="STRING"/>
       <ACTION>tertoos-cli candidate commit --label ${label}</ACTION>
     </COMMAND>
-    <COMMAND name="commit comment"
+    <COMMAND escape_chars="`$\&quot;" name="commit comment"
              help="Apply with a free-text comment">
       <PARAM name="comment" help="Comment text" ptype="STRING"/>
       <ACTION>tertoos-cli candidate commit --comment "${comment}"</ACTION>
@@ -106,15 +106,15 @@
       <ACTION>tertoos-cli candidate set hostname ${name}</ACTION>
     </COMMAND>
 
-    <COMMAND name="banner motd" help="Set message-of-the-day banner">
+    <COMMAND escape_chars="`$\&quot;" name="banner motd" help="Set message-of-the-day banner">
       <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set banner/motd "${text}"</ACTION>
     </COMMAND>
-    <COMMAND name="banner login" help="Set pre-login banner">
+    <COMMAND escape_chars="`$\&quot;" name="banner login" help="Set pre-login banner">
       <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set banner/login "${text}"</ACTION>
     </COMMAND>
-    <COMMAND name="banner exec" help="Set post-login (EXEC) banner">
+    <COMMAND escape_chars="`$\&quot;" name="banner exec" help="Set post-login (EXEC) banner">
       <PARAM name="text" help="Banner text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set banner/exec "${text}"</ACTION>
     </COMMAND>

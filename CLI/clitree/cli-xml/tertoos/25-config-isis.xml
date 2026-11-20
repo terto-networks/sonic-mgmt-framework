@@ -106,11 +106,11 @@
       <PARAM name="s" help="1..65235" ptype="TERTOOS_RANGE_1_65235"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/lsp_refresh_interval ${s}</ACTION>
     </COMMAND>
-    <COMMAND name="area-password" help="Area authentication password">
+    <COMMAND escape_chars="`$\&quot;" name="area-password" help="Area authentication password">
       <PARAM name="key" help="Password" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/area_password "${key}"</ACTION>
     </COMMAND>
-    <COMMAND name="domain-password" help="Domain authentication password">
+    <COMMAND escape_chars="`$\&quot;" name="domain-password" help="Domain authentication password">
       <PARAM name="key" help="Password" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set isis/instance/${isisvrf}/${isistag}/domain_password "${key}"</ACTION>
     </COMMAND>

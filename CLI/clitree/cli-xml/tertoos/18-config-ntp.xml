@@ -70,7 +70,7 @@
       <ACTION>tertoos-cli candidate delete ntp/server/${addr}</ACTION>
     </COMMAND>
 
-    <COMMAND name="ntp authentication-key" help="Configure an auth key">
+    <COMMAND escape_chars="`$\&quot;" name="ntp authentication-key" help="Configure an auth key">
       <PARAM name="id" help="Key id" ptype="UINT"/>
       <PARAM name="alg" help="md5 | sha1" ptype="TERTOOS_NTP_KEY_ALG"/>
       <PARAM name="value" help="Key value" ptype="STRING"/>

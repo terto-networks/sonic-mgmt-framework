@@ -96,7 +96,7 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="description" help="Set policy description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Set policy description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
     </COMMAND>
@@ -153,7 +153,7 @@
       </ACTION>
     </COMMAND>
 
-    <COMMAND name="remark" help="Add a comment to a rule (does not match)">
+    <COMMAND escape_chars="`$\&quot;" name="remark" help="Add a comment to a rule (does not match)">
       <PARAM name="seq" help="Sequence number" ptype="UINT"/>
       <PARAM name="text" help="Comment text" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/rule/${seq}/remark "${text}"</ACTION>
@@ -196,7 +196,7 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="description" help="Set policy description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Set policy description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
     </COMMAND>
@@ -282,7 +282,7 @@
       <ACTION>tertoos-cli candidate end</ACTION>
     </COMMAND>
 
-    <COMMAND name="description" help="Set policy description">
+    <COMMAND escape_chars="`$\&quot;" name="description" help="Set policy description">
       <PARAM name="text" help="Description" ptype="STRING_WITH_PIPE"/>
       <ACTION>tertoos-cli candidate set acl/${aclname}/policy_desc "${text}"</ACTION>
     </COMMAND>
