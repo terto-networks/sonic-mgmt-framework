@@ -49,7 +49,7 @@
 
     <COMMAND name="rollback configuration last"
              help="Roll back N most recent commits">
-      <PARAM name="n" help="Number of commits to roll back" ptype="UINT"/>
+      <PARAM name="n" help="Number of commits to roll back" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli rollback last ${n}</ACTION>
     </COMMAND>
     <COMMAND name="rollback configuration to"

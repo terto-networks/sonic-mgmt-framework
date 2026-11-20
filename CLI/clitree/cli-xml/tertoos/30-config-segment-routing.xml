@@ -119,7 +119,7 @@
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/name ${n}</ACTION>
     </COMMAND>
     <COMMAND name="discriminator" help="Path discriminator">
-      <PARAM name="d" help="uint32" ptype="UINT"/>
+      <PARAM name="d" help="uint32" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set sr-te/candidate-path/${srtepol_ep}/${srtepol_color}/${srtecpath}/discriminator ${d}</ACTION>
     </COMMAND>
     <COMMAND name="protocol-origin" help="Origin protocol">

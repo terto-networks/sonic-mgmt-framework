@@ -104,11 +104,11 @@
       <ACTION>tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/description "${text}"</ACTION>
     </COMMAND>
     <COMMAND name="mac aging" help="MAC aging time (seconds)">
-      <PARAM name="s" help="seconds" ptype="UINT"/>
+      <PARAM name="s" help="seconds" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/mac_aging ${s}</ACTION>
     </COMMAND>
     <COMMAND name="mac limit" help="MAC table limit">
-      <PARAM name="n" help="entries" ptype="UINT"/>
+      <PARAM name="n" help="entries" ptype="TERTOOS_RANGE_0_4294967295"/>
       <ACTION>tertoos-cli candidate set l2vpn/bridge-domain/${bdname}/mac_limit ${n}</ACTION>
     </COMMAND>
     <COMMAND name="flooding unknown-unicast" help="Flood unknown unicast">
@@ -162,7 +162,7 @@
     <COMMAND name="end" help="end" view="privileged-view"><ACTION>tertoos-cli candidate end</ACTION></COMMAND>
 
     <COMMAND name="vpn-id" help="VPN identifier">
-      <PARAM name="n" help="VPN id" ptype="UINT"/>
+      <PARAM name="n" help="VPN id" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set l2vpn/vfi/${vfiname}/vpn_id ${n}</ACTION>
     </COMMAND>
     <COMMAND name="pw-class" help="Pseudowire class">

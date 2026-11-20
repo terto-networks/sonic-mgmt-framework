@@ -122,7 +122,7 @@
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
       <PARAM name="prefix" help="A.B.C.D/M" ptype="TERTOOS_IP_PREFIX"/>
-      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <PARAM name="index" help="SID index" ptype="TERTOOS_RANGE_0_65535"/>
       <ACTION>
         tertoos-cli candidate set isis/prefix-sid/${isisvrf}/${isistag}/${prefix}/index ${index}&#xA;
       </ACTION>
@@ -147,7 +147,7 @@
       <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
       <PARAM name="lvl_kw" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <PARAM name="metric" help="Metric of the redistributed routes" ptype="SUBCOMMAND" mode="subcommand" optional="true">
-        <PARAM name="metric_value" help="Metric value" ptype="UINT"/>
+        <PARAM name="metric_value" help="Metric value" ptype="TERTOOS_RANGE_0_16777215"/>
       </PARAM>
       <ACTION>
         tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/ipv4_unicast/${proto}/${lvl_kw}&#xA;
@@ -220,7 +220,7 @@
       <PARAM name="proto" help="connected | static | bgp | ospf" ptype="TERTOOS_REDIST_PROTO_ISIS"/>
       <PARAM name="lvl" help="level-1 | level-2 | level-1-2" ptype="TERTOOS_ISIS_LEVEL"/>
       <PARAM name="metric" help="Metric of the redistributed routes" ptype="SUBCOMMAND" mode="subcommand" optional="true">
-        <PARAM name="metric_value" help="Metric value" ptype="UINT"/>
+        <PARAM name="metric_value" help="Metric value" ptype="TERTOOS_RANGE_0_16777215"/>
       </PARAM>
       <ACTION>
         tertoos-cli candidate set isis/redist/${isisvrf}/${isistag}/${isisaf}/${proto}/${lvl}&#xA;

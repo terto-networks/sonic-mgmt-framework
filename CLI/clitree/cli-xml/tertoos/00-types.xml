@@ -1110,6 +1110,87 @@
          pattern="((([0-9]{1,3}(\.[0-9]{1,3}){3}/[0-9]{1,2})|([0-9A-Fa-f:]*:[0-9A-Fa-f:.]*/[0-9]{1,3}))(,(([0-9]{1,3}(\.[0-9]{1,3}){3}/[0-9]{1,2})|([0-9A-Fa-f:]*:[0-9A-Fa-f:.]*/[0-9]{1,3})))*)"
          help="Comma-separated IPv4/IPv6 prefixes (e.g. 10.99.0.0/30,2001:db8::/64)"/>
 
+  <!-- C5 (20/11/2026): faixas do FRR/YANG nos PARAM que eram UINT ([0-9]+, sem
+       limite). Valor fora da faixa do FRR derrubaria o bloco no frr-reload. -->
+  <PTYPE name="TERTOOS_RANGE_0_512"
+         method="regexp"
+         pattern="(([0-9])|([1-9][0-9])|([1-4][0-9]{2})|(50[0-9])|(51[0-2]))"
+         help="0..512"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_128"
+         method="regexp"
+         pattern="(([0-9])|([1-9][0-9])|(1[0-1][0-9])|(12[0-8]))"
+         help="0..128"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_4294967295"
+         method="regexp"
+         pattern="(([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|([1-9][0-9]{7})|([1-9][0-9]{8})|([1-3][0-9]{9})|(4[0-1][0-9]{8})|(42[0-8][0-9]{7})|(429[0-3][0-9]{6})|(4294[0-8][0-9]{5})|(42949[0-5][0-9]{4})|(429496[0-6][0-9]{3})|(4294967[0-1][0-9]{2})|(42949672[0-8][0-9])|(429496729[0-5]))"
+         help="0..4294967295"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_16777214"
+         method="regexp"
+         pattern="(([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|(1[0-5][0-9]{6})|(16[0-6][0-9]{5})|(167[0-6][0-9]{4})|(1677[0-6][0-9]{3})|(16777[0-1][0-9]{2})|(1677720[0-9])|(1677721[0-4]))"
+         help="0..16777214"/>
+
+  <PTYPE name="TERTOOS_RANGE_0_16777215"
+         method="regexp"
+         pattern="(([0-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-9][0-9]{6})|(1[0-5][0-9]{6})|(16[0-6][0-9]{5})|(167[0-6][0-9]{4})|(1677[0-6][0-9]{3})|(16777[0-1][0-9]{2})|(1677720[0-9])|(1677721[0-5]))"
+         help="0..16777215"/>
+
+  <PTYPE name="TERTOOS_RANGE_1_4294967"
+         method="regexp"
+         pattern="(([1-9])|([1-9][0-9])|([1-9][0-9]{2})|([1-9][0-9]{3})|([1-9][0-9]{4})|([1-9][0-9]{5})|([1-3][0-9]{6})|(4[0-1][0-9]{5})|(42[0-8][0-9]{4})|(429[0-3][0-9]{3})|(4294[0-8][0-9]{2})|(42949[0-5][0-9])|(429496[0-7]))"
+         help="1..4294967"/>
+
+  <!-- C5: Tab dos objetos de QoS que o saibridge aplica (tertoos-cli complete qos-*). -->
+  <PTYPE name="TERTOOS_QOS_DSCP_TC_MAP"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-dscp-to-tc"
+         help="DSCP-to-TC map name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_TC_QUEUE_MAP"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-tc-to-queue"
+         help="TC-to-queue map name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_TC_PG_MAP"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-tc-to-pg"
+         help="TC-to-PG map name (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_SCHEDULER"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-scheduler"
+         help="Scheduler profile (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_WRED_PROFILE"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-wred-profile"
+         help="WRED profile (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_QUEUE_PROFILE"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-queue-profile"
+         help="Scheduler or WRED profile (Tab lists both)"/>
+
+  <PTYPE name="TERTOOS_QOS_BUFFER_POOL"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-buffer-pool"
+         help="Buffer pool (Tab lists the configured ones)"/>
+
+  <PTYPE name="TERTOOS_QOS_BUFFER_PROFILE"
+         method="regexp_select"
+         pattern="[A-Za-z][A-Za-z0-9_\-]{0,63}"
+         ext_pattern_cmd="tertoos-cli complete qos-buffer-profile"
+         help="Buffer profile (Tab lists the configured ones)"/>
+
   <PTYPE name="TERTOOS_SFLOW_POLLING_INTERVAL"
          method="regexp"
          pattern="((0)|([5-9])|([1-9][0-9])|([1-2][0-9]{2})|(300))"

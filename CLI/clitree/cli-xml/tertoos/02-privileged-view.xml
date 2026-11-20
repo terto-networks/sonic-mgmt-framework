@@ -1238,7 +1238,7 @@
     </COMMAND>
 
     <COMMAND name="terminal length" help="Set terminal pager length">
-      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="UINT"/>
+      <PARAM name="lines" help="Lines per page (0 = no paging)" ptype="TERTOOS_RANGE_0_512"/>
       <ACTION>tertoos-cli terminal length ${lines}</ACTION>
     </COMMAND>
 
@@ -1295,7 +1295,7 @@
 
     <COMMAND name="rollback configuration last"
              help="Roll back N most recent commits">
-      <PARAM name="n" help="Number of commits to roll back" ptype="UINT"/>
+      <PARAM name="n" help="Number of commits to roll back" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli rollback last ${n}</ACTION>
     </COMMAND>
     <COMMAND name="rollback configuration to"

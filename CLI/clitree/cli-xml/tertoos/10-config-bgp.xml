@@ -369,9 +369,9 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/max_ibgp_paths ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance bgp" help="BGP administrative distance">
-      <PARAM name="ext" help="External" ptype="UINT"/>
-      <PARAM name="int" help="Internal" ptype="UINT"/>
-      <PARAM name="local" help="Local" ptype="UINT"/>
+      <PARAM name="ext" help="External" ptype="TERTOOS_RANGE_1_255"/>
+      <PARAM name="int" help="Internal" ptype="TERTOOS_RANGE_1_255"/>
+      <PARAM name="local" help="Local" ptype="TERTOOS_RANGE_1_255"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ebgp_route_distance ${ext}&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af/${bgpaf}/ibgp_route_distance ${int}&#xA;
@@ -588,7 +588,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
-      <PARAM name="n" help="Limit" ptype="UINT"/>
+      <PARAM name="n" help="Limit" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/max_prefix_limit ${n}</ACTION>
     </COMMAND>
     <COMMAND name="next-hop-self" help="Set next-hop to self">
@@ -618,7 +618,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/as_override true</ACTION>
     </COMMAND>
     <COMMAND name="allowas-in" help="Accept routes with own AS">
-      <PARAM name="n" help="Occurrences" ptype="UINT"/>
+      <PARAM name="n" help="Occurrences" ptype="TERTOOS_RANGE_1_10"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_in true&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/af-group/${bgpafg}/${bgpaf}/allow_as_count ${n}&#xA;
@@ -787,7 +787,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/route_map_out ${rmap}</ACTION>
     </COMMAND>
     <COMMAND name="maximum-prefix" help="Maximum accepted prefixes">
-      <PARAM name="n" help="Limit" ptype="UINT"/>
+      <PARAM name="n" help="Limit" ptype="TERTOOS_RANGE_1_4294967295"/>
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/max_prefix_limit ${n}</ACTION>
     </COMMAND>
     <COMMAND name="next-hop-self" help="Set next-hop to self">
@@ -813,7 +813,7 @@
       <ACTION>tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/as_override true</ACTION>
     </COMMAND>
     <COMMAND name="allowas-in" help="Accept routes with own AS">
-      <PARAM name="n" help="Occurrences" ptype="UINT"/>
+      <PARAM name="n" help="Occurrences" ptype="TERTOOS_RANGE_1_10"/>
       <ACTION>
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_in true&#xA;
         tertoos-cli candidate set bgp/${bgpvrf}/neighbor/${bgpnbr}/af/${bgpaf}/allow_as_count ${n}&#xA;

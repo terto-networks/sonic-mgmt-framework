@@ -25,7 +25,7 @@
              help="Configure OSPFv3"
              view="config-router-ospfv3-view"
              viewid="ospf6vrf=default;ospf6id=${id}">
-      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
+      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>
         tertoos-cli candidate context router-ospfv3 default&#xA;
         tertoos-cli candidate set ospfv3/default/enable true&#xA;
@@ -36,7 +36,7 @@
              help="Configure OSPFv3 in a VRF"
              view="config-router-ospfv3-view"
              viewid="ospf6vrf=${vrf};ospf6id=${id}">
-      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="UINT"/>
+      <PARAM name="id" help="OSPFv3 process id (informational)" ptype="TERTOOS_RANGE_1_65535"/>
       <PARAM name="vrf" help="VRF name" ptype="TERTOOS_VRF_NAME"/>
       <ACTION>
         tertoos-cli candidate context router-ospfv3 ${vrf}&#xA;
@@ -45,7 +45,7 @@
     </COMMAND>
 
     <COMMAND name="no router ospfv3" help="Remove OSPFv3 configuration">
-      <PARAM name="id" help="OSPFv3 process id" ptype="UINT"/>
+      <PARAM name="id" help="OSPFv3 process id" ptype="TERTOOS_RANGE_1_65535"/>
       <ACTION>tertoos-cli candidate delete ospfv3/default</ACTION>
     </COMMAND>
   </VIEW>
@@ -75,7 +75,7 @@
       </ACTION>
     </COMMAND>
     <COMMAND name="default-metric" help="Default metric for redistributed routes">
-      <PARAM name="n" help="metric" ptype="UINT"/>
+      <PARAM name="n" help="metric" ptype="TERTOOS_RANGE_0_16777214"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/default-metric ${n}</ACTION>
     </COMMAND>
     <COMMAND name="distance" help="Administrative distance">
@@ -105,7 +105,7 @@
     </COMMAND>
     <COMMAND name="segment-routing prefix-sid-map" help="Map prefix to SID index">
       <PARAM name="prefix" help="prefix/len" ptype="TERTOOS_IPV6_PREFIX"/>
-      <PARAM name="index" help="SID index" ptype="UINT"/>
+      <PARAM name="index" help="SID index" ptype="TERTOOS_RANGE_0_65535"/>
       <ACTION>
         tertoos-cli candidate set ospfv3/${ospf6vrf}/prefix-sid/${prefix}/index ${index}&#xA;
       </ACTION>
@@ -123,7 +123,7 @@
     <COMMAND name="redistribute" help="Redistribute from another protocol">
       <PARAM name="proto" help="connected | static | bgp" ptype="TERTOOS_REDIST_PROTO"/>
       <PARAM name="metric" help="Metric of the redistributed routes" ptype="SUBCOMMAND" mode="subcommand" optional="true">
-        <PARAM name="metric_value" help="Metric value" ptype="UINT"/>
+        <PARAM name="metric_value" help="Metric value" ptype="TERTOOS_RANGE_0_16777214"/>
       </PARAM>
       <ACTION>
         tertoos-cli candidate set ospfv3/${ospf6vrf}/redistribute/${proto}/IMPORT&#xA;
@@ -161,7 +161,7 @@
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub-no-summary true</ACTION>
     </COMMAND>
     <COMMAND name="default-cost" help="Stub default-cost">
-      <PARAM name="n" help="cost" ptype="UINT"/>
+      <PARAM name="n" help="cost" ptype="TERTOOS_RANGE_0_16777215"/>
       <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/area/${ospf6area}/stub-default-cost ${n}</ACTION>
     </COMMAND>
     <COMMAND name="import-list" help="Apply import filter">

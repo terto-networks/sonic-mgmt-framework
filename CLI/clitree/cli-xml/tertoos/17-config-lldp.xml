@@ -24,7 +24,7 @@
       <ACTION>tertoos-cli candidate set lldp/hello_time ${s}</ACTION>
     </COMMAND>
     <COMMAND name="lldp multiplier" help="Hold-time multiplier">
-      <PARAM name="n" help="Multiplier" ptype="UINT"/>
+      <PARAM name="n" help="Multiplier" ptype="TERTOOS_RANGE_1_10"/>
       <ACTION>tertoos-cli candidate set lldp/multiplier ${n}</ACTION>
     </COMMAND>
     <COMMAND escape_chars="`$\&quot;" name="lldp system-name" help="LLDP system-name">
