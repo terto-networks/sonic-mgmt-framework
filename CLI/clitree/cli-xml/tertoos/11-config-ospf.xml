@@ -279,11 +279,13 @@
     </COMMAND>
     <COMMAND name="passive-interface" help="Mark interface passive">
       <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/passive/${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set ospf/${ospfvrf}/passive/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no passive-interface" help="Unmark interface passive">
       <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/passive/${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate delete ospf/${ospfvrf}/passive/${ifname}${ifsub}</ACTION>
     </COMMAND>
 
     <!-- Redistribute -->

@@ -113,11 +113,13 @@
 
     <COMMAND name="passive-interface" help="Mark interface passive">
       <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set ospfv3/${ospf6vrf}/passive-interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no passive-interface" help="Re-enable interface adjacency">
       <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/passive-interface/${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate delete ospfv3/${ospf6vrf}/passive-interface/${ifname}${ifsub}</ACTION>
     </COMMAND>
 
     <COMMAND name="redistribute" help="Redistribute from another protocol">

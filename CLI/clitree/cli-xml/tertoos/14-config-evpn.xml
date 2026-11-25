@@ -25,7 +25,8 @@
 
     <COMMAND name="vxlan source-interface" help="VXLAN VTEP source interface">
       <PARAM name="ifname" help="Interface name (Loopback0 typical)" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set vxlan/source-interface ${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set vxlan/source-interface ${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no vxlan source-interface" help="Remove VXLAN VTEP">
       <ACTION>tertoos-cli candidate delete vxlan/source-interface</ACTION>
@@ -65,7 +66,8 @@
 
     <COMMAND name="nvo source-interface" help="Bind NVO to a source interface">
       <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set evpn/nvo/source-interface ${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set evpn/nvo/source-interface ${ifname}${ifsub}</ACTION>
     </COMMAND>
 
     <COMMAND name="evi"
