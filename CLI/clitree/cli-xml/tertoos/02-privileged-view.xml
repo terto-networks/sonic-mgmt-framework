@@ -1084,14 +1084,14 @@
     </COMMAND>
 
     <!-- ===== S13.D — OTA image management ================================ -->
-    <COMMAND name="image install" help="Install firmware bundle to the standby slot (usb: | local path | URL)">
-      <PARAM name="url" help="usb:[name] | /path/bundle.tos | https://... URL" ptype="STRING"/>
+    <COMMAND name="image install" help="Install firmware bundle to the standby slot (usb: | local path | URL | SFTP/SCP server)">
+      <PARAM name="url" help="usb:[name] | /path/bundle.tos | https://... | sftp://user@server/path/file.tos | scp://user@server/path/file.tos (password is asked)" ptype="STRING"/>
       <PARAM name="opt" help="Skip the signature check" ptype="SUBCOMMAND" mode="subcommand" value="no-verify" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
-            sudo /usr/bin/tertoos-cli image install ${url} no-verify&#xA;
+            sudo /usr/bin/tertoos-cli image install '${url}' no-verify&#xA;
         else&#xA;
-            sudo /usr/bin/tertoos-cli image install ${url}&#xA;
+            sudo /usr/bin/tertoos-cli image install '${url}'&#xA;
         fi&#xA;
       </ACTION>
     </COMMAND>
@@ -1119,14 +1119,14 @@
     <COMMAND name="image patch" help="Show cumulative patches of the running image">
       <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
     </COMMAND>
-    <COMMAND name="image patch install" help="Install a cumulative patch (.tosp) for the running image (usb: | local path | URL)">
-      <PARAM name="url" help="usb:[name] | /path/patch.tosp | https://... URL" ptype="STRING"/>
+    <COMMAND name="image patch install" help="Install a cumulative patch (.tosp) for the running image (usb: | local path | URL | SFTP/SCP server)">
+      <PARAM name="url" help="usb:[name] | /path/patch.tosp | https://... | sftp://user@server/path/file.tosp | scp://user@server/path/file.tosp (password is asked)" ptype="STRING"/>
       <PARAM name="opt" help="Skip the signature check (lab only)" ptype="SUBCOMMAND" mode="subcommand" value="no-verify" optional="true"/>
       <ACTION>
         if [ "${opt}" = "no-verify" ]; then&#xA;
-            sudo /usr/bin/tertoos-cli image patch install ${url} no-verify&#xA;
+            sudo /usr/bin/tertoos-cli image patch install '${url}' no-verify&#xA;
         else&#xA;
-            sudo /usr/bin/tertoos-cli image patch install ${url}&#xA;
+            sudo /usr/bin/tertoos-cli image patch install '${url}'&#xA;
         fi&#xA;
       </ACTION>
     </COMMAND>
