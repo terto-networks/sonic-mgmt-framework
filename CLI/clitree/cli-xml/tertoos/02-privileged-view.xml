@@ -59,6 +59,12 @@
     <COMMAND name="show image patch" help="Show cumulative patches of the running image (TOS-PATCH-001)">
       <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
     </COMMAND>
+    <COMMAND name="show image patch detail" help="Show all patches, including superseded ones">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list detail</ACTION>
+    </COMMAND>
+    <COMMAND name="show image known-hosts" help="Show the saved host keys of SFTP/SCP servers used by image install">
+      <ACTION>sudo /usr/bin/tertoos-cli image known-hosts list</ACTION>
+    </COMMAND>
     <COMMAND name="show running-config"
              help="Show running configuration (committed)">
       <ACTION>tertoos-cli show running</ACTION>
@@ -1129,6 +1135,13 @@
             sudo /usr/bin/tertoos-cli image patch install '${url}'&#xA;
         fi&#xA;
       </ACTION>
+    </COMMAND>
+    <!-- Servidor SFTP/SCP do NOC reinstalado (chave nova): o download e' recusado
+         ("host key CHANGED"). Na RELEASE o operador nao alcanca o /data — este
+         comando apaga a chave gravada e a proxima conexao pergunta de novo. -->
+    <COMMAND name="clear image known-host" help="Forget the saved host key of an SFTP/SCP server (after it was reinstalled)" access="sysadmin">
+      <PARAM name="server" help="Server address, or server:port" ptype="STRING"/>
+      <ACTION>sudo /usr/bin/tertoos-cli image known-hosts delete '${server}'</ACTION>
     </COMMAND>
     <COMMAND name="image patch list" help="Show cumulative patches of the running image">
       <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>

@@ -46,6 +46,12 @@
     <COMMAND name="show image patch" help="Show cumulative patches of the running image (TOS-PATCH-001)">
       <ACTION>sudo /usr/bin/tertoos-cli image patch list</ACTION>
     </COMMAND>
+    <COMMAND name="show image patch detail" help="Show all patches, including superseded ones">
+      <ACTION>sudo /usr/bin/tertoos-cli image patch list detail</ACTION>
+    </COMMAND>
+    <COMMAND name="show image known-hosts" help="Show the saved host keys of SFTP/SCP servers used by image install">
+      <ACTION>sudo /usr/bin/tertoos-cli image known-hosts list</ACTION>
+    </COMMAND>
     <COMMAND name="show clock" help="Show current system time (time, timezone, NTP sync)">
       <ACTION>/usr/bin/tertoos-cli clock show</ACTION>
     </COMMAND>
