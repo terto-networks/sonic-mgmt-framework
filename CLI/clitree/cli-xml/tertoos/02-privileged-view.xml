@@ -588,8 +588,11 @@
     <COMMAND name="show evpn encapsulation" help="EVPN encap config">
       <ACTION>vtysh -c "show bgp l2vpn evpn"</ACTION>
     </COMMAND>
+    <!-- p2p configurado que o cfgd deixou fora do ldpd (nome que o ldpd corta e
+         colide: pseudowire > 15 / l2vpn > 31) aparece no fim como NOT ACTIVE — antes
+         ele simplesmente nao existia na lista (PW 736 do pi-rge-moek-pe01). -->
     <COMMAND name="show l2vpn xconnect" help="L2VPN pseudowire (VC) status">
-      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
+      <ACTION>vtysh -c "show l2vpn atom vc"; if [ -s /run/tertoos/l2vpn-inactive ]; then echo; echo "Configured but NOT ACTIVE:"; sed 's/^/  /' /run/tertoos/l2vpn-inactive; fi</ACTION>
     </COMMAND>
     <COMMAND name="show l2vpn binding" help="L2VPN pseudowire label bindings (local+remote)">
       <ACTION>vtysh -c "show l2vpn atom binding"</ACTION>
@@ -601,7 +604,7 @@
       <ACTION>tertoos-cli show l2vpn protection</ACTION>
     </COMMAND>
     <COMMAND name="show mpls l2transport vc" help="MPLS L2 transport VC">
-      <ACTION>vtysh -c "show l2vpn atom vc"</ACTION>
+      <ACTION>vtysh -c "show l2vpn atom vc"; if [ -s /run/tertoos/l2vpn-inactive ]; then echo; echo "Configured but NOT ACTIVE:"; sed 's/^/  /' /run/tertoos/l2vpn-inactive; fi</ACTION>
     </COMMAND>
     <COMMAND name="show evpn vni" help="EVPN VNI summary">
       <ACTION>vtysh -c "show evpn vni"</ACTION>
@@ -874,14 +877,21 @@
     <COMMAND name="show sflow" help="sFlow status">
       <ACTION>echo "== sFlow (hsflowd) =="; echo "status: $(systemctl is-active hsflowd 2&gt;/dev/null)"; sed -n '1,40p' /etc/hsflowd.conf 2&gt;/dev/null</ACTION>
     </COMMAND>
+    <!-- lldpcli e' setuid _lldpd com grupo adm (4750) e o journal/syslog do sistema
+         so' abre para adm/systemd-journal: o usuario criado por `username ... group`
+         (so' sysadmin/netadmin/netoperator) recebia "lldpcli: Permission denied" e
+         um `show logging` sem as mensagens do sistema (pi-rge-moek-pe01, POP
+         Interativa, 26/11/2026). As leituras passam por sudo -n restrito a estas
+         linhas exatas (/etc/sudoers.d/tertoos-readonly-diag, grupo netoperator);
+         sem a regra, cai no comando direto de antes. -->
     <COMMAND name="show lldp neighbors" help="LLDP neighbors">
-      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; lldpcli show neighbors || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
+      <ACTION>if systemctl is-active --quiet lldpd; then sudo -n /usr/sbin/lldpcli show neighbors 2&gt;/dev/null || lldpcli show neighbors; else echo "LLDP: lldpd is not running - see 'show lldp status'."; fi</ACTION>
     </COMMAND>
     <COMMAND name="show lldp table" help="LLDP table">
-      <ACTION>systemctl is-active --quiet lldpd &amp;&amp; lldpcli show neighbors summary || echo "LLDP: lldpd is not running. Start: 'sudo systemctl start lldpd'. Diagnose: 'systemctl status lldpd', 'journalctl -u lldpd -n 30 --no-pager'."</ACTION>
+      <ACTION>if systemctl is-active --quiet lldpd; then sudo -n /usr/sbin/lldpcli show neighbors summary 2&gt;/dev/null || lldpcli show neighbors summary; else echo "LLDP: lldpd is not running - see 'show lldp status'."; fi</ACTION>
     </COMMAND>
     <COMMAND name="show lldp status" help="LLDP daemon status">
-      <ACTION>echo "== LLDP (lldpd) =="; echo "enabled: $(systemctl is-enabled lldpd 2&gt;/dev/null)"; echo "active:  $(systemctl is-active lldpd 2&gt;/dev/null)"; systemctl is-active --quiet lldpd || journalctl -u lldpd -n 15 --no-pager 2&gt;/dev/null</ACTION>
+      <ACTION>echo "== LLDP (lldpd) =="; echo "enabled: $(systemctl is-enabled lldpd 2&gt;/dev/null)"; echo "active:  $(systemctl is-active lldpd 2&gt;/dev/null)"; systemctl is-active --quiet lldpd || sudo -n /usr/bin/journalctl -u lldpd -n 15 --no-pager 2&gt;/dev/null || journalctl -u lldpd -n 15 --no-pager 2&gt;/dev/null</ACTION>
     </COMMAND>
     <COMMAND name="show ntp associations" help="NTP associations">
       <ACTION>chronyc sources -v 2&gt;/dev/null || ntpq -p</ACTION>
@@ -898,7 +908,7 @@
       <ACTION>curl -s "http://127.0.0.1:7651/led-locator?on=0" &gt;/dev/null &amp;&amp; echo "locator LED: off" || echo "locator: saibridge unreachable"</ACTION>
     </COMMAND>
     <COMMAND name="show logging" help="Recent log messages">
-      <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
+      <ACTION>tail -200 /var/log/syslog 2&gt;/dev/null || sudo -n /usr/bin/journalctl -n 200 --no-pager 2&gt;/dev/null || journalctl -n 200 --no-pager</ACTION>
     </COMMAND>
     <COMMAND name="show snmp" help="SNMP agent: listening addresses, in-band access, communities and the ASIC/sensor subagent">
       <ACTION>tertoos-cli show snmp</ACTION>
