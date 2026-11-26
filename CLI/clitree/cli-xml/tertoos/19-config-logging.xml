@@ -47,7 +47,8 @@
     </COMMAND>
     <COMMAND name="logging source-interface" help="Source interface">
       <PARAM name="ifname" help="Interface" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set logging/global/source_intf ${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set logging/global/source_intf ${ifname}${ifsub}</ACTION>
     </COMMAND>
   </VIEW>
 </CLISH_MODULE>

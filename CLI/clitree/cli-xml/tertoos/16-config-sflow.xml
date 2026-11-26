@@ -21,7 +21,8 @@
     </COMMAND>
     <COMMAND name="sflow agent-id" help="Agent identification (interface)">
       <PARAM name="agent" help="Interface name (e.g. Loopback0)" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set sflow/agent_id ${agent}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="sflow polling-interval" help="Counter poll interval">
       <PARAM name="s" help="Seconds" ptype="TERTOOS_SFLOW_POLLING_INTERVAL"/>

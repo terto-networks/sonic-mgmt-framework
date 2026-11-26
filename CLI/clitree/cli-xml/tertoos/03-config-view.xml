@@ -148,7 +148,8 @@
       <PARAM name="vlan" help="VLAN id" ptype="TERTOOS_VLAN_ID"/>
       <PARAM name="if_kw" help="Egress interface" ptype="SUBCOMMAND" mode="subcommand" value="interface"/>
       <PARAM name="ifname" help="Interface name" ptype="TERTOOS_IFNAME"/>
-      <ACTION>tertoos-cli candidate set fdb/static/${vlan}/${mac} ${ifname}</ACTION>
+      <PARAM name="ifsub" help="Interface number when typed apart (e.g. 0, 1.758)" ptype="TERTOOS_IFNUM" optional="true"/>
+      <ACTION>tertoos-cli candidate set fdb/static/${vlan}/${mac} ${ifname}${ifsub}</ACTION>
     </COMMAND>
     <COMMAND name="no l2 mac-address-table static"
              help="Remove a static MAC entry">
