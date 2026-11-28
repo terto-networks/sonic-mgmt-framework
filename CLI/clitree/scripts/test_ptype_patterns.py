@@ -134,6 +134,20 @@ MANUAL["TERTOOS_WGKEY"] = (
      ""],
 )
 
+# RG do Edge (adocao por botao): 32 grupos hex com ":" ou 64 digitos colados.
+_FP = ":".join("%02X" % ((i * 37) % 256) for i in range(32))
+MANUAL["TERTOOS_SHA256_FP"] = (
+    [_FP, _FP.lower(), _FP.replace(":", ""), "0" * 64],
+    [_FP[:-3],                     # 31 grupos
+     _FP + ":00",                  # 33 grupos
+     _FP.replace(":", "")[:63],    # 63 digitos
+     "0" * 65,
+     _FP.replace(":", "-"),        # separador errado
+     "x" + _FP, _FP + "x",
+     "G" + _FP[1:],                # digito nao hex
+     ""],
+)
+
 
 def octet_cases():
     """IPv4 com octeto 0..300 em cada posicao + zero a esquerda."""

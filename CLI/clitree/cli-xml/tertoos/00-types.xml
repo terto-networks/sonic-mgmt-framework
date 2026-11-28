@@ -352,6 +352,13 @@
 
   <!-- inet:ip-address do YANG (tertoos-srte.yang SR_TE_POLICY.endpoint):
        IPv4 completo ou IPv6 (forma livre com ":"; o YANG/backend valida o resto). -->
+  <!-- Adocao por botao (TOS-ARCH-ADOPT-001): RG do Edge = SHA-256 da CA do site,
+       como o Horizon mostra (AB:CD:... 32 grupos) ou os 64 digitos colados. -->
+  <PTYPE name="TERTOOS_SHA256_FP"
+         method="regexp"
+         pattern="(([0-9A-Fa-f]{2}:){31}[0-9A-Fa-f]{2}|[0-9A-Fa-f]{64})"
+         help="SHA-256 fingerprint (AB:CD:... or 64 hex digits)"/>
+
   <PTYPE name="TERTOOS_IP_ADDR"
          method="regexp"
          pattern="((((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9]))|([0-9A-Fa-f]{0,4}(:[0-9A-Fa-f]{0,4}){2,7}))"
