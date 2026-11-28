@@ -20,6 +20,21 @@
       <ACTION>tertoos-cli candidate set horizon/enabled false</ACTION>
     </COMMAND>
 
+    <!-- Adocao por botao (TOS-ARCH-ADOPT-001): so' o IP do Edge; a caixa pede
+         adocao e um operador adota no Horizon (Switches > Aguardando adocao).
+         Sem token, sem tenant/site/broker. Liga o agent no mesmo commit.
+         fingerprint = RG do Edge obrigatorio (copiado da pagina do Edge). -->
+    <COMMAND name="horizon edge" help="Join Horizon through this Edge: the box asks for adoption and an operator adopts it in Horizon (no token)">
+      <PARAM name="ip" help="IP address the Edge advertises to the switches" ptype="TERTOOS_IP_ADDR"/>
+      <PARAM name="fingerprint" help="Require this Edge identity (shown on the Edge in Horizon)" ptype="SUBCOMMAND" mode="subcommand" optional="true">
+        <PARAM name="fp" help="SHA-256 fingerprint (AB:CD:... or 64 hex digits)" ptype="TERTOOS_SHA256_FP"/>
+      </PARAM>
+      <ACTION>tertoos-cli candidate set horizon/edge ${ip} &amp;&amp; tertoos-cli candidate set horizon/enabled true &amp;&amp; if [ -n "${fp}" ]; then tertoos-cli candidate set horizon/edge_fingerprint ${fp}; else tertoos-cli candidate delete horizon/edge_fingerprint >/dev/null 2>&amp;1; true; fi</ACTION>
+    </COMMAND>
+    <COMMAND name="no horizon edge" help="Stop button adoption (an adopted box keeps its certificate)">
+      <ACTION>tertoos-cli candidate delete horizon/edge &amp;&amp; { tertoos-cli candidate delete horizon/edge_fingerprint >/dev/null 2>&amp;1; true; }</ACTION>
+    </COMMAND>
+
     <COMMAND name="horizon tenant-id" help="Tenant UUID (assigned by Core)">
       <PARAM name="id" help="UUID" ptype="STRING"/>
       <ACTION>tertoos-cli candidate set horizon/tenant_id ${id}</ACTION>
